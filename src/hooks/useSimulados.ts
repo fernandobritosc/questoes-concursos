@@ -134,12 +134,17 @@ export function useSimulados() {
     // Filtra questões do banco baseadas nas fraquezas
     const { weakAssuntos, weakMaterias } = obterTopicosFracos()
 
+    // Filtra apenas as questões válidas do banco que contêm pelo menos 2 alternativas (ignora lixo do PDF)
+    const questoesValidas = allQuestoes.filter(
+      q => q.alternativas && Object.keys(q.alternativas).length >= 2
+    )
+
     // 1. Questões correspondentes a assuntos fracos
-    let pool = allQuestoes.filter(q => q.assunto && weakAssuntos.has(q.assunto))
+    let pool = questoesValidas.filter(q => q.assunto && weakAssuntos.has(q.assunto))
 
     // 2. Se for pouca questão, adiciona matérias fracas
     if (pool.length < qtd) {
-      const materiasPool = allQuestoes.filter(
+      const materiasPool = questoesValidas.filter(
         q => q.materia && weakMaterias.has(q.materia) && !pool.some(p => p.id === q.id)
       )
       pool = [...pool, ...materiasPool]
@@ -147,7 +152,7 @@ export function useSimulados() {
 
     // 3. Se ainda faltar, adiciona questões não resolvidas (ineditas)
     if (pool.length < qtd) {
-      const ineditas = allQuestoes.filter(
+      const ineditas = questoesValidas.filter(
         q => (!q.alternativa || q.alternativa === '') && !pool.some(p => p.id === q.id)
       )
       pool = [...pool, ...ineditas]
@@ -155,7 +160,7 @@ export function useSimulados() {
 
     // 4. Se mesmo assim faltar, pega qualquer questão do banco
     if (pool.length < qtd) {
-      const geral = allQuestoes.filter(q => !pool.some(p => p.id === q.id))
+      const geral = questoesValidas.filter(q => !pool.some(p => p.id === q.id))
       pool = [...pool, ...geral]
     }
 
