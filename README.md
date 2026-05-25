@@ -1,73 +1,85 @@
-# React + TypeScript + Vite
+# 🚀 Questões Concursos - Plataforma Premium de Preparação
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Uma plataforma de altíssimo nível desenvolvida em **React, TypeScript, Vite e Tailwind CSS v4**, integrada de forma robusta ao **Supabase** (banco de dados) e **Google Gemini IA** (mentor inteligente).
 
-Currently, two official plugins are available:
+Projetada especificamente para concurseiros de alta performance, a plataforma transforma a preparação passiva em um ecossistema ativo de aprendizado, análise de dados e gamificação de estudos.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Recursos de Destaque (Premium SaaS)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. 📅 Calendário de Consistência Retrátil (Heatmap)
+* **Visualização Estilo GitHub**: Um grid completo de 53 semanas (últimos 365 dias) alinhado de Domingo a Sábado para acompanhar a constância diária de estudos.
+* **Glow & Intensidade Violeta**: Quadradinhos que brilham em tons progressivos de violeta baseados no volume diário de questões respondidas.
+* **Foco em Espaço**: Inicia recolhido por padrão para economizar espaço de tela, expandindo com um clique suave e apresentando legenda de níveis.
+* **Tooltip Glassmorphic**: Balão informativo flutuante de alta performance exibindo a data e o volume exato de questões respondidas por extenso em português.
 
-## Expanding the ESLint configuration
+### 2. 📊 Visual Analytics Avançado (Recharts)
+* **Gráfico de Evolução Temporal (Area Chart)**: Gráfico de área dupla que plota o volume de resoluções (eixo esquerdo) e a taxa de acerto (eixo direito) ao longo do tempo. Sincroniza dinamicamente entre a visão "Geral" (últimos 10 dias de estudo ativos) e "Últimas 24h" (fluxo de estudos por hora).
+* **Radar de Competências de RPG (Radar Chart)**: Mapeia o perfil de forças e fraquezas do estudante nas principais matérias em um gráfico de teia interativo.
+* **Failsafe Inteligente**: Se o estudante tiver resolvido questões em menos de 3 matérias (o que impossibilita formar o polígono do radar), o sistema exibe automaticamente um **Bar Chart** estilizado em seu lugar, mantendo o visual impecável.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 3. ⌨️ Paleta de Comandos Global (`Ctrl + K` / `Cmd + K`)
+* **Navegação Instantânea**: Atalho global acessível de qualquer página para pular entre Dashboard, Edital, Revisões e Mentor instantaneamente.
+* **Busca Direta por ID de Questão (Q-ID)**: Digite um ID numérico (ex: `123456`) e a paleta abrirá instantaneamente a tela correspondente no Banco de Questões, carregando a questão em tempo real.
+* **Dúvida no Mentor**: Digite qualquer dúvida conceitual e selecione "Perguntar ao Mentor" para ser redirecionado com a pergunta preenchida para a IA.
+* **Interface Glassmorphic**: Modal com fundo desfocado e navegação autônoma por teclado (Setas, Enter, Escape).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 4. 🃏 Caderno de Erros Inteligente & Revisão Spaced Repetition
+* **Foco Cirúrgico**: Listagem automática de todas as questões cuja última tentativa do usuário foi incorreta.
+* **Explicação do Professor IA**: Acione o Mentor IA integrado ao Gemini para obter uma análise didática detalhada de por que você errou aquela alternativa específica e por que o gabarito é o correto.
+* **Resolução do Professor**: Espaço dinâmico para cadastrar e editar resoluções oficiais das questões de forma estruturada.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 5. 📋 Edital Verticalizado
+* **Sequenciamento Manual**: Controle absoluto e reordenação (mover para cima, baixo, topo, fim) da ordem dos tópicos e assuntos do edital.
+* **Mapeamento de Status**: Marque tópicos concluídos com checkboxes intuitivos e veja a taxa de conclusão ("Syllabus Concluído") e taxa de acerto real em cada tópico em tempo real.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Stack Tecnológico
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* **Frontend**: React 19, TypeScript, Vite.
+* **Estilização**: Tailwind CSS v4 (configuração baseada em variáveis CSS nativas), Lucide Icons, Glassmorphism e micro-animações CSS.
+* **Banco de Dados (DB)**: Supabase JS Client (relação de tabelas `questoes` + `historico_resolucoes`).
+* **Inteligência Artificial (AI)**: SDK Oficial do Google Generative AI (modelo Gemini) para análise de erros e geração de planos de estudos semanais táticos.
+* **Gráficos**: Recharts (Area, Radar, Bar, ResponsiveContainer).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🔒 Segurança de Credenciais
+
+Este projeto utiliza variáveis de ambiente (`.env`) para todas as conexões sensíveis de banco de dados e APIs.
+* **NUNCA** envie o arquivo `.env` ou `.env.local` para o repositório do GitHub.
+* O arquivo `.gitignore` do projeto está configurado para bloquear automaticamente qualquer vazamento de credenciais locais.
+* As credenciais de produção devem ser cadastradas de forma segura diretamente no painel do seu provedor de hospedagem (como o Vercel).
+
+Consulte o arquivo [.env.example](.env.example) para verificar o modelo de variáveis de ambiente necessárias para o correto funcionamento da plataforma.
+
+---
+
+## 🚀 Como Iniciar Localmente
+
+1. **Clonar o Repositório**:
+   ```bash
+   git clone https://github.com/fernandobritosc/questoes-concursos.git
+   cd questoes-concursos
+   ```
+
+2. **Instalar Dependências**:
+   ```bash
+   npm install
+   ```
+
+3. **Configurar Variáveis de Ambiente**:
+   Crie um arquivo `.env.local` na raiz do projeto seguindo o modelo do `.env.example`:
+   ```env
+   VITE_SUPABASE_URL=sua_url_do_supabase
+   VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
+   VITE_GEMINI_API_KEY=sua_chave_de_api_do_gemini
+   ```
+
+4. **Rodar em Desenvolvimento**:
+   ```bash
+   npm run dev
+   ```
+   Abra `http://localhost:5173` no seu navegador.
