@@ -6,6 +6,7 @@ import { Mentor } from './pages/Mentor'
 import { Questoes } from './pages/Questoes'
 import { EditalVerticalizado } from './pages/EditalVerticalizado'
 import { Landing } from './pages/Landing'
+import { Simulados } from './pages/Simulados'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<Navigate to="/app/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="revisao" element={<Revisao />} />
+          <Route path="simulados" element={<Simulados />} />
           <Route path="mentor" element={<Mentor />} />
           <Route path="questoes" element={<Questoes />} />
           <Route path="edital" element={<EditalVerticalizado />} />

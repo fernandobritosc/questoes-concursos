@@ -151,3 +151,43 @@ Texto do PDF:
 ${pageText}
   `.trim()
 }
+
+/**
+ * Gera um diagnóstico tático de desempenho e conselho exclusivo baseado nos erros de um simulado específico.
+ */
+export async function gerarFeedbackSimulado(
+  erros: { materia: string; assunto: string }[],
+  acertos: number,
+  total: number
+): Promise<string> {
+  const taxaAcerto = total > 0 ? Math.round((acertos / total) * 100) : 0
+
+  let errosStr = ''
+  if (erros.length > 0) {
+    errosStr = erros
+      .map(e => `- ${e.materia || 'Sem Matéria'}: ${e.assunto || 'Geral'}`)
+      .join('\n')
+  } else {
+    errosStr = 'Nenhum erro cometido! Parabéns, aproveitamento de 100% neste simulado.'
+  }
+
+  const prompt = `
+    Aja como um mentor de alto nível para concursos públicos.
+    Eu acabo de realizar um Simulado Inteligente Personalizado com os seguintes resultados:
+    - Acertos: ${acertos} de ${total} (${taxaAcerto}% de aproveitamento)
+    
+    Tópicos onde cometi erros neste simulado:
+    ${errosStr}
+
+    Por favor, forneça um conselho exclusivo de mentor IA de como estudar os pontos onde falhei:
+    1. **Análise Tática**: Um breve comentário de incentivo ou crítica construtiva com base na taxa de acerto (${taxaAcerto}%).
+    2. **Plano de Ataque**: Orientações claras, estratégicas e práticas sobre como estudar/revisar cada um dos tópicos falhados (use os tópicos listados acima).
+    3. **Foco e Estratégia de Prova**: Conselhos de como gerenciar melhor o tempo ou evitar pegadinhas nesses assuntos nas próximas provas.
+
+    Use uma linguagem motivadora, objetiva e profissional. Formate a resposta usando markdown com títulos claros e boa legibilidade.
+  `.trim()
+
+  const result = await geminiModel.generateContent(prompt)
+  return result.response.text()
+}
+
