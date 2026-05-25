@@ -142,31 +142,44 @@ export function Questoes() {
     <div className="h-[calc(100vh-60px)] flex flex-col bg-muted/20 animate-in fade-in duration-300 overflow-hidden">
       
       {/* Top Tabs Header Estilo TEC */}
-      <div className="bg-card border-b border-border px-4 flex items-center justify-start text-xs sm:text-sm font-bold text-muted-foreground select-none overflow-x-auto shrink-0 shadow-xxs">
-        <button
-          onClick={() => setTopTab('questoes')}
-          className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${topTab === 'questoes' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
-        >
-          <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Questões
-        </button>
-        <button
-          onClick={() => setTopTab('indice')}
-          className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${topTab === 'indice' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
-        >
-          <List className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Índice
-        </button>
-        <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap">
-          <PieChart className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Estatísticas
-        </button>
-        <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap">
-          <CheckCircle2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Gabarito
-        </button>
-        <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap hidden sm:flex">
-          <Settings className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Configurações
-        </button>
-        <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap hidden sm:flex">
-          <Printer className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Imprimir
-        </button>
+      <div className="bg-card border-b border-border px-4 flex items-center justify-between text-xs sm:text-sm font-bold text-muted-foreground select-none shrink-0 shadow-xxs">
+        <div className="flex items-center justify-start overflow-x-auto scrollbar-none flex-1">
+          <button
+            onClick={() => setTopTab('questoes')}
+            className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${topTab === 'questoes' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
+          >
+            <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Questões
+          </button>
+          <button
+            onClick={() => setTopTab('indice')}
+            className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${topTab === 'indice' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
+          >
+            <List className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Índice
+          </button>
+          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap">
+            <PieChart className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Estatísticas
+          </button>
+          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap">
+            <CheckCircle2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Gabarito
+          </button>
+          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap hidden sm:flex">
+            <Settings className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Configurações
+          </button>
+          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap hidden sm:flex">
+            <Printer className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Imprimir
+          </button>
+        </div>
+        
+        {/* Botão de Importar sempre visível à direita se houver questões */}
+        {cadernoQuestoes.length > 0 && (
+          <button
+            onClick={() => setIsImportModalOpen(true)}
+            className="my-2 ml-4 flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-[#1565c0] text-white rounded-lg text-xxs font-black transition-all shadow-sm active:scale-95 cursor-pointer whitespace-nowrap"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            <span>Importar PDF</span>
+          </button>
+        )}
       </div>
 
       {/* Main Content Area */}

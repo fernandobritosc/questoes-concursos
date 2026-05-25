@@ -36,8 +36,8 @@ export const getQuestionValidation = (q: Resolucao): string[] => {
   if (!q.questao_tec_id || q.questao_tec_id <= 0) errors.push('ID da questão ausente ou inválido')
   if (!q.enunciado || q.enunciado.trim().length < 10) errors.push('Enunciado curto ou ausente')
   if (!q.gabarito) errors.push('Gabarito ausente')
-  const altKeys = Object.keys(q.alternativas || {})
-  if (altKeys.length < 2) errors.push('Alternativas insuficientes')
+  const validAlts = Object.values(q.alternativas || {}).filter(val => val && val.trim() !== '')
+  if (validAlts.length < 2) errors.push('Alternativas insuficientes')
   return errors
 }
 
@@ -206,7 +206,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
       }
 
       // Split questions
-      const chunks = questionsText.split("www.tecconcursos.com.br/questoes/")
+      const chunks = questionsText.split(/www\.tecconcursos\.com\.br\/questoes\/(?=\d{5,8}\b)/)
       if (chunks.length <= 1) {
         throw new Error("Nenhuma questão encontrada no PDF. Verifique se o PDF contém cadernos de questões do TEC Concursos.")
       }
@@ -276,7 +276,17 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
           materia = subjectLine.trim()
         }
 
-        const restText = lines.slice(3).join("\n")
+        // Pular possíveis cabeçalhos de seções do PDF (ex: "Contraposição)" ou "Revogação)")
+        let enunciadoStartLine = 3
+        while (
+          lines[enunciadoStartLine] && 
+          /^[a-zA-Zá-úÁ-Úà-ùÀ-Ùã-õÃ-Õâ-ûÂ-ÛçÇ\s\-\–\/]+[)]\s*$/.test(lines[enunciadoStartLine].trim()) &&
+          lines[enunciadoStartLine].trim().length < 50
+        ) {
+          enunciadoStartLine++
+        }
+
+        const restText = lines.slice(enunciadoStartLine).join("\n")
         let remainingText = restText.trim()
 
         // Parse alternatives
@@ -407,21 +417,33 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
       setImportStatus({ step: 'saving', progress: 0, total: newQuestions.length })
 
       // Monta o payload para a tabela 'questoes' (sem campos de histórico)
-      const questoesPayload: Questao[] = newQuestions.map(q => ({
-        questao_tec_id: q.questao_tec_id,
-        materia: q.materia,
-        assunto: q.assunto,
-        banca_texto: q.banca_texto,
-        orgao: q.orgao,
-        concurso: q.concurso,
-        prova: q.prova,
-        ano: q.ano,
-        caderno_nome: q.caderno_nome,
-        enunciado: q.enunciado,
-        gabarito: q.gabarito,
-        alternativas: q.alternativas,
-        resolucao_professor: null,
-      }))
+      const questoesPayload: Questao[] = newQuestions.map(q => {
+        // Limpar alternativas vazias para que fiquem ausentes
+        const cleanedAlts: Record<string, string> = {}
+        if (q.alternativas) {
+          Object.entries(q.alternativas).forEach(([letter, text]) => {
+            if (text && text.trim() !== '') {
+              cleanedAlts[letter.toUpperCase()] = text.trim()
+            }
+          })
+        }
+
+        return {
+          questao_tec_id: q.questao_tec_id,
+          materia: q.materia,
+          assunto: q.assunto,
+          banca_texto: q.banca_texto,
+          orgao: q.orgao,
+          concurso: q.concurso,
+          prova: q.prova,
+          ano: q.ano,
+          caderno_nome: q.caderno_nome,
+          enunciado: q.enunciado,
+          gabarito: q.gabarito,
+          alternativas: cleanedAlts,
+          resolucao_professor: null,
+        }
+      })
 
       const successCount = await insertQuestoesBatch(questoesPayload, (current) => {
         setImportStatus(prev => ({ ...prev, progress: current }))
@@ -815,6 +837,48 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           </div>
                         </div>
 
+                        {/* Linha 3: Órgão, Concurso e Ano */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Órgão</label>
+                            <input 
+                              type="text"
+                              value={selectedQuestion.orgao || ''}
+                              onChange={(e) => {
+                                const newOrgao = e.target.value
+                                const updatedProva = newOrgao ? `${newOrgao} / ${selectedQuestion.ano || ''}` : ''
+                                handleUpdateTempQuestion(selectedTempIndex, { orgao: newOrgao, prova: updatedProva })
+                              }}
+                              placeholder="Ex: TRE MS"
+                              className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2]"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Cargo / Concurso</label>
+                            <input 
+                              type="text"
+                              value={selectedQuestion.concurso || ''}
+                              onChange={(e) => handleUpdateTempQuestion(selectedTempIndex, { concurso: e.target.value })}
+                              placeholder="Ex: CEBRASPE - Analista Judiciário"
+                              className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2]"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Ano</label>
+                            <input 
+                              type="number"
+                              value={selectedQuestion.ano || ''}
+                              onChange={(e) => {
+                                const newAno = parseInt(e.target.value, 10) || null
+                                const updatedProva = selectedQuestion.orgao ? `${selectedQuestion.orgao} / ${newAno || ''}` : ''
+                                handleUpdateTempQuestion(selectedTempIndex, { ano: newAno, prova: updatedProva })
+                              }}
+                              placeholder="Ex: 2024"
+                              className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2]"
+                            />
+                          </div>
+                        </div>
+
                         {/* Linha 3: Enunciado */}
                         <div className="space-y-1">
                           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Enunciado da Questão</label>
@@ -830,7 +894,6 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide block">Textos das Alternativas</label>
                           {['A', 'B', 'C', 'D', 'E'].map(letter => {
                             const optionText = selectedQuestion.alternativas?.[letter]
-                            if (optionText === undefined && letter !== 'A' && letter !== 'B') return null // Apenas renderiza se existir no dicionário ou A/B
 
                             return (
                               <div key={letter} className="flex gap-2 items-center">
