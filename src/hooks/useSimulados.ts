@@ -139,28 +139,51 @@ export function useSimulados() {
       q => q.alternativas && Object.keys(q.alternativas).length >= 2
     )
 
-    // 1. Questões correspondentes a assuntos fracos
-    let pool = questoesValidas.filter(q => q.assunto && weakAssuntos.has(q.assunto))
+    // Exclui questões que o aluno errou e ainda não corrigiu (para não refazer as mesmas questões do Caderno de Erros)
+    const questoesValidasSemErros = questoesValidas.filter(
+      q => !(q.alternativa && !q.acertou)
+    )
 
-    // 2. Se for pouca questão, adiciona matérias fracas
+    // 1. Damos prioridade absoluta para questões INÉDITAS (nunca resolvidas) dos assuntos fracos
+    let pool = questoesValidasSemErros.filter(
+      q => q.assunto && weakAssuntos.has(q.assunto) && (!q.alternativa || q.alternativa === '')
+    )
+
+    // 2. Se faltar, adicionamos questões que o aluno já acertou dos mesmos assuntos fracos (para fixação)
     if (pool.length < qtd) {
-      const materiasPool = questoesValidas.filter(
-        q => q.materia && weakMaterias.has(q.materia) && !pool.some(p => p.id === q.id)
+      const resolvidasAcerto = questoesValidasSemErros.filter(
+        q => q.assunto && weakAssuntos.has(q.assunto) && q.alternativa && q.acertou && !pool.some(p => p.id === q.id)
       )
-      pool = [...pool, ...materiasPool]
+      pool = [...pool, ...resolvidasAcerto]
     }
 
-    // 3. Se ainda faltar, adiciona questões não resolvidas (ineditas)
+    // 3. Se ainda faltar, adicionamos inéditas das matérias fracas (geral)
     if (pool.length < qtd) {
-      const ineditas = questoesValidas.filter(
+      const materiasIneditas = questoesValidasSemErros.filter(
+        q => q.materia && weakMaterias.has(q.materia) && (!q.alternativa || q.alternativa === '') && !pool.some(p => p.id === q.id)
+      )
+      pool = [...pool, ...materiasIneditas]
+    }
+
+    // 4. Se ainda faltar, adicionamos questões acertadas das matérias fracas
+    if (pool.length < qtd) {
+      const materiasResolvidas = questoesValidasSemErros.filter(
+        q => q.materia && weakMaterias.has(q.materia) && q.alternativa && q.acertou && !pool.some(p => p.id === q.id)
+      )
+      pool = [...pool, ...materiasResolvidas]
+    }
+
+    // 5. Se mesmo assim faltar, pega qualquer inédita do banco
+    if (pool.length < qtd) {
+      const ineditasGeral = questoesValidasSemErros.filter(
         q => (!q.alternativa || q.alternativa === '') && !pool.some(p => p.id === q.id)
       )
-      pool = [...pool, ...ineditas]
+      pool = [...pool, ...ineditasGeral]
     }
 
-    // 4. Se mesmo assim faltar, pega qualquer questão do banco
+    // 6. Se ainda assim faltar (caso raro), pega qualquer questão restante (exceto erros)
     if (pool.length < qtd) {
-      const geral = questoesValidas.filter(q => !pool.some(p => p.id === q.id))
+      const geral = questoesValidasSemErros.filter(q => !pool.some(p => p.id === q.id))
       pool = [...pool, ...geral]
     }
 
