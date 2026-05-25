@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "MonitorPro Extrator",
+  "version": "2.1",
+  "description": "Captura passiva e inteligente de questões do TEC Concursos.",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["*://www.tecconcursos.com.br/questoes/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
