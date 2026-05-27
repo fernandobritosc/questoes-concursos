@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useRevisao } from '../hooks/useRevisao'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { Button } from '../components/ui/Button'
+import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { BookOpen, CheckCircle2, XCircle, ArrowRight, BrainCircuit, ExternalLink, Search, Filter, BookOpenCheck, Book, Pencil, Check, Loader2 } from 'lucide-react'
 import { updateResolucaoProfessor } from '../services/supabase.service'
 
@@ -389,9 +390,9 @@ export function Revisao() {
                           </div>
                         </div>
                       ) : (
-                        <div className="text-foreground leading-relaxed text-xs font-semibold whitespace-pre-line select-text">
+                        <div className="text-foreground leading-relaxed text-xs font-semibold select-text">
                           {resolucaoText ? (
-                            resolucaoText
+                            <MarkdownAI text={resolucaoText} />
                           ) : (
                             <div className="flex flex-col items-center justify-center py-6 text-center text-muted-foreground gap-2 border border-dashed border-white/[0.08] rounded-xl bg-white/[0.01]">
                               <Book className="w-8 h-8 text-muted-foreground/50" />
@@ -418,8 +419,8 @@ export function Revisao() {
                       <BrainCircuit className="w-5 h-5 text-violet-400 shrink-0" />
                       <span>Explicação do Mentor IA</span>
                     </div>
-                    <div className="text-[13px] text-foreground/90 whitespace-pre-wrap leading-relaxed select-text font-medium">
-                      {explicacaoAtual}
+                    <div className="text-[13px] text-foreground/90 select-text font-medium">
+                      <MarkdownAI text={explicacaoAtual} />
                     </div>
                   </div>
                 )}

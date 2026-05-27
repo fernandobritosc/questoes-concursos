@@ -46,8 +46,10 @@ export async function gerarExplicacaoErro(
     ${questao.alternativas[questao.gabarito || '']}
     
     Explique de forma direta e didática:
-    1. Por que a alternativa marcada pelo aluno está errada (qual foi a "pegadinha" ou erro de conceito).
+    1. Por que a alternativa marcada pelo aluno está errada. Se houver uma pegadinha ou erro de conceito clássico da banca, inicie a frase explicativa com "Pegadinha: " para que ela seja destacada visualmente.
     2. Por que o gabarito é o correto.
+    3. Se houver alguma dica de ouro ou mnemônico valioso para memorização na prova, inicie a linha com "Dica de Prova: ".
+    
     Use uma linguagem amigável, encorajadora e focada na preparação para concursos. Formate bem o texto com parágrafos e sem markdown excessivo.
   `
   const result = await geminiModel.generateContent(prompt)
@@ -80,9 +82,11 @@ export async function gerarResolucaoProfessor(
     Gabarito: ${questao.gabarito}
     
     Escreva uma resolução detalhada e didática desta questão que:
-    1. Explique por que o gabarito (${questao.gabarito}) está correto
-    2. Explique por que as demais alternativas estão erradas (principalmente as que são "pegadinhas")
-    3. Contextualize com a teoria necessária para resolver este tipo de questão
+    1. Explique por que o gabarito (${questao.gabarito}) está correto.
+    2. Explique por que as demais alternativas estão erradas. Se alguma alternativa for uma pegadinha comum, inicie a explicação dela com "Pegadinha: ".
+    3. Destaque pontos teóricos de alta relevância ou regras importantes iniciando com "Atenção: " ou "Importante: ".
+    4. Se houver uma dica rápida ou macete de prova para acelerar a resolução, inicie o parágrafo com "Dica de Prova: ".
+    5. Termine com uma síntese de fechamento iniciando com "Resumo: ".
     
     Use uma linguagem clara, direta e encorajadora. Não use markdown excessivo.
   `
@@ -182,7 +186,7 @@ export async function gerarFeedbackSimulado(
     Por favor, forneça um conselho exclusivo de mentor IA de como estudar os pontos onde falhei:
     1. **Análise Tática**: Um breve comentário de incentivo ou crítica construtiva com base na taxa de acerto (${taxaAcerto}%).
     2. **Plano de Ataque**: Orientações claras, estratégicas e práticas sobre como estudar/revisar cada um dos tópicos falhados (use os tópicos listados acima).
-    3. **Foco e Estratégia de Prova**: Conselhos de como gerenciar melhor o tempo ou evitar pegadinhas nesses assuntos nas próximas provas.
+    3. Destaque avisos cruciais ou alertas iniciando a linha com "Atenção: " ou "Dica de Prova: " para que o sistema renderize em cards destacados.
 
     Use uma linguagem motivadora, objetiva e profissional. Formate a resposta usando markdown com títulos claros e boa legibilidade.
   `.trim()
@@ -190,4 +194,3 @@ export async function gerarFeedbackSimulado(
   const result = await geminiModel.generateContent(prompt)
   return result.response.text()
 }
-

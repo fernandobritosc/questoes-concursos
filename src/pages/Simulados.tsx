@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSimulados } from '../hooks/useSimulados'
 import { Button } from '../components/ui/Button'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
+import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { formatarTempo } from '../hooks/useDashboard'
 import { gerarResolucaoProfessor } from '../services/gemini.service'
 import { updateResolucaoProfessor } from '../services/supabase.service'
@@ -32,89 +33,7 @@ function formatCountdown(segundos: number): string {
   return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
 }
 
-// Sub-componente para renderizar Markdown da IA sem dependências extras
-function MarkdownAI({ text }: { text: string }) {
-  if (!text) return null
 
-  const lines = text.split('\n')
-
-  return (
-    <div className="space-y-3.5 text-foreground/90 leading-relaxed font-sans text-sm">
-      {lines.map((line, idx) => {
-        const trimmed = line.trim()
-        if (!trimmed) return <div key={idx} className="h-2" />
-
-        // Headings
-        if (trimmed.startsWith('### ')) {
-          return (
-            <h4 key={idx} className="text-sm font-bold text-violet-400 mt-5 mb-1.5 tracking-tight flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-violet-400 shrink-0" />
-              {parseBold(trimmed.substring(4))}
-            </h4>
-          )
-        }
-        if (trimmed.startsWith('## ')) {
-          return (
-            <h3 key={idx} className="text-base font-black text-violet-300 mt-7 mb-2.5 tracking-tight border-b border-white/[0.05] pb-1">
-              {parseBold(trimmed.substring(3))}
-            </h3>
-          )
-        }
-        if (trimmed.startsWith('# ')) {
-          return (
-            <h2 key={idx} className="text-lg font-black text-foreground mt-8 mb-3.5 tracking-tight">
-              {parseBold(trimmed.substring(2))}
-            </h2>
-          )
-        }
-
-        // Bullet points
-        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-          return (
-            <div key={idx} className="flex gap-2 pl-3 py-0.5">
-              <span className="text-violet-500 font-bold shrink-0">•</span>
-              <p className="flex-1 text-muted-foreground text-xs">{parseBold(trimmed.substring(2))}</p>
-            </div>
-          )
-        }
-
-        // Ordered list numbers
-        const numMatch = trimmed.match(/^(\d+)\.\s+(.*)/)
-        if (numMatch) {
-          return (
-            <div key={idx} className="flex gap-2 pl-3 py-1">
-              <span className="text-violet-400 font-bold text-xs shrink-0">{numMatch[1]}.</span>
-              <p className="flex-1 text-muted-foreground text-xs">{parseBold(numMatch[2])}</p>
-            </div>
-          )
-        }
-
-        // Default paragraph
-        return (
-          <p key={idx} className="text-muted-foreground text-xs">
-            {parseBold(trimmed)}
-          </p>
-        )
-      })}
-    </div>
-  )
-}
-
-function parseBold(text: string): React.ReactNode {
-  const parts = text.split(/\*\*(.*?)\*\*/g)
-  if (parts.length === 1) return text
-
-  return parts.map((part, i) => {
-    if (i % 2 === 1) {
-      return (
-        <strong key={i} className="font-extrabold text-foreground/90">
-          {part}
-        </strong>
-      )
-    }
-    return part
-  })
-}
 
 export function Simulados() {
   const {
@@ -782,8 +701,8 @@ export function Simulados() {
                         </div>
 
                         {explicacaoLocal ? (
-                          <div className="p-4 rounded-xl bg-violet-500/[0.02] border border-violet-500/10 text-xs text-muted-foreground leading-relaxed whitespace-pre-wrap select-text">
-                            {explicacaoLocal}
+                          <div className="p-4 rounded-xl bg-violet-500/[0.02] border border-violet-500/10 select-text">
+                            <MarkdownAI text={explicacaoLocal} />
                           </div>
                         ) : (
                           <div className="p-4 rounded-xl bg-white/[0.005] border border-dashed border-white/[0.08] text-center text-xs text-muted-foreground/50 py-6">

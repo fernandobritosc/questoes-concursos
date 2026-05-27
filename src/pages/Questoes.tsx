@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import { useQuestoes } from '../hooks/useQuestoes'
 import { ImportPdfModal } from '../components/ImportPdfModal'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
+import { MarkdownAI } from '../components/ui/MarkdownAI'
 import type { HistoricoResolucao } from '../types/database'
 import { 
   ChevronRight, 
@@ -526,9 +527,9 @@ export function Questoes() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text-foreground leading-relaxed text-xs font-semibold whitespace-pre-line">
+                  <div className="text-foreground leading-relaxed text-xs font-semibold">
                     {resolucaoText ? (
-                      resolucaoText
+                      <MarkdownAI text={resolucaoText} />
                     ) : (
                       <div className="flex flex-col items-center justify-center py-6 text-center text-muted-foreground gap-2 border border-dashed border-border rounded-lg bg-muted/30">
                         <Book className="w-8 h-8 text-muted-foreground" />
@@ -555,8 +556,8 @@ export function Questoes() {
                 <BrainCircuit className="w-5 h-5 text-primary" />
                 <span>Explicação do Professor IA</span>
               </div>
-              <div className="text-foreground leading-relaxed text-sm prose prose-sm prose-p:my-2 prose-headings:my-3 prose-headings:text-primary prose-strong:text-primary max-w-none">
-                <ReactMarkdown>{explicacoes[questoesExibidas[currentQuestaoIndex].id!]}</ReactMarkdown>
+              <div className="text-foreground leading-relaxed text-sm max-w-none">
+                <MarkdownAI text={explicacoes[questoesExibidas[currentQuestaoIndex].id!]} />
               </div>
             </div>
           )}
