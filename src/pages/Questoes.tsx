@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
 import { useQuestoes } from '../hooks/useQuestoes'
 import { ImportPdfModal } from '../components/ImportPdfModal'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
