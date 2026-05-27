@@ -503,7 +503,7 @@ export function Dashboard() {
 
   const evolucaoDiaria = is24h ? stats.stats24h.evolucaoDiaria : stats.evolucaoDiaria
 
-  const radarData = chartData.slice(0, 5).map(item => ({
+  const radarData = chartData.map(item => ({
     materia: item.materia.length > 18 ? item.materia.substring(0, 16) + '...' : item.materia,
     Aproveitamento: item.taxa,
     total: item.total
