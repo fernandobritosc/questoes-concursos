@@ -667,7 +667,7 @@ export function Dashboard() {
                 color: periodo === '24h' ? '#ffffff' : 'var(--color-muted-foreground)',
               }}
             >
-              <span>Últimas 24h</span>
+              <span>Hoje</span>
               <span className="text-[9px] opacity-75 font-normal">(Brasília)</span>
             </button>
           </div>
@@ -695,7 +695,7 @@ export function Dashboard() {
         <MetricCard
           title="Questões Resolvidas"
           value={totalQuestoes}
-          subtitle="Total acumulado"
+          subtitle={is24h ? "Hoje (Brasília)" : "Total acumulado"}
           icon={<BookOpen className="w-4 h-4 text-white" />}
           gradientClass="gradient-violet"
           sparkColor="#8b5cf6"
@@ -705,7 +705,7 @@ export function Dashboard() {
         <MetricCard
           title="Tempo Médio"
           value={tempoFormatado}
-          subtitle="Por questão"
+          subtitle={is24h ? "Hoje (Brasília)" : "Por questão"}
           icon={<Clock className="w-4 h-4 text-white" />}
           gradientClass="gradient-amber"
           sparkColor="#f59e0b"
@@ -715,7 +715,7 @@ export function Dashboard() {
         <MetricCard
           title="Erros para Revisar"
           value={errosPendentes}
-          subtitle="Aguardando revisão"
+          subtitle={is24h ? "Gerados hoje" : "Aguardando revisão"}
           icon={<Target className="w-4 h-4 text-white" />}
           gradientClass="gradient-rose"
           sparkColor="#f43f5e"
@@ -734,11 +734,11 @@ export function Dashboard() {
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-violet-400" />
               <h3 className="text-sm font-bold text-foreground">
-                {is24h ? 'Desempenho por Hora (Últimas 24h)' : 'Evolução de Estudos (Últimos Dias)'}
+                {is24h ? 'Desempenho por Hora (Hoje)' : 'Evolução de Estudos (Últimos Dias)'}
               </h3>
             </div>
             <span className="text-[10px] text-violet-400 font-bold bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full">
-              {is24h ? 'Fluxo Horário' : 'Fluxo Diário'}
+              {is24h ? 'Fluxo de Hoje' : 'Fluxo Diário'}
             </span>
           </div>
           <div className="flex-1 flex items-center justify-center min-h-[220px]">
@@ -784,9 +784,9 @@ export function Dashboard() {
                 />
               ))
             ) : (
-              <div className="flex items-center justify-center text-muted-foreground text-sm flex-1 text-center py-4">
+              <div className="flex items-center justify-center text-muted-foreground text-sm flex-1 text-center py-4 flex-col gap-1">
                 <span>Nenhuma matéria estudada</span>
-                <span className="text-xs opacity-60 mt-1">{is24h ? 'nas últimas 24 horas.' : 'ainda.'}</span>
+                <span className="text-xs opacity-60 mt-0.5">{is24h ? 'hoje.' : 'ainda.'}</span>
               </div>
             )}
           </div>
@@ -798,7 +798,7 @@ export function Dashboard() {
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-sky-400" />
               <h3 className="text-sm font-bold text-foreground">
-                {is24h ? 'Resoluções (Últimas 24h)' : 'Últimas Resoluções'}
+                {is24h ? 'Resoluções de Hoje' : 'Últimas Resoluções'}
               </h3>
             </div>
             {is24h && (
@@ -812,9 +812,9 @@ export function Dashboard() {
               <ResolucaoItem key={res.id || Math.random()} res={res} index={i} />
             ))}
             {ultimasResolucoes.length === 0 && (
-              <div className="flex flex-col items-center justify-center text-muted-foreground text-sm flex-1 text-center py-4">
+              <div className="flex flex-col items-center justify-center text-muted-foreground text-sm flex-1 text-center py-4 flex-col gap-1">
                 <span>Nenhuma questão resolvida</span>
-                <span className="text-xs opacity-60 mt-1">{is24h ? 'nas últimas 24 horas.' : 'ainda.'}</span>
+                <span className="text-xs opacity-60 mt-0.5">{is24h ? 'hoje.' : 'ainda.'}</span>
               </div>
             )}
           </div>

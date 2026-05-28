@@ -168,26 +168,54 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
       taxa: val.resolvidas > 0 ? Math.round((val.acertos / val.resolvidas) * 100) : 0,
     }))
 
-  // Cálculo das estatísticas das últimas 24 horas (Horário de Brasília)
-  const agoraMs = Date.now()
-  const umDiaAtrasMs = agoraMs - 24 * 60 * 60 * 1000
+  // Helper to format date in Brasília timezone (YYYY-MM-DD)
+  const getBrasiliaDateString = (date: Date): string => {
+    return new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(date)
+  }
 
-  const respondidas24h = respondidas.filter(r => {
+  // Helper to get date string and hour in Brasília timezone
+  const getBrasiliaDateAndHour = (dateStr: string) => {
+    const d = new Date(dateStr)
+    const dateString = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(d)
+
+    const hour = Number(new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Sao_Paulo',
+      hour: '2-digit',
+      hour12: false
+    }).format(d)) % 24
+
+    return { dateString, hour }
+  }
+
+  // Cálculo das estatísticas de Hoje (Horário de Brasília)
+  const hojeSP = getBrasiliaDateString(new Date())
+
+  const respondidasHoje = respondidas.filter(r => {
     if (!r.data_resolucao) return false
-    const dataMs = new Date(r.data_resolucao).getTime()
-    return dataMs >= umDiaAtrasMs
+    const { dateString } = getBrasiliaDateAndHour(r.data_resolucao)
+    return dateString === hojeSP
   })
 
-  const totalQuestoes24h = respondidas24h.length
-  const totalAcertos24h = respondidas24h.filter(r => r.acertou).length
-  const taxaAcerto24h = totalQuestoes24h > 0 ? Math.round((totalAcertos24h / totalQuestoes24h) * 100) : 0
-  const tempoMedio24h =
-    totalQuestoes24h > 0
-      ? Math.round(respondidas24h.reduce((acc, curr) => acc + curr.tempo_segundos, 0) / totalQuestoes24h)
+  const totalQuestoesHoje = respondidasHoje.length
+  const totalAcertosHoje = respondidasHoje.filter(r => r.acertou).length
+  const taxaAcertoHoje = totalQuestoesHoje > 0 ? Math.round((totalAcertosHoje / totalQuestoesHoje) * 100) : 0
+  const tempoMedioHoje =
+    totalQuestoesHoje > 0
+      ? Math.round(respondidasHoje.reduce((acc, curr) => acc + curr.tempo_segundos, 0) / totalQuestoesHoje)
       : 0
 
-  // Estatísticas de matéria das últimas 24 horas
-  const porMateria24h = respondidas24h.reduce(
+  // Estatísticas de matéria de Hoje
+  const porMateriaHoje = respondidasHoje.reduce(
     (acc, curr) => {
       const mat = curr.materia || 'Sem Matéria'
       if (!acc[mat]) acc[mat] = { materia: mat, acertos: 0, total: 0, taxa: 0 }
@@ -198,30 +226,28 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
     {} as Record<string, MateriaStat>
   )
 
-  const chartData24h = Object.values(porMateria24h)
+  const chartDataHoje = Object.values(porMateriaHoje)
     .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
     .sort((a, b) => b.total - a.total)
 
-  // Agrupamento por hora para as últimas 24h
-  const porHora24h = respondidas24h.reduce((acc, curr) => {
+  // Agrupamento por hora (Brasília) para Hoje
+  const porHoraHoje = respondidasHoje.reduce((acc, curr) => {
     if (!curr.data_resolucao) return acc
-    const d = new Date(curr.data_resolucao)
-    const hour = String(d.getHours()).padStart(2, '0') + 'h'
-    const timestamp = d.getTime()
-    const hourKey = d.toISOString().substring(0, 13)
+    const { hour } = getBrasiliaDateAndHour(curr.data_resolucao)
+    const hourKey = hour
+    const display = `${hour}h`
 
     if (!acc[hourKey]) {
-      acc[hourKey] = { display: hour, resolvidas: 0, acertos: 0, timestamp }
+      acc[hourKey] = { display, resolvidas: 0, acertos: 0, hour }
     }
     acc[hourKey].resolvidas += 1
     if (curr.acertou) acc[hourKey].acertos += 1
     return acc
-  }, {} as Record<string, { display: string; resolvidas: number; acertos: number; timestamp: number }>)
+  }, {} as Record<number, { display: string; resolvidas: number; acertos: number; hour: number }>)
 
-  const evolucaoDiaria24h = Object.entries(porHora24h)
-    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-    .slice(-10)
-    .map(([_, val]) => ({
+  const evolucaoDiariaHoje = Object.values(porHoraHoje)
+    .sort((a, b) => a.hour - b.hour)
+    .map(val => ({
       data: val.display,
       resolvidas: val.resolvidas,
       acertos: val.acertos,
@@ -251,14 +277,14 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
     dataFormatada: dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1),
     evolucaoDiaria,
     stats24h: {
-      totalQuestoes: totalQuestoes24h,
-      totalAcertos: totalAcertos24h,
-      taxaAcerto: taxaAcerto24h,
-      tempoMedio: tempoMedio24h,
-      tempoFormatado: formatarTempo(tempoMedio24h),
-      resolucoes: respondidas24h,
-      chartData: chartData24h,
-      evolucaoDiaria: evolucaoDiaria24h
+      totalQuestoes: totalQuestoesHoje,
+      totalAcertos: totalAcertosHoje,
+      taxaAcerto: taxaAcertoHoje,
+      tempoMedio: tempoMedioHoje,
+      tempoFormatado: formatarTempo(tempoMedioHoje),
+      resolucoes: respondidasHoje,
+      chartData: chartDataHoje,
+      evolucaoDiaria: evolucaoDiariaHoje
     }
   }
 }
