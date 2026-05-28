@@ -682,7 +682,7 @@ export function Dashboard() {
       </div>
 
       {/* ── Métricas: gauge + 3 cards numa faixa horizontal compacta ── */}
-      <div className="grid grid-cols-4 gap-4 shrink-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
         {/* Gauge Card */}
         <div className="glass-card p-4 flex items-center gap-5 animate-fade-in-up stagger-1">
           <GaugeChart value={taxaAcerto} size={110} />
@@ -764,7 +764,7 @@ export function Dashboard() {
       </div>
 
       {/* ── Painéis inferiores — crescem para preencher todo o espaço restante ── */}
-      <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
         {/* Matérias Estudadas */}
         <div className="glass-card p-5 flex flex-col animate-fade-in-up" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center gap-2 mb-4 shrink-0">
