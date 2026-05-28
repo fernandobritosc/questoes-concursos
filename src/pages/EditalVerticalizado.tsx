@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { 
   ChevronRight, 
+  ChevronLeft,
   Plus, 
   Trash2, 
   ChevronsUp, 
@@ -85,7 +86,9 @@ export function EditalVerticalizado() {
   }, [resolucoes, customMaterias])
 
   useEffect(() => {
-    if (!selectedMateria && uniqueMateriasList.length > 0) {
+    // Auto-seleciona apenas em telas grandes (desktop)
+    const isMobile = window.innerWidth < 768
+    if (!selectedMateria && uniqueMateriasList.length > 0 && !isMobile) {
       setSelectedMateria(uniqueMateriasList[0])
     }
   }, [uniqueMateriasList, selectedMateria])
@@ -316,11 +319,11 @@ export function EditalVerticalizado() {
         </div>
       </div>
 
-      {/* Grid de 2 Colunas */}
-      <div className="flex-1 flex overflow-hidden">
+      {/* Grid de 2 Colunas (Responsivo no celular) */}
+      <div className="flex-1 flex overflow-hidden relative">
         
         {/* Coluna Esquerda: Lista de Matérias */}
-        <div className="w-80 border-r border-border bg-card flex flex-col h-full shrink-0">
+        <div className={`w-full md:w-80 border-r border-border bg-card flex flex-col h-full shrink-0 ${selectedMateria ? 'hidden md:flex' : 'flex'}`}>
           
           {/* Caixa de Busca de Matérias */}
           <div className="p-4 border-b border-border space-y-3 shrink-0">
@@ -427,13 +430,21 @@ export function EditalVerticalizado() {
         </div>
 
         {/* Coluna Direita: Assuntos & Painel de Detalhes */}
-        <div className="flex-1 bg-muted/10 flex flex-col h-full overflow-hidden">
+        <div className={`flex-1 bg-muted/10 flex flex-col h-full overflow-hidden ${!selectedMateria ? 'hidden md:flex' : 'flex'}`}>
           
           {selectedMateria ? (
             <div className="flex-1 flex flex-col overflow-hidden">
               
               {/* Header de Detalhes da Matéria */}
-              <div className="p-5 bg-card border-b border-border shrink-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="p-5 bg-card border-b border-border shrink-0 flex flex-col items-start justify-between gap-4">
+                {/* Botão de Voltar para Mobile */}
+                <button
+                  onClick={() => setSelectedMateria(null)}
+                  className="md:hidden flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-violet-400 hover:text-violet-300 border border-violet-500/20 bg-violet-500/5 px-3 py-1.5 rounded-xl cursor-pointer transition-all mb-2"
+                >
+                  <ChevronLeft className="w-4 h-4 animate-pulse" />
+                  <span>Voltar para Matérias</span>
+                </button>
                 <div className="space-y-1">
                   <h3 className="text-sm font-black text-foreground uppercase tracking-wide">{selectedMateria}</h3>
                   <p className="text-[10px] text-muted-foreground font-semibold">
