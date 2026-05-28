@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, BookOpen, BrainCircuit, Database, ClipboardList, Timer } from 'lucide-react'
+import { LayoutDashboard, BookOpen, BrainCircuit, Database, ClipboardList, Timer, Map } from 'lucide-react'
 import { CommandPalette } from './CommandPalette'
 
 export function Layout() {
@@ -9,6 +9,7 @@ export function Layout() {
     { name: 'Dashboard', path: '/app/dashboard', icon: LayoutDashboard },
     { name: 'Edital Verticalizado', path: '/app/edital', icon: ClipboardList },
     { name: 'Simulados IA', path: '/app/simulados', icon: Timer },
+    { name: 'Mapa de Questões', path: '/app/mapa', icon: Map },
     { name: 'Caderno de Erros', path: '/app/revisao', icon: BookOpen },
     { name: 'Banco de Questões', path: '/app/questoes', icon: Database },
     { name: 'Mentor IA', path: '/app/mentor', icon: BrainCircuit },

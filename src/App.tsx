@@ -7,6 +7,7 @@ import { Questoes } from './pages/Questoes'
 import { EditalVerticalizado } from './pages/EditalVerticalizado'
 import { Landing } from './pages/Landing'
 import { Simulados } from './pages/Simulados'
+import { MapaQuestoes } from './pages/MapaQuestoes'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="mentor" element={<Mentor />} />
           <Route path="questoes" element={<Questoes />} />
           <Route path="edital" element={<EditalVerticalizado />} />
+          <Route path="mapa" element={<MapaQuestoes />} />
         </Route>
 
         {/* Fallback temporário caso a pessoa estivesse acostumada com a rota antiga */}

@@ -116,6 +116,21 @@ export function Questoes() {
     }
   }, [targetId, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams])
 
+  useEffect(() => {
+    const matParam = searchParams.get('materia')
+    const assParam = searchParams.get('assunto')
+    if ((matParam || assParam) && cadernoQuestoes.length > 0) {
+      const newFiltros: Record<string, string> = {}
+      if (matParam) newFiltros['materia'] = matParam
+      if (assParam) newFiltros['assunto'] = assParam
+      
+      setFiltros(newFiltros)
+      setCurrentQuestaoIndex(0)
+      setTopTab('questoes')
+      setSearchParams({}, { replace: true })
+    }
+  }, [searchParams, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams])
+
   const [filtros, setFiltros] = useState<Record<string, string> | null>(null)
   
   const questoesExibidas = useMemo(() => {
