@@ -15,9 +15,9 @@ export function Layout() {
   ]
 
   return (
-    <div className="flex h-screen w-full bg-background">
+    <div className="flex h-screen w-full bg-background print:h-auto print:block print:bg-white">
       {/* Sidebar */}
-      <aside className="w-56 border-r border-border bg-card/80 backdrop-blur-sm flex flex-col">
+      <aside className="w-56 border-r border-border bg-card/80 backdrop-blur-sm flex flex-col print:hidden">
         <div className="p-6">
           <Link to="/" className="flex items-center gap-3 group">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/25 transition-shadow duration-300 group-hover:shadow-violet-500/40">
@@ -66,7 +66,7 @@ export function Layout() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto p-5 flex flex-col">
+      <main className="flex-1 overflow-auto p-5 flex flex-col print:p-0 print:overflow-visible print:h-auto print:block">
         <Outlet />
       </main>
 

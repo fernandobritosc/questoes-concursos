@@ -19,7 +19,6 @@ import {
   GraduationCap,
   Search,
   X,
-  Settings,
   Printer,
   List,
   Shuffle,
@@ -94,6 +93,14 @@ export function Questoes() {
     handleConfirmarResposta,
   } = useQuestoes()
 
+  const statsTotal = historicoQuestaoAtiva?.length || 0
+  const statsAcertos = historicoQuestaoAtiva?.filter(h => h.acertou).length || 0
+  const statsErros = statsTotal - statsAcertos
+  const statsTaxaAcerto = statsTotal > 0 ? Math.round((statsAcertos / statsTotal) * 100) : 0
+  const statsRadius = 28
+  const statsCircumference = 2 * Math.PI * statsRadius
+  const statsStrokeDashoffset = statsCircumference - (statsTaxaAcerto / 100) * statsCircumference
+
   const [searchParams, setSearchParams] = useSearchParams()
   const targetId = searchParams.get('id')
 
@@ -139,36 +146,43 @@ export function Questoes() {
   if (loading) return <LoadingSpinner />
 
   return (
-    <div className="h-[calc(100vh-60px)] flex flex-col bg-muted/20 animate-in fade-in duration-300 overflow-hidden">
-      
-      {/* Top Tabs Header Estilo TEC */}
-      <div className="bg-card border-b border-border px-4 flex items-center justify-between text-xs sm:text-sm font-bold text-muted-foreground select-none shrink-0 shadow-xxs">
-        <div className="flex items-center justify-start overflow-x-auto scrollbar-none flex-1">
-          <button
-            onClick={() => setTopTab('questoes')}
-            className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${topTab === 'questoes' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
-          >
-            <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Questões
-          </button>
-          <button
-            onClick={() => setTopTab('indice')}
-            className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${topTab === 'indice' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
-          >
-            <List className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Índice
-          </button>
-          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap">
-            <PieChart className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Estatísticas
-          </button>
-          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap">
-            <CheckCircle2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Gabarito
-          </button>
-          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap hidden sm:flex">
-            <Settings className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Configurações
-          </button>
-          <button className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground opacity-40 cursor-not-allowed transition-colors whitespace-nowrap hidden sm:flex">
-            <Printer className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Imprimir
-          </button>
-        </div>
+    <>
+      <div className="h-[calc(100vh-60px)] flex flex-col bg-muted/20 animate-in fade-in duration-300 overflow-hidden print:hidden">
+        
+        {/* Top Tabs Header Estilo TEC */}
+        <div className="bg-card border-b border-border px-4 flex items-center justify-between text-xs sm:text-sm font-bold text-muted-foreground select-none shrink-0 shadow-xxs">
+          <div className="flex items-center justify-start overflow-x-auto scrollbar-none flex-1">
+            <button
+              onClick={() => setTopTab('questoes')}
+              className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${topTab === 'questoes' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
+            >
+              <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Questões
+            </button>
+            <button
+              onClick={() => setTopTab('indice')}
+              className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${topTab === 'indice' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
+            >
+              <List className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Índice
+            </button>
+            <button
+              onClick={() => setTopTab('estatisticas')}
+              className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${topTab === 'estatisticas' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
+            >
+              <PieChart className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Estatísticas
+            </button>
+            <button
+              onClick={() => setTopTab('gabarito')}
+              className={`py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${topTab === 'gabarito' ? 'border-primary text-primary bg-primary/5' : 'border-transparent hover:text-foreground hover:bg-muted/50'}`}
+            >
+              <CheckCircle2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Gabarito
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="py-3.5 px-4 sm:px-6 flex items-center gap-2 border-b-2 border-transparent hover:text-foreground hover:bg-muted/50 transition-colors whitespace-nowrap hidden sm:flex cursor-pointer active:scale-95 duration-100"
+            >
+              <Printer className="w-4 h-4 sm:w-4.5 sm:h-4.5" /> Imprimir
+            </button>
+          </div>
         
         {/* Botão de Importar sempre visível à direita se houver questões */}
         {cadernoQuestoes.length > 0 && (
@@ -625,6 +639,228 @@ export function Questoes() {
           </div>
         )}
 
+        {topTab === 'estatisticas' && (
+          <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
+            {cadernoQuestoes.length === 0 ? (
+              <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-border rounded-xl shadow-sm">
+                <Layers className="w-16 h-16 text-muted-foreground/30 mb-4" />
+                <h2 className="text-xl font-bold text-foreground mb-2">Nenhuma questão disponível</h2>
+                <p className="text-sm text-muted-foreground">Importe um PDF para ver as estatísticas.</p>
+              </div>
+            ) : (
+              <div className="space-y-6 pb-12">
+                {/* Cabeçalho da Questão Ativa */}
+                <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <span className="text-xxs font-black text-primary uppercase tracking-wider bg-primary/10 px-2.5 py-1 rounded-md">Questão Ativa</span>
+                    <h4 className="text-sm font-black text-foreground mt-3">
+                      Q{questoesExibidas[currentQuestaoIndex]?.questao_tec_id} — {questoesExibidas[currentQuestaoIndex]?.banca_texto} ({questoesExibidas[currentQuestaoIndex]?.ano})
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-1 font-semibold">
+                      {questoesExibidas[currentQuestaoIndex]?.materia} {questoesExibidas[currentQuestaoIndex]?.assunto && `> ${questoesExibidas[currentQuestaoIndex]?.assunto}`}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setTopTab('questoes')}
+                    className="px-4 py-2 border border-border text-foreground hover:bg-muted rounded-lg text-xxs font-black uppercase tracking-wider transition-all shadow-xxs active:scale-95 duration-100 cursor-pointer"
+                  >
+                    Voltar para a Questão
+                  </button>
+                </div>
+
+                {/* Estatísticas Gerais */}
+                <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+                  <div className="px-6 py-4 bg-muted border-b border-border flex items-center gap-2 text-foreground font-bold text-xs uppercase tracking-wider">
+                    <PieChart className="w-5 h-5 text-teal-500 fill-teal-50" />
+                    <span>Desempenho nesta Questão</span>
+                  </div>
+
+                  {loadingHistoricoAtivo ? (
+                    <div className="p-12 flex items-center justify-center">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    </div>
+                  ) : statsTotal === 0 ? (
+                    <div className="p-8 flex items-center gap-3 text-muted-foreground text-xs font-semibold justify-center">
+                      <PieChart className="w-5 h-5 text-muted-foreground/50" />
+                      <span>Você ainda não resolveu esta questão. Sua primeira tentativa será registrada no histórico.</span>
+                    </div>
+                  ) : (
+                    <div className="p-6 space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Donut Chart */}
+                        <div className="flex items-center gap-4 bg-muted/20 p-4 rounded-xl border border-border/60">
+                          <div className="relative flex items-center justify-center w-20 h-20">
+                            <svg className="w-full h-full transform -rotate-90">
+                              <circle
+                                cx="40"
+                                cy="40"
+                                r={statsRadius}
+                                className="text-border"
+                                strokeWidth="7"
+                                stroke="currentColor"
+                                fill="transparent"
+                              />
+                              <circle
+                                cx="40"
+                                cy="40"
+                                r={statsRadius}
+                                className="text-emerald-500 transition-all duration-500 ease-out"
+                                strokeWidth="7"
+                                strokeDasharray={statsCircumference}
+                                strokeDashoffset={statsStrokeDashoffset}
+                                strokeLinecap="round"
+                                stroke="currentColor"
+                                fill="transparent"
+                              />
+                            </svg>
+                            <span className="absolute text-sm font-black text-foreground">{statsTaxaAcerto}%</span>
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <h4 className="text-xs font-bold text-foreground">Taxa de Acerto</h4>
+                            <p className="text-xxs text-muted-foreground">
+                              {statsAcertos} {statsAcertos === 1 ? 'acerto' : 'acertos'} e {statsErros} {statsErros === 1 ? 'erro' : 'erros'} de {statsTotal} {statsTotal === 1 ? 'tentativa' : 'tentativas'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Estatísticas Simples */}
+                        <div className="grid grid-cols-2 gap-3 md:col-span-2">
+                          <div className="bg-muted/20 p-4 rounded-xl border border-border/60 flex flex-col justify-between">
+                            <span className="text-[10px] font-black uppercase text-muted-foreground">Vezes Resolvida</span>
+                            <span className="text-xl font-black text-foreground">{statsTotal} {statsTotal === 1 ? 'vez' : 'vezes'}</span>
+                          </div>
+                          <div className="bg-muted/20 p-4 rounded-xl border border-border/60 flex flex-col justify-between">
+                            <span className="text-[10px] font-black uppercase text-muted-foreground">Último Resultado</span>
+                            <span className={`text-xs font-black uppercase tracking-wide ${historicoQuestaoAtiva[historicoQuestaoAtiva.length - 1]?.acertou ? 'text-emerald-600' : 'text-red-650'}`}>
+                              {historicoQuestaoAtiva[historicoQuestaoAtiva.length - 1]?.acertou ? 'Acertou (Correto)' : 'Errou (Incorreto)'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Histórico Cronológico */}
+                      <div className="border border-border rounded-xl overflow-hidden bg-card">
+                        <div className="px-5 py-3.5 bg-muted/30 border-b border-border text-[10px] font-black uppercase tracking-wider text-muted-foreground">
+                          Histórico de Tentativas
+                        </div>
+                        <div className="max-h-[250px] overflow-y-auto divide-y divide-border/60">
+                          {historicoQuestaoAtiva.slice().reverse().map((tentativa, idx) => {
+                            const data = new Date(tentativa.data_resolucao).toLocaleDateString('pt-BR', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })
+                            const tempo = tentativa.tempo_segundos
+                              ? `${Math.floor(tentativa.tempo_segundos / 60)}m ${tentativa.tempo_segundos % 60}s`
+                              : 'N/D'
+
+                            return (
+                              <div key={tentativa.id || idx} className="px-6 py-3 flex items-center justify-between text-xxs font-semibold hover:bg-muted/10 transition-colors">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-muted-foreground">{data}</span>
+                                  <span className={`font-black uppercase tracking-wider px-2 py-0.5 rounded text-[9px] ${
+                                    tentativa.acertou 
+                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                                      : 'bg-red-50 text-red-700 border border-red-200'
+                                  }`}>
+                                    {tentativa.acertou ? 'Acertou' : 'Errou'}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-4 text-muted-foreground">
+                                  <span>Opção: <strong className="text-foreground">{tentativa.alternativa || 'N/A'}</strong></span>
+                                  <span>Tempo: <strong className="text-foreground">{tempo}</strong></span>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {topTab === 'gabarito' && (
+          <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
+            {cadernoQuestoes.length === 0 ? (
+              <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-border rounded-xl shadow-sm">
+                <Layers className="w-16 h-16 text-muted-foreground/30 mb-4" />
+                <h2 className="text-xl font-bold text-foreground mb-2">Nenhuma questão disponível</h2>
+                <p className="text-sm text-muted-foreground">Importe um PDF para ver o gabarito.</p>
+              </div>
+            ) : (
+              <div className="space-y-6 pb-12">
+                {/* Info Header */}
+                <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <span className="text-xxs font-black text-emerald-500 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-md">Gabarito Oficial</span>
+                    <h4 className="text-sm font-black text-foreground mt-3">
+                      Questão Q{questoesExibidas[currentQuestaoIndex]?.questao_tec_id}
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-1 font-semibold">
+                      {questoesExibidas[currentQuestaoIndex]?.materia} {questoesExibidas[currentQuestaoIndex]?.assunto && `> ${questoesExibidas[currentQuestaoIndex]?.assunto}`}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setTopTab('questoes')}
+                    className="px-4 py-2 border border-border text-foreground hover:bg-muted rounded-lg text-xxs font-black uppercase tracking-wider transition-all shadow-xxs active:scale-95 duration-100 cursor-pointer"
+                  >
+                    Voltar para a Questão
+                  </button>
+                </div>
+
+                {/* Big Answer Reveal Card */}
+                <div className="bg-card border border-border rounded-xl p-8 shadow-lg flex flex-col items-center justify-center text-center space-y-4">
+                  <div className="w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center text-3xl font-black text-emerald-500 shadow-lg shadow-emerald-500/10 animate-bounce">
+                    {questoesExibidas[currentQuestaoIndex]?.gabarito}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black text-foreground">Alternativa Correta</h3>
+                    <p className="text-xs text-muted-foreground mt-1 font-medium">Veja abaixo o texto completo da opção oficial recomendada:</p>
+                  </div>
+                  
+                  {/* Full Text of Correct Alternative */}
+                  <div className="w-full max-w-2xl bg-emerald-500/[0.03] border border-emerald-500/20 p-5 rounded-xl text-left leading-relaxed text-xs text-foreground font-semibold mt-4">
+                    {questoesExibidas[currentQuestaoIndex]?.gabarito ? (questoesExibidas[currentQuestaoIndex]?.alternativas?.[questoesExibidas[currentQuestaoIndex]?.gabarito as string] || 'Texto da alternativa não disponível.') : 'Texto da alternativa não disponível.'}
+                  </div>
+                </div>
+
+                {/* Resolução do Professor e IA se disponível */}
+                {(questoesExibidas[currentQuestaoIndex]?.resolucao_professor || explicacoes[questoesExibidas[currentQuestaoIndex]?.id!]) && (
+                  <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden p-6 space-y-4">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                      <GraduationCap className="w-4.5 h-4.5 text-primary" /> Explicação e Resolução
+                    </h3>
+                    
+                    {questoesExibidas[currentQuestaoIndex]?.resolucao_professor && (
+                      <div className="space-y-1">
+                        <h4 className="text-xxs font-black uppercase text-amber-600">Comentário do Professor</h4>
+                        <div className="text-xs text-foreground leading-relaxed mt-2">
+                          <MarkdownAI text={questoesExibidas[currentQuestaoIndex]?.resolucao_professor} />
+                        </div>
+                      </div>
+                    )}
+
+                    {explicacoes[questoesExibidas[currentQuestaoIndex]?.id!] && (
+                      <div className="space-y-1 pt-3 border-t border-border/60">
+                        <h4 className="text-xxs font-black uppercase text-primary">Comentário do Mentor IA</h4>
+                        <div className="text-xs text-foreground leading-relaxed mt-2">
+                          <MarkdownAI text={explicacoes[questoesExibidas[currentQuestaoIndex]?.id!]} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {topTab === 'indice' && (
           <div className="w-full max-w-5xl mx-auto bg-card border border-border rounded-xl shadow-sm overflow-hidden">
             <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between">
@@ -780,7 +1016,139 @@ export function Questoes() {
         existingQuestions={resolucoes}
       />
 
-    </div>
+      </div>
+
+      {/* Dedicated Print-Only Container */}
+      {cadernoQuestoes.length > 0 && (
+        <div className="hidden print:block w-full max-w-4xl mx-auto p-8 bg-white text-black text-sm leading-relaxed space-y-6">
+          
+          {/* Header Info */}
+          <div className="border-b-2 border-black pb-4">
+            <div className="flex justify-between items-start text-xs font-bold uppercase tracking-wider text-neutral-600">
+              <div>
+                <span>Questão Q{questoesExibidas[currentQuestaoIndex]?.questao_tec_id}</span>
+                <span className="mx-2">•</span>
+                <span className="text-neutral-900">{questoesExibidas[currentQuestaoIndex]?.banca_texto} ({questoesExibidas[currentQuestaoIndex]?.ano})</span>
+              </div>
+              <div>
+                <span>TEC Concursos</span>
+              </div>
+            </div>
+            
+            <h1 className="text-lg font-extrabold text-neutral-900 mt-3">
+              {questoesExibidas[currentQuestaoIndex]?.materia}
+              {questoesExibidas[currentQuestaoIndex]?.assunto && (
+                <span className="text-neutral-500 font-normal"> &gt; {questoesExibidas[currentQuestaoIndex]?.assunto}</span>
+              )}
+            </h1>
+            
+            {questoesExibidas[currentQuestaoIndex]?.orgao && (
+              <div className="text-xs text-neutral-500 mt-1 font-semibold">
+                Órgão: <span className="text-neutral-800 font-bold">{questoesExibidas[currentQuestaoIndex]?.orgao}</span>
+                {questoesExibidas[currentQuestaoIndex]?.concurso && (
+                  <>
+                    <span className="mx-2">•</span>
+                    Concurso: <span className="text-neutral-800 font-bold">{questoesExibidas[currentQuestaoIndex]?.concurso}</span>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Enunciado */}
+          <div className="space-y-4 print:break-inside-avoid">
+            <p className="text-neutral-800 font-medium leading-relaxed whitespace-pre-line text-sm bg-neutral-50 p-4 rounded border border-neutral-200">
+              {questoesExibidas[currentQuestaoIndex]?.enunciado}
+            </p>
+          </div>
+
+          {/* Alternativas */}
+          {questoesExibidas[currentQuestaoIndex]?.alternativas && (
+            <div className="space-y-3 pt-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-500">Alternativas:</h3>
+              {Object.entries(questoesExibidas[currentQuestaoIndex]?.alternativas)
+                .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+                .map(([letra, texto]) => {
+                  const isCorrect = questoesExibidas[currentQuestaoIndex]?.gabarito === letra
+                  const isSelected = alternativaSelecionada === letra
+
+                  let printBorder = "border-neutral-200"
+                  let printBg = "bg-white"
+                  let label = ""
+
+                  if (isCorrect && isSelected) {
+                    printBorder = "border-emerald-600 border-2"
+                    printBg = "bg-emerald-50/70 font-semibold"
+                    label = " [GABARITO OFICIAL - SUA RESPOSTA]"
+                  } else if (isCorrect) {
+                    printBorder = "border-emerald-500 border-2"
+                    printBg = "bg-emerald-50/50"
+                    label = " [GABARITO OFICIAL]"
+                  } else if (isSelected) {
+                    printBorder = "border-red-500 border-2"
+                    printBg = "bg-red-50/50"
+                    label = " [SUA RESPOSTA - INCORRETA]"
+                  }
+
+                  return (
+                    <div 
+                      key={letra} 
+                      className={`p-3 rounded border text-xs leading-relaxed flex items-start gap-3 print:break-inside-avoid ${printBorder} ${printBg}`}
+                    >
+                      <span className="w-5 h-5 rounded-full bg-neutral-200 text-neutral-800 font-bold flex items-center justify-center flex-shrink-0 text-xxs border border-neutral-300">
+                        {letra}
+                      </span>
+                      <div className="flex-1 mt-0.5 text-neutral-900 font-medium">
+                        {String(texto)}
+                        {label && <span className="ml-2 text-xxs font-black text-emerald-700 tracking-wider">{label}</span>}
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          )}
+
+          {/* Resolução do Professor ou Comentários da IA */}
+          {(() => {
+            const resolucaoText = questoesExibidas[currentQuestaoIndex]?.resolucao_professor
+            const explicacaoText = explicacoes[questoesExibidas[currentQuestaoIndex]?.id!]
+            const hasProf = !!resolucaoText
+            const hasIA = !!explicacaoText
+            const isIdentical = hasProf && hasIA && resolucaoText.trim() === explicacaoText.trim()
+
+            if (!hasProf && !hasIA) return null
+
+            return (
+              <div className="border-t-2 border-black pt-6 space-y-6">
+                {hasProf && (
+                  <div className="space-y-2 print:break-inside-avoid">
+                    <h3 className="text-xs font-extrabold uppercase tracking-widest text-amber-800 flex items-center gap-1">
+                      Comentário do Professor:
+                    </h3>
+                    <div className="text-neutral-800 text-xs bg-amber-50/20 p-4 rounded border border-amber-200">
+                      <MarkdownAI text={resolucaoText} />
+                    </div>
+                  </div>
+                )}
+
+                {hasIA && !isIdentical && (
+                  <div className="space-y-2 print:break-inside-avoid">
+                    <h3 className="text-xs font-extrabold uppercase tracking-widest text-primary flex items-center gap-1">
+                      Explicação Detalhada do Mentor IA:
+                    </h3>
+                    <div className="text-neutral-800 text-xs bg-blue-50/20 p-4 rounded border border-blue-100">
+                      <MarkdownAI text={explicacaoText} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })()}
+
+        </div>
+      )}
+    </>
   )
 }
 
