@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchAllResolucoes } from '../services/supabase.service'
-import { gerarPlanoEstudos, type FraquezaItem } from '../services/gemini.service'
+import { gerarPlanoEstudos, gerarMentoriaAssunto, type FraquezaItem } from '../services/gemini.service'
 import type { Resolucao } from '../types/database'
 
 const FRAQUEZA_MIN_QUESTOES = 3
@@ -26,20 +26,28 @@ function detectarFraquezas(resolucoes: Resolucao[]): FraquezaItem[] {
 
 /**
  * Hook para o Mentor IA.
- * Analisa o histórico de resoluções, detecta fraquezas e gera o plano de estudos.
+ * Analisa o histórico de resoluções, detecta fraquezas, seleciona o assunto ativo e gera planos personalizados.
  */
 export function useMentor() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [fraquezas, setFraquezas] = useState<FraquezaItem[]>([])
+  
+  // Plano Geral Semanal
   const [plano, setPlano] = useState<string | null>(null)
   const [gerandoPlano, setGerandoPlano] = useState(false)
+
+  // Mentoria Individualizada por Assunto
+  const [selectedFraqueza, setSelectedFraqueza] = useState<FraquezaItem | null>(null)
+  const [planosAssuntos, setPlanosAssuntos] = useState<Record<string, string>>({})
+  const [gerandoMentoria, setGerandoMentoria] = useState(false)
 
   useEffect(() => {
     async function load() {
       try {
         const resolucoes = await fetchAllResolucoes()
-        setFraquezas(detectarFraquezas(resolucoes))
+        const detected = detectarFraquezas(resolucoes)
+        setFraquezas(detected)
       } catch (err: any) {
         console.error('Erro ao analisar desempenho:', err)
         setError(err.message || 'Erro ao carregar dados.')
@@ -64,5 +72,33 @@ export function useMentor() {
     }
   }
 
-  return { loading, error, fraquezas, plano, gerandoPlano, handleGerarPlano }
+  const handleGerarMentoria = async (fraqueza: FraquezaItem) => {
+    const key = `${fraqueza.materia} - ${fraqueza.assunto}`
+    if (planosAssuntos[key]) return // Retorna se já gerado
+    
+    setGerandoMentoria(true)
+    try {
+      const texto = await gerarMentoriaAssunto(fraqueza)
+      setPlanosAssuntos(prev => ({ ...prev, [key]: texto }))
+    } catch (err: any) {
+      console.error('Erro ao gerar mentoria de assunto:', err)
+    } finally {
+      setGerandoMentoria(false)
+    }
+  }
+
+  return {
+    loading,
+    error,
+    fraquezas,
+    plano,
+    gerandoPlano,
+    handleGerarPlano,
+    selectedFraqueza,
+    setSelectedFraqueza,
+    planosAssuntos,
+    gerandoMentoria,
+    handleGerarMentoria
+  }
 }
+

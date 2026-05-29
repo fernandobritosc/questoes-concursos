@@ -121,6 +121,50 @@ export async function gerarPlanoEstudos(fraquezas: FraquezaItem[]): Promise<stri
 }
 
 /**
+ * Gera uma mentoria super detalhada e tática para uma fraqueza de assunto específica.
+ */
+export async function gerarMentoriaAssunto(fraqueza: FraquezaItem): Promise<string> {
+  const prompt = `
+    Aja como um mentor e professor de altíssimo nível especializado na preparação para concursos públicos brasileiros.
+    Eu sou um concurseiro e estou enfrentando grandes dificuldades no seguinte tema específico:
+    - **Matéria**: ${fraqueza.materia}
+    - **Assunto**: ${fraqueza.assunto}
+    - **Meu Desempenho Atual**: Apenas ${fraqueza.taxa}% de acertos em um total de ${fraqueza.total} questões resolvidas.
+
+    Por favor, elabore um diagnóstico e guia de mentoria extremamente prático, aprofundado, direcionado e NÃO GENÉRICO para eu dominar este assunto. O seu guia deve ser formatado em Markdown e conter as seguintes seções estruturadas:
+
+    ### 🎯 1. Diagnóstico do Tema
+    Explique brevemente por que este assunto costuma ser desafiador, a relevância dele para provas e qual a chave conceitual que eu preciso virar na mente para compreendê-lo (evite generalidades, explique a lógica por trás da matéria).
+
+    ### 🔥 2. Tópicos Quentes (O que mais cai)
+    Seja específico e preciso. Liste as principais regras, súmulas, artigos de lei ou conceitos teóricos que são disparadamente os mais cobrados pelas bancas examinadoras sobre este assunto específico. Diga exatamente no que focar.
+
+    ### ⚠️ 3. Pegadinhas e Armadilhas da Banca
+    Aponte de 2 a 3 pegadinhas ou cascas de banana clássicas que as bancas costumam colocar nas questões deste assunto para confundir os candidatos. Inicie cada item explicativo da pegadinha estritamente com o prefixo "Pegadinha: " (ex: "Pegadinha: A banca tenta trocar a competência X pela Y...").
+
+    ### 🚀 4. Plano de Ataque (Como estudar)
+    Forneça um roteiro passo a passo prático de estudo e revisão ativa para este tema (ex: "1º Passo: Ler atentamente o artigo X... 2º Passo: Criar uma tabela comparativa entre... 3º Passo: Resolver questões focadas em...").
+
+    ### 💡 5. Dica de Prova & Memorização
+    Forneça uma dica de prova valiosa, um mnemônico inteligente, uma associação mental ou um resumo visual ultra-focado para eu não esquecer mais as regras fundamentais deste assunto. Inicie o parágrafo explicativo da dica estritamente com o prefixo "Dica de Prova: ".
+
+    ### 💻 6. Prompt de Estudo Ativo (Google NotebookLM)
+    Gere um prompt altamente focado para eu copiar e colar no **Google NotebookLM** (uma IA baseada em documentos). O prompt gerado deve ser incluído **estritamente** dentro de um bloco de código markdown com a linguagem \`notebooklm\` (ex: \`\`\`notebooklm\n[Prompt de NotebookLM]\n\`\`\`).
+    O prompt de NotebookLM deve instruir a IA do NotebookLM a:
+    1. Agir como um examinador rigoroso especializado em concursos sobre o assunto "${fraqueza.assunto}" (${fraqueza.materia}).
+    2. Realizar perguntas de recall ativo (active recall) baseadas unicamente nos documentos que eu fizer upload (ex: leis secas, resumos, PDFs).
+    3. Fazer uma pergunta por vez, esperar minha resposta, avaliá-la dando nota e só então seguir para a próxima pergunta.
+    4. Simular pegadinhas clássicas das bancas e pedir que eu identifique o erro conceitual.
+
+    Mantenha um tom altamente profissional, objetivo, direto e motivador. Diga com precisão o que eu preciso fazer para subir minha taxa de acerto. Use markdown limpo, com títulos claros e boa legibilidade.
+  `.trim()
+
+  const result = await geminiModel.generateContent(prompt)
+  return result.response.text()
+}
+
+
+/**
  * Gera um prompt de parsing de PDF com questões de concurso.
  * Retorna o texto do prompt (o parsing em si é feito no hook useQuestoes).
  */
