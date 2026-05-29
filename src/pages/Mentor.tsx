@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useMentor } from '../hooks/useMentor'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { Button } from '../components/ui/Button'
-import { BrainCircuit, Sparkles, Calendar, ChevronRight, AlertTriangle, GraduationCap, ArrowRight, Printer, Cpu, Copy, Check } from 'lucide-react'
+import { BrainCircuit, Sparkles, Calendar, ChevronRight, GraduationCap, Printer, Cpu, Copy, Check } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 
 // Card Interativo e Premium para Google NotebookLM com ação de cópia integrada

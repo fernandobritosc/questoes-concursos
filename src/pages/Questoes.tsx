@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuestoes } from '../hooks/useQuestoes'
 import { ImportPdfModal } from '../components/ImportPdfModal'
@@ -91,7 +91,6 @@ export function Questoes() {
     historicoQuestaoAtiva,
     loadingHistoricoAtivo,
     handleConfirmarResposta,
-    filtros,
     setFiltros,
     questoesExibidas,
   } = useQuestoes()
