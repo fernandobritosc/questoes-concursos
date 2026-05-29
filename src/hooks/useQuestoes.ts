@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { 
   fetchAllQuestoes, 
   updateResolucaoProfessor,
@@ -116,6 +116,19 @@ export function useQuestoes() {
   const [pastaDestino, setPastaDestino] = useState('Analista Legislativo (ALEGO)/2026 - Analista Admi...')
   const [gerarEmSerie, setGerarEmSerie] = useState(false)
 
+  // ── Filtros do Mapa de Questões (Tópicos/Assuntos) ───────────────────────────
+  const [filtros, setFiltros] = useState<Record<string, string> | null>(null)
+
+  const questoesExibidas = useMemo(() => {
+    if (!filtros) return cadernoQuestoes;
+    return cadernoQuestoes.filter(q => {
+      for (const [key, val] of Object.entries(filtros)) {
+        if (String((q as any)[key] || `Sem ${key}`) !== val) return false;
+      }
+      return true;
+    })
+  }, [cadernoQuestoes, filtros])
+
   // ── Importação PDF ────────────────────────────────────────────────────────────
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
 
@@ -128,14 +141,14 @@ export function useQuestoes() {
 
   // Sync resolução text when navigating caderno
   useEffect(() => {
-    if (cadernoQuestoes.length > 0 && cadernoQuestoes[currentQuestaoIndex]) {
-      const q = cadernoQuestoes[currentQuestaoIndex]
+    if (questoesExibidas.length > 0 && questoesExibidas[currentQuestaoIndex]) {
+      const q = questoesExibidas[currentQuestaoIndex]
       setResolucaoText(q.resolucao_professor || '')
       setEditingResolucao(false)
       setAlternativaSelecionada(null)
       setRevelado(false)
     }
-  }, [currentQuestaoIndex, cadernoQuestoes])
+  }, [currentQuestaoIndex, questoesExibidas])
 
   // Initial load
   useEffect(() => {
@@ -159,7 +172,7 @@ export function useQuestoes() {
   // Timer: incrementa segundos se a questão ainda não foi respondida
   useEffect(() => {
     let timer: any = null
-    if (!revelado && cadernoQuestoes.length > 0) {
+    if (!revelado && questoesExibidas.length > 0) {
       timer = setInterval(() => {
         setTempoSegundos(prev => prev + 1)
       }, 1000)
@@ -167,7 +180,7 @@ export function useQuestoes() {
     return () => {
       if (timer) clearInterval(timer)
     }
-  }, [revelado, currentQuestaoIndex, cadernoQuestoes])
+  }, [revelado, currentQuestaoIndex, questoesExibidas])
 
   // Reset timer on navigating questions
   useEffect(() => {
@@ -188,8 +201,8 @@ export function useQuestoes() {
 
   // Load history of active question when currentQuestaoIndex or caderno changes
   useEffect(() => {
-    if (cadernoQuestoes.length > 0 && cadernoQuestoes[currentQuestaoIndex]) {
-      const q = cadernoQuestoes[currentQuestaoIndex]
+    if (questoesExibidas.length > 0 && questoesExibidas[currentQuestaoIndex]) {
+      const q = questoesExibidas[currentQuestaoIndex]
       const targetId = q.questao_id || q.id
       if (targetId) {
         loadHistoricoDaQuestao(targetId)
@@ -199,7 +212,7 @@ export function useQuestoes() {
     } else {
       setHistoricoQuestaoAtiva([])
     }
-  }, [currentQuestaoIndex, cadernoQuestoes])
+  }, [currentQuestaoIndex, questoesExibidas])
 
   // ─── Derived Data (Filtros dinâmicos) ─────────────────────────────────────────
 
@@ -372,9 +385,9 @@ export function useQuestoes() {
   }
 
   // ─── Actions: Resolução do Professor ─────────────────────────────────────────
-
   const handleSaveResolucao = async () => {
-    const questao = cadernoQuestoes[currentQuestaoIndex]
+    if (questoesExibidas.length === 0 || !questoesExibidas[currentQuestaoIndex]) return
+    const questao = questoesExibidas[currentQuestaoIndex]
     // Usa questao_id (FK para tabela questoes) ou id como fallback
     const targetId = questao.questao_id || questao.id
     if (!targetId) return
@@ -383,11 +396,11 @@ export function useQuestoes() {
     try {
       await updateResolucaoProfessor(targetId, resolucaoText)
 
-      const updatedQuestoes = [...cadernoQuestoes]
-      updatedQuestoes[currentQuestaoIndex] = { ...questao, resolucao_professor: resolucaoText }
-      setCadernoQuestoes(updatedQuestoes)
+      setCadernoQuestoes(prev => prev.map(q => 
+        (q.questao_id === targetId || q.id === targetId) ? { ...q, resolucao_professor: resolucaoText } : q
+      ))
       setResolucoes(prev => prev.map(r =>
-        r.questao_id === targetId ? { ...r, resolucao_professor: resolucaoText } : r
+        (r.questao_id === targetId || r.id === targetId) ? { ...r, resolucao_professor: resolucaoText } : r
       ))
       setEditingResolucao(false)
     } catch (err: any) {
@@ -400,7 +413,8 @@ export function useQuestoes() {
 
   const handleConfirmarResposta = async () => {
     if (revelado || !alternativaSelecionada) return
-    const questao = cadernoQuestoes[currentQuestaoIndex]
+    if (questoesExibidas.length === 0 || !questoesExibidas[currentQuestaoIndex]) return
+    const questao = questoesExibidas[currentQuestaoIndex]
     const targetId = questao.questao_id || questao.id
     if (!targetId) return
 
@@ -417,25 +431,20 @@ export function useQuestoes() {
       })
 
       // Atualiza o estado local para marcar a questão como respondida
-      const updatedQuestoes = [...cadernoQuestoes]
-      updatedQuestoes[currentQuestaoIndex] = {
-        ...questao,
+      const resolucaoData = {
         alternativa: alternativaSelecionada,
         acertou,
         tempo_segundos: tempoSegundos,
         data_resolucao: new Date().toISOString(),
       }
-      setCadernoQuestoes(updatedQuestoes)
+
+      setCadernoQuestoes(prev => prev.map(q => 
+        (q.questao_id === targetId || q.id === targetId) ? { ...q, ...resolucaoData } : q
+      ))
       
       // Atualiza na lista total de resoluções
       setResolucoes(prev => prev.map(r => 
-        (r.questao_id === targetId || r.id === targetId) ? {
-          ...r,
-          alternativa: alternativaSelecionada,
-          acertou,
-          tempo_segundos: tempoSegundos,
-          data_resolucao: new Date().toISOString(),
-        } : r
+        (r.questao_id === targetId || r.id === targetId) ? { ...r, ...resolucaoData } : r
       ))
 
       setRevelado(true)
@@ -449,7 +458,6 @@ export function useQuestoes() {
       setSalvandoResposta(false)
     }
   }
-
   // ─── Computed Values ──────────────────────────────────────────────────────────
 
   const filteredQuestions = getFilteredQuestions()
@@ -500,6 +508,9 @@ export function useQuestoes() {
     loadingHistoricoAtivo,
 
     // ── Filter State ───────────────────────────────────────────────────────
+    filtros,
+    setFiltros,
+    questoesExibidas,
     objetivo,
     setObjetivo,
     activeTab,

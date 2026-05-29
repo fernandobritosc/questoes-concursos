@@ -91,6 +91,9 @@ export function Questoes() {
     historicoQuestaoAtiva,
     loadingHistoricoAtivo,
     handleConfirmarResposta,
+    filtros,
+    setFiltros,
+    questoesExibidas,
   } = useQuestoes()
 
   const statsTotal = historicoQuestaoAtiva?.length || 0
@@ -109,12 +112,13 @@ export function Questoes() {
       const idNum = parseInt(targetId, 10)
       const index = cadernoQuestoes.findIndex(q => q.questao_tec_id === idNum)
       if (index !== -1) {
+        setFiltros(null) // Limpa os filtros de assunto/tópico para garantir que a questão apareça!
         setCurrentQuestaoIndex(index)
         setTopTab('questoes')
         setSearchParams({}, { replace: true })
       }
     }
-  }, [targetId, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams])
+  }, [targetId, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams, setFiltros])
 
   useEffect(() => {
     const matParam = searchParams.get('materia')
@@ -129,19 +133,7 @@ export function Questoes() {
       setTopTab('questoes')
       setSearchParams({}, { replace: true })
     }
-  }, [searchParams, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams])
-
-  const [filtros, setFiltros] = useState<Record<string, string> | null>(null)
-  
-  const questoesExibidas = useMemo(() => {
-    if (!filtros) return cadernoQuestoes;
-    return cadernoQuestoes.filter(q => {
-      for (const [key, val] of Object.entries(filtros)) {
-        if (String((q as any)[key] || `Sem ${key}`) !== val) return false;
-      }
-      return true;
-    })
-  }, [cadernoQuestoes, filtros])
+  }, [searchParams, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams, setFiltros])
   
   const handleNodeClick = (nodeName: string, levelIndex: number, parentNames: string[]) => {
     const currentOption = ORGANIZAR_OPTIONS.find(o => o.id === organizarPor) || ORGANIZAR_OPTIONS[0];
