@@ -1,13 +1,28 @@
 {
   "manifest_version": 3,
   "name": "MonitorPro Extrator",
-  "version": "2.1",
-  "description": "Captura passiva e inteligente de questões do TEC Concursos.",
-  "permissions": ["storage"],
+  "version": "3.0",
+  "description": "Extrator inteligente de resoluções do TEC Concursos para o MonitorPro.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://www.tecconcursos.com.br/*",
+    "https://dyxtalcvjcprmhuktyfd.supabase.co/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*",
+    "https://*.vercel.app/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://www.tecconcursos.com.br/questoes/*"],
-      "js": ["content.js"]
+      "matches": [
+        "*://www.tecconcursos.com.br/questoes/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://*.vercel.app/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
     }
   ]
 }
