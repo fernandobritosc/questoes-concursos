@@ -103,7 +103,7 @@ export async function gerarExplicacaoErro(
     [Explique de forma detalhada por que o gabarito oficial (${gabaritoLetra}) é o correto.]
     
     ### 🔍 Outras Alternativas
-    [Para cada uma das outras alternativas incorretas restantes, explique de forma clara e objetiva por que elas também estão erradas (ex: "Alternativa X está errada porque..."). Se houver pegadinha nelas, use o prefixo "Pegadinha: [texto]".]
+    [Para CADA UMA das outras alternativas incorretas restantes, crie obrigatoriamente um parágrafo explicativo individual e separado por uma quebra de linha dupla. Cada alternativa deve começar em sua própria linha (ex: "Alternativa X está errada porque..."). NUNCA agrupe a explicação de múltiplas alternativas em uma única linha ou parágrafo. Se alguma das alternativas contiver uma pegadinha clássica da banca, inicie esse parágrafo estritamente com o prefixo "Pegadinha: [texto]" no começo da linha para que seja renderizada em um card.]
     
     ### 💡 Dica de Prova
     [Se houver alguma dica de ouro ou mnemônico valioso para memorização na prova, crie um parágrafo iniciando estritamente com o prefixo "Dica de Prova: [texto]".]
@@ -160,7 +160,7 @@ export async function gerarResolucaoProfessor(
     [Escreva aqui uma explicação aprofundada de por que o gabarito oficial (${gabaritoLetra}) está correto.]
     
     ### 🔍 Análise das Alternativas
-    [Para CADA UMA das outras alternativas incorretas, crie um parágrafo explicativo claro indicando por que ela está errada (ex: "Alternativa A está incorreta porque...", "Alternativa B..."). Se alguma alternativa contiver uma casca de banana ou pegadinha clássica da banca, inicie a explicação dela estritamente com o prefixo "Pegadinha: [texto]" para que ela seja destacada visualmente em um card.]
+    [Para CADA UMA das outras alternativas incorretas, crie obrigatoriamente um parágrafo explicativo individual e separado por uma quebra de linha dupla. Cada alternativa deve começar em sua própria linha (ex: "Alternativa A está incorreta porque..."). NUNCA junte ou agrupe a explicação de múltiplas alternativas em uma única linha ou parágrafo. Se alguma alternativa contiver uma pegadinha clássica da banca, a explicação dessa alternativa deve iniciar estritamente com o prefixo "Pegadinha: [texto]" no começo do parágrafo, para que ela seja destacada em um card visual.]
     
     ### 💡 Dica de Prova
     [Se houver uma dica rápida ou macete de prova para acelerar a resolução, crie um parágrafo iniciando estritamente com o prefixo "Dica de Prova: [texto]".]
@@ -232,7 +232,7 @@ export async function gerarMentoriaAssunto(fraqueza: FraquezaItem): Promise<stri
     Seja específico e preciso. Liste as principais regras, súmulas, artigos de lei ou conceitos teóricos que são disparadamente os mais cobrados pelas bancas examinadoras sobre este assunto específico. Diga exatamente no que focar.
 
     ### ⚠️ 3. Pegadinhas e Armadilhas da Banca
-    Aponte de 2 a 3 pegadinhas ou cascas de banana clássicas que as bancas costumam colocar nas questões deste assunto para confundir os candidatos. Inicie cada item explicativo da pegadinha estritamente com o prefixo "Pegadinha: " (ex: "Pegadinha: A banca tenta trocar a competência X pela Y...").
+    Aponte de 2 a 3 pegadinhas ou cascas de banana clássicas que as bancas costumam colocar nas questões deste assunto para confundir os candidatos. Escreva cada pegadinha em seu próprio parágrafo individual separado por uma quebra de linha dupla. Cada um desses parágrafos deve iniciar estritamente com o prefixo "Pegadinha: [texto]" no começo da linha para que ela seja devidamente destacada visualmente.
 
     ### 🚀 4. Plano de Ataque (Como estudar)
     Forneça um roteiro passo a passo prático de estudo e revisão ativa para este tema (ex: "1º Passo: Ler atentamente o artigo X... 2º Passo: Criar uma tabela comparativa entre... 3º Passo: Resolver questões focadas em...").
