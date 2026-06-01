@@ -90,6 +90,7 @@ export function Questoes() {
     tempoSegundos,
     salvandoResposta,
     historicoQuestaoAtiva,
+    loadingHistoricoAtivo,
     handleConfirmarResposta,
     setFiltros,
     questoesExibidas,

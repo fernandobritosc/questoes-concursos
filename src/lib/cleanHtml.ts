@@ -26,7 +26,7 @@ export function cleanHtmlText(htmlStr: string | null | undefined): string {
     '&#39;': "'",
     '&#x27;': "'"
   };
-  text = text.replace(/&(nbsp|lt|gt|quot|amp|apos|#39|#x27);/g, (match, entity) => entities[match] || match);
+  text = text.replace(/&(nbsp|lt|gt|quot|amp|apos|#39|#x27);/g, (match) => entities[match] || match);
   
   // 6. Normaliza múltiplos espaços e quebras de linha
   return text.trim();
