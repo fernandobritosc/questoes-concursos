@@ -554,7 +554,7 @@ export function Revisao() {
                 </div>
 
                 {/* Caixa de Explicação IA se carregada */}
-                {explicacaoAtual && (
+                {explicacaoAtual && explicacaoAtual !== resolucaoText && (
                   <div className="bg-violet-600/[0.05] border border-violet-500/10 rounded-xl p-5 mt-6 animate-in slide-in-from-bottom-4 flex flex-col gap-3">
                     <div className="flex items-center gap-2 text-violet-400 font-black text-xs uppercase shrink-0">
                       <BrainCircuit className="w-5 h-5 text-violet-400 shrink-0" />

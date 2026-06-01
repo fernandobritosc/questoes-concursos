@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 
-// Configura o SDK do Gemini usando a chave de API segura do backend
-const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
+// Configura o SDK do Groq usando a chave de API segura do backend
+const apiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY
 
 // Configura o cliente Admin do Supabase no backend
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
@@ -43,11 +43,11 @@ export default async function handler(req: any, res: any) {
       return res.status(401).json({ error: 'Sessão inválida ou expirada. Faça login novamente.' })
     }
 
-    // 2. Validação da Chave do Gemini
+    // 2. Validação da Chave da Groq
     if (!apiKey) {
-      console.error('Erro de Configuração: GEMINI_API_KEY não está configurada no ambiente do servidor.')
+      console.error('Erro de Configuração: GROQ_API_KEY não está configurada no ambiente do servidor.')
       return res.status(500).json({ 
-        error: 'A chave de API do Gemini (GEMINI_API_KEY) não está configurada no backend.' 
+        error: 'A chave de API da Groq (GROQ_API_KEY) não está configurada no backend.' 
       })
     }
 
@@ -57,27 +57,27 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: 'Parâmetro "prompt" é obrigatório e deve ser uma string.' })
     }
 
-    // 3. Execução Segura do Gemini
-    const genAI = new GoogleGenerativeAI(apiKey)
+    // 3. Execução Segura da Groq
+    const groq = new Groq({ apiKey })
     
-    const generationConfig: any = {}
-    if (responseMimeType) {
-      generationConfig.responseMimeType = responseMimeType
+    const options: any = {
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }]
     }
 
-    const model = genAI.getGenerativeModel({ 
-      model: 'gemini-flash-latest',
-      generationConfig
-    })
+    // Mantém a compatibilidade com o formato JSON estruturado do cronograma
+    if (responseMimeType === 'application/json') {
+      options.response_format = { type: 'json_object' }
+    }
 
-    const result = await model.generateContent(prompt)
-    const text = result.response.text()
+    const chatCompletion = await groq.chat.completions.create(options)
+    const text = chatCompletion.choices[0]?.message?.content || ''
 
     return res.status(200).json({ text })
   } catch (error: any) {
     console.error('Erro no processamento da requisição:', error)
     return res.status(500).json({ 
-      error: 'Erro interno ao processar a requisição com o Gemini AI.',
+      error: 'Erro interno ao processar a requisição com o Groq AI.',
       details: error.message || String(error)
     })
   }

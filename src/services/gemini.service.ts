@@ -60,25 +60,55 @@ export async function gerarExplicacaoErro(
   questao: QuestaoParaExplicacao,
   alternativaSelecionada: string
 ): Promise<string> {
+  const gabaritoLetra = questao.gabarito || 'Não especificado'
+  const gabaritoTexto = (questao.gabarito && questao.alternativas?.[questao.gabarito]) || 'Texto da alternativa correta não especificado'
+
+  const alternativasRestantes = Object.entries(questao.alternativas || {})
+    .filter(([letra]) => letra !== alternativaSelecionada && letra !== questao.gabarito)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([letra, texto]) => `${letra}) ${texto}`)
+    .join('\n')
+
   const prompt = `
-    Aja como um professor especialista de concursos públicos.
+    Aja como um professor especialista de concursos públicos orientando um aluno que errou uma questão.
     O aluno errou a seguinte questão da banca ${questao.banca_texto} sobre ${questao.materia} (${questao.assunto}):
     
     Enunciado:
     ${questao.enunciado}
     
     Alternativa que o aluno marcou (INCORRETA):
-    ${questao.alternativas[alternativaSelecionada]}
+    ${alternativaSelecionada}) ${questao.alternativas[alternativaSelecionada]}
     
-    Gabarito correto:
-    ${questao.alternativas[questao.gabarito || '']}
+    Gabarito oficial de referência:
+    ${gabaritoLetra}) ${gabaritoTexto}
     
-    Explique de forma direta e didática:
-    1. Por que a alternativa marcada pelo aluno está errada. Se houver uma pegadinha ou erro de conceito clássico da banca, inicie a frase explicativa com "Pegadinha: " para que ela seja destacada visualmente.
-    2. Por que o gabarito é o correto.
-    3. Se houver alguma dica de ouro ou mnemônico valioso para memorização na prova, inicie a linha com "Dica de Prova: ".
+    Outras alternativas da questão (também incorretas):
+    ${alternativasRestantes}
     
-    Use uma linguagem amigável, encorajadora e focada na preparação para concursos. Formate bem o texto com parágrafos e sem markdown excessivo.
+    DIRETRIZ DE PRECISÃO JURÍDICA (CRÍTICA):
+    Ao explicar a competência da Justiça do Trabalho (Art. 114 da CF) sobre servidores públicos, siga estritamente a jurisprudência consolidada do STF (ADI 3.395-DF) e Súmula 137 do STJ:
+    - A Justiça do Trabalho NÃO tem competência para julgar causas de servidores estatutários (regime estatutário) ou temporários em regime jurídico-administrativo (Art. 37, IX, CF).
+    - O julgamento de servidores estatutários ou temporários cabe exclusivamente à Justiça Comum (Estadual para Estados/Municípios, Federal para a União).
+    - A Justiça do Trabalho SÓ é competente para servidores celetistas (CLT - empregados públicos), empresas públicas e sociedades de economia mista.
+    Nunca afirme que a EC 45/2004 deu competência à Justiça do Trabalho para julgar servidores estatutários. A ADI 3.395 do STF suspendeu qualquer interpretação nesse sentido.
+    
+    Se o Gabarito de referência for 'Não especificado', você deve deduzir qual alternativa é a correta analisando o enunciado e as opções, explicando-a no local do gabarito. Nunca afirme que a questão não tem resposta ou que o gabarito é 'null' se for viável identificar a alternativa correta juridicamente.
+    
+    Escreva uma explicação detalhada e altamente estruturada seguindo ESTRITAMENTE a estrutura abaixo, utilizando exatamente estes títulos em Markdown (###):
+    
+    ### 📚 Análise do Seu Erro
+    [Explique de forma clara por que a alternativa marcada pelo aluno (${alternativaSelecionada}) está errada. Se houver uma pegadinha clássica da banca na opção selecionada, inicie o parágrafo estritamente com o prefixo "Pegadinha: [texto]" para que ela seja destacada visualmente em um card.]
+    
+    ### ✅ Justificativa do Gabarito
+    [Explique de forma detalhada por que o gabarito oficial (${gabaritoLetra}) é o correto.]
+    
+    ### 🔍 Outras Alternativas
+    [Para cada uma das outras alternativas incorretas restantes, explique de forma clara e objetiva por que elas também estão erradas (ex: "Alternativa X está errada porque..."). Se houver pegadinha nelas, use o prefixo "Pegadinha: [texto]".]
+    
+    ### 💡 Dica de Prova
+    [Se houver alguma dica de ouro ou mnemônico valioso para memorização na prova, crie um parágrafo iniciando estritamente com o prefixo "Dica de Prova: [texto]".]
+    
+    Use uma linguagem acolhedora, focada em guiar o aprendizado do aluno. Garanta que todas as opções da questão fiquem explicadas.
   `
   return chamarGeminiBackend(prompt)
 }
@@ -90,13 +120,15 @@ export async function gerarExplicacaoErro(
 export async function gerarResolucaoProfessor(
   questao: QuestaoParaExplicacao
 ): Promise<string> {
+  const gabaritoLetra = questao.gabarito || 'Não especificado'
+
   const alternativasStr = Object.entries(questao.alternativas || {})
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([letra, texto]) => `${letra}) ${texto}`)
     .join('\n')
 
   const prompt = `
-    Aja como um professor especialista de concursos públicos que está escrevendo a resolução oficial de uma questão.
+    Aja como um professor especialista de concursos públicos que está escrevendo a resolução oficial, estruturada e detalhada de uma questão.
     
     Questão da banca ${questao.banca_texto} sobre ${questao.materia} - ${questao.assunto}:
     
@@ -106,16 +138,37 @@ export async function gerarResolucaoProfessor(
     Alternativas:
     ${alternativasStr}
     
-    Gabarito: ${questao.gabarito}
+    Gabarito oficial de referência: ${gabaritoLetra}
     
-    Escreva uma resolução detalhada e didática desta questão que:
-    1. Explique por que o gabarito (${questao.gabarito}) está correto.
-    2. Explique por que as demais alternativas estão erradas. Se alguma alternativa for uma pegadinha comum, inicie a explicação dela com "Pegadinha: ".
-    3. Destaque pontos teóricos de alta relevância ou regras importantes iniciando com "Atenção: " ou "Importante: ".
-    4. Se houver uma dica rápida ou macete de prova para acelerar a resolução, inicie o parágrafo com "Dica de Prova: ".
-    5. Termine com uma síntese de fechamento iniciando com "Resumo: ".
+    DIRETRIZ DE PRECISÃO JURÍDICA (CRÍTICA):
+    Ao explicar a competência da Justiça do Trabalho (Art. 114 da CF) sobre servidores públicos, siga estritamente a jurisprudência consolidada do STF (ADI 3.395-DF) e Súmula 137 do STJ:
+    - A Justiça do Trabalho NÃO tem competência para julgar causas de servidores estatutários (regime estatutário) ou temporários em regime jurídico-administrativo (Art. 37, IX, CF).
+    - O julgamento de servidores estatutários ou temporários cabe exclusivamente à Justiça Comum (Estadual para Estados/Municípios, Federal para a União).
+    - A Justiça do Trabalho SÓ é competente para servidores celetistas (CLT - empregados públicos), empresas públicas e sociedades de economia mista.
+    Nunca afirme que a EC 45/2004 deu competência à Justiça do Trabalho para julgar servidores estatutários. A ADI 3.395 do STF suspendeu qualquer interpretação nesse sentido.
     
-    Use uma linguagem clara, direta e encorajadora. Não use markdown excessivo.
+    Se o Gabarito de referência for 'Não especificado', você deve deduzir qual alternativa é a correta analisando o enunciado e as opções, explicando-a no local do gabarito. Nunca afirme que a questão não tem resposta ou que o gabarito é 'null' se for viável identificar a alternativa correta juridicamente.
+    
+    Você DEVE obrigatoriamente produzir uma resolução completa que explique e detalhe cada uma das alternativas individualmente, sem pular nenhuma opção.
+    
+    Siga ESTRITAMENTE a estrutura abaixo em sua resposta, utilizando exatamente estes títulos em Markdown (###):
+    
+    ### 📚 Introdução Conceitual
+    [Escreva aqui uma breve introdução conceitual ou teórica sobre o tema da questão. Você pode destacar pontos teóricos de alta relevância ou regras importantes iniciando o parágrafo estritamente com "Atenção: [texto]" ou "Importante: [texto]" para que o sistema renderize em cards destacados.]
+    
+    ### ✅ Gabarito Comentado
+    [Escreva aqui uma explicação aprofundada de por que o gabarito oficial (${gabaritoLetra}) está correto.]
+    
+    ### 🔍 Análise das Alternativas
+    [Para CADA UMA das outras alternativas incorretas, crie um parágrafo explicativo claro indicando por que ela está errada (ex: "Alternativa A está incorreta porque...", "Alternativa B..."). Se alguma alternativa contiver uma casca de banana ou pegadinha clássica da banca, inicie a explicação dela estritamente com o prefixo "Pegadinha: [texto]" para que ela seja destacada visualmente em um card.]
+    
+    ### 💡 Dica de Prova
+    [Se houver uma dica rápida ou macete de prova para acelerar a resolução, crie um parágrafo iniciando estritamente com o prefixo "Dica de Prova: [texto]".]
+    
+    ### 📝 Resumo da Questão
+    [Termine com uma síntese de fechamento iniciando o parágrafo estritamente com o prefixo "Resumo: [texto]". Não misture outros prefixos como "Atenção" ou "Importante" nesta linha.]
+    
+    Use uma linguagem formal, clara e muito didática. Certifique-se de justificar o erro de todas as alternativas incorretas individualmente para ajudar o aluno a aprender.
   `
   return chamarGeminiBackend(prompt)
 }
