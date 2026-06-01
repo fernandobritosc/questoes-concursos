@@ -82,6 +82,19 @@ export async function updateResolucaoProfessor(
   if (error) throw error
 }
 
+/** Atualiza todos os dados editáveis de uma questão. */
+export async function updateQuestao(
+  questaoId: number,
+  payload: Partial<Questao>
+): Promise<void> {
+  const { error } = await supabase
+    .from('questoes')
+    .update(payload)
+    .eq('id', questaoId)
+
+  if (error) throw error
+}
+
 // ─── Historico Resolucoes ─────────────────────────────────────────────────────
 
 /**

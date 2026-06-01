@@ -3,7 +3,8 @@ import {
   fetchAllQuestoes, 
   updateResolucaoProfessor,
   insertHistoricoResolucao,
-  fetchHistoricoByQuestao
+  fetchHistoricoByQuestao,
+  updateQuestao
 } from '../services/supabase.service'
 import { gerarResolucaoProfessor } from '../services/gemini.service'
 import type { ResolucaoView, HistoricoResolucao } from '../types/database'
@@ -458,6 +459,45 @@ export function useQuestoes() {
       setSalvandoResposta(false)
     }
   }
+
+  const handleEditQuestao = async (updatedFields: Partial<ResolucaoView>) => {
+    if (questoesExibidas.length === 0 || !questoesExibidas[currentQuestaoIndex]) return false
+    const questao = questoesExibidas[currentQuestaoIndex]
+    const targetId = questao.questao_id || questao.id
+    if (!targetId) return false
+
+    try {
+      // Monta payload com campos da tabela 'questoes'
+      const payload: any = {}
+      if (updatedFields.enunciado !== undefined) payload.enunciado = updatedFields.enunciado
+      if (updatedFields.alternativas !== undefined) payload.alternativas = updatedFields.alternativas
+      if (updatedFields.materia !== undefined) payload.materia = updatedFields.materia
+      if (updatedFields.assunto !== undefined) payload.assunto = updatedFields.assunto
+      if (updatedFields.banca_texto !== undefined) payload.banca_texto = updatedFields.banca_texto
+      if (updatedFields.orgao !== undefined) payload.orgao = updatedFields.orgao
+      if (updatedFields.concurso !== undefined) payload.concurso = updatedFields.concurso
+      if (updatedFields.prova !== undefined) payload.prova = updatedFields.prova
+      if (updatedFields.ano !== undefined) payload.ano = updatedFields.ano
+      if (updatedFields.gabarito !== undefined) payload.gabarito = updatedFields.gabarito
+
+      await updateQuestao(targetId, payload)
+
+      const updateLocal = (q: ResolucaoView) => {
+        if (q.questao_id === targetId || q.id === targetId) {
+          return { ...q, ...updatedFields }
+        }
+        return q
+      }
+
+      setCadernoQuestoes(prev => prev.map(updateLocal))
+      setResolucoes(prev => prev.map(updateLocal))
+      return true
+    } catch (err) {
+      console.error('Erro ao editar questão:', err)
+      alert('Erro ao salvar alterações da questão. Verifique sua conexão.')
+      return false
+    }
+  }
   // ─── Computed Values ──────────────────────────────────────────────────────────
 
   const filteredQuestions = getFilteredQuestions()
@@ -583,5 +623,6 @@ export function useQuestoes() {
     handleSaveResolucao,
     handleConfirmarResposta,
     loadHistoricoDaQuestao,
+    handleEditQuestao,
   }
 }

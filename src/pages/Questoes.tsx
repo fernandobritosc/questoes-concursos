@@ -90,11 +90,64 @@ export function Questoes() {
     tempoSegundos,
     salvandoResposta,
     historicoQuestaoAtiva,
-    loadingHistoricoAtivo,
     handleConfirmarResposta,
     setFiltros,
     questoesExibidas,
+    handleEditQuestao,
   } = useQuestoes()
+
+  // Estados para Modal de Edição de Questão
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [editEnunciado, setEditEnunciado] = useState('')
+  const [editMateria, setEditMateria] = useState('')
+  const [editAssunto, setEditAssunto] = useState('')
+  const [editBanca, setEditBanca] = useState('')
+  const [editOrgao, setEditOrgao] = useState('')
+  const [editConcurso, setEditConcurso] = useState('')
+  const [editProva, setEditProva] = useState('')
+  const [editAno, setEditAno] = useState<number | null>(null)
+  const [editGabarito, setEditGabarito] = useState('')
+  const [editAlternativas, setEditAlternativas] = useState<Record<string, string>>({})
+  const [savingEdit, setSavingEdit] = useState(false)
+
+  const handleOpenEditModal = () => {
+    const q = questoesExibidas[currentQuestaoIndex]
+    if (!q) return
+    setEditEnunciado(q.enunciado || '')
+    setEditMateria(q.materia || '')
+    setEditAssunto(q.assunto || '')
+    setEditBanca(q.banca_texto || '')
+    setEditOrgao(q.orgao || '')
+    setEditConcurso(q.concurso || '')
+    setEditProva(q.prova || '')
+    setEditAno(q.ano || null)
+    setEditGabarito(q.gabarito || '')
+    setEditAlternativas(q.alternativas || {})
+    setIsEditModalOpen(true)
+  }
+
+  const handleConfirmEdit = async () => {
+    setSavingEdit(true)
+    try {
+      const ok = await handleEditQuestao({
+        enunciado: editEnunciado,
+        materia: editMateria,
+        assunto: editAssunto,
+        banca_texto: editBanca,
+        orgao: editOrgao,
+        concurso: editConcurso,
+        prova: editProva,
+        ano: editAno,
+        gabarito: editGabarito,
+        alternativas: editAlternativas
+      })
+      if (ok) {
+        setIsEditModalOpen(false)
+      }
+    } finally {
+      setSavingEdit(false)
+    }
+  }
 
   const statsTotal = historicoQuestaoAtiva?.length || 0
   const statsAcertos = historicoQuestaoAtiva?.filter(h => h.acertou).length || 0
@@ -405,6 +458,14 @@ export function Questoes() {
 
               {/* Setas direcionais no mesmo bloco subheader */}
               <div className="flex items-center gap-1.5 self-end sm:self-auto border-l border-border/80 pl-3">
+                <button
+                  onClick={handleOpenEditModal}
+                  className="flex items-center gap-1 px-3 py-1.5 border border-amber-500/30 hover:bg-amber-500/10 text-amber-500 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 cursor-pointer bg-card mr-2"
+                  title="Editar dados desta questão (Corrigir erros de digitação/HTML)"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  <span>Editar</span>
+                </button>
                 <button
                   disabled={currentQuestaoIndex === 0}
                   onClick={() => {
@@ -1252,6 +1313,197 @@ export function Questoes() {
             )
           })()}
 
+        </div>
+      )}
+
+      {/* Modal de Edição de Questão */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+          <div className="bg-card rounded-2xl border border-border shadow-2xl w-full max-w-3xl overflow-hidden transform transition-all duration-300 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+            
+            {/* Header */}
+            <div className="px-6 py-4 bg-muted border-b border-border flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-amber-500/20 rounded-lg text-amber-500">
+                  <Pencil className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-foreground">
+                    Editar Dados da Questão
+                  </h3>
+                  <p className="text-[10px] text-muted-foreground font-bold mt-0.5">
+                    Modifique o texto, alternativas e metadados diretamente no banco de dados
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsEditModalOpen(false)}
+                className="text-muted-foreground hover:text-foreground p-1.5 hover:bg-muted rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Body (Scrollable) */}
+            <div className="p-6 overflow-y-auto space-y-4 flex-1 select-text scrollbar-thin">
+              {/* Matéria e Assunto */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Matéria</label>
+                  <input 
+                    type="text"
+                    value={editMateria}
+                    onChange={(e) => setEditMateria(e.target.value)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Assunto</label>
+                  <input 
+                    type="text"
+                    value={editAssunto}
+                    onChange={(e) => setEditAssunto(e.target.value)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Banca, Órgão, Ano e Gabarito */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Banca</label>
+                  <input 
+                    type="text"
+                    value={editBanca}
+                    onChange={(e) => setEditBanca(e.target.value)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Órgão</label>
+                  <input 
+                    type="text"
+                    value={editOrgao}
+                    onChange={(e) => setEditOrgao(e.target.value)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Ano</label>
+                  <input 
+                    type="number"
+                    value={editAno || ''}
+                    onChange={(e) => setEditAno(e.target.value ? parseInt(e.target.value, 10) : null)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Gabarito</label>
+                  <select 
+                    value={editGabarito}
+                    onChange={(e) => setEditGabarito(e.target.value)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-bold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  >
+                    <option value="">Selecione...</option>
+                    <option value="A">Alternativa A</option>
+                    <option value="B">Alternativa B</option>
+                    <option value="C">Alternativa C</option>
+                    <option value="D">Alternativa D</option>
+                    <option value="E">Alternativa E</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Concurso e Prova */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Concurso / Cargo</label>
+                  <input 
+                    type="text"
+                    value={editConcurso}
+                    onChange={(e) => setEditConcurso(e.target.value)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Prova</label>
+                  <input 
+                    type="text"
+                    value={editProva}
+                    onChange={(e) => setEditProva(e.target.value)}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Enunciado */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Enunciado da Questão</label>
+                <textarea 
+                  value={editEnunciado}
+                  onChange={(e) => setEditEnunciado(e.target.value)}
+                  className="w-full min-h-[140px] bg-card border border-border rounded-lg px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none resize-y leading-relaxed"
+                />
+              </div>
+
+              {/* Alternativas */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide block">Alternativas</label>
+                {['A', 'B', 'C', 'D', 'E'].map(letter => {
+                  const optionText = editAlternativas[letter] || ''
+
+                  return (
+                    <div key={letter} className="flex gap-2 items-center">
+                      <span className="w-6 h-6 rounded-full flex items-center justify-center bg-muted text-muted-foreground font-black text-xxs shrink-0 border border-border">
+                        {letter}
+                      </span>
+                      <input 
+                        type="text"
+                        value={optionText}
+                        onChange={(e) => {
+                          setEditAlternativas(prev => ({
+                            ...prev,
+                            [letter]: e.target.value
+                          }))
+                        }}
+                        className="flex-1 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"
+                        placeholder={`Texto da alternativa ${letter}...`}
+                      />
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 bg-muted border-t border-border flex items-center justify-end gap-3 flex-shrink-0">
+              <button 
+                onClick={() => setIsEditModalOpen(false)}
+                disabled={savingEdit}
+                className="px-4 py-2 border border-border text-foreground hover:bg-muted rounded-lg text-xxs font-black uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={handleConfirmEdit}
+                disabled={savingEdit || !editEnunciado.trim()}
+                className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xxs font-black uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5 cursor-pointer active:scale-98 disabled:opacity-50"
+              >
+                {savingEdit ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Salvando...</span>
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Confirmar e Salvar</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+          </div>
         </div>
       )}
     </>
