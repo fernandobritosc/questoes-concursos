@@ -237,10 +237,14 @@ export async function insertHistoricoResolucao(payload: {
   acertou: boolean
   tempo_segundos: number
 }): Promise<HistoricoResolucao> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+
   const { data, error } = await supabase
     .from('historico_resolucoes')
     .insert({
       ...payload,
+      user_id: userId,
       data_resolucao: new Date().toISOString(),
     })
     .select()

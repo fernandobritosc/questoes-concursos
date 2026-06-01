@@ -9,9 +9,13 @@ import {
   Timer, 
   Map, 
   Menu, 
-  X 
+  X,
+  LogOut
 } from 'lucide-react'
 import { CommandPalette } from './CommandPalette'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
+
 
 export function Layout() {
   const location = useLocation()
@@ -27,8 +31,14 @@ export function Layout() {
     { name: 'Mentor IA', path: '/app/mentor', icon: BrainCircuit },
   ]
 
+  const { session } = useAuth()
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+  }
+
 
   const renderNavLinks = () => (
     navItems.map((item) => {
@@ -113,6 +123,18 @@ export function Layout() {
             </nav>
 
             <div className="pt-4 mt-auto">
+              {session && (
+                <button
+                  onClick={() => {
+                    handleLogout()
+                    closeMobileMenu()
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-xs font-semibold cursor-pointer mb-2"
+                >
+                  <LogOut className="w-4.5 h-4.5" />
+                  Sair da Conta
+                </button>
+              )}
               <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
               <div className="px-4 py-3 rounded-xl bg-violet-500/[0.07] border border-violet-500/10">
                 <p className="text-xs text-violet-300 font-medium">Web Platform</p>
@@ -146,6 +168,15 @@ export function Layout() {
 
         {/* Bottom section */}
         <div className="p-4 mt-auto">
+          {session && (
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-xs font-semibold cursor-pointer mb-2"
+            >
+              <LogOut className="w-4.5 h-4.5" />
+              Sair da Conta
+            </button>
+          )}
           <div className="mx-2 h-px bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
           <div className="px-4 py-3 rounded-xl bg-violet-500/[0.07] border border-violet-500/10">
             <p className="text-xs text-violet-300 font-medium">Web Platform</p>

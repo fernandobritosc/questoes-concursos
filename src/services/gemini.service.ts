@@ -4,6 +4,8 @@
  * Todos os prompts e chamadas ao modelo passam por aqui, agora redirecionados de forma segura pelo backend.
  */
 
+import { supabase } from '../lib/supabase'
+
 // ─── Tipos ─────────────────────────────────────────────────────────────────────
 
 export interface FraquezaItem {
@@ -28,10 +30,14 @@ export interface QuestaoParaExplicacao {
  * Envia um prompt para o endpoint backend serverless que executa o Gemini de forma segura.
  */
 async function chamarGeminiBackend(prompt: string): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const token = session?.access_token || ''
+
   const response = await fetch('/api/gemini', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({ prompt })
   })
