@@ -3,6 +3,7 @@ import { useRevisao } from '../hooks/useRevisao'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { Button } from '../components/ui/Button'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
+import { cleanHtmlText } from '../lib/cleanHtml'
 import { BookOpen, CheckCircle2, XCircle, ArrowRight, BrainCircuit, ExternalLink, Search, Filter, BookOpenCheck, Book, Pencil, Check, Loader2, ChevronDown, ChevronRight } from 'lucide-react'
 import { updateResolucaoProfessor } from '../services/supabase.service'
 
@@ -411,7 +412,7 @@ export function Revisao() {
 
                 {/* Enunciado */}
                 <p className="text-foreground leading-relaxed text-sm font-medium whitespace-pre-line bg-card/40 rounded-xl select-text">
-                  {questaoAtual.enunciado}
+                  {cleanHtmlText(questaoAtual.enunciado)}
                 </p>
 
                 {/* Alternativas */}
@@ -450,7 +451,7 @@ export function Revisao() {
                           {letra}
                         </span>
                         <span className="flex-1 mt-0.5 text-foreground font-medium group-hover:text-foreground">
-                          {String(texto)}
+                          {cleanHtmlText(String(texto))}
                         </span>
                       </button>
                     )

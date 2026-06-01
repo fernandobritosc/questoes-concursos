@@ -4,6 +4,7 @@ import { useQuestoes } from '../hooks/useQuestoes'
 import { ImportPdfModal } from '../components/ImportPdfModal'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
+import { cleanHtmlText } from '../lib/cleanHtml'
 import type { HistoricoResolucao } from '../types/database'
 import { 
   ChevronRight, 
@@ -432,7 +433,7 @@ export function Questoes() {
             {/* 4. Enunciado (Padded, legibilidade excelente) */}
             <div className="px-6 py-6 md:p-8 space-y-6">
               <p className="text-foreground leading-relaxed text-sm font-medium whitespace-pre-line bg-card rounded-lg selection:bg-primary/20">
-                {questoesExibidas[currentQuestaoIndex].enunciado}
+                {cleanHtmlText(questoesExibidas[currentQuestaoIndex].enunciado)}
               </p>
 
               {/* 5. Alternativas Dispostas como Barras de Largura Total */}
@@ -453,7 +454,7 @@ export function Questoes() {
                           circleStyles = "bg-emerald-500 text-white font-extrabold border border-emerald-600 animate-pulse"
                         } else if (isSelected && !isCorrect) {
                           barStyles = "border-red-500 bg-red-50/50 hover:bg-red-50"
-                          circleStyles = "bg-red-500 text-white font-extrabold border border-red-600"
+                          circleStyles = "bg-red-500 text-white font-extrabold border border-red-650"
                         } else {
                           barStyles = "border-border opacity-55 bg-card"
                           circleStyles = "bg-muted text-muted-foreground font-semibold border border-border"
@@ -473,7 +474,7 @@ export function Questoes() {
                           <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] transition-all ${circleStyles}`}>
                             {letra}
                           </span>
-                          <span className="flex-1 mt-0.5 text-foreground font-medium group-hover:text-foreground">{String(texto)}</span>
+                          <span className="flex-1 mt-0.5 text-foreground font-medium group-hover:text-foreground">{cleanHtmlText(String(texto))}</span>
                         </button>
                       )
                     })
@@ -1163,7 +1164,7 @@ export function Questoes() {
           {/* Enunciado */}
           <div className="space-y-4 print:break-inside-avoid">
             <p className="text-neutral-800 font-medium leading-relaxed whitespace-pre-line text-sm bg-neutral-50 p-4 rounded border border-neutral-200">
-              {questoesExibidas[currentQuestaoIndex]?.enunciado}
+              {cleanHtmlText(questoesExibidas[currentQuestaoIndex]?.enunciado)}
             </p>
           </div>
 
@@ -1204,7 +1205,7 @@ export function Questoes() {
                         {letra}
                       </span>
                       <div className="flex-1 mt-0.5 text-neutral-900 font-medium">
-                        {String(texto)}
+                        {cleanHtmlText(String(texto))}
                         {label && <span className="ml-2 text-xxs font-black text-emerald-700 tracking-wider">{label}</span>}
                       </div>
                     </div>

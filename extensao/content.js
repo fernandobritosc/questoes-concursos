@@ -235,7 +235,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     let enunciado = null;
     const enunciadoEl = container.querySelector(".questao-enunciado-texto");
     if (enunciadoEl) {
-      enunciado = enunciadoEl.innerHTML.trim();
+      enunciado = enunciadoEl.innerText ? enunciadoEl.innerText.trim() : enunciadoEl.textContent.trim();
     }
 
     // 6. Alternativas
@@ -256,9 +256,9 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
 
       // Texto da alternativa
       const textoEl = li.querySelector(".questao-enunciado-alternativa-texto");
-      const textoHtml = textoEl ? textoEl.innerHTML.trim() : "";
+      const textoClean = textoEl ? (textoEl.innerText ? textoEl.innerText.trim() : textoEl.textContent.trim()) : "";
       
-      alternativas[letra] = textoHtml;
+      alternativas[letra] = textoClean;
     });
 
     // 7. Gabarito Correto e Resposta do Usuário

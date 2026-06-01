@@ -3,6 +3,7 @@ import { useSimulados } from '../hooks/useSimulados'
 import { Button } from '../components/ui/Button'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
+import { cleanHtmlText } from '../lib/cleanHtml'
 import { formatarTempo } from '../hooks/useDashboard'
 import { gerarResolucaoProfessor } from '../services/gemini.service'
 import { updateResolucaoProfessor } from '../services/supabase.service'
@@ -553,7 +554,7 @@ export function Simulados() {
             {/* Enunciado */}
             <div className="flex-1 min-h-0 overflow-y-auto pr-1">
               <div className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.03] text-foreground/90 font-medium text-sm leading-relaxed whitespace-pre-wrap select-text">
-                {qAtual?.enunciado}
+                {cleanHtmlText(qAtual?.enunciado)}
               </div>
 
               {/* Alternativas */}
@@ -583,7 +584,7 @@ export function Simulados() {
                           }`}>
                             {letra}
                           </span>
-                          <span className="text-xs pt-0.5 leading-relaxed">{texto}</span>
+                          <span className="text-xs pt-0.5 leading-relaxed">{cleanHtmlText(String(texto))}</span>
                         </button>
                       )
                     })}
@@ -886,7 +887,7 @@ export function Simulados() {
                       <div className="space-y-1.5 mt-2">
                         <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">Enunciado</span>
                         <div className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.03] text-foreground/90 font-medium text-xs leading-relaxed whitespace-pre-wrap select-text">
-                          {q.enunciado}
+                          {cleanHtmlText(q.enunciado)}
                         </div>
                       </div>
 
@@ -925,7 +926,7 @@ export function Simulados() {
                                   }`}>
                                     {letra}
                                   </span>
-                                  <p className="flex-1 leading-relaxed pt-0.5">{texto}</p>
+                                  <p className="flex-1 leading-relaxed pt-0.5">{cleanHtmlText(String(texto))}</p>
                                   {badgeIcon}
                                 </div>
                               )
