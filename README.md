@@ -75,10 +75,14 @@ Consulte o arquivo [.env.example](.env.example) para verificar o modelo de vari�
    ```env
    VITE_SUPABASE_URL=sua_url_do_supabase
    VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
-   VITE_GEMINI_API_KEY=sua_chave_de_api_do_gemini
+
+   # Segurança: Esta chave não deve ter o prefixo VITE_. Ela é lida exclusivamente
+   # no lado do servidor pelas APIs Serverless do Vercel (evitando exposição no frontend).
+   GEMINI_API_KEY=sua_chave_de_api_do_gemini
    ```
 
 4. **Rodar em Desenvolvimento**:
+   Para rodar o app localmente com as APIs Serverless integradas, use:
    ```bash
    npm run dev
    ```

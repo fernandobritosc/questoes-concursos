@@ -1,9 +1,8 @@
 /**
  * gemini.service.ts
  * Camada centralizada de acesso à API do Google Gemini.
- * Todos os prompts e chamadas ao modelo passam por aqui.
+ * Todos os prompts e chamadas ao modelo passam por aqui, agora redirecionados de forma segura pelo backend.
  */
-import { geminiModel } from '../lib/gemini'
 
 // ─── Tipos ─────────────────────────────────────────────────────────────────────
 
@@ -21,6 +20,29 @@ export interface QuestaoParaExplicacao {
   enunciado?: string | null
   alternativas: Record<string, string>
   gabarito?: string | null
+}
+
+// ─── Helper de Comunicação Backend ───────────────────────────────────────────
+
+/**
+ * Envia um prompt para o endpoint backend serverless que executa o Gemini de forma segura.
+ */
+async function chamarGeminiBackend(prompt: string): Promise<string> {
+  const response = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ prompt })
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.error || 'Erro ao obter resposta do Mentor IA no servidor.')
+  }
+
+  const data = await response.json()
+  return data.text
 }
 
 // ─── Funções de Serviço ────────────────────────────────────────────────────────
@@ -52,8 +74,7 @@ export async function gerarExplicacaoErro(
     
     Use uma linguagem amigável, encorajadora e focada na preparação para concursos. Formate bem o texto com parágrafos e sem markdown excessivo.
   `
-  const result = await geminiModel.generateContent(prompt)
-  return result.response.text()
+  return chamarGeminiBackend(prompt)
 }
 
 /**
@@ -90,8 +111,7 @@ export async function gerarResolucaoProfessor(
     
     Use uma linguagem clara, direta e encorajadora. Não use markdown excessivo.
   `
-  const result = await geminiModel.generateContent(prompt)
-  return result.response.text()
+  return chamarGeminiBackend(prompt)
 }
 
 /**
@@ -116,8 +136,7 @@ export async function gerarPlanoEstudos(fraquezas: FraquezaItem[]): Promise<stri
 
     Mantenha um tom encorajador e direto. Formate bem usando markdown, mas não de forma exagerada.
   `
-  const result = await geminiModel.generateContent(prompt)
-  return result.response.text()
+  return chamarGeminiBackend(prompt)
 }
 
 /**
@@ -156,11 +175,10 @@ export async function gerarMentoriaAssunto(fraqueza: FraquezaItem): Promise<stri
     3. Fazer uma pergunta por vez, esperar minha resposta, avaliá-la dando nota e só então seguir para a próxima pergunta.
     4. Simular pegadinhas clássicas das bancas e pedir que eu identifique o erro conceitual.
 
-    Mantenha um tom altamente profissional, objetivo, direto e motivador. Diga com precisão o que eu preciso fazer para subir minha taxa de acerto. Use markdown limpo, com títulos claros e boa legibilidade.
+    Mantenha um tom altamente profissional, objective, direto e motivador. Diga com precisão o que eu preciso fazer para subir minha taxa de acerto. Use markdown limpo, com títulos claros e boa legibilidade.
   `.trim()
 
-  const result = await geminiModel.generateContent(prompt)
-  return result.response.text()
+  return chamarGeminiBackend(prompt)
 }
 
 
@@ -235,6 +253,5 @@ export async function gerarFeedbackSimulado(
     Use uma linguagem motivadora, objetiva e profissional. Formate a resposta usando markdown com títulos claros e boa legibilidade.
   `.trim()
 
-  const result = await geminiModel.generateContent(prompt)
-  return result.response.text()
+  return chamarGeminiBackend(prompt)
 }
