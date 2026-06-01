@@ -59,6 +59,7 @@ export function EditalVerticalizado() {
   const [materiaSearch, setMateriaSearch] = useState('')
   const [assuntoSearch, setAssuntoSearch] = useState('')
   const [showAddMateria, setShowAddMateria] = useState(false)
+  const [statusFiltro, setStatusFiltro] = useState<'todos' | 'criticos' | 'nao_iniciados'>('todos')
 
   // Carregar dados iniciais da base
   useEffect(() => {
@@ -129,12 +130,32 @@ export function EditalVerticalizado() {
     })
   }, [selectedMateria, resolucoes, customOrder])
 
-  // Assuntos filtrados por busca
+  // Assuntos filtrados por busca e status
   const assuntosFiltrados = useMemo(() => {
-    return assuntosDaMateria.filter(a => 
-      a.toLowerCase().includes(assuntoSearch.toLowerCase())
-    )
-  }, [assuntosDaMateria, assuntoSearch])
+    return assuntosDaMateria.filter(a => {
+      const matchesBusca = a.toLowerCase().includes(assuntoSearch.toLowerCase())
+      if (!matchesBusca) return false
+
+      // Estatísticas de questões específicas deste assunto
+      const questoesDoAssunto = resolucoes.filter(r => r.materia === selectedMateria && r.assunto === a)
+      const countQuestoes = questoesDoAssunto.length
+      
+      const resolvidas = questoesDoAssunto.filter(q => q.alternativa && q.alternativa !== '')
+      const acertos = resolvidas.filter(q => q.acertou).length
+      const taxaAcerto = resolvidas.length > 0 ? Math.round((acertos / resolvidas.length) * 100) : 0
+      
+      const isStudied = studiedAssuntos[`${selectedMateria}::${a}`] || false
+
+      if (statusFiltro === 'criticos') {
+        return !isStudied && countQuestoes > 0 && taxaAcerto < 60
+      }
+      if (statusFiltro === 'nao_iniciados') {
+        return !isStudied && countQuestoes === 0
+      }
+
+      return true
+    })
+  }, [assuntosDaMateria, assuntoSearch, statusFiltro, resolucoes, selectedMateria, studiedAssuntos])
 
   // Métricas da matéria selecionada
   const materiaMetrics = useMemo(() => {
@@ -521,6 +542,41 @@ export function EditalVerticalizado() {
                 </div>
               </div>
 
+              {/* Filtros Rápidos de Status */}
+              <div className="px-5 py-2.5 bg-muted/30 border-b border-border flex flex-wrap items-center gap-2 shrink-0 animate-fade-in">
+                <span className="text-[10px] text-muted-foreground font-black uppercase tracking-wider mr-1">Filtrar Status:</span>
+                <button
+                  onClick={() => setStatusFiltro('todos')}
+                  className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-full transition-all cursor-pointer border ${
+                    statusFiltro === 'todos'
+                      ? 'bg-primary/10 border-primary/30 text-primary shadow-xs'
+                      : 'bg-card border-border/80 hover:border-border text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                  }`}
+                >
+                  Todos
+                </button>
+                <button
+                  onClick={() => setStatusFiltro('criticos')}
+                  className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-full transition-all cursor-pointer border ${
+                    statusFiltro === 'criticos'
+                      ? 'bg-rose-500/10 border-rose-500/25 text-rose-400 shadow-xs'
+                      : 'bg-card border-border/80 hover:border-border text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                  }`}
+                >
+                  Críticos (&lt; 60%)
+                </button>
+                <button
+                  onClick={() => setStatusFiltro('nao_iniciados')}
+                  className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-full transition-all cursor-pointer border ${
+                    statusFiltro === 'nao_iniciados'
+                      ? 'bg-amber-500/10 border-amber-500/25 text-amber-500 shadow-xs'
+                      : 'bg-card border-border/80 hover:border-border text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                  }`}
+                >
+                  Não iniciados
+                </button>
+              </div>
+
               {/* Lista dos Assuntos estruturada */}
               <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-2.5">
                 {assuntosFiltrados.length === 0 ? (
@@ -543,13 +599,24 @@ export function EditalVerticalizado() {
                     const acertos = resolvidas.filter(q => q.acertou).length
                     const taxaAcerto = resolvidas.length > 0 ? Math.round((acertos / resolvidas.length) * 100) : 0
 
+                    let borderLeftStyle = "border-l-border"
+                    if (isStudied) {
+                      borderLeftStyle = "border-l-[3px] border-l-[#1a7a52]"
+                    } else if (countQuestoes > 0) {
+                      if (taxaAcerto < 60) {
+                        borderLeftStyle = "border-l-[3px] border-l-[#b33030]"
+                      } else {
+                        borderLeftStyle = "border-l-[3px] border-l-[#9c5f00]"
+                      }
+                    }
+
                     return (
                       <div 
                         key={assunto}
-                        className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-card border rounded-2xl shadow-xxs transition-all gap-4 group ${
+                        className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-card border ${borderLeftStyle} rounded-2xl shadow-xxs transition-all gap-4 group ${
                           isStudied 
                             ? 'border-emerald-500/20 bg-emerald-50/[0.02]' 
-                            : 'border-border hover:border-primary/20'
+                            : 'hover:border-primary/20'
                         }`}
                       >
                         {/* Detalhes do Assunto */}
@@ -569,13 +636,22 @@ export function EditalVerticalizado() {
                           </button>
 
                           <div className="min-w-0 pr-2">
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <span className="flex-shrink-0 text-xxs font-black text-primary bg-primary/10 px-2 py-0.5 rounded">
                                 {originalIndex + 1}º
                               </span>
-                              <h4 className={`text-xs font-bold truncate max-w-[280px] sm:max-w-[350px] ${isStudied ? 'text-foreground line-through opacity-65' : 'text-foreground'}`}>
+                              <h4 className={`text-xs font-bold truncate max-w-[180px] sm:max-w-[300px] ${isStudied ? 'text-foreground line-through opacity-65' : 'text-foreground'}`}>
                                 {assunto}
                               </h4>
+                              {countQuestoes > 0 && (
+                                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full shrink-0 ${
+                                  taxaAcerto >= 60 
+                                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                                    : 'bg-rose-500/10 text-rose-450 border border-rose-500/20'
+                                }`}>
+                                  {taxaAcerto}% acerto
+                                </span>
+                              )}
                             </div>
 
                             {/* Detalhes rápidos de questões deste assunto */}

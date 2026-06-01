@@ -534,14 +534,6 @@ USING (bucket_id = 'materiais-estudo');`
 
       </div>
 
-      {/* Legenda dos Níveis de Aproveitamento */}
-      <div className="bg-card/25 border border-border/60 p-4 rounded-xl text-xxs font-black uppercase tracking-wider text-muted-foreground flex flex-wrap gap-x-6 gap-y-2 justify-center sm:justify-start">
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/30" /> Excelência (&gt;= 80%)</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/30" /> Regular (50% a 79%)</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/30" /> Crítico (&lt; 50%)</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-zinc-500 shadow-sm shadow-zinc-500/30" /> Não Resolvido</span>
-      </div>
-
       {/* Listagem de Matérias (Capsulas) */}
       <div className="space-y-4">
         
@@ -549,6 +541,8 @@ USING (bucket_id = 'materiais-estudo');`
           const isExpanded = expandedSubjects[subject.nome]
           const resolvidosCount = subject.assuntos.filter(a => a.totalTentativas > 0).length
           const totalAssuntosSubject = subject.assuntos.length
+          const firstExpandedSubject = subjectsData.find(s => expandedSubjects[s.nome])
+          const isFirstExpanded = firstExpandedSubject?.nome === subject.nome
 
           return (
             <div key={subject.nome} className="bg-card/25 border border-border/80 rounded-2xl overflow-hidden shadow-xxs transition-all">
@@ -597,7 +591,17 @@ USING (bucket_id = 'materiais-estudo');`
 
               {/* Grid Expansível de Quadradinhos / Sub-tópicos */}
               {isExpanded && (
-                <div className="p-6 bg-card/10 animate-in slide-in-from-top-2 duration-300">
+                <div className="p-6 bg-card/10 animate-in slide-in-from-top-2 duration-300 space-y-5">
+                  {/* Legenda dos Níveis de Aproveitamento - Apenas no primeiro card expandido */}
+                  {isFirstExpanded && (
+                    <div className="bg-card/45 border border-border/80 p-4 rounded-xl text-xs font-black uppercase tracking-wider text-muted-foreground flex flex-wrap gap-x-6 gap-y-2 justify-center sm:justify-start">
+                      <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/30 border border-emerald-400" /> Excelência (&gt;= 80%)</span>
+                      <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/30 border border-amber-400" /> Regular (50% a 79%)</span>
+                      <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/30 border border-rose-400" /> Crítico (&lt; 50%)</span>
+                      <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-full bg-zinc-500 shadow-sm shadow-zinc-500/30 border border-zinc-400" /> Não Resolvido</span>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     
                     {subject.assuntos.map((assunto) => {
@@ -606,22 +610,26 @@ USING (bucket_id = 'materiais-estudo');`
                       let statusBadge = 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
                       let statusText = 'Não Resolvido'
                       let Icon = HelpCircle
+                      let tooltipText = 'Não Resolvido: nenhuma questão resolvida'
 
                       if (assunto.status === 'excelente') {
                         cardBorder = 'border-l-4 border-l-emerald-500 hover:border-emerald-500/40'
                         statusBadge = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                         statusText = `Excelente (${assunto.taxaAcerto}%)`
                         Icon = Award
+                        tooltipText = 'Excelência: >= 80% de acerto'
                       } else if (assunto.status === 'atencao') {
                         cardBorder = 'border-l-4 border-l-amber-500 hover:border-amber-500/40'
                         statusBadge = 'bg-amber-500/10 text-amber-400 border-amber-500/20'
                         statusText = `Regular (${assunto.taxaAcerto}%)`
                         Icon = AlertTriangle
+                        tooltipText = 'Regular: 50% a 79% de acerto'
                       } else if (assunto.status === 'critico') {
                         cardBorder = 'border-l-4 border-l-rose-500 hover:border-rose-500/40'
                         statusBadge = 'bg-rose-500/10 text-rose-400 border-rose-500/20'
                         statusText = `Crítico (${assunto.taxaAcerto}%)`
                         Icon = ShieldAlert
+                        tooltipText = 'Crítico: < 50% de acerto'
                       }
 
                       const key = `${subject.nome} | ${assunto.nome}`
@@ -641,7 +649,10 @@ USING (bucket_id = 'materiais-estudo');`
                             
                             {/* Info de Métricas e Performance */}
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border flex items-center gap-1 ${statusBadge}`}>
+                              <span 
+                                className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border flex items-center gap-1 cursor-help transition-all duration-200 ${statusBadge}`}
+                                title={tooltipText}
+                              >
                                 <Icon className="w-3 h-3" />
                                 {statusText}
                               </span>

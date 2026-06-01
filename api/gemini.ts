@@ -1,19 +1,18 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@supabase/supabase-js'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 // Configura o SDK do Gemini usando a chave de API segura do backend
-const apiKey = process.env.GEMINI_API_KEY
+const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
 
 // Configura o cliente Admin do Supabase no backend
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
 
 const supabase = supabaseUrl && supabaseServiceKey 
   ? createClient(supabaseUrl, supabaseServiceKey) 
   : null
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   // Define cabeçalhos de CORS e JSON
   res.setHeader('Content-Type', 'application/json')
 
@@ -52,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     }
 
-    const { prompt } = req.body
+    const { prompt, responseMimeType } = req.body
 
     if (!prompt || typeof prompt !== 'string') {
       return res.status(400).json({ error: 'Parâmetro "prompt" é obrigatório e deve ser uma string.' })
@@ -60,7 +59,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // 3. Execução Segura do Gemini
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
+    
+    const generationConfig: any = {}
+    if (responseMimeType) {
+      generationConfig.responseMimeType = responseMimeType
+    }
+
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-flash-latest',
+      generationConfig
+    })
 
     const result = await model.generateContent(prompt)
     const text = result.response.text()

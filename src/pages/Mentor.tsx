@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useMentor } from '../hooks/useMentor'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { Button } from '../components/ui/Button'
-import { BrainCircuit, Sparkles, Calendar, ChevronRight, GraduationCap, Printer, Cpu, Copy, Check } from 'lucide-react'
+import { BrainCircuit, Sparkles, Calendar, ChevronRight, GraduationCap, Printer, Cpu, Copy, Check, Info } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 
 // Card Interativo e Premium para Google NotebookLM com ação de cópia integrada
@@ -77,7 +77,11 @@ export function Mentor() {
     setSelectedFraqueza,
     planosAssuntos,
     gerandoMentoria,
-    handleGerarMentoria
+    handleGerarMentoria,
+    tarefasConcluidas,
+    handleToggleTarefa,
+    handleLimparPlano,
+    dbSyncError
   } = useMentor()
 
   if (loading) return <LoadingSpinner />
@@ -308,10 +312,164 @@ export function Mentor() {
                   )}
 
                   {plano && !gerandoPlano && (
-                    <div className="prose prose-sm dark:prose-invert max-w-none text-foreground/90 animate-in fade-in duration-300 print:text-zinc-800">
-                      <ReactMarkdown components={customRenderers}>
-                        {plano}
-                      </ReactMarkdown>
+                    <div className="space-y-6 animate-in fade-in duration-300">
+                      {typeof plano === 'string' ? (
+                        <div className="prose prose-sm dark:prose-invert max-w-none text-foreground/90 print:text-zinc-800">
+                          <ReactMarkdown components={customRenderers}>
+                            {plano}
+                          </ReactMarkdown>
+                        </div>
+                      ) : (
+                        <div className="space-y-6 text-left">
+                          {/* Banner de Sincronização de Banco (se houver erro/ausência de colunas) */}
+                          {dbSyncError && (
+                            <div className="p-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5 text-yellow-400 text-xs space-y-2.5 animate-scale-in print:hidden">
+                              <div className="flex items-start gap-2.5">
+                                <Info className="w-4 h-4 text-yellow-450 shrink-0 mt-0.5" />
+                                <div className="space-y-1">
+                                  <p className="font-extrabold text-foreground">Sincronização em Nuvem Desativada</p>
+                                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                                    Seu plano semanal está sendo salvo localmente no <strong>localStorage</strong> do navegador. Para habilitar o salvamento persistente na nuvem (Supabase), execute o script SQL abaixo no <strong>SQL Editor</strong> do painel do seu Supabase:
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="relative">
+                                <pre className="p-2.5 rounded bg-black/40 text-[9px] font-mono overflow-x-auto text-zinc-350 border border-white/5 leading-relaxed">
+{`ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_plano JSONB DEFAULT '{}'::jsonb;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAULT '{}'::jsonb;`}
+                                </pre>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(`ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_plano JSONB DEFAULT '{}'::jsonb;\nALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAULT '{}'::jsonb;`);
+                                    alert('Código SQL copiado para a área de transferência!');
+                                  }}
+                                  className="absolute top-2 right-2 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider bg-zinc-800/80 border border-zinc-700 text-zinc-300 rounded hover:bg-zinc-700 cursor-pointer"
+                                >
+                                  Copiar SQL
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Diagnóstico Glassmorphism */}
+                          <div className="p-5 rounded-xl border border-violet-500/20 bg-gradient-to-br from-violet-950/10 via-card to-card text-foreground shadow-xs relative overflow-hidden">
+                            <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-violet-500 to-indigo-600" />
+                            <h4 className="text-xs font-black text-violet-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                              <Sparkles className="w-4 h-4 text-violet-400" /> Diagnóstico do Mentor
+                            </h4>
+                            <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+                              {plano.diagnostico}
+                            </p>
+                          </div>
+
+                          {/* Lista do Cronograma Semanal */}
+                          <div className="space-y-4">
+                            <h4 className="text-xs font-black text-foreground uppercase tracking-wider flex items-center gap-2 border-b border-border/40 pb-2">
+                              <Calendar className="w-4 h-4 text-primary" /> Cronograma de Estudos da Semana
+                            </h4>
+
+                            <div className="flex flex-col gap-3">
+                              {plano.cronograma.map((item, index) => {
+                                const isCompleted = !!tarefasConcluidas[index]
+                                
+                                // Determina o badge de carga de trabalho
+                                let cargaStyle = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                if (item.carga === 'Moderada') {
+                                  cargaStyle = "bg-amber-500/10 text-amber-500 border border-amber-500/20"
+                                } else if (item.carga === 'Intensa') {
+                                  cargaStyle = "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                                }
+
+                                return (
+                                  <div
+                                    key={index}
+                                    className={`p-4 rounded-xl border transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden ${
+                                      isCompleted
+                                        ? 'border-emerald-500/30 bg-emerald-500/[0.02] opacity-75'
+                                        : 'border-border/60 hover:border-primary/40 bg-card'
+                                    }`}
+                                  >
+                                    {isCompleted && (
+                                      <div className="absolute top-0 left-0 h-full w-1 bg-emerald-500" />
+                                    )}
+
+                                    <div className="flex items-start gap-4 flex-1 min-w-0">
+                                      {/* Checkbox interativo */}
+                                      <button
+                                        onClick={() => handleToggleTarefa(index)}
+                                        className={`w-5 h-5 rounded-md border flex items-center justify-center cursor-pointer shrink-0 mt-0.5 transition-all ${
+                                          isCompleted
+                                            ? 'bg-emerald-500 border-emerald-600 text-white shadow-sm'
+                                            : 'border-border bg-black/10 hover:border-primary/50 text-transparent'
+                                        }`}
+                                      >
+                                        <Check className="w-3.5 h-3.5 stroke-[3]" />
+                                      </button>
+
+                                      <div className="space-y-1.5 min-w-0 flex-1">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                          <span className="text-xs font-bold text-foreground">
+                                            {item.dia}
+                                          </span>
+                                          <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider ${cargaStyle}`}>
+                                            Carga: {item.carga}
+                                          </span>
+                                          <span className="text-[9px] bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded font-black">
+                                            {item.questoes_sugeridas} questões
+                                          </span>
+                                        </div>
+
+                                        <div className="flex flex-col gap-1 mt-1">
+                                          <p className="text-[10px] text-muted-foreground font-black uppercase tracking-wider">
+                                            {item.materia}
+                                          </p>
+                                          {item.topicos && item.topicos.length > 0 && (
+                                            <div className="flex flex-wrap gap-1 mt-0.5">
+                                              {item.topicos.map((topico, tIdx) => (
+                                                <span key={tIdx} className="text-[10px] font-bold text-violet-300 bg-violet-500/5 px-2 py-0.5 rounded border border-white/[0.04]">
+                                                  {topico}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          )}
+                                        </div>
+
+                                        <p className={`text-xs mt-2 leading-relaxed font-medium ${isCompleted ? 'line-through text-muted-foreground/60' : 'text-muted-foreground'}`}>
+                                          {item.meta_estudo}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Dica de Ouro */}
+                          {plano.dica_ouro && (
+                            <div className="p-5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-foreground relative overflow-hidden">
+                              <div className="absolute top-0 left-0 h-full w-1 bg-indigo-500" />
+                              <h4 className="text-xs font-black text-indigo-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                                <Sparkles className="w-4 h-4 animate-pulse text-indigo-400" /> Dica de Ouro do Mentor
+                              </h4>
+                              <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
+                                {plano.dica_ouro}
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Botão de Exclusão para Regenerar */}
+                          <div className="flex justify-end pt-4 print:hidden">
+                            <button
+                              onClick={handleLimparPlano}
+                              className="px-4 py-2 border border-destructive/25 text-destructive bg-destructive/5 hover:bg-destructive/10 text-xxs font-black uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
+                            >
+                              Limpar e Regenerar Plano
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchResolucoeComErros, insertHistoricoResolucao, updateResolucaoProfessor } from '../services/supabase.service'
+import { fetchAllResolucoes, insertHistoricoResolucao, updateResolucaoProfessor } from '../services/supabase.service'
 import { gerarExplicacaoErro } from '../services/gemini.service'
 import type { ResolucaoView } from '../types/database'
 
@@ -28,8 +28,33 @@ export function useRevisao() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchResolucoeComErros()
-        setErros(data)
+        const data = await fetchAllResolucoes()
+        
+        // Agrupa por questao_tec_id e mantém apenas a tentativa mais recente
+        const latestAttemptsMap = new Map<number, ResolucaoView>()
+        for (const item of data) {
+          if (item.questao_tec_id && !latestAttemptsMap.has(item.questao_tec_id)) {
+            latestAttemptsMap.set(item.questao_tec_id, item)
+          }
+        }
+        
+        const schedule = JSON.parse(localStorage.getItem('concursos_spaced_repetition') || '{}')
+        const now = new Date()
+        
+        const dueQuestions = Array.from(latestAttemptsMap.values()).filter(item => {
+          // Se errou a última tentativa, está sempre na fila de revisão
+          if (!item.acertou) return true
+          
+          // Se acertou, verifica se tem agendamento ativo e se está vencido (due)
+          const meta = schedule[String(item.questao_id || item.id)]
+          if (meta && meta.proximaRevisao) {
+            return new Date(meta.proximaRevisao) <= now
+          }
+          
+          return false
+        })
+        
+        setErros(dueQuestions)
       } catch (err: any) {
         console.error('Erro ao buscar caderno de erros:', err)
         setError(err.message || 'Erro ao carregar caderno de erros.')
@@ -57,6 +82,9 @@ export function useRevisao() {
    * Registra a tentativa no banco (historico_resolucoes) e avança.
    * A questão só sai do caderno de erros se o usuário acertar.
    */
+  /**
+   * Registra a tentativa no banco (historico_resolucoes).
+   */
   const handleConfirmarResposta = async (tempoSegundos: number = 0) => {
     if (!alternativaSelecionada || !questaoAtual) return
 
@@ -71,15 +99,6 @@ export function useRevisao() {
         acertou,
         tempo_segundos: tempoSegundos,
       })
-
-      // Se acertou, remove do caderno de erros localmente
-      if (acertou) {
-        setErros(prev => prev.filter((_, idx) => idx !== questaoAtualIndex))
-        // Ajusta o índice se necessário
-        if (questaoAtualIndex >= erros.length - 1 && questaoAtualIndex > 0) {
-          setQuestaoAtualIndex(prev => prev - 1)
-        }
-      }
     } catch (err: any) {
       console.error('Erro ao salvar resposta:', err)
     } finally {
@@ -94,6 +113,90 @@ export function useRevisao() {
     setRevelado(false)
     if (questaoAtualIndex < erros.length - 1) {
       setQuestaoAtualIndex(prev => prev + 1)
+    }
+  }
+
+  /**
+   * Classifica a facilidade da resposta usando o algoritmo SM-2 e reagenda.
+   */
+  const handleClassificar = async (grade: number) => {
+    if (!questaoAtual) return
+
+    const questaoId = questaoAtual.questao_id || questaoAtual.id
+    const schedule = JSON.parse(localStorage.getItem('concursos_spaced_repetition') || '{}')
+    const meta = schedule[String(questaoId)] || { n: 0, ef: 2.5, interval: 0 }
+
+    // Calcula os novos parâmetros SM-2
+    let n = meta.n
+    let ef = meta.ef
+    let interval = meta.interval
+
+    if (grade >= 3) {
+      if (n === 0) {
+        interval = 1
+      } else if (n === 1) {
+        interval = 4
+      } else {
+        interval = Math.round(meta.interval * meta.ef)
+      }
+      n = n + 1
+    } else {
+      n = 0
+      interval = 1
+    }
+
+    // Atualiza fator de facilidade (EF)
+    ef = ef + (0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02))
+    if (ef < 1.3) ef = 1.3
+
+    const proximaRevisao = new Date()
+    proximaRevisao.setDate(proximaRevisao.getDate() + interval)
+
+    // Grava de volta no localStorage
+    schedule[String(questaoId)] = {
+      n,
+      ef,
+      interval,
+      proximaRevisao: proximaRevisao.toISOString()
+    }
+    localStorage.setItem('concursos_spaced_repetition', JSON.stringify(schedule))
+
+    // Remove a questão da fila ativa localmente
+    setErros(prev => prev.filter((_, idx) => idx !== questaoAtualIndex))
+
+    // Ajusta o índice
+    if (questaoAtualIndex >= erros.length - 1 && questaoAtualIndex > 0) {
+      setQuestaoAtualIndex(prev => prev - 1)
+    }
+
+    // Reseta estado da resposta
+    setAlternativaSelecionada(null)
+    setRevelado(false)
+  }
+
+  /**
+   * Obtém os prazos dinâmicos baseados no estado atual de SM-2
+   */
+  const obterPrazosEstimados = (questaoId: number) => {
+    const schedule = JSON.parse(localStorage.getItem('concursos_spaced_repetition') || '{}')
+    const meta = schedule[String(questaoId)] || { n: 0, ef: 2.5, interval: 0 }
+
+    const dificilInterval = 1
+    
+    let bomInterval = 1
+    if (meta.n === 0) bomInterval = 1
+    else if (meta.n === 1) bomInterval = 4
+    else bomInterval = Math.max(1, Math.round(meta.interval * meta.ef))
+
+    let facilInterval = 3
+    if (meta.n === 0) facilInterval = 3
+    else if (meta.n === 1) facilInterval = 6
+    else facilInterval = Math.max(1, Math.round(meta.interval * meta.ef * 1.3))
+
+    return {
+      dificil: dificilInterval,
+      bom: bomInterval,
+      facil: facilInterval
     }
   }
 
@@ -151,5 +254,7 @@ export function useRevisao() {
     handleConfirmarResposta,
     handleProxima,
     handleExplicacaoIA,
+    handleClassificar,
+    obterPrazosEstimados,
   }
 }

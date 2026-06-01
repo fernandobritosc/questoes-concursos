@@ -20,61 +20,6 @@ import {
   Bar
 } from 'recharts'
 
-/* ──────────────── Gauge SVG Animado ──────────────── */
-
-function GaugeChart({ value, size = 120 }: { value: number; size?: number }) {
-  const strokeWidth = 10
-  const radius = (size - strokeWidth) / 2
-  const circumference = 2 * Math.PI * radius
-  const offset = circumference - (value / 100) * circumference
-
-  const getColor = (v: number) => {
-    if (v >= 80) return { stroke: 'url(#gaugeGreen)', glow: 'rgba(16, 185, 129, 0.25)' }
-    if (v >= 70) return { stroke: 'url(#gaugeAmber)', glow: 'rgba(245, 158, 11, 0.25)' }
-    return { stroke: 'url(#gaugeRed)', glow: 'rgba(239, 68, 68, 0.25)' }
-  }
-
-  const { stroke, glow } = getColor(value)
-
-  return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="transform -rotate-90">
-        <defs>
-          <linearGradient id="gaugeGreen" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#059669" />
-            <stop offset="100%" stopColor="#34d399" />
-          </linearGradient>
-          <linearGradient id="gaugeAmber" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#d97706" />
-            <stop offset="100%" stopColor="#fbbf24" />
-          </linearGradient>
-          <linearGradient id="gaugeRed" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#dc2626" />
-            <stop offset="100%" stopColor="#f87171" />
-          </linearGradient>
-        </defs>
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={strokeWidth}
-        />
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke={stroke} strokeWidth={strokeWidth}
-          strokeLinecap="round"
-          strokeDasharray={circumference} strokeDashoffset={offset}
-          style={{
-            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            filter: `drop-shadow(0 0 8px ${glow})`,
-          }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-black tracking-tight text-foreground">{value}%</span>
-        <span className="text-[10px] font-medium text-muted-foreground mt-0.5">Taxa de Acerto</span>
-      </div>
-    </div>
-  )
-}
 
 /* ──────────────── Sparkline SVG ──────────────── */
 
@@ -108,16 +53,38 @@ function Sparkline({ color = '#8b5cf6' }: { color?: string }) {
   )
 }
 
+/* ──────────────── Trend WoW Indicator ──────────────── */
+
+function TrendIndicator({ trend }: { trend: { value: number; isImprovement: boolean; label: string } }) {
+  if (trend.value === 0) {
+    return (
+      <span className="text-[10px] font-semibold text-muted-foreground/50 flex items-center gap-0.5 mt-1.5 select-none">
+        Sem alteração WoW
+      </span>
+    )
+  }
+
+  const colorClass = trend.isImprovement ? "text-emerald-400" : "text-red-400"
+  const arrow = trend.isImprovement ? "↑" : "↓"
+
+  return (
+    <span className={`text-[10px] font-bold ${colorClass} flex items-center gap-0.5 mt-1.5 select-none`}>
+      {arrow} {trend.label} <span className="text-muted-foreground/50 font-normal">vs. semana anterior</span>
+    </span>
+  )
+}
+
 /* ──────────────── Compact Metric Card ──────────────── */
 
 function MetricCard({
-  title, value, subtitle, icon, gradientClass, sparkColor, stagger,
+  title, value, subtitle, icon, gradientClass, sparkColor, stagger, sizeClass = "text-[40px]", trend,
 }: {
   title: string; value: string | number; subtitle: string
-  icon: React.ReactNode; gradientClass: string; sparkColor: string; stagger: string
+  icon: React.ReactNode; gradientClass: string; sparkColor: string; stagger: string; sizeClass?: string;
+  trend: { value: number; isImprovement: boolean; label: string }
 }) {
   return (
-    <div className={`glass-card p-4 flex flex-col justify-between gap-3 animate-fade-in-up ${stagger}`}>
+    <div className={`glass-card p-4.5 flex flex-col justify-between gap-3 animate-fade-in-up ${stagger}`}>
       <div className="flex items-center justify-between">
         <div className={`p-2 rounded-lg ${gradientClass} shadow-lg`}>
           {icon}
@@ -125,10 +92,15 @@ function MetricCard({
         <Sparkline color={sparkColor} />
       </div>
       <div>
-        <h4 className="text-2xl font-black tracking-tight text-foreground leading-none">{value}</h4>
-        <p className="text-[11px] font-medium text-muted-foreground mt-1">{title}</p>
+        <h4 className={`${sizeClass} font-black tracking-tight text-foreground leading-none`} style={{ fontVariantNumeric: 'tabular-nums' }}>
+          {value}
+        </h4>
+        <p className="text-[11px] font-bold text-muted-foreground mt-1.5">{title}</p>
       </div>
-      <p className="text-[10px] text-muted-foreground/60">{subtitle}</p>
+      <div className="flex flex-col border-t border-white/[0.04] pt-2">
+        <p className="text-[10px] text-muted-foreground/60 leading-none">{subtitle}</p>
+        <TrendIndicator trend={trend} />
+      </div>
     </div>
   )
 }
@@ -683,14 +655,17 @@ export function Dashboard() {
 
       {/* ── Métricas: gauge + 3 cards numa faixa horizontal compacta ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
-        {/* Gauge Card */}
-        <div className="glass-card p-4 flex items-center gap-5 animate-fade-in-up stagger-1">
-          <GaugeChart value={taxaAcerto} size={110} />
-          <div>
-            <p className="text-sm font-bold text-foreground">{totalAcertos}/{totalQuestoes}</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">questões corretas</p>
-          </div>
-        </div>
+        <MetricCard
+          title="Taxa de Acerto"
+          value={`${taxaAcerto}%`}
+          subtitle={is24h ? "Aproveitamento de hoje" : `${totalAcertos}/${totalQuestoes} corretas`}
+          icon={<Trophy className="w-4.5 h-4.5 text-white" />}
+          gradientClass="gradient-emerald"
+          sparkColor="#10b981"
+          stagger="stagger-1"
+          sizeClass="text-[64px]"
+          trend={stats.trends.taxa}
+        />
 
         <MetricCard
           title="Questões Resolvidas"
@@ -700,6 +675,8 @@ export function Dashboard() {
           gradientClass="gradient-violet"
           sparkColor="#8b5cf6"
           stagger="stagger-2"
+          sizeClass="text-[40px]"
+          trend={stats.trends.resolvidas}
         />
 
         <MetricCard
@@ -710,6 +687,8 @@ export function Dashboard() {
           gradientClass="gradient-amber"
           sparkColor="#f59e0b"
           stagger="stagger-3"
+          sizeClass="text-[40px]"
+          trend={stats.trends.tempo}
         />
 
         <MetricCard
@@ -720,6 +699,8 @@ export function Dashboard() {
           gradientClass="gradient-rose"
           sparkColor="#f43f5e"
           stagger="stagger-4"
+          sizeClass="text-[28px]"
+          trend={stats.trends.erros}
         />
       </div>
 

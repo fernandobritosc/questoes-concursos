@@ -283,3 +283,40 @@ export async function insertResolucoesBatch(
 ): Promise<number> {
   return insertQuestoesBatch(questoes, onProgress)
 }
+
+/** Busca o plano de estudos e tarefas salvas no perfil do usuário no Supabase */
+export async function fetchMentorPlano(): Promise<{ mentor_plano: any; mentor_tarefas: any } | null> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) return null
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('mentor_plano, mentor_tarefas')
+    .eq('id', userId)
+    .single()
+
+  if (error) {
+    throw error
+  }
+  return data
+}
+
+/** Salva o plano de estudos e as tarefas concluídas no perfil do usuário no Supabase */
+export async function updateMentorPlano(planoJson: any, tarefasJson: any): Promise<void> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) return
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({
+      mentor_plano: planoJson,
+      mentor_tarefas: tarefasJson
+    })
+    .eq('id', userId)
+
+  if (error) {
+    throw error
+  }
+}

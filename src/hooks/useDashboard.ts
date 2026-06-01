@@ -30,6 +30,12 @@ interface Stats24h {
   evolucaoDiaria: DiaEvolucao[]
 }
 
+export interface Microtrend {
+  value: number
+  isImprovement: boolean
+  label: string
+}
+
 interface DashboardStats {
   totalQuestoes: number
   totalAcertos: number
@@ -44,6 +50,12 @@ interface DashboardStats {
   dataFormatada: string
   stats24h: Stats24h
   evolucaoDiaria: DiaEvolucao[]
+  trends: {
+    taxa: Microtrend
+    resolvidas: Microtrend
+    tempo: Microtrend
+    erros: Microtrend
+  }
 }
 
 /**
@@ -117,6 +129,68 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
     totalQuestoes > 0
       ? Math.round(respondidas.reduce((acc, curr) => acc + curr.tempo_segundos, 0) / totalQuestoes)
       : 0
+
+  // ─── CÁLCULO DE TRENDS SEMANAIS (WEEK-OVER-WEEK) ───────────────────────────
+  const agora = Date.now()
+  const umDia = 24 * 60 * 60 * 1000
+  const seteDias = 7 * umDia
+  const quatorzeDias = 14 * umDia
+
+  const resolucoesEstaSemana = respondidas.filter(r => {
+    if (!r.data_resolucao) return false
+    const diff = agora - new Date(r.data_resolucao).getTime()
+    return diff <= seteDias
+  })
+
+  const resolucoesSemanaAnterior = respondidas.filter(r => {
+    if (!r.data_resolucao) return false
+    const diff = agora - new Date(r.data_resolucao).getTime()
+    return diff > seteDias && diff <= quatorzeDias
+  })
+
+  // 1. Taxa de Acerto WoW
+  const totalEstaSemana = resolucoesEstaSemana.length
+  const acertosEstaSemana = resolucoesEstaSemana.filter(r => r.acertou).length
+  const taxaEstaSemana = totalEstaSemana > 0 ? Math.round((acertosEstaSemana / totalEstaSemana) * 100) : 0
+
+  const totalSemanaAnterior = resolucoesSemanaAnterior.length
+  const acertosSemanaAnterior = resolucoesSemanaAnterior.filter(r => r.acertou).length
+  const taxaSemanaAnterior = totalSemanaAnterior > 0 ? Math.round((acertosSemanaAnterior / totalSemanaAnterior) * 100) : 0
+
+  const diffTaxa = taxaEstaSemana - taxaSemanaAnterior
+  const trendTaxa = {
+    value: diffTaxa,
+    isImprovement: diffTaxa >= 0,
+    label: diffTaxa >= 0 ? `+${diffTaxa}%` : `${diffTaxa}%`
+  }
+
+  // 2. Questões Resolvidas WoW
+  const diffResolvidas = totalEstaSemana - totalSemanaAnterior
+  const trendResolvidas = {
+    value: diffResolvidas,
+    isImprovement: diffResolvidas >= 0,
+    label: diffResolvidas >= 0 ? `+${diffResolvidas}` : `${diffResolvidas}`
+  }
+
+  // 3. Tempo Médio WoW
+  const tempoEstaSemana = totalEstaSemana > 0 ? Math.round(resolucoesEstaSemana.reduce((acc, curr) => acc + curr.tempo_segundos, 0) / totalEstaSemana) : 0
+  const tempoSemanaAnterior = totalSemanaAnterior > 0 ? Math.round(resolucoesSemanaAnterior.reduce((acc, curr) => acc + curr.tempo_segundos, 0) / totalSemanaAnterior) : 0
+  const diffTempo = tempoEstaSemana - tempoSemanaAnterior
+  const trendTempo = {
+    value: diffTempo,
+    isImprovement: diffTempo <= 0,
+    label: diffTempo <= 0 ? `-${Math.abs(diffTempo)}s` : `+${diffTempo}s`
+  }
+
+  // 4. Erros para Revisar WoW (delta absoluto de erros acumulados)
+  const errosEstaSemana = totalEstaSemana - acertosEstaSemana
+  const errosSemanaAnterior = totalSemanaAnterior - acertosSemanaAnterior
+  const diffErros = errosEstaSemana - errosSemanaAnterior
+  const trendErros = {
+    value: diffErros,
+    isImprovement: diffErros <= 0,
+    label: diffErros <= 0 ? `-${Math.abs(diffErros)}` : `+${diffErros}`
+  }
 
   const porMateria = respondidas.reduce(
     (acc, curr) => {
@@ -285,6 +359,12 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
       resolucoes: respondidasHoje,
       chartData: chartDataHoje,
       evolucaoDiaria: evolucaoDiariaHoje
+    },
+    trends: {
+      taxa: trendTaxa,
+      resolvidas: trendResolvidas,
+      tempo: trendTempo,
+      erros: trendErros
     }
   }
 }

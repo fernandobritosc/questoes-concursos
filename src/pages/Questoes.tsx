@@ -134,6 +134,74 @@ export function Questoes() {
     }
   }, [searchParams, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams, setFiltros])
   
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignora atalhos se o usuário estiver focando em algum campo de texto/entrada
+      const active = document.activeElement;
+      if (active) {
+        const tagName = active.tagName.toLowerCase();
+        if (tagName === 'input' || tagName === 'textarea' || active.getAttribute('contenteditable') === 'true') {
+          return;
+        }
+      }
+
+      const currentQuestao = questoesExibidas[currentQuestaoIndex];
+      if (!currentQuestao) return;
+
+      // Teclas 1-5 para selecionar alternativas (apenas se não estiver revelado)
+      if (!revelado && ['1', '2', '3', '4', '5'].includes(e.key)) {
+        const mapping: Record<string, string> = {
+          '1': 'A',
+          '2': 'B',
+          '3': 'C',
+          '4': 'D',
+          '5': 'E'
+        };
+        const letter = mapping[e.key];
+        if (letter && currentQuestao.alternativas?.[letter]) {
+          e.preventDefault();
+          setAlternativaSelecionada(letter);
+        }
+        return;
+      }
+
+      // Enter ou Espaço
+      if (e.key === 'Enter' || e.key === ' ') {
+        // Evita scroll da página com barra de espaço
+        e.preventDefault();
+
+        if (!revelado) {
+          // Se tiver alternativa selecionada, confirma/resolve
+          if (alternativaSelecionada && !salvandoResposta) {
+            handleConfirmarResposta();
+          }
+        } else {
+          // Se já estiver revelado, avança para próxima questão
+          if (currentQuestaoIndex < questoesExibidas.length - 1) {
+            setCurrentQuestaoIndex(prev => prev + 1);
+            setAlternativaSelecionada(null);
+            setRevelado(false);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [
+    revelado,
+    alternativaSelecionada,
+    currentQuestaoIndex,
+    questoesExibidas,
+    salvandoResposta,
+    handleConfirmarResposta,
+    setCurrentQuestaoIndex,
+    setAlternativaSelecionada,
+    setRevelado
+  ]);
+
   const handleNodeClick = (nodeName: string, levelIndex: number, parentNames: string[]) => {
     const currentOption = ORGANIZAR_OPTIONS.find(o => o.id === organizarPor) || ORGANIZAR_OPTIONS[0];
     const levels = currentOption.levels;
@@ -418,46 +486,76 @@ export function Questoes() {
             <div className="bg-muted/70 p-5 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3.5 flex-wrap">
                 {!revelado ? (
-                  <button
-                    disabled={!alternativaSelecionada || salvandoResposta}
-                    onClick={handleConfirmarResposta}
-                    className={`px-6 py-2.5 rounded-lg text-xs font-black shadow-sm transition-all uppercase tracking-wider flex items-center gap-2 ${
-                      alternativaSelecionada 
-                        ? 'bg-[#00c853] hover:bg-[#00b0ff] text-white cursor-pointer active:scale-98' 
-                        : 'bg-muted text-muted-foreground cursor-not-allowed border border-border'
-                    }`}
-                  >
-                    {salvandoResposta && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                    RESOLVER QUESTÃO
-                  </button>
+                  <>
+                    <button
+                      disabled={!alternativaSelecionada || salvandoResposta}
+                      onClick={handleConfirmarResposta}
+                      title="Atalho: Enter ou Espaço"
+                      className={`px-6 py-2.5 rounded-lg text-xs font-black shadow-sm transition-all uppercase tracking-wider flex items-center gap-2 ${
+                        alternativaSelecionada 
+                          ? 'bg-[#00c853] hover:bg-[#00b0ff] text-white cursor-pointer active:scale-98' 
+                          : 'bg-muted text-muted-foreground cursor-not-allowed border border-border'
+                      }`}
+                    >
+                      {salvandoResposta && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                      RESOLVER QUESTÃO
+                    </button>
+
+                    <button
+                      onClick={() => handleExplicacaoIA(questoesExibidas[currentQuestaoIndex])}
+                      disabled={loadingExplicacao === questoesExibidas[currentQuestaoIndex].id}
+                      className="flex items-center gap-1.5 border border-primary/30 hover:bg-primary/5 text-primary font-black px-4 py-2.5 rounded-lg text-xxs transition-all active:scale-98 cursor-pointer"
+                    >
+                      {loadingExplicacao === questoesExibidas[currentQuestaoIndex].id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <BrainCircuit className="w-3.5 h-3.5 text-primary" />
+                      )}
+                      <span>Minha Explicação (IA)</span>
+                    </button>
+                  </>
                 ) : (
-                  <span className="text-xs font-black flex items-center gap-1.5">
-                    {alternativaSelecionada === questoesExibidas[currentQuestaoIndex].gabarito ? (
-                      <>
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                        <span className="text-emerald-600 uppercase tracking-wide">Você acertou!</span>
-                      </>
-                    ) : (
-                      <>
-                        <XCircle className="w-5 h-5 text-red-500" />
-                        <span className="text-red-650 uppercase tracking-wide">Você errou!</span>
-                      </>
-                    )}
-                  </span>
+                  <>
+                    <span className="text-xs font-black flex items-center gap-1.5 mr-2">
+                      {alternativaSelecionada === questoesExibidas[currentQuestaoIndex].gabarito ? (
+                        <>
+                          <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          <span className="text-emerald-600 uppercase tracking-wide">Você acertou!</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="w-5 h-5 text-red-500" />
+                          <span className="text-red-650 uppercase tracking-wide">Você errou!</span>
+                        </>
+                      )}
+                    </span>
+
+                    <button
+                      onClick={() => {
+                        setAlternativaSelecionada(null)
+                        setRevelado(false)
+                      }}
+                      title="Atalho: Enter ou Espaço"
+                      className="flex items-center gap-1.5 bg-primary hover:bg-[#1565c0] text-white font-black px-5 py-2.5 rounded-lg text-xxs transition-all shadow-sm active:scale-98 cursor-pointer"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Tentar Mais uma vez</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleExplicacaoIA(questoesExibidas[currentQuestaoIndex])}
+                      disabled={loadingExplicacao === questoesExibidas[currentQuestaoIndex].id}
+                      className="flex items-center gap-1.5 border border-primary/30 hover:bg-primary/5 text-primary font-black px-4 py-2.5 rounded-lg text-xxs transition-all active:scale-98 cursor-pointer"
+                    >
+                      {loadingExplicacao === questoesExibidas[currentQuestaoIndex].id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <BrainCircuit className="w-3.5 h-3.5 text-primary" />
+                      )}
+                      <span>Minha Explicação (IA)</span>
+                    </button>
+                  </>
                 )}
-                
-                <button
-                  onClick={() => handleExplicacaoIA(questoesExibidas[currentQuestaoIndex])}
-                  disabled={loadingExplicacao === questoesExibidas[currentQuestaoIndex].id}
-                  className="flex items-center gap-1.5 bg-primary/20 hover:bg-primary/20 text-primary font-black px-4 py-2.5 rounded-lg text-xxs transition-all border border-[#1976d2]/20 shadow-xxs active:scale-98 cursor-pointer"
-                >
-                  {loadingExplicacao === questoesExibidas[currentQuestaoIndex].id ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    <BrainCircuit className="w-3.5 h-3.5 text-primary" />
-                  )}
-                  <span>Me Explique (IA)</span>
-                </button>
               </div>
 
               {/* Cronômetro de Resolução */}
@@ -604,6 +702,7 @@ export function Questoes() {
                   setAlternativaSelecionada(null)
                   setRevelado(false)
                 }}
+                title="Atalho: Enter ou Espaço"
                 className="px-4 py-2 bg-card border border-border text-foreground hover:bg-muted text-xxs font-black transition-colors rounded-lg shadow-xxs disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 uppercase tracking-wider"
               >
                 Próxima

@@ -29,7 +29,7 @@ export interface QuestaoParaExplicacao {
 /**
  * Envia um prompt para o endpoint backend serverless que executa o Gemini de forma segura.
  */
-async function chamarGeminiBackend(prompt: string): Promise<string> {
+async function chamarGeminiBackend(prompt: string, options?: { responseMimeType?: string }): Promise<string> {
   const { data: { session } } = await supabase.auth.getSession()
   const token = session?.access_token || ''
 
@@ -39,7 +39,7 @@ async function chamarGeminiBackend(prompt: string): Promise<string> {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ prompt })
+    body: JSON.stringify({ prompt, responseMimeType: options?.responseMimeType })
   })
 
   if (!response.ok) {
@@ -130,19 +130,33 @@ export async function gerarPlanoEstudos(fraquezas: FraquezaItem[]): Promise<stri
     .join('\n')
 
   const prompt = `
-    Aja como um mentor de alto nível para concursos públicos.
-    Eu sou um aluno e estas são as minhas 5 maiores fraquezas atuais baseadas na minha taxa de acerto:
+    Aja como um mentor de alto nível especializado em concursos públicos.
+    Eu sou um aluno e estas são as minhas 5 maiores fraquezas atuais baseadas na minha taxa de acerto em questões:
     ${listaAssuntosStr}
 
-    Por favor, gere um Plano de Estudos direcionado e prático para a próxima semana, focando em melhorar esses pontos fracos.
-    Divida em:
-    1. Diagnóstico breve (o que esses erros indicam).
-    2. Cronograma Semanal (Dia 1 ao Dia 7) com metas práticas (ex: "Dia 1: Revisar teoria X e fazer 10 questões da banca Y").
-    3. Dica de Ouro de memorização ou foco para essas matérias específicas.
+    Por favor, elabore um plano de estudos tático semanal de 7 dias com base nas minhas fraquezas.
+    Você DEVE responder a essa solicitação ESTRITAMENTE em formato JSON.
+    Não adicione blocos de código markdown (\`\`\`json ou \`\`\`), não adicione textos explicativos extras fora do JSON. Retorne apenas o JSON bruto e válido.
 
-    Mantenha um tom encorajador e direto. Formate bem usando markdown, mas não de forma exagerada.
-  `
-  return chamarGeminiBackend(prompt)
+    Formato JSON exigido:
+    {
+      "diagnostico": "Um parágrafo de análise técnica sincera, estratégica e encorajadora do mentor sobre os pontos onde o aluno está falhando e o que isso indica sobre o seu método de estudo.",
+      "cronograma": [
+        {
+          "dia": "Segunda-feira",
+          "materia": "Nome da matéria da fraqueza",
+          "topicos": ["Subtópico 1", "Subtópico 2"],
+          "carga": "Leve, Moderada ou Intensa",
+          "questoes_sugeridas": 15,
+          "meta_estudo": "Roteiro de ação prático e focado no assunto para o dia (ex: ler resumos de súmulas, resolver caderno de erros, ou cobrir lei seca de artigos X a Y)."
+        },
+        ... (gere para todos os 7 dias da semana seguindo a mesma estrutura)
+      ],
+      "dica_ouro": "Uma dica rápida de ouro ou mnemônico focado de memorização para essas fraquezas mapeadas."
+    }
+  `.trim()
+
+  return chamarGeminiBackend(prompt, { responseMimeType: 'application/json' })
 }
 
 /**

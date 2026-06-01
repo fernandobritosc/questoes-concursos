@@ -42,6 +42,19 @@ export function useSimulados() {
 
   const timerRef = useRef<any>(null)
 
+  // Histórico de simulados locais
+  const [historicoSimulados, setHistoricoSimulados] = useState<any[]>([])
+
+  // Carrega histórico do localStorage
+  useEffect(() => {
+    try {
+      const hist = JSON.parse(localStorage.getItem('concursos_simulado_historico') || '[]')
+      setHistoricoSimulados(hist)
+    } catch (err) {
+      console.error('Erro ao carregar histórico local de simulados:', err)
+    }
+  }, [etapa])
+
   // Carrega as questões no início para analisar o perfil do usuário
   useEffect(() => {
     async function load() {
@@ -255,16 +268,38 @@ export function useSimulados() {
 
     // Busca feedback tático no Gemini
     setLoadingFeedback(true)
+    let feedbackText = ''
     try {
-      const feedback = await gerarFeedbackSimulado(errosCometidos, acertos, total)
-      setDiagnosticoIA(feedback)
+      feedbackText = await gerarFeedbackSimulado(errosCometidos, acertos, total)
+      setDiagnosticoIA(feedbackText)
     } catch (err: any) {
       console.error('Erro ao gerar feedback do Gemini:', err)
-      setDiagnosticoIA(
-        '# Diagnóstico Indisponível\nOcorreu um erro temporário ao conectar-se ao Gemini AI. Verifique sua chave de API nas configurações.'
-      )
+      feedbackText = '# Diagnóstico Indisponível\nOcorreu um erro temporário ao conectar-se ao Gemini AI. Verifique sua chave de API nas configurações.'
+      setDiagnosticoIA(feedbackText)
     } finally {
       setLoadingFeedback(false)
+    }
+
+    // Salva no histórico do localStorage
+    const novoSimulado = {
+      id: `sim_${Date.now()}`,
+      data: new Date().toISOString(),
+      qtdQuestoes: total,
+      tempoMinutos: config.tempoMinutos,
+      tempoGasto: tempoGasto,
+      acertos,
+      total,
+      taxa,
+      diagnosticoIA: feedbackText
+    }
+
+    try {
+      const historicoExistente = JSON.parse(localStorage.getItem('concursos_simulado_historico') || '[]')
+      const novoHistorico = [novoSimulado, ...historicoExistente]
+      localStorage.setItem('concursos_simulado_historico', JSON.stringify(novoHistorico))
+      setHistoricoSimulados(novoHistorico)
+    } catch (err) {
+      console.error('Erro ao salvar simulado no histórico local:', err)
     }
 
     setEtapa('results')
@@ -284,6 +319,20 @@ export function useSimulados() {
     setDiagnosticoIA(null)
   }
 
+  /**
+   * Limpa todo o histórico de simulados do localStorage
+   */
+  const handleLimparHistorico = () => {
+    if (window.confirm('Tem certeza de que deseja apagar todo o seu histórico de simulados? Essa ação não pode ser desfeita.')) {
+      try {
+        localStorage.removeItem('concursos_simulado_historico')
+        setHistoricoSimulados([])
+      } catch (err) {
+        console.error('Erro ao apagar histórico local:', err)
+      }
+    }
+  }
+
   return {
     loading,
     error,
@@ -298,9 +347,11 @@ export function useSimulados() {
     loadingFeedback,
     diagnosticoIA,
     pontuacao,
+    historicoSimulados,
     handleIniciarSimulado,
     handleMarcarResposta,
     handleFinalizarSimulado,
     handleResetSimulado,
+    handleLimparHistorico,
   }
 }
