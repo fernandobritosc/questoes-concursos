@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { 
   X, 
   Upload, 
@@ -13,7 +13,9 @@ import {
 import { fetchQuestaoIds, insertQuestoesBatch, fetchAllQuestoes } from '../services/supabase.service'
 import type { Questao, ResolucaoView } from '../types/database'
 
-// Alias para compatibilidade com o código de parse abaixo
+import { loadPdfJs, extractPdfText, parsePdfContent } from '../lib/pdfParser'
+
+// Alias para compatibilidade com o cÃ³digo de parse abaixo
 type Resolucao = ResolucaoView
 
 interface ImportStatus {
@@ -33,7 +35,7 @@ interface ImportPdfModalProps {
 
 export const getQuestionValidation = (q: Resolucao): string[] => {
   const errors: string[] = []
-  if (!q.questao_tec_id || q.questao_tec_id <= 0) errors.push('ID da questão ausente ou inválido')
+  if (!q.questao_tec_id || q.questao_tec_id <= 0) errors.push('ID da questÃ£o ausente ou invÃ¡lido')
   if (!q.enunciado || q.enunciado.trim().length < 10) errors.push('Enunciado curto ou ausente')
   if (!q.gabarito) errors.push('Gabarito ausente')
   const validAlts = Object.values(q.alternativas || {}).filter(val => val && val.trim() !== '')
@@ -104,286 +106,29 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
     setImportStatus({ step: 'loading_engine', progress: 0, total: 0 })
 
     try {
-      // 1. Carregar motor PDF.js
-      const pdfjsLib = await new Promise<any>((resolve, reject) => {
-        if ((window as any).pdfjsLib) {
-          resolve((window as any).pdfjsLib)
-          return
-        }
-        const script = document.createElement('script')
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js'
-        script.onload = () => {
-          const lib = (window as any).pdfjsLib
-          lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js'
-          resolve(lib)
-        }
-        script.onerror = () => reject(new Error('Erro ao carregar o motor PDF.js da CDN.'))
-        document.body.appendChild(script)
-      })
+      const pdfjsLib = await loadPdfJs()
 
-      // 2. Ler arquivo e carregar documento
       setImportStatus({ step: 'reading_pages', progress: 0, total: 100 })
       const arrayBuffer = await importFile.arrayBuffer()
-      const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
-      const totalPages = pdfDoc.numPages
 
-      setImportStatus({ step: 'reading_pages', progress: 0, total: totalPages })
-
-      let fullText = ''
-      for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-        const page = await pdfDoc.getPage(pageNum)
-        const textContent = await page.getTextContent()
-        const items = textContent.items as any[]
-        const validItems = items.filter(item => item.str && item.str.trim() !== '')
-
-        // Ordenar itens por Y decrescente (topo para rodapé) e X crescente
-        validItems.sort((a, b) => {
-          const yDiff = b.transform[5] - a.transform[5]
-          if (Math.abs(yDiff) > 4) { // Tolerância de 4 pontos
-            return yDiff
-          }
-          return a.transform[4] - b.transform[4]
-        })
-
-        // Agrupar em linhas com tolerância
-        const pageLines: string[] = []
-        let currentY = -999
-        let currentLineItems: any[] = []
-
-        for (const item of validItems) {
-          const y = item.transform[5]
-          if (currentY === -999) {
-            currentY = y
-            currentLineItems.push(item)
-          } else if (Math.abs(y - currentY) <= 4) {
-            currentLineItems.push(item)
-          } else {
-            currentLineItems.sort((a, b) => a.transform[4] - b.transform[4])
-            pageLines.push(currentLineItems.map(i => i.str).join(' '))
-            
-            currentY = y
-            currentLineItems = [item]
-          }
-        }
-
-        if (currentLineItems.length > 0) {
-          currentLineItems.sort((a, b) => a.transform[4] - b.transform[4])
-          pageLines.push(currentLineItems.map(i => i.str).join(' '))
-        }
-
-        const pageText = pageLines.join('\n')
-        fullText += pageText + '\n'
-
+      const { fullText } = await extractPdfText(pdfjsLib, arrayBuffer, (pageNum) => {
         setImportStatus(prev => ({
           ...prev,
           step: 'reading_pages',
-          progress: pageNum
+          progress: pageNum,
         }))
-      }
+      })
 
-      // 3. Analisar questões e gabarito
       setImportStatus({ step: 'parsing', progress: 0, total: 100 })
 
-      // Encontrar Gabarito
-      const gabaritoIndex = fullText.lastIndexOf("Gabarito")
-      if (gabaritoIndex === -1) {
-        throw new Error("Não foi possível encontrar a seção 'Gabarito' no PDF. Certifique-se de que exportou o arquivo completo do TEC Concursos.")
-      }
-
-      const questionsText = fullText.substring(0, gabaritoIndex)
-      const gabaritoText = fullText.substring(gabaritoIndex)
-
-      // Parse Gabarito
-      const answersMap: Record<number, string> = {}
-      const answerRegex = /(\d+)\)\s*([A-E]|Certo|Errado)\b/g
-      let match;
-      while ((match = answerRegex.exec(gabaritoText)) !== null) {
-        const qNum = parseInt(match[1], 10)
-        let val = match[2]
-        if (val === 'Certo') val = 'C'
-        if (val === 'Errado') val = 'E'
-        answersMap[qNum] = val
-      }
-
-      // Split questions
-      const chunks = questionsText.split(/www\.tecconcursos\.com\.br\/questoes\/(?=\d{5,8}\b)/)
-      if (chunks.length <= 1) {
-        throw new Error("Nenhuma questão encontrada no PDF. Verifique se o PDF contém cadernos de questões do TEC Concursos.")
-      }
-
-      const parsedQuestions: Resolucao[] = []
-      let seqNum = 1
-
-      for (let i = 1; i < chunks.length; i++) {
-        const chunk = chunks[i].trim()
-        const rawLines = chunk.split("\n").map(l => l.trim()).filter(Boolean)
-
-        // Filtrar rodapés e cabeçalhos repetidos
-        const lines = rawLines.filter(line => {
-          const lower = line.toLowerCase()
-          if (line.match(/\b\d{2}\/\d{2}\/\d{4}\b/)) return false
-          if ((lower.includes("tec") && lower.includes("concurso")) || lower.includes("tecconcursos")) return false
-          if (lower.includes("questões para") || lower.includes("editais, simulados") || lower.includes("provas,")) return false
-          if (lower.startsWith("http://") || lower.startsWith("https://") || lower === "http://" || lower === "https://") return false
-          if (lower.includes("www.tecconcursos.com.br")) return false
-          if (line.match(/^p[aá]gina \d+ de \d+$/i) || line.match(/^page \d+ of \d+$/i) || line.match(/^\d+\/\d+$/)) return false
-          return true
-        })
-
-        if (lines.length < 3) continue
-
-        const questaoIdStr = lines[0].match(/^(\d{5,8})/)?.[1]
-        if (!questaoIdStr) continue
-        const questao_tec_id = parseInt(questaoIdStr, 10)
-
-        // Subheader (Banca - Cargo/Orgao/Ano)
-        const subheader = lines[1] || ''
-        let banca = ''
-        let cargo = ''
-        let orgao = ''
-        let ano: number | null = null
-
-        const subparts = subheader.split(" - ")
-        if (subparts.length >= 2) {
-          banca = subparts[0].trim()
-          const rightSide = subparts.slice(1).join(" - ")
-          const rightparts = rightSide.split("/")
-          
-          if (rightparts.length >= 1) {
-            cargo = rightparts[0].trim()
-          }
-          if (rightparts.length >= 2) {
-            orgao = rightparts[1].trim()
-          }
-          const lastPart = rightparts[rightparts.length - 1]
-          const anoMatch = lastPart.match(/\b(19\d\d|20\d\d)\b/)
-          if (anoMatch) {
-            ano = parseInt(anoMatch[1], 10)
-          }
-        } else {
-          banca = subheader.trim()
-        }
-
-        // Subject (Materia - Assunto)
-        const subjectLine = lines[2] || ''
-        let materia = ''
-        let assunto = ''
-        const subjParts = subjectLine.split(" - ")
-        if (subjParts.length >= 2) {
-          materia = subjParts[0].trim()
-          assunto = subjParts.slice(1).join(" - ").trim()
-        } else {
-          materia = subjectLine.trim()
-        }
-
-        // Pular possíveis cabeçalhos de seções do PDF (ex: "Contraposição)" ou "Revogação)")
-        let enunciadoStartLine = 3
-        while (
-          lines[enunciadoStartLine] && 
-          /^[a-zA-Zá-úÁ-Úà-ùÀ-Ùã-õÃ-Õâ-ûÂ-ÛçÇ\s\-\–\/]+[)]\s*$/.test(lines[enunciadoStartLine].trim()) &&
-          lines[enunciadoStartLine].trim().length < 50
-        ) {
-          enunciadoStartLine++
-        }
-
-        const restText = lines.slice(enunciadoStartLine).join("\n")
-        let remainingText = restText.trim()
-
-        // Parse alternatives
-        const alternativas: Record<string, string> = {}
-        const optionLetters = ['a', 'b', 'c', 'd', 'e']
-        const altIndices: any[] = []
-
-        for (const letter of optionLetters) {
-          const altPattern = new RegExp(`(^|\\n)\\s*${letter}\\)\\s+`, 'i')
-          const altMatch = remainingText.match(altPattern)
-          if (altMatch && altMatch.index !== undefined) {
-            altIndices.push({ letter: letter.toUpperCase(), index: altMatch.index, markerLength: altMatch[0].length })
-          }
-        }
-
-        let enunciado = ''
-
-        if (altIndices.length >= 2) {
-          altIndices.sort((a, b) => a.index - b.index)
-          enunciado = remainingText.substring(0, altIndices[0].index).trim()
-          for (let j = 0; j < altIndices.length; j++) {
-            const current = altIndices[j]
-            const next = altIndices[j + 1]
-            const start = current.index + current.markerLength
-            const end = next ? next.index : remainingText.length
-            let altText = remainingText.substring(start, end).trim().replace(/\s+/g, ' ')
-            
-            // Clean trailing Gabarito
-            altText = altText.replace(/\s*Gabarito:\s*([A-E]|Certo|Errado|C|E)\s*$/i, '').trim()
-            
-            alternativas[current.letter] = altText
-          }
-        } else {
-          const hasCerto = remainingText.toLowerCase().includes("certo")
-          const hasErrado = remainingText.toLowerCase().includes("errado")
-          if (hasCerto && hasErrado) {
-            alternativas["C"] = "Certo"
-            alternativas["E"] = "Errado"
-            enunciado = remainingText
-              .replace(/Certo\s*Errado$/i, '')
-              .replace(/Certo\s*\n\s*Errado$/i, '')
-              .trim()
-          } else {
-            enunciado = remainingText
-          }
-        }
-
-        enunciado = enunciado.replace(/^\s*\d+[\)\.\s-]\s*/, '').trim()
-        enunciado = enunciado.replace(/\s+/g, ' ').trim()
-        
-        let gabarito = answersMap[seqNum] || null
-        
-        if (!gabarito) {
-          const chunkGabaritoMatch = chunk.match(/\bGabarito:\s*([A-E]|Certo|Errado|C|E)\b/i)
-          if (chunkGabaritoMatch) {
-            let val = chunkGabaritoMatch[1]
-            if (val.toLowerCase() === 'certo') val = 'C'
-            if (val.toLowerCase() === 'errado') val = 'E'
-            gabarito = val.toUpperCase()
-          }
-        }
-
-        parsedQuestions.push({
-          id: -1,
-          questao_id: -1,
-          questao_tec_id,
-          alternativa: "",
-          acertou: false,
-          data_resolucao: '1970-01-01T00:00:00.000Z',
-          materia,
-          assunto,
-          banca_texto: banca,
-          gabarito,
-          tempo_segundos: 0,
-          enunciado,
-          alternativas,
-          orgao,
-          concurso: cargo ? `${banca} - ${cargo}` : banca,
-          prova: orgao ? `${orgao} / ${ano || ''}` : '',
-          ano,
-          caderno_nome: nameToUse,
-          resolucao_professor: null
-        })
-
-        seqNum++
-      }
-
-      if (parsedQuestions.length === 0) {
-        throw new Error("Não foi possível extrair nenhuma questão do PDF. Formato inválido.")
-      }
+      const parsedQuestions = parsePdfContent(fullText, nameToUse)
 
       setTempQuestions(parsedQuestions)
       setSelectedTempIndex(0)
       setImportStatus({
         step: 'review',
         progress: parsedQuestions.length,
-        total: parsedQuestions.length
+        total: parsedQuestions.length,
       })
 
     } catch (err: any) {
@@ -401,10 +146,10 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
     if (tempQuestions.length === 0) return
     try {
       setImportStatus({ step: 'checking_existing', progress: 0, total: 100 })
-      // Verifica IDs já existentes na tabela 'questoes'
+      // Verifica IDs jÃ¡ existentes na tabela 'questoes'
       const existingIds = await fetchQuestaoIds()
       
-      // Filtra apenas as questões novas (não duplicadas)
+      // Filtra apenas as questÃµes novas (nÃ£o duplicadas)
       const newQuestions = tempQuestions.filter(q => !existingIds.has(q.questao_tec_id!))
 
       if (newQuestions.length === 0) {
@@ -416,7 +161,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
 
       setImportStatus({ step: 'saving', progress: 0, total: newQuestions.length })
 
-      // Monta o payload para a tabela 'questoes' (sem campos de histórico)
+      // Monta o payload para a tabela 'questoes' (sem campos de histÃ³rico)
       const questoesPayload: Questao[] = newQuestions.map(q => {
         // Limpar alternativas vazias para que fiquem ausentes
         const cleanedAlts: Record<string, string> = {}
@@ -486,10 +231,10 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
             </div>
             <div>
               <h3 className="text-sm font-black text-foreground">
-                {importStatus.step === 'review' ? 'Revisão Interativa do Caderno' : 'Importar PDF do TEC Concursos'}
+                {importStatus.step === 'review' ? 'RevisÃ£o Interativa do Caderno' : 'Importar PDF do TEC Concursos'}
               </h3>
               <p className="text-[10px] text-muted-foreground font-bold mt-0.5">
-                {importStatus.step === 'review' ? `Revise e edite as ${tempQuestions.length} questões detectadas` : 'Ingestão client-side ultra-rápida'}
+                {importStatus.step === 'review' ? `Revise e edite as ${tempQuestions.length} questÃµes detectadas` : 'IngestÃ£o client-side ultra-rÃ¡pida'}
               </p>
             </div>
           </div>
@@ -511,7 +256,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
         {/* Modal Body */}
         <div className={`p-6 ${importStatus.step === 'review' ? 'flex-1 overflow-hidden p-0 flex flex-col lg:flex-row' : ''}`}>
           
-          {/* Passo 1: Seleção de Arquivo e Nome Customizado (Idle) */}
+          {/* Passo 1: SeleÃ§Ã£o de Arquivo e Nome Customizado (Idle) */}
           {importStatus.step === 'idle' && (
             <div className="space-y-5">
               {!importFile ? (
@@ -524,7 +269,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                       setImportFile(file);
                       setCustomCadernoName(file.name.replace(/\.[^/.]+$/, ""));
                     } else {
-                      alert("Apenas arquivos PDF são permitidos.");
+                      alert("Apenas arquivos PDF sÃ£o permitidos.");
                     }
                   }}
                   className="flex flex-col items-center justify-center border-2 border-dashed border-border hover:border-[#1976d2] bg-blue-50/10 hover:bg-blue-50/20 rounded-xl p-8 text-center cursor-pointer transition-all group"
@@ -586,13 +331,13 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                   <input 
                     id="customCadernoName"
                     type="text"
-                    placeholder="Ex: Informática Polícia Federal 2026"
+                    placeholder="Ex: InformÃ¡tica PolÃ­cia Federal 2026"
                     value={customCadernoName}
                     onChange={(e) => setCustomCadernoName(e.target.value)}
                     className="w-full bg-card border border-border rounded-lg px-3 py-2 text-xs font-semibold text-foreground focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] shadow-xxs"
                   />
                   <p className="text-[10px] text-muted-foreground font-bold leading-relaxed">
-                    Este nome será usado para agrupar as novas questões no seu Banco de Questões Pessoal.
+                    Este nome serÃ¡ usado para agrupar as novas questÃµes no seu Banco de QuestÃµes Pessoal.
                   </p>
                 </div>
               )}
@@ -632,11 +377,11 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
             <div className="flex flex-col items-center justify-center py-12 text-center space-y-4">
               <Loader2 className="w-10 h-10 text-primary animate-spin" />
               <h4 className="text-xs font-black text-foreground">
-                {importStatus.step === 'loading_engine' && "Inicializando motor de inteligência do PDF..."}
-                {importStatus.step === 'reading_pages' && `Extraindo textos e analisando páginas...`}
-                {importStatus.step === 'parsing' && "Mapeando gabarito e estruturando as questões..."}
+                {importStatus.step === 'loading_engine' && "Inicializando motor de inteligÃªncia do PDF..."}
+                {importStatus.step === 'reading_pages' && `Extraindo textos e analisando pÃ¡ginas...`}
+                {importStatus.step === 'parsing' && "Mapeando gabarito e estruturando as questÃµes..."}
                 {importStatus.step === 'checking_existing' && "Evitando duplicidade: verificando registros existentes no Supabase..."}
-                {importStatus.step === 'saving' && "Gravando novas questões exclusivas no seu Banco de Dados..."}
+                {importStatus.step === 'saving' && "Gravando novas questÃµes exclusivas no seu Banco de Dados..."}
               </h4>
               {importStatus.step === 'reading_pages' && (
                 <div className="w-full max-w-xs bg-muted rounded-full h-2">
@@ -647,25 +392,25 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                 </div>
               )}
               <p className="text-[10px] text-muted-foreground font-bold">
-                {importStatus.step === 'reading_pages' && `Lendo página ${importStatus.progress} de ${importStatus.total}...`}
+                {importStatus.step === 'reading_pages' && `Lendo pÃ¡gina ${importStatus.progress} de ${importStatus.total}...`}
                 {importStatus.step === 'saving' && `Gravando item ${importStatus.progress} de ${importStatus.total}...`}
               </p>
             </div>
           )}
 
-          {/* Passo 2: Visualizador/Revisor Interativo de Questões Detectadas (Review) */}
+          {/* Passo 2: Visualizador/Revisor Interativo de QuestÃµes Detectadas (Review) */}
           {importStatus.step === 'review' && (
             <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-              {/* Esquerda: Lista de Questões */}
+              {/* Esquerda: Lista de QuestÃµes */}
               <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-border flex flex-col overflow-hidden bg-muted/20 shrink-0">
                 <div className="p-3 border-b border-border bg-card flex flex-col gap-2">
                   <h4 className="text-[11px] font-black text-foreground uppercase tracking-wider">
-                    Lista de Questões ({tempQuestions.length})
+                    Lista de QuestÃµes ({tempQuestions.length})
                   </h4>
                   {tempQuestions.some(q => getQuestionValidation(q).length > 0) && (
                     <div className="p-2 rounded bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] font-bold flex items-start gap-1">
                       <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                      <span>Existem questões com alertas ou campos ausentes. Corrija-os antes de gravar.</span>
+                      <span>Existem questÃµes com alertas ou campos ausentes. Corrija-os antes de gravar.</span>
                     </div>
                   )}
                   {/* Filtros de Duplicidade */}
@@ -676,7 +421,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           onClick={handleDiscardDbDuplicates}
                           className="w-full flex items-center justify-between text-xxs bg-amber-500/10 hover:bg-amber-500/20 text-amber-550 border border-amber-500/20 px-2 py-1 rounded font-bold cursor-pointer transition-colors"
                         >
-                          <span>{dbDuplicateCount} já existem no banco</span>
+                          <span>{dbDuplicateCount} jÃ¡ existem no banco</span>
                           <span className="underline">Descartar</span>
                         </button>
                       )}
@@ -696,7 +441,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                 <div className="flex-1 overflow-y-auto p-2 space-y-1.5 min-h-0">
                   {tempQuestions.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground text-xs italic">
-                      Nenhuma questão restante.
+                      Nenhuma questÃ£o restante.
                     </div>
                   ) : (
                     tempQuestions.map((q, idx) => {
@@ -718,7 +463,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           className={`w-full text-left p-2.5 rounded-xl border text-xxs flex flex-col gap-1 transition-all cursor-pointer ${borderStyle}`}
                         >
                           <div className="flex items-center justify-between font-bold">
-                            <span className="text-foreground">Questão {idx + 1}</span>
+                            <span className="text-foreground">QuestÃ£o {idx + 1}</span>
                             <span className="text-muted-foreground">Q{q.questao_tec_id || 'SEM ID'}</span>
                           </div>
                           <p className="text-foreground/80 truncate max-w-full font-medium">
@@ -735,7 +480,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                             )}
                             {isDbDup && (
                               <span className="bg-amber-500/10 text-amber-550 px-1 py-0.2 rounded font-black text-[8px] uppercase tracking-wide">
-                                Já existe no BD
+                                JÃ¡ existe no BD
                               </span>
                             )}
                           </div>
@@ -746,11 +491,11 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                 </div>
               </div>
 
-              {/* Direita: Workspace de Edição */}
+              {/* Direita: Workspace de EdiÃ§Ã£o */}
               <div className="flex-1 overflow-y-auto p-4 md:p-6 min-h-0 flex flex-col">
                 {tempQuestions.length === 0 ? (
                   <div className="flex-1 flex items-center justify-center text-muted-foreground text-xs italic">
-                    Todas as questões foram descartadas.
+                    Todas as questÃµes foram descartadas.
                   </div>
                 ) : (
                   (() => {
@@ -766,14 +511,14 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-550 text-xs font-bold space-y-1">
                             <h5 className="flex items-center gap-1 font-black">
                               <AlertTriangle className="w-4 h-4 shrink-0" />
-                              Alertas para esta Questão:
+                              Alertas para esta QuestÃ£o:
                             </h5>
                             <ul className="list-disc pl-4 space-y-0.5 font-semibold text-[11px]">
                               {validationErrors.map((err, index) => (
                                 <li key={index} className="text-red-500">{err}</li>
                               ))}
-                              {isDbDup && <li>Esta questão já está registrada no seu banco de dados Supabase e será ignorada para evitar duplicações.</li>}
-                              {isLocDup && <li className="text-red-500">Há outra questão com o mesmo ID neste lote de importação.</li>}
+                              {isDbDup && <li>Esta questÃ£o jÃ¡ estÃ¡ registrada no seu banco de dados Supabase e serÃ¡ ignorada para evitar duplicaÃ§Ãµes.</li>}
+                              {isLocDup && <li className="text-red-500">HÃ¡ outra questÃ£o com o mesmo ID neste lote de importaÃ§Ã£o.</li>}
                             </ul>
                           </div>
                         )}
@@ -815,10 +560,10 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           </div>
                         </div>
 
-                        {/* Linha 2: Matéria e Assunto */}
+                        {/* Linha 2: MatÃ©ria e Assunto */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Matéria</label>
+                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">MatÃ©ria</label>
                             <input 
                               type="text"
                               value={selectedQuestion.materia || ''}
@@ -837,10 +582,10 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           </div>
                         </div>
 
-                        {/* Linha 3: Órgão, Concurso e Ano */}
+                        {/* Linha 3: Ã“rgÃ£o, Concurso e Ano */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Órgão</label>
+                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Ã“rgÃ£o</label>
                             <input 
                               type="text"
                               value={selectedQuestion.orgao || ''}
@@ -859,7 +604,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                               type="text"
                               value={selectedQuestion.concurso || ''}
                               onChange={(e) => handleUpdateTempQuestion(selectedTempIndex, { concurso: e.target.value })}
-                              placeholder="Ex: CEBRASPE - Analista Judiciário"
+                              placeholder="Ex: CEBRASPE - Analista JudiciÃ¡rio"
                               className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-[#1976d2]"
                             />
                           </div>
@@ -881,7 +626,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
 
                         {/* Linha 3: Enunciado */}
                         <div className="space-y-1">
-                          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Enunciado da Questão</label>
+                          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Enunciado da QuestÃ£o</label>
                           <textarea 
                             value={selectedQuestion.enunciado || ''}
                             onChange={(e) => handleUpdateTempQuestion(selectedTempIndex, { enunciado: e.target.value })}
@@ -916,14 +661,14 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                           })}
                         </div>
 
-                        {/* Ações da questão */}
+                        {/* AÃ§Ãµes da questÃ£o */}
                         <div className="flex items-center justify-end gap-2 pt-2">
                           <button 
                             onClick={() => handleDeleteTempQuestion(selectedTempIndex)}
                             className="flex items-center gap-1 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-lg text-xxs font-black uppercase tracking-wider transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
-                            <span>Descartar esta questão</span>
+                            <span>Descartar esta questÃ£o</span>
                           </button>
                         </div>
                       </div>
@@ -940,10 +685,10 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
               <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full animate-bounce">
                 <Check className="w-10 h-10" />
               </div>
-              <h3 className="text-sm font-black text-foreground">Importação concluída com sucesso!</h3>
+              <h3 className="text-sm font-black text-foreground">ImportaÃ§Ã£o concluÃ­da com sucesso!</h3>
               <p className="text-xs text-muted-foreground max-w-sm font-semibold">
-                Foram processadas com sucesso {importStatus.total} questões. 
-                Dessas, **{importStatus.importedCount} novas questões exclusivas** foram gravadas no banco e as duplicadas existentes foram filtradas.
+                Foram processadas com sucesso {importStatus.total} questÃµes. 
+                Dessas, **{importStatus.importedCount} novas questÃµes exclusivas** foram gravadas no banco e as duplicadas existentes foram filtradas.
               </p>
               <button
                 onClick={() => {
@@ -965,7 +710,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
               <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-full">
                 <AlertTriangle className="w-10 h-10" />
               </div>
-              <h3 className="text-sm font-black text-foreground">Falha na ingestão do PDF</h3>
+              <h3 className="text-sm font-black text-foreground">Falha na ingestÃ£o do PDF</h3>
               <p className="text-xs text-red-500 max-w-sm font-semibold leading-relaxed">
                 {importStatus.errorMsg || 'Erro desconhecido durante o processamento do documento.'}
               </p>
@@ -1011,7 +756,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                 onClick={() => setSelectedTempIndex(prev => prev + 1)}
                 className="flex items-center gap-1 px-3 py-1.5 border border-border text-muted-foreground hover:text-foreground rounded-lg text-xxs font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-card"
               >
-                <span>Próxima</span>
+                <span>PrÃ³xima</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -1039,7 +784,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
                 }`}
               >
                 <Check className="w-3.5 h-3.5" />
-                <span>Confirmar e Gravar ({tempQuestions.length} questões)</span>
+                <span>Confirmar e Gravar ({tempQuestions.length} questÃµes)</span>
               </button>
             </div>
           </div>
@@ -1049,3 +794,4 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
     </div>
   )
 }
+
