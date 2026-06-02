@@ -36,8 +36,8 @@ export function Login() {
         if (signInError) throw signInError
         navigate('/')
       }
-    } catch (err: any) {
-      setError(err.message || 'Ocorreu um erro na autenticação.')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Ocorreu um erro na autenticação.')
     } finally {
       setLoading(false)
     }

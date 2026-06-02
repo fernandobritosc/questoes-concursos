@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useDashboard, formatarTempo } from '../hooks/useDashboard'
+import type { ResolucaoView } from '../types/database'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { CheckCircle2, XCircle, Clock, BookOpen, Flame, Target, TrendingUp, ExternalLink, Activity, Trophy, ChevronDown, ChevronUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -145,7 +146,7 @@ function MateriaBar({ materia, taxa, acertos, total, index }: { materia: string;
 
 /* ──────────────── Resolução Item ──────────────── */
 
-function ResolucaoItem({ res, index }: { res: any; index: number }) {
+function ResolucaoItem({ res, index }: { res: ResolucaoView; index: number }) {
   const tempoDisplay = formatarTempo(res.tempo_segundos)
 
   return (
@@ -213,7 +214,7 @@ function ResolucaoItem({ res, index }: { res: any; index: number }) {
 
 interface CustomTooltipProps {
   active?: boolean
-  payload?: any[]
+  payload?: Array<{ name: string; color: string; value: number }>
   label?: string
 }
 
@@ -222,7 +223,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
     return (
       <div className="glass-card p-3 border border-white/10 text-left text-xs shadow-xl">
         <p className="font-black text-violet-400 mb-1">{label}</p>
-        {payload.map((pld: any) => (
+        {payload.map((pld) => (
           <p key={pld.name} className="font-semibold text-foreground flex items-center justify-between gap-4 mt-0.5">
             <span className="opacity-85">{pld.name}:</span>
             <span className="font-bold text-right" style={{ color: pld.color || '#fff' }}>
@@ -239,7 +240,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
 /* ──────────────── Componente StudyHeatmap (GitHub-style) ──────────────── */
 
 interface StudyHeatmapProps {
-  resolucoes: any[]
+  resolucoes: Array<{ alternativa: string | null; data_resolucao: string }>
 }
 
 function StudyHeatmap({ resolucoes }: StudyHeatmapProps) {
@@ -790,7 +791,7 @@ export function Dashboard() {
           </div>
           <div className="space-y-2 flex-1 overflow-y-auto min-h-0 pr-1">
             {ultimasResolucoes.map((res, i) => (
-              <ResolucaoItem key={res.id || Math.random()} res={res} index={i} />
+              <ResolucaoItem key={res.id || `res-${i}`} res={res} index={i} />
             ))}
             {ultimasResolucoes.length === 0 && (
               <div className="flex flex-col items-center justify-center text-muted-foreground text-sm flex-1 text-center py-4 flex-col gap-1">

@@ -124,7 +124,7 @@ export function useQuestoes() {
     if (!filtros) return cadernoQuestoes;
     return cadernoQuestoes.filter(q => {
       for (const [key, val] of Object.entries(filtros)) {
-        if (String((q as any)[key] || `Sem ${key}`) !== val) return false;
+        if (String((q as unknown as Record<string, unknown>)[key] || `Sem ${key}`) !== val) return false;
       }
       return true;
     })
@@ -137,11 +137,13 @@ export function useQuestoes() {
 
   // Reset pagination on filter change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisibleQuestionsCount(25)
   }, [selectedMaterias, selectedAssuntos, selectedBancas, selectedAnos, selectedOrgaos, selectedConcursos, selectedCarreiras, selectedStatus, objetivo])
 
   // Sync resolução text when navigating caderno
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (questoesExibidas.length > 0 && questoesExibidas[currentQuestaoIndex]) {
       const q = questoesExibidas[currentQuestaoIndex]
       setResolucaoText(q.resolucao_professor || '')
@@ -149,6 +151,7 @@ export function useQuestoes() {
       setAlternativaSelecionada(null)
       setRevelado(false)
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [currentQuestaoIndex, questoesExibidas])
 
   // Initial load
@@ -172,19 +175,16 @@ export function useQuestoes() {
   
   // Timer: incrementa segundos se a questão ainda não foi respondida
   useEffect(() => {
-    let timer: any = null
-    if (!revelado && questoesExibidas.length > 0) {
-      timer = setInterval(() => {
-        setTempoSegundos(prev => prev + 1)
-      }, 1000)
-    }
-    return () => {
-      if (timer) clearInterval(timer)
-    }
+    if (revelado || questoesExibidas.length === 0) return
+    const timer = setInterval(() => {
+      setTempoSegundos(prev => prev + 1)
+    }, 1000)
+    return () => { clearInterval(timer) }
   }, [revelado, currentQuestaoIndex, questoesExibidas])
 
   // Reset timer on navigating questions
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTempoSegundos(0)
   }, [currentQuestaoIndex])
 
@@ -201,6 +201,7 @@ export function useQuestoes() {
   }
 
   // Load history of active question when currentQuestaoIndex or caderno changes
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (questoesExibidas.length > 0 && questoesExibidas[currentQuestaoIndex]) {
       const q = questoesExibidas[currentQuestaoIndex]
@@ -214,6 +215,7 @@ export function useQuestoes() {
       setHistoricoQuestaoAtiva([])
     }
   }, [currentQuestaoIndex, questoesExibidas])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // ─── Derived Data (Filtros dinâmicos) ─────────────────────────────────────────
 
@@ -404,7 +406,7 @@ export function useQuestoes() {
         (r.questao_id === targetId || r.id === targetId) ? { ...r, resolucao_professor: resolucaoText } : r
       ))
       setEditingResolucao(false)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao salvar resolução:', err)
       alert('Erro ao salvar a resolução do professor. Verifique sua conexão ou permissões.')
     } finally {
@@ -468,7 +470,7 @@ export function useQuestoes() {
 
     try {
       // Monta payload com campos da tabela 'questoes'
-      const payload: any = {}
+      const payload: Record<string, unknown> = {}
       if (updatedFields.enunciado !== undefined) payload.enunciado = updatedFields.enunciado
       if (updatedFields.alternativas !== undefined) payload.alternativas = updatedFields.alternativas
       if (updatedFields.materia !== undefined) payload.materia = updatedFields.materia

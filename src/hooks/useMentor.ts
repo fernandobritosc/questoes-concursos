@@ -61,8 +61,8 @@ export function tentarParsearPlano(texto: string): PlanoEstruturado | null {
       const dica_ouro = parsed.dica_ouro || parsed.dicaOuro || parsed.dica_de_ouro || ""
 
       if (cronograma.length > 0) {
-        const cronogramaNormalizado = cronograma.map((item: any) => {
-          let rawCarga = item.carga || "Moderada"
+        const cronogramaNormalizado = cronograma.map((item: Record<string, unknown>) => {
+          const rawCarga = item.carga || "Moderada"
           let carga = "Moderada"
           if (typeof rawCarga === 'string') {
             const lowerCarga = rawCarga.toLowerCase()
@@ -151,8 +151,8 @@ export function useMentor() {
                 : dbData.mentor_tarefas
             }
           }
-        } catch (dbErr: any) {
-          console.warn('Colunas do mentor no Supabase ausentes ou inacessíveis, usando localStorage fallback:', dbErr.message)
+        } catch (dbErr: unknown) {
+          console.warn('Colunas do mentor no Supabase ausentes ou inacessíveis, usando localStorage fallback:', dbErr instanceof Error ? dbErr.message : String(dbErr))
           setDbSyncError(true)
         }
 
@@ -181,9 +181,9 @@ export function useMentor() {
         if (cachedMentorias) {
           setPlanosAssuntos(JSON.parse(cachedMentorias))
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Erro ao analisar desempenho:', err)
-        setError(err.message || 'Erro ao carregar dados.')
+        setError(err instanceof Error ? err.message : 'Erro ao carregar dados.')
       } finally {
         setLoading(false)
       }
@@ -213,7 +213,7 @@ export function useMentor() {
         console.warn('Erro ao salvar plano no Supabase:', dbErr)
         setDbSyncError(true)
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao gerar plano:', err)
       setPlano('Houve um erro ao gerar o plano. Tente novamente mais tarde.')
     } finally {
@@ -260,7 +260,7 @@ export function useMentor() {
       const novasMentorias = { ...planosAssuntos, [key]: texto }
       setPlanosAssuntos(novasMentorias)
       localStorage.setItem('mentor_planos_assuntos', JSON.stringify(novasMentorias))
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao gerar mentoria de assunto:', err)
     } finally {
       setGerandoMentoria(false)

@@ -306,9 +306,9 @@ export function MapaQuestoes() {
           updatedAt: new Date().toISOString()
         }
       }))
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao salvar material:', err)
-      alert(`Erro ao salvar material de estudo: ${err.message}`)
+      alert(`Erro ao salvar material de estudo: ${err instanceof Error ? err.message : String(err)}`)
     } finally {
       setUploadingKey(null)
     }
@@ -326,9 +326,9 @@ export function MapaQuestoes() {
       } else {
         alert('Material de estudo não localizado no armazenamento.')
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao abrir material:', err)
-      alert(`Erro ao abrir material de estudo: ${err.message}`)
+      alert(`Erro ao abrir material de estudo: ${err instanceof Error ? err.message : String(err)}`)
     } finally {
       setUploadingKey(null)
     }
@@ -346,9 +346,9 @@ export function MapaQuestoes() {
         delete next[key]
         return next
       })
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao remover material:', err)
-      alert(`Erro ao remover material de estudo: ${err.message}`)
+      alert(`Erro ao remover material de estudo: ${err instanceof Error ? err.message : String(err)}`)
     }
   }
 

@@ -163,6 +163,7 @@ export function CommandPalette() {
 
   // Resetar índice selecionado quando a lista filtrada muda
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedIndex(0)
   }, [filteredCommands])
 

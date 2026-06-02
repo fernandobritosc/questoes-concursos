@@ -301,7 +301,7 @@ export async function gerarFeedbackSimulado(
 ): Promise<string> {
   const taxaAcerto = total > 0 ? Math.round((acertos / total) * 100) : 0
 
-  let errosStr = ''
+  let errosStr: string
   if (erros.length > 0) {
     errosStr = erros
       .map(e => `- ${e.materia || 'Sem Matéria'}: ${e.assunto || 'Geral'}`)

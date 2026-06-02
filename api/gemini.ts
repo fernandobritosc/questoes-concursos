@@ -13,6 +13,7 @@ const supabase = supabaseUrl && supabaseServiceKey
   ? createClient(supabaseUrl, supabaseServiceKey) 
   : null
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
   // Define cabeçalhos de CORS e JSON
   res.setHeader('Content-Type', 'application/json')
@@ -61,6 +62,7 @@ export default async function handler(req: any, res: any) {
     // 3. Execução Segura da Groq
     const groq = new Groq({ apiKey })
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const options: any = {
       model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }]
@@ -75,11 +77,11 @@ export default async function handler(req: any, res: any) {
     const text = chatCompletion.choices[0]?.message?.content || ''
 
     return res.status(200).json({ text })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Erro no processamento da requisição:', error)
     return res.status(500).json({ 
       error: 'Erro interno ao processar a requisição com o Groq AI.',
-      details: error.message || String(error)
+      details: error instanceof Error ? error.message : String(error)
     })
   }
 }

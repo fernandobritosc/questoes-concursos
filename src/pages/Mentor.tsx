@@ -86,7 +86,7 @@ export function Mentor() {
 
   if (loading) return <LoadingSpinner />
 
-  // Renderizadores customizados do ReactMarkdown para uma UI/UX premium e suporte a impressão
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const customRenderers = {
     p: ({ children, ...props }: any) => {
       // Reconhece se o texto contém "Pegadinha:" ou "Dica de Prova:"
@@ -149,6 +149,7 @@ export function Mentor() {
         {children}
       </li>
     ),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     code: ({ node, inline, className, children, ...props }: any) => {
       const match = /language-(\w+)/.exec(className || '')
       const language = match ? match[1] : ''
@@ -167,6 +168,7 @@ export function Mentor() {
       )
     }
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   const activeMentoriaText = selectedFraqueza
     ? planosAssuntos[`${selectedFraqueza.materia} - ${selectedFraqueza.assunto}`]

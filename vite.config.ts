@@ -6,15 +6,14 @@ import tailwindcss from '@tailwindcss/vite'
 function apiEmulatorPlugin() {
   return {
     name: 'api-emulator',
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     configureServer(server: any) {
       server.middlewares.use(async (req: any, res: any, next: any) => {
         if (req.url?.startsWith('/api/gemini')) {
           try {
-            // Importa o handler dinamicamente usando o ssrLoadModule do Vite
             const module = await server.ssrLoadModule('./api/gemini.ts')
             const handler = module.default
 
-            // Mock de VercelRequest consumindo os chunks da requisição
             const chunks = []
             for await (const chunk of req) {
               chunks.push(chunk)
@@ -24,7 +23,6 @@ function apiEmulatorPlugin() {
 
             const vercelReq = Object.assign(req, { body })
 
-            // Mock de VercelResponse
             const vercelRes = {
               status(statusCode: number) {
                 res.statusCode = statusCode
@@ -53,6 +51,7 @@ function apiEmulatorPlugin() {
         next()
       })
     }
+    /* eslint-enable @typescript-eslint/no-explicit-any */
   }
 }
 

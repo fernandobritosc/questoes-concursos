@@ -55,9 +55,9 @@ export function useRevisao() {
         })
         
         setErros(dueQuestions)
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Erro ao buscar caderno de erros:', err)
-        setError(err.message || 'Erro ao carregar caderno de erros.')
+        setError(err instanceof Error ? err.message : 'Erro ao carregar caderno de erros.')
       } finally {
         setLoading(false)
       }
@@ -69,6 +69,7 @@ export function useRevisao() {
 
   // Garante que toda nova questão sempre carregue sem resposta selecionada e não-revelada ao navegar
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAlternativaSelecionada(null)
     setRevelado(false)
   }, [questaoAtual?.questao_tec_id])
@@ -99,7 +100,7 @@ export function useRevisao() {
         acertou,
         tempo_segundos: tempoSegundos,
       })
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao salvar resposta:', err)
     } finally {
       setSalvandoResposta(false)
@@ -129,7 +130,7 @@ export function useRevisao() {
     // Calcula os novos parâmetros SM-2
     let n = meta.n
     let ef = meta.ef
-    let interval = meta.interval
+    let interval: number
 
     if (grade >= 3) {
       if (n === 0) {
@@ -183,12 +184,12 @@ export function useRevisao() {
 
     const dificilInterval = 1
     
-    let bomInterval = 1
+    let bomInterval: number
     if (meta.n === 0) bomInterval = 1
     else if (meta.n === 1) bomInterval = 4
     else bomInterval = Math.max(1, Math.round(meta.interval * meta.ef))
 
-    let facilInterval = 3
+    let facilInterval: number
     if (meta.n === 0) facilInterval = 3
     else if (meta.n === 1) facilInterval = 6
     else facilInterval = Math.max(1, Math.round(meta.interval * meta.ef * 1.3))
@@ -221,7 +222,7 @@ export function useRevisao() {
       setErros(prev => prev.map(q => 
         (q.questao_id || q.id) === targetId ? { ...q, resolucao_professor: texto } : q
       ))
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro na IA:', err)
       setExplicacoes(prev => ({
         ...prev,

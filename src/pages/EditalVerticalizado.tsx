@@ -90,6 +90,7 @@ export function EditalVerticalizado() {
     // Auto-seleciona apenas em telas grandes (desktop)
     const isMobile = window.innerWidth < 768
     if (!selectedMateria && uniqueMateriasList.length > 0 && !isMobile) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedMateria(uniqueMateriasList[0])
     }
   }, [uniqueMateriasList, selectedMateria])

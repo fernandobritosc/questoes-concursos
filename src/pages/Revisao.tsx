@@ -51,6 +51,7 @@ export function Revisao() {
         const mat = e.materia || 'Sem Matéria'
         counts[mat] = (counts[mat] || 0) + 1
       })
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInitialCounts(counts)
     }
   }, [loading, erros, initialCounts])
@@ -71,6 +72,7 @@ export function Revisao() {
 
   // Sincroniza o texto e expansão da resolução ao carregar/navegar questão ou responder
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (questaoAtual) {
       setResolucaoText(questaoAtual.resolucao_professor || '')
       setEditingResolucao(false)
@@ -80,6 +82,7 @@ export function Revisao() {
         setResolucaoExpanded(false)
       }
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [questaoAtual, revelado])
 
   const handleSaveResolucao = async () => {
@@ -88,10 +91,8 @@ export function Revisao() {
     try {
       // Atualiza a resolução do professor na tabela 'questoes'
       await updateResolucaoProfessor(questaoAtual.questao_id, resolucaoText)
-      // Atualiza no cache local da sessão
-      questaoAtual.resolucao_professor = resolucaoText
       setEditingResolucao(false)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao salvar resolução:', err)
       alert('Erro ao salvar a resolução do professor. Verifique sua conexão.')
     } finally {
@@ -258,7 +259,7 @@ export function Revisao() {
                 <Filter className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-muted-foreground rotate-90" />
                 <select
                   value={ordenacao}
-                  onChange={e => setOrdenacao(e.target.value as any)}
+                  onChange={e => setOrdenacao(e.target.value as 'mais_erros' | 'mais_recentes' | 'alfabetica')}
                   className="w-full pl-8 pr-2 py-2 bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.15] focus:border-violet-500 rounded-xl text-[10px] text-foreground transition-colors focus:outline-none font-medium appearance-none cursor-pointer"
                 >
                   <option value="mais_erros" className="bg-card text-foreground">Mais erros</option>

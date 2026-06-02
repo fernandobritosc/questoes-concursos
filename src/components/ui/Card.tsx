@@ -24,9 +24,7 @@ export function Card({ padding = 'md', className = '', children, ...props }: Car
   )
 }
 
-interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {}
-
-export function CardHeader({ className = '', children, ...props }: CardHeaderProps) {
+export function CardHeader({ className = '', children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={`p-4 border-b border-border bg-muted/20 ${className}`} {...props}>
       {children}

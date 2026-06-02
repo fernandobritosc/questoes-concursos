@@ -5,6 +5,18 @@ import type { ResolucaoView } from '../types/database'
 
 export type SimuladoEtapa = 'setup' | 'active' | 'submitting' | 'results'
 
+interface SimuladoHistoricoItem {
+  id: string
+  data: string
+  qtdQuestoes: number
+  tempoMinutos: number
+  tempoGasto: number
+  acertos: number
+  total: number
+  taxa: number
+  diagnosticoIA: string
+}
+
 export interface SimuladoConfig {
   qtdQuestoes: number
   tempoMinutos: number
@@ -40,15 +52,16 @@ export function useSimulados() {
   const [diagnosticoIA, setDiagnosticoIA] = useState<string | null>(null)
   const [pontuacao, setPontuacao] = useState<{ acertos: number; total: number; taxa: number } | null>(null)
 
-  const timerRef = useRef<any>(null)
+  const timerRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
   // Histórico de simulados locais
-  const [historicoSimulados, setHistoricoSimulados] = useState<any[]>([])
+  const [historicoSimulados, setHistoricoSimulados] = useState<SimuladoHistoricoItem[]>([])
 
   // Carrega histórico do localStorage
   useEffect(() => {
     try {
       const hist = JSON.parse(localStorage.getItem('concursos_simulado_historico') || '[]')
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHistoricoSimulados(hist)
     } catch (err) {
       console.error('Erro ao carregar histórico local de simulados:', err)
@@ -61,15 +74,104 @@ export function useSimulados() {
       try {
         const data = await fetchAllQuestoes()
         setAllQuestoes(data)
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Erro ao carregar questões para simulado:', err)
-        setError(err.message || 'Erro ao carregar banco de dados.')
+        setError(err instanceof Error ? err.message : 'Erro ao carregar banco de dados.')
       } finally {
         setLoading(false)
       }
     }
     load()
   }, [])
+
+  /**
+   * Submete todas as respostas ao banco de dados e obtém feedback da IA
+   */
+  const handleFinalizarSimulado = async () => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    setEtapa('submitting')
+
+    let acertos = 0
+    const total = questoesSelected.length
+
+    // Mapeamento dos erros cometidos neste simulado
+    const errosCometidos: { materia: string; assunto: string }[] = []
+
+    // Calcula tempo gasto médio por questão
+    const tempoMedioQuestao = total > 0 ? Math.round(tempoGasto / total) : 0
+
+    // Salva cada resposta na tabela historico_resolucoes do Supabase
+    const promises = questoesSelected.map(async q => {
+      const id = q.questao_id || q.id!
+      const resposta = respostasMarcadas[id] || ''
+      const acertou = resposta.toUpperCase() === (q.gabarito || '').toUpperCase()
+
+      if (acertou) {
+        acertos++
+      } else {
+        errosCometidos.push({
+          materia: q.materia || 'Geral',
+          assunto: q.assunto || 'Sem Assunto',
+        })
+      }
+
+      // Registra a tentativa no Supabase
+      try {
+        await insertHistoricoResolucao({
+          questao_id: id,
+          questao_tec_id: q.questao_tec_id,
+          alternativa: resposta,
+          acertou,
+          tempo_segundos: tempoMedioQuestao,
+        })
+      } catch (err) {
+        console.error(`Erro ao salvar histórico do simulado para questão ${id}:`, err)
+      }
+    })
+
+    await Promise.all(promises)
+
+    const taxa = total > 0 ? Math.round((acertos / total) * 100) : 0
+    setPontuacao({ acertos, total, taxa })
+
+    // Busca feedback tático no Gemini
+    setLoadingFeedback(true)
+    let feedbackText: string
+    try {
+      feedbackText = await gerarFeedbackSimulado(errosCometidos, acertos, total)
+      setDiagnosticoIA(feedbackText)
+    } catch (err: unknown) {
+      console.error('Erro ao gerar feedback do Gemini:', err)
+      feedbackText = '# Diagnóstico Indisponível\nOcorreu um erro temporário ao conectar-se ao Gemini AI. Verifique sua chave de API nas configurações.'
+      setDiagnosticoIA(feedbackText)
+    } finally {
+      setLoadingFeedback(false)
+    }
+
+    // Salva no histórico do localStorage
+    const novoSimulado: SimuladoHistoricoItem = {
+      id: `sim_${Date.now()}`,
+      data: new Date().toISOString(),
+      qtdQuestoes: total,
+      tempoMinutos: config.tempoMinutos,
+      tempoGasto: tempoGasto,
+      acertos,
+      total,
+      taxa,
+      diagnosticoIA: feedbackText
+    }
+
+    try {
+      const historicoExistente = JSON.parse(localStorage.getItem('concursos_simulado_historico') || '[]')
+      const novoHistorico = [novoSimulado, ...historicoExistente]
+      localStorage.setItem('concursos_simulado_historico', JSON.stringify(novoHistorico))
+      setHistoricoSimulados(novoHistorico)
+    } catch (err) {
+      console.error('Erro ao salvar simulado no histórico local:', err)
+    }
+
+    setEtapa('results')
+  }
 
   // Gerencia o cronômetro do simulado ativo
   useEffect(() => {
@@ -91,6 +193,7 @@ export function useSimulados() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [etapa, questoesSelected])
 
   /**
@@ -214,95 +317,6 @@ export function useSimulados() {
       ...prev,
       [questaoId]: alternativa,
     }))
-  }
-
-  /**
-   * Submete todas as respostas ao banco de dados e obtém feedback da IA
-   */
-  const handleFinalizarSimulado = async () => {
-    if (timerRef.current) clearInterval(timerRef.current)
-    setEtapa('submitting')
-
-    let acertos = 0
-    const total = questoesSelected.length
-
-    // Mapeamento dos erros cometidos neste simulado
-    const errosCometidos: { materia: string; assunto: string }[] = []
-
-    // Calcula tempo gasto médio por questão
-    const tempoMedioQuestao = total > 0 ? Math.round(tempoGasto / total) : 0
-
-    // Salva cada resposta na tabela historico_resolucoes do Supabase
-    const promises = questoesSelected.map(async q => {
-      const id = q.questao_id || q.id!
-      const resposta = respostasMarcadas[id] || ''
-      const acertou = resposta.toUpperCase() === (q.gabarito || '').toUpperCase()
-
-      if (acertou) {
-        acertos++
-      } else {
-        errosCometidos.push({
-          materia: q.materia || 'Geral',
-          assunto: q.assunto || 'Sem Assunto',
-        })
-      }
-
-      // Registra a tentativa no Supabase
-      try {
-        await insertHistoricoResolucao({
-          questao_id: id,
-          questao_tec_id: q.questao_tec_id,
-          alternativa: resposta,
-          acertou,
-          tempo_segundos: tempoMedioQuestao,
-        })
-      } catch (err) {
-        console.error(`Erro ao salvar histórico do simulado para questão ${id}:`, err)
-      }
-    })
-
-    await Promise.all(promises)
-
-    const taxa = total > 0 ? Math.round((acertos / total) * 100) : 0
-    setPontuacao({ acertos, total, taxa })
-
-    // Busca feedback tático no Gemini
-    setLoadingFeedback(true)
-    let feedbackText = ''
-    try {
-      feedbackText = await gerarFeedbackSimulado(errosCometidos, acertos, total)
-      setDiagnosticoIA(feedbackText)
-    } catch (err: any) {
-      console.error('Erro ao gerar feedback do Gemini:', err)
-      feedbackText = '# Diagnóstico Indisponível\nOcorreu um erro temporário ao conectar-se ao Gemini AI. Verifique sua chave de API nas configurações.'
-      setDiagnosticoIA(feedbackText)
-    } finally {
-      setLoadingFeedback(false)
-    }
-
-    // Salva no histórico do localStorage
-    const novoSimulado = {
-      id: `sim_${Date.now()}`,
-      data: new Date().toISOString(),
-      qtdQuestoes: total,
-      tempoMinutos: config.tempoMinutos,
-      tempoGasto: tempoGasto,
-      acertos,
-      total,
-      taxa,
-      diagnosticoIA: feedbackText
-    }
-
-    try {
-      const historicoExistente = JSON.parse(localStorage.getItem('concursos_simulado_historico') || '[]')
-      const novoHistorico = [novoSimulado, ...historicoExistente]
-      localStorage.setItem('concursos_simulado_historico', JSON.stringify(novoHistorico))
-      setHistoricoSimulados(novoHistorico)
-    } catch (err) {
-      console.error('Erro ao salvar simulado no histórico local:', err)
-    }
-
-    setEtapa('results')
   }
 
   /**

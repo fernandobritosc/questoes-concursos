@@ -235,7 +235,7 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
   const evolucaoDiaria = Object.entries(porDia)
     .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
     .slice(-10)
-    .map(([_, val]) => ({
+    .map(([, val]) => ({
       data: val.display,
       resolvidas: val.resolvidas,
       acertos: val.acertos,
@@ -383,9 +383,9 @@ export function useDashboard() {
       try {
         const data = await fetchAllResolucoes()
         setResolucoes(data)
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Erro ao buscar resoluções:', err)
-        setError(err.message || 'Erro ao carregar dados.')
+        setError(err instanceof Error ? err.message : 'Erro ao carregar dados.')
       } finally {
         setLoading(false)
       }

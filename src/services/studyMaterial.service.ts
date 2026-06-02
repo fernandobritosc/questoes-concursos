@@ -210,6 +210,7 @@ export async function getStudyMaterial(
   } else {
     // Recupera do IndexedDB local
     const db = await openDB()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const item = await new Promise<any>((resolve, reject) => {
       const transaction = db.transaction(STORE_NAME, 'readonly')
       const store = transaction.objectStore(STORE_NAME)
@@ -282,6 +283,7 @@ export async function listAllStudyMaterialsMetadata(
     }
 
     const metadata: Record<string, StudyMaterialMetadata> = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(data || []).forEach((item: any) => {
       metadata[item.id] = {
         fileName: item.file_name,
@@ -301,6 +303,7 @@ export async function listAllStudyMaterialsMetadata(
       request.onsuccess = () => {
         const results = request.result || []
         const metadata: Record<string, StudyMaterialMetadata> = {}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         results.forEach((item: any) => {
           metadata[item.id] = {
             fileName: item.fileName,

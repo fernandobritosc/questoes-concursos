@@ -10,6 +10,7 @@ import type { Questao, HistoricoResolucao, ResolucaoView } from '../types/databa
 
 // ─── Helper: mapeia o resultado do JOIN para ResolucaoView ────────────────────
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapHistoricoToView(h: any): ResolucaoView {
   const q: Questao = h.questao ?? {}
   return {
@@ -46,6 +47,7 @@ export async function fetchQuestaoIds(): Promise<Set<number>> {
 
   if (error) throw error
   return new Set<number>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (data || []).map((r: any) => r.questao_tec_id).filter(Boolean)
   )
 }
@@ -291,6 +293,7 @@ export const fetchResolucaoIds = fetchQuestaoIds
 
 /** @deprecated Use insertQuestoesBatch */
 export async function insertResolucoesBatch(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   questoes: any[],
   onProgress?: (current: number, total: number) => void
 ): Promise<number> {
@@ -298,6 +301,7 @@ export async function insertResolucoesBatch(
 }
 
 /** Busca o plano de estudos e tarefas salvas no perfil do usuário no Supabase */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchMentorPlano(): Promise<{ mentor_plano: any; mentor_tarefas: any } | null> {
   const { data: { session } } = await supabase.auth.getSession()
   const userId = session?.user?.id
@@ -316,6 +320,7 @@ export async function fetchMentorPlano(): Promise<{ mentor_plano: any; mentor_ta
 }
 
 /** Salva o plano de estudos e as tarefas concluídas no perfil do usuário no Supabase */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function updateMentorPlano(planoJson: any, tarefasJson: any): Promise<void> {
   const { data: { session } } = await supabase.auth.getSession()
   const userId = session?.user?.id

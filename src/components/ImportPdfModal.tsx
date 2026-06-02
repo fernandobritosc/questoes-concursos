@@ -33,7 +33,7 @@ interface ImportPdfModalProps {
   existingQuestions: ResolucaoView[]
 }
 
-export const getQuestionValidation = (q: Resolucao): string[] => {
+const getQuestionValidation = (q: Resolucao): string[] => {
   const errors: string[] = []
   if (!q.questao_tec_id || q.questao_tec_id <= 0) errors.push('ID da questÃ£o ausente ou invÃ¡lido')
   if (!q.enunciado || q.enunciado.trim().length < 10) errors.push('Enunciado curto ou ausente')
@@ -131,13 +131,13 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
         total: parsedQuestions.length,
       })
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
       setImportStatus({
         step: 'error',
         progress: 0,
         total: 0,
-        errorMsg: err.message || 'Erro inesperado durante a importação.'
+        errorMsg: err instanceof Error ? err.message : 'Erro inesperado durante a importação.'
       })
     }
   }
@@ -203,13 +203,13 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
         total: newQuestions.length, 
         importedCount: successCount 
       })
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
       setImportStatus({ 
         step: 'error', 
         progress: 0, 
         total: 0, 
-        errorMsg: err.message || 'Erro inesperado durante o salvamento.' 
+        errorMsg: err instanceof Error ? err.message : 'Erro inesperado durante o salvamento.' 
       })
     }
   }

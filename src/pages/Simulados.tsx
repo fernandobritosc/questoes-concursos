@@ -7,6 +7,7 @@ import { cleanHtmlText } from '../lib/cleanHtml'
 import { formatarTempo } from '../hooks/useDashboard'
 import { gerarResolucaoProfessor } from '../services/gemini.service'
 import { updateResolucaoProfessor } from '../services/supabase.service'
+import type { ResolucaoView } from '../types/database'
 import {
   AreaChart,
   Area,
@@ -69,6 +70,7 @@ export function Simulados() {
   const [selectedTempo, setSelectedTempo] = useState(15)
 
   // Controle do modal de prescrição tática do histórico
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedSimuladoForModal, setSelectedSimuladoForModal] = useState<any | null>(null)
 
   // Controle de paginação e visualização do histórico
@@ -83,7 +85,7 @@ export function Simulados() {
   const [loadingExplicacao, setLoadingExplicacao] = useState<number | null>(null)
 
   // Solicita explicação da IA para uma questão específica no painel de revisão
-  const handleGerarExplicacaoIA = async (q: any) => {
+  const handleGerarExplicacaoIA = async (q: ResolucaoView) => {
     const id = q.questao_id || q.id
     if (!id || loadingExplicacao === id) return
     setLoadingExplicacao(id)
