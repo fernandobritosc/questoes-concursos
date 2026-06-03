@@ -16,7 +16,7 @@
   "content_scripts": [
     {
       "matches": [
-        "*://www.tecconcursos.com.br/questoes/*",
+        "*://www.tecconcursos.com.br/*",
         "http://localhost/*",
         "http://127.0.0.1/*",
         "https://*.vercel.app/*"

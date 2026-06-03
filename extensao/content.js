@@ -9,6 +9,19 @@
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5eHRhbGN2amNwcm1odWt0eWZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1MzI1MjcsImV4cCI6MjA4NDEwODUyN30.BPMR3SBmTrf_3icEyYjWUmiC5ZsoCseEXB3LF6c14L8";
 const SUPABASE_URL = "https://dyxtalcvjcprmhuktyfd.supabase.co";
 
+// Helper para detectar se o contexto da extensão foi invalidado (ex: após reload ou reinício)
+function isContextInvalidated() {
+  if (typeof chrome === 'undefined' || !chrome.runtime || !chrome.runtime.id) {
+    return true;
+  }
+  try {
+    chrome.runtime.getURL("");
+    return false;
+  } catch (e) {
+    return true;
+  }
+}
+
 // ============================================================================
 // 1. MÓDULO DE SINCRONIZAÇÃO DE CREDENCIAIS (Para o App React)
 // ============================================================================
@@ -21,6 +34,7 @@ if (isReactApp) {
   console.log("content.js:10 ⚡ MonitorPro: Receptor DOM de sessão iniciado...");
 
   function sincronizarSessao() {
+    if (isContextInvalidated()) return;
     try {
       const storageKey = "sb-dyxtalcvjcprmhuktyfd-auth-token";
       const sessionStr = localStorage.getItem(storageKey);
@@ -32,11 +46,13 @@ if (isReactApp) {
 
         if (token && userId) {
           chrome.storage.local.get(["supabase_token", "supabase_user_id"], (stored) => {
+            if (isContextInvalidated()) return;
             if (stored.supabase_token !== token || stored.supabase_user_id !== userId) {
               chrome.storage.local.set({
                 supabase_token: token,
                 supabase_user_id: userId
               }, () => {
+                if (isContextInvalidated()) return;
                 console.log(`content.js:38 ⚡ MonitorPro: Sessão sincronizada com sucesso via DOM! UserID: ${userId}`);
               });
             }
@@ -45,21 +61,30 @@ if (isReactApp) {
       } else {
         // Sem token no localStorage -> Usuário deslogou do App
         chrome.storage.local.get(["supabase_token"], (stored) => {
+          if (isContextInvalidated()) return;
           if (stored.supabase_token) {
             chrome.storage.local.remove(["supabase_token", "supabase_user_id"], () => {
+              if (isContextInvalidated()) return;
               console.log("content.js:48 ⚡ MonitorPro: Sessão limpa (usuário deslogado do aplicativo).");
             });
           }
         });
       }
     } catch (e) {
+      if (isContextInvalidated()) return;
       console.error("⚡ MonitorPro: Erro ao sincronizar sessão:", e);
     }
   }
 
   // Verifica na carga e a cada 3 segundos (captura logins/logouts em tempo real)
   sincronizarSessao();
-  setInterval(sincronizarSessao, 3000);
+  const syncInterval = setInterval(() => {
+    if (isContextInvalidated()) {
+      clearInterval(syncInterval);
+      return;
+    }
+    sincronizarSessao();
+  }, 3000);
 }
 
 // ============================================================================
@@ -69,11 +94,126 @@ if (isReactApp) {
 if (window.location.hostname.includes("tecconcursos.com.br")) {
   console.log("⚡ MonitorPro: Extrator iniciado na página do TEC Concursos.");
 
-  // Conjunto de IDs de questões que já enviamos nesta aba para evitar loops/duplicações
-  const sentResolutions = new Set();
+  // Controle de envios de tentativas e comentários de forma independente
+  const sentAttempts = new Set();
+  const sentComments = new Set();
+  const pendingRequests = new Set();
   
   // Dicionário de tempos de carregamento para medir o tempo gasto por questão
   const questionLoadTimes = {};
+
+  /**
+   * Converte recursivamente os nós do DOM para Markdown simplificado
+   */
+  function htmlToMarkdown(node) {
+    if (!node) return "";
+    
+    // Se for nó de texto (TEXT_NODE = 3)
+    if (node.nodeType === 3) {
+      return node.textContent;
+    }
+    
+    // Se for elemento (ELEMENT_NODE = 1)
+    if (node.nodeType === 1) {
+      const tagName = node.tagName.toLowerCase();
+      
+      // Processa os filhos primeiro
+      let childrenMarkdown = "";
+      node.childNodes.forEach(child => {
+        childrenMarkdown += htmlToMarkdown(child);
+      });
+      
+      switch (tagName) {
+        case "strong":
+        case "b":
+          return `**${childrenMarkdown}**`;
+          
+        case "em":
+        case "i":
+          return `*${childrenMarkdown}*`;
+          
+        case "s":
+        case "strike":
+        case "del":
+          return `~~${childrenMarkdown}~~`;
+          
+        case "p":
+          // Evita parágrafos vazios ou apenas com espaços/&nbsp;
+          if (!childrenMarkdown.trim() || childrenMarkdown.trim() === "\u00A0") {
+            return "\n\n";
+          }
+          return `\n\n${childrenMarkdown}\n\n`;
+          
+        case "blockquote":
+          const cleanBlock = childrenMarkdown.trim().replace(/\n{2,}/g, "\n\n");
+          return `\n\n> ${cleanBlock.replace(/\n/g, "\n> ")}\n\n`;
+          
+        case "br":
+          return "\n";
+          
+        case "li": {
+          const parent = node.parentNode;
+          const isOrdered = parent && parent.tagName.toLowerCase() === "ol";
+          if (isOrdered) {
+            const siblings = Array.from(parent.children).filter(c => c.tagName.toLowerCase() === "li");
+            const index = siblings.indexOf(node) + 1;
+            return `\n${index}. ${childrenMarkdown.trim()}`;
+          }
+          return `\n- ${childrenMarkdown.trim()}`;
+        }
+          
+        case "ul":
+        case "ol":
+          return `\n${childrenMarkdown}\n`;
+          
+        case "table":
+          return `\n\n${childrenMarkdown}\n\n`;
+          
+        case "tr": {
+          const cells = node.querySelectorAll("td, th");
+          const cellsCount = cells.length;
+          let rowMarkdown = `\n| ${childrenMarkdown}`;
+          
+          // Verifica se é a linha de cabeçalho
+          const isHeader = node.querySelector("th") !== null || (node.parentNode && node.parentNode.children[0] === node);
+          if (isHeader && cellsCount > 0) {
+            rowMarkdown += "\n|" + Array(cellsCount).fill(" --- |").join("");
+          }
+          return rowMarkdown;
+        }
+        
+        case "td":
+        case "th":
+          return `${childrenMarkdown.trim().replace(/\n/g, " ")} |`;
+          
+        case "h1":
+          return `\n\n# ${childrenMarkdown}\n\n`;
+        case "h2":
+          return `\n\n## ${childrenMarkdown}\n\n`;
+        case "h3":
+          return `\n\n### ${childrenMarkdown}\n\n`;
+        case "h4":
+        case "h5":
+        case "h6":
+          return `\n\n#### ${childrenMarkdown}\n\n`;
+          
+        default:
+          return childrenMarkdown;
+      }
+    }
+    
+    return "";
+  }
+
+  function convertElementToMarkdown(element) {
+    if (!element) return null;
+    let md = htmlToMarkdown(element);
+    // Limpa espaços e quebras de linha duplicadas
+    md = md.replace(/\n{3,}/g, "\n\n");
+    md = md.replace(/&nbsp;/g, " ");
+    md = md.replace(/\u00A0/g, " "); // decodifica non-breaking spaces
+    return md.trim();
+  }
 
   /**
    * Helper para verificar se a questão no container foi resolvida.
@@ -92,24 +232,60 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
   }
 
   /**
+   * Obtém o elemento de comentário de forma resiliente
+   */
+  function obterElementoComentario(container) {
+    let commentEl = container.querySelector(".questao-complementos-comentario-conteudo-texto");
+    if (!commentEl) {
+      // Fallback para quando o comentário é renderizado fora do container (ex: em páginas de questão única)
+      const allComments = document.querySelectorAll(".questao-complementos-comentario-conteudo-texto");
+      if (allComments.length === 1) {
+        commentEl = allComments[0];
+      }
+    }
+    return commentEl;
+  }
+
+  /**
    * Processa e salva a resolução de uma questão de forma segura e deduplicada
    */
   function processarResolucao(container, questaoTecId) {
-    if (sentResolutions.has(questaoTecId)) return;
-    sentResolutions.add(questaoTecId);
+    if (pendingRequests.has(questaoTecId)) {
+      return;
+    }
+    const hasAttemptSent = sentAttempts.has(questaoTecId);
+    const commentEl = obterElementoComentario(container);
+    const commentText = commentEl ? commentEl.textContent.trim() : "";
+    const hasComment = commentText.length > 5 && !commentText.toLowerCase().includes("carregando");
+    const hasCommentSent = sentComments.has(questaoTecId);
 
-    console.log(`[MonitorPro] ⚡ Capturando dados da Questão #${questaoTecId}...`);
+    // Se já enviou a tentativa E (ou não tem comentário no DOM ou já enviou o comentário), não faz nada.
+    if (hasAttemptSent && (!hasComment || hasCommentSent)) {
+      return;
+    }
+
+    console.log(`[MonitorPro] ⚡ Processando dados da Questão #${questaoTecId}...`);
     try {
-      extrairESalvarQuestao(container, questaoTecId);
+      pendingRequests.add(questaoTecId);
+      const userJustAnswered = !!questionLoadTimes[questaoTecId];
+      extrairESalvarQuestao(container, questaoTecId, hasAttemptSent, hasCommentSent, userJustAnswered);
     } catch (err) {
-      console.error(`[MonitorPro] ❌ Falha interna ao extrair dados da Questão #${questaoTecId}:`, err);
-      // Remove do Set para permitir que re-tentativas aconteçam se o DOM mudar novamente
-      sentResolutions.delete(questaoTecId);
+      if (isContextInvalidated()) return;
+      console.error(`[MonitorPro] ❌ Falha ao extrair dados da Questão #${questaoTecId}:`, err);
+      pendingRequests.delete(questaoTecId);
+      // Em caso de erro, limpa os conjuntos correspondentes para permitir novas tentativas
+      if (!hasAttemptSent) sentAttempts.delete(questaoTecId);
+      if (hasComment && !hasCommentSent) sentComments.delete(questaoTecId);
     }
   }
 
-  // Loop leve (500ms) para varrer containers e configurar observadores reativos individuais (MutationObserver)
-  setInterval(() => {
+  // Loop leve (500ms) para varrer containers e calcular tempos de início de resolução
+  const extractionInterval = setInterval(() => {
+    if (isContextInvalidated()) {
+      clearInterval(extractionInterval);
+      return;
+    }
+    
     const questionContainers = document.querySelectorAll(".questao");
     
     questionContainers.forEach((container) => {
@@ -121,48 +297,59 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
 
       // 1. Inicia o cronômetro para questões novas não resolvidas
       const isResolved = verificarSeResolvida(container);
-      if (!isResolved && !questionLoadTimes[questaoTecId]) {
-        questionLoadTimes[questaoTecId] = Date.now();
-        console.log(`[MonitorPro] Cronômetro iniciado para a Questão #${questaoTecId}`);
+      if (!isResolved) {
+        if (!questionLoadTimes[questaoTecId]) {
+          questionLoadTimes[questaoTecId] = Date.now();
+          console.log(`[MonitorPro] Cronômetro iniciado para a Questão #${questaoTecId}`);
+        }
+        // Se a questão já foi marcada como enviada mas agora está desmarcada (limpa), limpa o controle para permitir novo envio
+        if (sentAttempts.has(questaoTecId)) {
+          sentAttempts.delete(questaoTecId);
+          console.log(`[MonitorPro] Questão #${questaoTecId} foi limpa/desmarcada pelo usuário. Resetando sentAttempts.`);
+        }
       }
 
-      // 2. Configura MutationObserver se o container ainda não possuir um configurado
-      if (!container.hasAttribute("data-observed")) {
-        container.setAttribute("data-observed", "true");
-        
-        console.log(`[MonitorPro] MutationObserver ativado no container da Questão #${questaoTecId}`);
-        
-        const observer = new MutationObserver(() => {
-          // Relê o ID caso o AngularJS recicle o container
-          const currentIdInput = container.querySelector("input[id-questao]");
-          if (!currentIdInput || !currentIdInput.value) return;
-          const currentId = parseInt(currentIdInput.value);
-          if (isNaN(currentId)) return;
-
-          if (verificarSeResolvida(container)) {
-            processarResolucao(container, currentId);
-          }
-        });
-
-        observer.observe(container, {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ["class", "aria-checked"]
-        });
-      }
-
-      // 3. Failsafe: se já estiver resolvida no loop periódico tradicional, processa imediatamente
+      // 2. Failsafe: se já estiver resolvida no loop periódico tradicional, processa imediatamente
       if (isResolved) {
         processarResolucao(container, questaoTecId);
       }
     });
   }, 500);
 
+  // Configura um MutationObserver global na página do TEC Concursos (no document.body)
+  // para ser imune a reciclagens do AngularJS ou deslocamento dos containers.
+  const globalObserver = new MutationObserver(() => {
+    if (isContextInvalidated()) {
+      globalObserver.disconnect();
+      return;
+    }
+    
+    const questionContainers = document.querySelectorAll(".questao");
+    questionContainers.forEach((container) => {
+      const idInput = container.querySelector("input[id-questao]");
+      if (!idInput || !idInput.value) return;
+
+      const questaoTecId = parseInt(idInput.value);
+      if (isNaN(questaoTecId)) return;
+
+      if (verificarSeResolvida(container)) {
+        processarResolucao(container, questaoTecId);
+      }
+    });
+  });
+
+  globalObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ["class", "aria-checked"]
+  });
+
   /**
    * Extrai todos os campos da questão a partir do seu container e envia para o Supabase
    */
-  function extrairESalvarQuestao(container, questaoTecId) {
+  function extrairESalvarQuestao(container, questaoTecId, hasAttemptSent, hasCommentSent, userJustAnswered) {
     // 1. Matéria
     let materia = null;
     const materiaEl = container.querySelector(".questao-cabecalho-informacoes-materia a");
@@ -335,6 +522,15 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       }
     }
 
+    // 8.5. Resolução do Professor
+    let resolucaoProfessor = null;
+    const commentEl = obterElementoComentario(container);
+    console.log(`[MonitorPro] Questão #${questaoTecId}: Buscando comentário do professor. Elemento encontrado:`, commentEl);
+    if (commentEl) {
+      resolucaoProfessor = convertElementToMarkdown(commentEl);
+      console.log(`[MonitorPro] Questão #${questaoTecId}: Comentário convertido (100 chs):`, resolucaoProfessor ? resolucaoProfessor.substring(0, 100) + '...' : 'null');
+    }
+
     // Monta os payloads finais
     const questaoPayload = {
       questao_tec_id: questaoTecId,
@@ -348,7 +544,8 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       caderno_nome: cadernoNome,
       enunciado,
       alternativas,
-      gabarito
+      gabarito,
+      resolucao_professor: resolucaoProfessor
     };
 
     const tentativaPayload = {
@@ -361,14 +558,19 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     console.log(`[MonitorPro] Extração completa da Questão #${questaoTecId}:`, { questaoPayload, tentativaPayload });
 
     // Salva no Supabase!
-    salvarNoSupabase(questaoPayload, tentativaPayload);
+    salvarNoSupabase(questaoPayload, tentativaPayload, hasAttemptSent, hasCommentSent, userJustAnswered);
   }
 
   /**
    * Salva os payloads de forma relacional no Supabase
    */
-  function salvarNoSupabase(questaoPayload, tentativaPayload) {
+  function salvarNoSupabase(questaoPayload, tentativaPayload, hasAttemptSent, hasCommentSent, userJustAnswered) {
+    if (isContextInvalidated()) {
+      pendingRequests.delete(questaoPayload.questao_tec_id);
+      return;
+    }
     chrome.storage.local.get(["supabase_token", "supabase_user_id"], async (stored) => {
+      if (isContextInvalidated()) return;
       const token = stored.supabase_token;
       const userId = stored.supabase_user_id;
 
@@ -387,24 +589,39 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       }
 
       try {
-        // Passo A: Verifica se a questão já está cadastrada na tabela 'questoes'
-        const searchUrl = `${SUPABASE_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id`;
+        if (isContextInvalidated()) return;
+
+        // Passo A: Verifica se a questão já está cadastrada na tabela 'questoes' e busca tentativas existentes
+        const searchUrl = `${SUPABASE_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`;
         const searchRes = await fetch(searchUrl, {
           method: "GET",
           headers
         });
 
         let dbQuestaoId = null;
+        let existingResolucao = null;
+        let hasExistingAttempt = false;
 
         if (searchRes.ok) {
           const rows = await searchRes.json();
           if (rows && rows.length > 0) {
             dbQuestaoId = rows[0].id;
-            console.log(`[MonitorPro] Questão #${questaoPayload.questao_tec_id} já cadastrada. ID no banco: ${dbQuestaoId}`);
+            existingResolucao = rows[0].resolucao_professor;
+            const history = rows[0].historico_resolucoes || [];
+            
+            // Verifica se o usuário correspondente já tem alguma tentativa registrada para esta questão
+            if (userId) {
+              hasExistingAttempt = history.some(h => h.user_id === userId);
+            } else {
+              hasExistingAttempt = history.some(h => !h.user_id);
+            }
+            console.log(`[MonitorPro] Questão #${questaoPayload.questao_tec_id} já cadastrada. ID no banco: ${dbQuestaoId}. Tentativa existente: ${hasExistingAttempt}`);
           }
         } else {
           console.warn("[MonitorPro] Falha ao consultar existência da questão. Tentando prosseguir...");
         }
+
+        if (isContextInvalidated()) return;
 
         // Passo B: Se a questão não existir no banco, faz o cadastro dela
         if (!dbQuestaoId) {
@@ -423,15 +640,91 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
             if (data && data.length > 0) {
               dbQuestaoId = data[0].id;
               console.log(`[MonitorPro] Questão #${questaoPayload.questao_tec_id} cadastrada com sucesso! ID gerado: ${dbQuestaoId}`);
+              if (questaoPayload.resolucao_professor) {
+                sentComments.add(questaoPayload.questao_tec_id);
+                console.log(`[MonitorPro] 📚 Comentário do professor para a Questão #${questaoPayload.questao_tec_id} salvo com sucesso!`);
+              }
             }
           } else {
-            const errMsg = await insertRes.text();
-            throw new Error(`Erro ao cadastrar questão na tabela 'questoes': ${errMsg}`);
+            const errText = await insertRes.text();
+            
+            // Se for erro de chave duplicada (23505), significa que outra requisição inseriu a questão simultaneamente.
+            // Nesse caso, podemos fazer uma nova busca para obter o ID existente e continuar.
+            if (errText.includes("23505") || errText.includes("duplicate key")) {
+              console.warn(`[MonitorPro] Conflito de chave duplicada detectado para a Questão #${questaoPayload.questao_tec_id}. Recuperando registro existente...`);
+              if (isContextInvalidated()) return;
+              const recoveryRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`, {
+                method: "GET",
+                headers
+              });
+              if (recoveryRes.ok) {
+                const rows = await recoveryRes.json();
+                if (rows && rows.length > 0) {
+                  dbQuestaoId = rows[0].id;
+                  existingResolucao = rows[0].resolucao_professor;
+                  const history = rows[0].historico_resolucoes || [];
+                  if (userId) {
+                    hasExistingAttempt = history.some(h => h.user_id === userId);
+                  } else {
+                    hasExistingAttempt = history.some(h => !h.user_id);
+                  }
+                  console.log(`[MonitorPro] Registro recuperado com sucesso. ID no banco: ${dbQuestaoId}. Tentativa existente: ${hasExistingAttempt}`);
+                  
+                  // Se houver um comentário e ele for diferente, faz a atualização
+                  if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
+                    console.log(`[MonitorPro] 📚 Atualizando comentário do professor pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`);
+                    if (isContextInvalidated()) return;
+                    const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
+                      method: "PATCH",
+                      headers,
+                      body: JSON.stringify({ resolucao_professor: questaoPayload.resolucao_professor })
+                    });
+                    if (updateRes.ok) {
+                      console.log(`[MonitorPro] 📚 Comentário do professor para a Questão #${questaoPayload.questao_tec_id} atualizado com sucesso!`);
+                      sentComments.add(questaoPayload.questao_tec_id);
+                    }
+                  } else if (questaoPayload.resolucao_professor) {
+                    sentComments.add(questaoPayload.questao_tec_id);
+                  }
+                }
+              }
+            }
+            
+            // Se ainda não temos o dbQuestaoId, lança o erro de fato.
+            if (!dbQuestaoId) {
+              throw new Error(`Erro ao cadastrar questão na tabela 'questoes': ${errText}`);
+            }
+          }
+        } else {
+          // Se a questão já existia, mas extraímos uma resolução do professor e ela é diferente da que está no banco, atualiza!
+          if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
+            console.log(`[MonitorPro] 📚 Atualizando comentário do professor da Questão #${questaoPayload.questao_tec_id}...`);
+            const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
+              method: "PATCH",
+              headers,
+              body: JSON.stringify({ resolucao_professor: questaoPayload.resolucao_professor })
+            });
+
+            if (updateRes.ok) {
+              console.log(`[MonitorPro] 📚 Comentário do professor para a Questão #${questaoPayload.questao_tec_id} atualizado com sucesso!`);
+              sentComments.add(questaoPayload.questao_tec_id);
+            } else {
+              console.warn(`[MonitorPro] Falha ao atualizar comentário do professor:`, await updateRes.text());
+            }
+          } else if (questaoPayload.resolucao_professor) {
+            // Se já tem resolução idêntica no banco, só marca como enviado
+            sentComments.add(questaoPayload.questao_tec_id);
+            console.log(`[MonitorPro] 📚 Comentário do professor para a Questão #${questaoPayload.questao_tec_id} já existia no banco de dados.`);
           }
         }
 
+        if (isContextInvalidated()) return;
+
         // Passo C: Insere a tentativa de resolução na tabela 'historico_resolucoes'
-        if (dbQuestaoId) {
+        // Condições para inserir a tentativa:
+        // 1. Ainda não foi marcada como enviada nesta sessão (hasAttemptSent é falso).
+        // 2. E (o usuário acabou de responder no fluxo da sessão OU não há tentativa cadastrada no banco de dados para evitar duplicadas de recarga de página).
+        if (dbQuestaoId && !hasAttemptSent && (userJustAnswered || !hasExistingAttempt)) {
           const finalTentativa = {
             ...tentativaPayload,
             questao_id: dbQuestaoId,
@@ -450,16 +743,39 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
           });
 
           if (historyRes.ok) {
-            console.log(`[MonitorPro] 🚀 Resolução da Questão #${questaoPayload.questao_tec_id} gravada com SUCESSO no Supabase!`);
+            console.log(`[MonitorPro] 🚀 Tentativa do usuário para a Questão #${questaoPayload.questao_tec_id} gravada com SUCESSO no Supabase!`);
+            sentAttempts.add(questaoPayload.questao_tec_id);
           } else {
             const errMsg = await historyRes.text();
             throw new Error(`Erro ao cadastrar histórico de resolução: ${errMsg}`);
           }
+        } else if (dbQuestaoId && !hasAttemptSent) {
+          // Se já havia uma tentativa no banco de dados e não é resposta recente, marca como enviado para evitar loops
+          sentAttempts.add(questaoPayload.questao_tec_id);
+          console.log(`[MonitorPro] Tentativa para a Questão #${questaoPayload.questao_tec_id} ignorada (já existe no histórico do banco).`);
         }
       } catch (err) {
+        if (isContextInvalidated()) {
+          console.warn("[MonitorPro] Sincronização interrompida (extensão recarregada/desativada).");
+          return;
+        }
         console.error("[MonitorPro] Falha crítica de sincronização com o banco de dados:", err);
-        // Remove dos enviados para permitir re-tentativa na próxima alteração do DOM
-        sentResolutions.delete(questaoPayload.questao_tec_id);
+        // Em caso de erro, limpa os conjuntos correspondentes para tentar novamente na próxima alteração do DOM
+        if (!hasAttemptSent) sentAttempts.delete(questaoPayload.questao_tec_id);
+        if (questaoPayload.resolucao_professor) sentComments.delete(questaoPayload.questao_tec_id);
+      } finally {
+        if (!isContextInvalidated()) {
+          pendingRequests.delete(questaoPayload.questao_tec_id);
+          // Re-avalia o container após um breve delay (150ms) caso o comentário tenha sido carregado 
+          // ou o DOM tenha mudado enquanto a requisição assíncrona estava em voo.
+          setTimeout(() => {
+            if (isContextInvalidated()) return;
+            const targetContainer = document.querySelector(`input[id-questao][value="${questaoPayload.questao_tec_id}"]`)?.closest(".questao");
+            if (targetContainer && verificarSeResolvida(targetContainer)) {
+              processarResolucao(targetContainer, questaoPayload.questao_tec_id);
+            }
+          }, 150);
+        }
       }
     });
   }

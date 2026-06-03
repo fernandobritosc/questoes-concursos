@@ -33,6 +33,12 @@ Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos
 - `QuestaoNavegacao` — navegação inferior (Anterior/Próxima/Aleatório/Limpar)
 - `QuestaoPrintView` — layout oculto para impressão
 
+#### Extração de Resoluções do Professor
+- **Integração TEC Concursos**: A extensão do navegador (`extensao/content.js`) agora extrai as resoluções dos professores em tempo real a partir de `.questao-complementos-comentario-conteudo-texto`.
+- **Conversão HTML para Markdown**: Criado um parser robusto em JS na extensão que preserva negritos, itálicos, listas, citações e textos riscados, salvando de forma limpa no campo `resolucao_professor` da tabela `questoes` no Supabase.
+- **Sincronização Reativa**: Modificado o controle de envios para dar `PATCH` no comentário da questão caso ela já exista no banco, viabilizando o carregamento assíncrono das abas de comentários no TEC Concursos.
+- **Suporte a Riscos (Strikethrough)**: Adicionado suporte à formatação `~~texto~~` em `MarkdownAI.tsx` com estilo line-through vermelho para simular a rasura de alternativas incorretas no site original.
+
 #### Correções de ESLint (54 → 0 erros)
 | Arquivo | Correções |
 |---|---|
@@ -64,11 +70,12 @@ Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos
 - **Setup**: `src/test/setup.ts`
 - **ESLint config**: atualizado para reconhecer globals do vitest
 
-**28 testes passando:**
+**38 testes passando:**
 | File | Tests | O que cobre |
 |---|---|---|
 | `src/lib/cleanHtml.test.ts` | 17 | `cleanHtmlText` — null, undefined, HTML stripping (`<br>`, `</p>`, tags), decodificação de entidades (`&nbsp;`, `&lt;`, `&amp;`, etc.), trimming |
 | `src/lib/pdfParser.test.ts` | 11 | `parsePdfContent` — questão única, múltiplas, gabarito Certo/Errado, 5 alternativas, exceções (sem Gabarito, sem questões), filtro de footer, `caderno_nome`, alternativas com sufixo Gabarito, estilo "Certo/Errado" |
+| `src/components/ui/MarkdownAI.test.tsx` | 10 | `MarkdownAI` — renderização de nulos, parágrafos, negritos, itálicos, rasuras (strikethrough), listas ordenadas/não ordenadas, caixas de avisos/alertas, tabelas markdown com alinhamento e formatação interna |
 
 ### 🔄 Pendente
 - Testes de componentes: `QuestaoNavegacao`, `QuestaoVisualizador`, `QuestaoGabarito`
