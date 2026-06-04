@@ -140,20 +140,29 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
 /**
  * Busca todas as questões do banco (da tabela questoes) com o último histórico.
  * Usado no Banco de Questões para listar todas as questões importadas.
+ * Atenção: usa colunas explícitas (evita select('*')) e limite de segurança.
  */
 export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
-  // Busca todas as questões
+  // Busca questões — colunas explícitas, sem select('*')
   const { data: questoesData, error: qErr } = await supabase
     .from('questoes')
-    .select('*')
-    .order('created_at', { ascending: false })
+    .select(`
+      id, questao_tec_id, materia, assunto, banca_texto, orgao,
+      concurso, prova, ano, caderno_nome, enunciado, gabarito,
+      alternativas, resolucao_professor, created_at
+    `)
+    .order('id', { ascending: false })
+    .limit(1000)
 
   if (qErr) throw qErr
 
-  // Busca o histórico mais recente de cada questão
+  // Busca o histórico mais recente de cada questão — colunas explícitas
   const { data: historico, error: hErr } = await supabase
     .from('historico_resolucoes')
-    .select('*')
+    .select(`
+      id, questao_id, questao_tec_id, alternativa, acertou,
+      tempo_segundos, data_resolucao
+    `)
     .order('data_resolucao', { ascending: false })
 
   if (hErr) throw hErr
@@ -162,7 +171,7 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
   const historicoMap = new Map<number, HistoricoResolucao>()
   for (const h of (historico || [])) {
     if (!historicoMap.has(h.questao_id)) {
-      historicoMap.set(h.questao_id, h)
+      historicoMap.set(h.questao_id, h as HistoricoResolucao)
     }
   }
 
