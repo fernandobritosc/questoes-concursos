@@ -23,15 +23,19 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      console.log('[ErrorBoundary] Renderizando fallback de erro')
       return (
         <div className="p-8 text-center">
           <p className="text-red-500 font-bold">Erro ao renderizar página</p>
           <pre className="text-xs mt-4 text-left bg-muted p-4 rounded overflow-auto max-h-96">
             {this.state.error?.message}
+            {'\n\n'}
+            {this.state.error?.stack}
           </pre>
         </div>
       )
     }
+    console.log('[ErrorBoundary] Renderizando children normalmente')
     return this.props.children
   }
 }
