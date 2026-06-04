@@ -18,6 +18,8 @@ import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { BrainCircuit, Layers, Upload } from 'lucide-react'
 
 export function Questoes() {
+  console.count('[LOG Questoes] Render count')
+
   const [topTab, setTopTab] = useState<'questoes' | 'indice' | 'estatisticas' | 'gabarito'>('questoes')
 
 
