@@ -16,6 +16,7 @@ import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { AlertCircle, RefreshCw } from 'lucide-react'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { BrainCircuit, Layers, Upload } from 'lucide-react'
+import { ErrorBoundary } from '../components/ErrorBoundary'
 
 export function Questoes() {
   console.count('[LOG Questoes] Render count')
@@ -192,7 +193,7 @@ export function Questoes() {
   if (loading) return <LoadingSpinner />
 
   return (
-    <>
+    <ErrorBoundary>
       <div className="h-[calc(100vh-60px)] flex flex-col bg-muted/20 animate-in fade-in duration-300 overflow-hidden print:hidden">
         
         <QuestaoTabs
@@ -351,7 +352,7 @@ export function Questoes() {
         onClose={() => setIsEditModalOpen(false)}
         onSave={handleEditQuestao}
       />
-    </>
+    </ErrorBoundary>
   )
 }
 
