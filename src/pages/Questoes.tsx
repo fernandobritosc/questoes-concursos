@@ -13,6 +13,7 @@ import { QuestaoResolucaoProfessor } from '../components/QuestaoResolucaoProfess
 import { QuestaoNavegacao } from '../components/QuestaoNavegacao'
 import { QuestaoPrintView } from '../components/QuestaoPrintView'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
+import { AlertCircle, RefreshCw } from 'lucide-react'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { BrainCircuit, Layers, Upload } from 'lucide-react'
 
@@ -55,6 +56,7 @@ export function Questoes() {
     setFiltros,
     questoesExibidas,
     handleEditQuestao,
+    loadingError,
   } = useQuestoes()
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -166,6 +168,23 @@ export function Questoes() {
     setFiltros(filtros);
     setCurrentQuestaoIndex(0);
     setTopTab('questoes');
+  }
+
+  if (loadingError) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[calc(100vh-60px)] p-12 text-center">
+        <AlertCircle className="w-16 h-16 text-destructive mb-4" />
+        <h2 className="text-xl font-bold text-foreground mb-2">Erro ao carregar questões</h2>
+        <p className="text-sm text-muted-foreground max-w-md mb-6">{loadingError}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-[#1565c0] text-white rounded-lg text-sm font-bold transition-all cursor-pointer"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Tentar novamente
+        </button>
+      </div>
+    )
   }
 
   if (loading) return <LoadingSpinner />

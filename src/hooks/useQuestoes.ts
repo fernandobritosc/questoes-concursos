@@ -78,6 +78,7 @@ export function useQuestoes() {
   const [revelado, setRevelado] = useState(false)
   const [explicacoes, setExplicacoes] = useState<Record<number, string>>({})
   const [loadingExplicacao, setLoadingExplicacao] = useState<number | null>(null)
+  const [loadingError, setLoadingError] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState<number | null>(null)
 
   // ── Resolução do Professor ────────────────────────────────────────────────────
@@ -156,19 +157,30 @@ export function useQuestoes() {
 
   // Initial load
   useEffect(() => {
+    let cancelled = false
     async function load() {
+      setLoadingError(null)
       try {
-        // Busca todas as questões importadas com o último resultado de cada uma
-        const data = await fetchAllQuestoes()
+        const data = await Promise.race([
+          fetchAllQuestoes(),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Timeout ao conectar com o banco de dados. Verifique sua conexão.')), 30000)
+          ),
+        ])
+        if (cancelled) return
         setResolucoes(data)
         setCadernoQuestoes(data)
       } catch (err) {
         console.error('Erro ao buscar banco de questões:', err)
+        if (!cancelled) {
+          setLoadingError(err instanceof Error ? err.message : 'Erro desconhecido ao carregar questões.')
+        }
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
     load()
+    return () => { cancelled = true }
   }, [])
 
   // ─── Relational Timer & History Loading Effects ──────────────────────────────
@@ -502,7 +514,13 @@ export function useQuestoes() {
   }
   // ─── Computed Values ──────────────────────────────────────────────────────────
 
-  const filteredQuestions = getFilteredQuestions()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const filteredQuestions = useMemo(() => getFilteredQuestions(), [
+    resolucoes, objetivo,
+    selectedMaterias, selectedAssuntos, selectedBancas, selectedAnos,
+    selectedOrgaos, selectedConcursos, selectedCarreiras,
+    selectedStatus,
+  ])
   const filteredCount = filteredQuestions.length
 
   const totalFiltrosAtivos =
@@ -524,6 +542,7 @@ export function useQuestoes() {
     resolucoes,
     setResolucoes,
     loading,
+    loadingError,
     cadernoQuestoes,
     setCadernoQuestoes,
     isCadernoActive,
