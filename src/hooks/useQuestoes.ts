@@ -173,6 +173,13 @@ export function useQuestoes() {
           return
         }
         console.log(`[LOG useQuestoes] Dados carregados com sucesso: ${data.length} questões`)
+        if (data.length > 0) {
+          const q0 = data[0]
+          console.log(`[LOG useQuestoes] 1ª questão: id=${q0.questao_tec_id}, enunciado=${(q0.enunciado || '').length}chars, alternativas=${JSON.stringify(q0.alternativas || {}).length}chars, resolucao=${(q0.resolucao_professor || '').length}chars`)
+          // Estima tamanho total dos dados em memória
+          const totalChars = data.reduce((sum, q) => sum + (q.enunciado || '').length + JSON.stringify(q.alternativas || {}).length + (q.resolucao_professor || '').length, 0)
+          console.log(`[LOG useQuestoes] Total aprox. de caracteres: ${(totalChars / 1024 / 1024).toFixed(1)}MB`)
+        }
         setResolucoes(data)
         setCadernoQuestoes(data)
       } catch (err) {
