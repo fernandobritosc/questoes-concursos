@@ -13,9 +13,8 @@ import { QuestaoResolucaoProfessor } from '../components/QuestaoResolucaoProfess
 import { QuestaoNavegacao } from '../components/QuestaoNavegacao'
 import { QuestaoPrintView } from '../components/QuestaoPrintView'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
-import { AlertCircle, RefreshCw } from 'lucide-react'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
-import { BrainCircuit, Layers, Upload } from 'lucide-react'
+import { AlertCircle, RefreshCw, BrainCircuit, Layers, Upload } from 'lucide-react'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 
 export function Questoes() {
@@ -166,6 +165,13 @@ export function Questoes() {
     setAlternativaSelecionada,
     setRevelado
   ]);
+
+  // Monitora transição de loading para debug
+  useEffect(() => {
+    if (!loading) {
+      console.log('[LOG Questoes] loading=false — conteúdo deve estar visível')
+    }
+  }, [loading])
 
   const handleIndiceNavigate = (filtros: Record<string, string>) => {
     setFiltros(filtros);
