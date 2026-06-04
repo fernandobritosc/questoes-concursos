@@ -10,7 +10,7 @@ import {
   ChevronRight, 
   Trash2 
 } from 'lucide-react'
-import { fetchQuestaoIds, insertQuestoesBatch, fetchAllQuestoes } from '../services/supabase.service'
+import { fetchQuestaoIds, insertQuestoesBatch, fetchAllQuestoes, clearQuestoesCache } from '../services/supabase.service'
 import type { Questao, ResolucaoView } from '../types/database'
 
 import { loadPdfJs, extractPdfText, parsePdfContent } from '../lib/pdfParser'
@@ -154,6 +154,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
 
       if (newQuestions.length === 0) {
         setImportStatus({ step: 'success', progress: 0, total: 0, importedCount: 0 })
+        clearQuestoesCache()
         const updatedData = await fetchAllQuestoes()
         onImportSuccess(updatedData)
         return
@@ -194,6 +195,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
         setImportStatus(prev => ({ ...prev, progress: current }))
       })
 
+      clearQuestoesCache()
       const updatedData = await fetchAllQuestoes()
       onImportSuccess(updatedData)
 

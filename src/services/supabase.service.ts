@@ -137,83 +137,112 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
   return (data || []).map(mapHistoricoToView)
 }
 
+// Cache em memória para evitar chamadas duplicadas concorrentes
+let _questoesCache: ResolucaoView[] | null = null
+let _questoesCachePromise: Promise<ResolucaoView[]> | null = null
+let _questoesCacheTimestamp = 0
+const CACHE_TTL_MS = 60000 // 1 minuto
+
+/** Invalida o cache de fetchAllQuestoes (chamado após importar PDF). */
+export function clearQuestoesCache(): void {
+  _questoesCache = null
+  _questoesCachePromise = null
+  _questoesCacheTimestamp = 0
+}
+
 /**
- * Busca todas as questões do banco (da tabela questoes) com o último histórico.
- * Usado no Banco de Questões para listar todas as questões importadas.
- * Atenção: usa colunas explícitas (evita select('*')) e limite de segurança.
+ * Busca todas as questões do banco com cache compartilhado.
+ * Evita N chamadas concorrentes quando múltiplas páginas montam em paralelo.
  */
 export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
-  console.log('[LOG fetchAllQuestoes] Iniciando busca de questões...')
-
-  // Busca questões — colunas explícitas, sem select('*')
-  const t0 = performance.now()
-  const { data: questoesData, error: qErr } = await supabase
-    .from('questoes')
-    .select(`
-      id, questao_tec_id, materia, assunto, banca_texto, orgao,
-      concurso, prova, ano, caderno_nome, enunciado, gabarito,
-      alternativas, resolucao_professor, created_at
-    `)
-    .order('id', { ascending: false })
-    .limit(1000)
-
-  const t1 = performance.now()
-  console.log(`[LOG fetchAllQuestoes] Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData?.length ?? 0} | error=${qErr?.message ?? 'null'}`)
-
-  if (qErr) throw qErr
-
-  // Busca o histórico mais recente de cada questão — colunas explícitas
-  console.log('[LOG fetchAllQuestoes] Iniciando busca do histórico...')
-  const { data: historico, error: hErr } = await supabase
-    .from('historico_resolucoes')
-    .select(`
-      id, questao_id, questao_tec_id, alternativa, acertou,
-      tempo_segundos, data_resolucao
-    `)
-    .order('data_resolucao', { ascending: false })
-
-  const t2 = performance.now()
-  console.log(`[LOG fetchAllQuestoes] Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico?.length ?? 0} | error=${hErr?.message ?? 'null'}`)
-
-  if (hErr) throw hErr
-
-  // Mapeia: para cada questão, pega o último histórico (se houver)
-  console.log('[LOG fetchAllQuestoes] Mesclando dados...')
-  const historicoMap = new Map<number, HistoricoResolucao>()
-  for (const h of (historico || [])) {
-    if (!historicoMap.has(h.questao_id)) {
-      historicoMap.set(h.questao_id, h as HistoricoResolucao)
-    }
+  // Retorna cache se ainda válido
+  if (_questoesCache && Date.now() - _questoesCacheTimestamp < CACHE_TTL_MS) {
+    console.log('[LOG fetchAllQuestoes] Cache hit!')
+    return _questoesCache
   }
 
-  const result = (questoesData || []).map((q: Questao): ResolucaoView => {
-    const h = historicoMap.get(q.id!)
-    return {
-      id: h?.id ?? 0,
-      questao_id: q.id!,
-      questao_tec_id: q.questao_tec_id,
-      alternativa: h?.alternativa ?? null,
-      acertou: h?.acertou ?? false,
-      tempo_segundos: h?.tempo_segundos ?? 0,
-      data_resolucao: h?.data_resolucao ?? q.created_at ?? new Date().toISOString(),
-      materia: q.materia,
-      assunto: q.assunto,
-      banca_texto: q.banca_texto,
-      orgao: q.orgao,
-      concurso: q.concurso,
-      prova: q.prova,
-      ano: q.ano,
-      caderno_nome: q.caderno_nome,
-      enunciado: q.enunciado,
-      gabarito: q.gabarito,
-      alternativas: q.alternativas ?? {},
-      resolucao_professor: q.resolucao_professor ?? null,
-    }
-  })
+  // Deduplica chamadas concorrentes (Promise cache)
+  if (_questoesCachePromise) {
+    console.log('[LOG fetchAllQuestoes] Aguardando chamada concorrente...')
+    return _questoesCachePromise
+  }
 
-  const t3 = performance.now()
-  console.log(`[LOG fetchAllQuestoes] Mesclagem concluída: ${(t3 - t2).toFixed(0)}ms | total=${result.length}`)
-  return result
+  console.log('[LOG fetchAllQuestoes] Iniciando busca de questões...')
+  _questoesCachePromise = (async (): Promise<ResolucaoView[]> => {
+    const t0 = performance.now()
+    const { data: questoesData, error: qErr } = await supabase
+      .from('questoes')
+      .select(`
+        id, questao_tec_id, materia, assunto, banca_texto, orgao,
+        concurso, prova, ano, caderno_nome, enunciado, gabarito,
+        alternativas, resolucao_professor, created_at
+      `)
+      .order('id', { ascending: false })
+      .limit(1000)
+
+    const t1 = performance.now()
+    console.log(`[LOG fetchAllQuestoes] Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData?.length ?? 0} | error=${qErr?.message ?? 'null'}`)
+    if (qErr) throw qErr
+
+    console.log('[LOG fetchAllQuestoes] Iniciando busca do histórico...')
+    const { data: historico, error: hErr } = await supabase
+      .from('historico_resolucoes')
+      .select(`
+        id, questao_id, questao_tec_id, alternativa, acertou,
+        tempo_segundos, data_resolucao
+      `)
+      .order('data_resolucao', { ascending: false })
+
+    const t2 = performance.now()
+    console.log(`[LOG fetchAllQuestoes] Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico?.length ?? 0} | error=${hErr?.message ?? 'null'}`)
+    if (hErr) throw hErr
+
+    console.log('[LOG fetchAllQuestoes] Mesclando dados...')
+    const historicoMap = new Map<number, HistoricoResolucao>()
+    for (const h of (historico || [])) {
+      if (!historicoMap.has(h.questao_id)) {
+        historicoMap.set(h.questao_id, h as HistoricoResolucao)
+      }
+    }
+
+    const result = (questoesData || []).map((q: Questao): ResolucaoView => {
+      const h = historicoMap.get(q.id!)
+      return {
+        id: h?.id ?? 0,
+        questao_id: q.id!,
+        questao_tec_id: q.questao_tec_id,
+        alternativa: h?.alternativa ?? null,
+        acertou: h?.acertou ?? false,
+        tempo_segundos: h?.tempo_segundos ?? 0,
+        data_resolucao: h?.data_resolucao ?? q.created_at ?? new Date().toISOString(),
+        materia: q.materia,
+        assunto: q.assunto,
+        banca_texto: q.banca_texto,
+        orgao: q.orgao,
+        concurso: q.concurso,
+        prova: q.prova,
+        ano: q.ano,
+        caderno_nome: q.caderno_nome,
+        enunciado: q.enunciado,
+        gabarito: q.gabarito,
+        alternativas: q.alternativas ?? {},
+        resolucao_professor: q.resolucao_professor ?? null,
+      }
+    })
+
+    const t3 = performance.now()
+    console.log(`[LOG fetchAllQuestoes] Mesclagem concluída: ${(t3 - t2).toFixed(0)}ms | total=${result.length}`)
+
+    _questoesCache = result
+    _questoesCacheTimestamp = Date.now()
+    return result
+  })()
+
+  try {
+    return await _questoesCachePromise
+  } finally {
+    _questoesCachePromise = null
+  }
 }
 
 export async function fetchResolucoeComErros(): Promise<ResolucaoView[]> {

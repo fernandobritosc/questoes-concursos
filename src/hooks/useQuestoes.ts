@@ -241,20 +241,38 @@ export function useQuestoes() {
   }, [currentQuestaoIndex, questoesExibidas])
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  // ─── Derived Data (Filtros dinâmicos) ─────────────────────────────────────────
+  // ─── Derived Data (Filtros dinâmicos) — memoizados ─────────────────────────────
 
-  const materiasComAssuntos = resolucoes.reduce((acc, curr) => {
-    if (!curr.materia) return acc
-    if (!acc[curr.materia]) acc[curr.materia] = new Set<string>()
-    if (curr.assunto) acc[curr.materia].add(curr.assunto)
-    return acc
-  }, {} as Record<string, Set<string>>)
+  const materiasComAssuntos = useMemo(() =>
+    resolucoes.reduce((acc, curr) => {
+      if (!curr.materia) return acc
+      if (!acc[curr.materia]) acc[curr.materia] = new Set<string>()
+      if (curr.assunto) acc[curr.materia].add(curr.assunto)
+      return acc
+    }, {} as Record<string, Set<string>>),
+    [resolucoes]
+  )
 
-  const materiasUnicas = Array.from(new Set(resolucoes.map(r => r.materia).filter(Boolean))) as string[]
-  const bancasUnicas = Array.from(new Set(resolucoes.map(r => r.banca_texto).filter(Boolean))) as string[]
-  const anosUnicos = Array.from(new Set(resolucoes.map(r => r.ano).filter(Boolean))) as number[]
-  const orgaosUnicos = Array.from(new Set(resolucoes.map(r => r.orgao).filter(Boolean))) as string[]
-  const concursosUnicos = Array.from(new Set(resolucoes.map(r => r.concurso).filter(Boolean))) as string[]
+  const materiasUnicas = useMemo(
+    () => Array.from(new Set(resolucoes.map(r => r.materia).filter(Boolean))) as string[],
+    [resolucoes]
+  )
+  const bancasUnicas = useMemo(
+    () => Array.from(new Set(resolucoes.map(r => r.banca_texto).filter(Boolean))) as string[],
+    [resolucoes]
+  )
+  const anosUnicos = useMemo(
+    () => Array.from(new Set(resolucoes.map(r => r.ano).filter(Boolean))) as number[],
+    [resolucoes]
+  )
+  const orgaosUnicos = useMemo(
+    () => Array.from(new Set(resolucoes.map(r => r.orgao).filter(Boolean))) as string[],
+    [resolucoes]
+  )
+  const concursosUnicos = useMemo(
+    () => Array.from(new Set(resolucoes.map(r => r.concurso).filter(Boolean))) as string[],
+    [resolucoes]
+  )
 
   // ─── Actions: Filtros ─────────────────────────────────────────────────────────
 
