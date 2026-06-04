@@ -159,6 +159,7 @@ export function useQuestoes() {
   useEffect(() => {
     let cancelled = false
     async function load() {
+      console.log('[LOG useQuestoes] Iniciando carga inicial...')
       setLoadingError(null)
       try {
         const data = await Promise.race([
@@ -167,20 +168,31 @@ export function useQuestoes() {
             setTimeout(() => reject(new Error('Timeout ao conectar com o banco de dados. Verifique sua conexão.')), 30000)
           ),
         ])
-        if (cancelled) return
+        if (cancelled) {
+          console.log('[LOG useQuestoes] Componente desmontado durante carga.')
+          return
+        }
+        console.log(`[LOG useQuestoes] Dados carregados com sucesso: ${data.length} questões`)
         setResolucoes(data)
         setCadernoQuestoes(data)
       } catch (err) {
-        console.error('Erro ao buscar banco de questões:', err)
+        console.error('[LOG useQuestoes] Erro na carga inicial:', err)
         if (!cancelled) {
           setLoadingError(err instanceof Error ? err.message : 'Erro desconhecido ao carregar questões.')
         }
       } finally {
-        if (!cancelled) setLoading(false)
+        if (!cancelled) {
+          console.log('[LOG useQuestoes] setLoading(false)')
+          setLoading(false)
+        }
       }
     }
+    console.log('[LOG useQuestoes] useEffect disparado, chamando load()')
     load()
-    return () => { cancelled = true }
+    return () => {
+      console.log('[LOG useQuestoes] Cleanup: cancelando carga')
+      cancelled = true
+    }
   }, [])
 
   // ─── Relational Timer & History Loading Effects ──────────────────────────────

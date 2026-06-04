@@ -143,7 +143,10 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
  * Atenção: usa colunas explícitas (evita select('*')) e limite de segurança.
  */
 export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
+  console.log('[LOG fetchAllQuestoes] Iniciando busca de questões...')
+
   // Busca questões — colunas explícitas, sem select('*')
+  const t0 = performance.now()
   const { data: questoesData, error: qErr } = await supabase
     .from('questoes')
     .select(`
@@ -154,9 +157,13 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     .order('id', { ascending: false })
     .limit(1000)
 
+  const t1 = performance.now()
+  console.log(`[LOG fetchAllQuestoes] Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData?.length ?? 0} | error=${qErr?.message ?? 'null'}`)
+
   if (qErr) throw qErr
 
   // Busca o histórico mais recente de cada questão — colunas explícitas
+  console.log('[LOG fetchAllQuestoes] Iniciando busca do histórico...')
   const { data: historico, error: hErr } = await supabase
     .from('historico_resolucoes')
     .select(`
@@ -165,9 +172,13 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     `)
     .order('data_resolucao', { ascending: false })
 
+  const t2 = performance.now()
+  console.log(`[LOG fetchAllQuestoes] Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico?.length ?? 0} | error=${hErr?.message ?? 'null'}`)
+
   if (hErr) throw hErr
 
   // Mapeia: para cada questão, pega o último histórico (se houver)
+  console.log('[LOG fetchAllQuestoes] Mesclando dados...')
   const historicoMap = new Map<number, HistoricoResolucao>()
   for (const h of (historico || [])) {
     if (!historicoMap.has(h.questao_id)) {
@@ -175,7 +186,7 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     }
   }
 
-  return (questoesData || []).map((q: Questao): ResolucaoView => {
+  const result = (questoesData || []).map((q: Questao): ResolucaoView => {
     const h = historicoMap.get(q.id!)
     return {
       id: h?.id ?? 0,
@@ -199,6 +210,10 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
       resolucao_professor: q.resolucao_professor ?? null,
     }
   })
+
+  const t3 = performance.now()
+  console.log(`[LOG fetchAllQuestoes] Mesclagem concluída: ${(t3 - t2).toFixed(0)}ms | total=${result.length}`)
+  return result
 }
 
 export async function fetchResolucoeComErros(): Promise<ResolucaoView[]> {
