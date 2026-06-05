@@ -11,6 +11,7 @@ import {
   Trash2 
 } from 'lucide-react'
 import { fetchQuestaoIds, insertQuestoesBatch, fetchAllQuestoes, clearQuestoesCache } from '../services/supabase.service'
+import { trackEvent } from '../services/hermesTracker'
 import type { Questao, ResolucaoView } from '../types/database'
 
 import { loadPdfJs, extractPdfText, parsePdfContent } from '../lib/pdfParser'
@@ -205,6 +206,8 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
         total: newQuestions.length, 
         importedCount: successCount 
       })
+
+      trackEvent('importar_pdf', { questoes: successCount })
     } catch (err: unknown) {
       console.error(err)
       setImportStatus({ 

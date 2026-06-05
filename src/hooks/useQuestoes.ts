@@ -7,6 +7,7 @@ import {
   updateQuestao
 } from '../services/supabase.service'
 import { gerarResolucaoProfessor } from '../services/gemini.service'
+import { trackEvent } from '../services/hermesTracker'
 import type { ResolucaoView, HistoricoResolucao } from '../types/database'
 
 // Alias de compatibilidade local
@@ -394,6 +395,8 @@ export function useQuestoes() {
     setAlternativaSelecionada(null)
     setRevelado(false)
     setIsCadernoActive(true)
+
+    trackEvent('gerar_caderno', { quantidade: questoesFiltradas.length, total_filtros: totalFiltrosAtivos })
   }
 
   const handleCopy = (id: number) => {
@@ -425,6 +428,12 @@ export function useQuestoes() {
       setResolucoes(prev => prev.map(q => 
         (q.questao_id || q.id) === targetId ? { ...q, resolucao_professor: texto } : q
       ))
+
+      trackEvent('gerar_explicacao_ia', {
+        questao_id: targetId,
+        materia: questao.materia,
+        assunto: questao.assunto,
+      })
     } catch (err) {
       console.error(err)
       setExplicacoes(prev => ({
@@ -500,7 +509,24 @@ export function useQuestoes() {
       ))
 
       setRevelado(true)
-      
+
+      trackEvent('responder_questao', {
+        questao_id: targetId,
+        questao_tec_id: questao.questao_tec_id,
+        materia: questao.materia,
+        assunto: questao.assunto,
+        banca_texto: questao.banca_texto,
+        orgao: questao.orgao,
+        concurso: questao.concurso,
+        ano: questao.ano,
+        gabarito: questao.gabarito,
+        alternativa_selecionada: alternativaSelecionada,
+        acertou,
+        tempo_segundos: tempoSegundos,
+        enunciado: questao.enunciado,
+        alternativas: questao.alternativas,
+      })
+
       // Recarrega o histórico específico desta questão
       await loadHistoricoDaQuestao(targetId)
     } catch (err) {
@@ -542,6 +568,12 @@ export function useQuestoes() {
 
       setCadernoQuestoes(prev => prev.map(updateLocal))
       setResolucoes(prev => prev.map(updateLocal))
+
+      trackEvent('editar_questao', {
+        questao_id: targetId,
+        campos: Object.keys(payload),
+      })
+
       return true
     } catch (err) {
       console.error('Erro ao editar questão:', err)

@@ -17,6 +17,7 @@ import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { AlertCircle, RefreshCw, BrainCircuit, Layers, Upload } from 'lucide-react'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 
+
 export function Questoes() {
   console.count('[LOG Questoes] Render count')
 
@@ -196,8 +197,14 @@ export function Questoes() {
     )
   }
 
-  if (loading) return <LoadingSpinner />
+  console.log('[DEBUG Questoes] render - loading:', loading, 'cadernoQuestoes:', cadernoQuestoes.length, 'questoesExibidas:', questoesExibidas.length)
 
+  if (loading) {
+    console.log('[DEBUG Questoes] renderizando LoadingSpinner')
+    return <LoadingSpinner />
+  }
+
+  console.log('[DEBUG Questoes] renderizando JSX principal')
   return (
     <ErrorBoundary>
       <div className="h-[calc(100vh-60px)] flex flex-col bg-muted/20 animate-in fade-in duration-300 overflow-hidden print:hidden">

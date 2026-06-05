@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchAllResolucoes, fetchMentorPlano, updateMentorPlano } from '../services/supabase.service'
 import { gerarPlanoEstudos, gerarMentoriaAssunto, type FraquezaItem } from '../services/gemini.service'
+import { trackEvent } from '../services/hermesTracker'
 import type { Resolucao } from '../types/database'
 
 const FRAQUEZA_MIN_QUESTOES = 3
@@ -202,6 +203,8 @@ export function useMentor() {
       const novoPlano = parsed || texto
       setPlano(novoPlano)
       
+      trackEvent('gerar_plano_estudos', { fraquezas: fraquezas.length })
+
       // Reseta o progresso das tarefas para o novo plano
       setTarefasConcluidas({})
       localStorage.removeItem('mentor_tarefas_concluidas')
@@ -222,8 +225,11 @@ export function useMentor() {
   }
 
   const handleToggleTarefa = async (index: number) => {
-    const novasTarefas = { ...tarefasConcluidas, [index]: !tarefasConcluidas[index] }
+    const novaConcluida = !tarefasConcluidas[index]
+    const novasTarefas = { ...tarefasConcluidas, [index]: novaConcluida }
     setTarefasConcluidas(novasTarefas)
+
+    trackEvent('alternar_tarefa', { index, concluida: novaConcluida })
     localStorage.setItem('mentor_tarefas_concluidas', JSON.stringify(novasTarefas))
 
     // Sincroniza com Supabase
@@ -259,6 +265,8 @@ export function useMentor() {
       const texto = await gerarMentoriaAssunto(fraqueza)
       const novasMentorias = { ...planosAssuntos, [key]: texto }
       setPlanosAssuntos(novasMentorias)
+
+      trackEvent('gerar_mentoria', { materia: fraqueza.materia, assunto: fraqueza.assunto })
       localStorage.setItem('mentor_planos_assuntos', JSON.stringify(novasMentorias))
     } catch (err: unknown) {
       console.error('Erro ao gerar mentoria de assunto:', err)

@@ -107,8 +107,8 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
         const trimmed = line.trim()
         if (!trimmed) return <div key={blockIdx} className="h-1.5" />
 
-        // Callouts / Alerts parsing (extremely robust to support leading bullets, numbers, asterisks, dashes, spaces and emojis)
-        const pegadinhaMatch = trimmed.match(/^(?:[-*+•\d.\s]*|(?:\*\*)*)*(?:🚨\s*)*Pegadinhas?(?:\*\*)*\s*[:\-—]\s*(.*)/i)
+        // Callouts / Alerts parsing (extremely robust and linear to avoid catastrophic backtracking)
+        const pegadinhaMatch = trimmed.match(/^[-*+•\d.\s]*(?:\*\*)*(?:🚨\s*)*Pegadinhas?(?:\*\*)*\s*[:\-—]\s*(.*)/i)
         if (pegadinhaMatch) {
           return (
             <div key={blockIdx} className="my-3.5 p-4 rounded-xl bg-red-500/5 border border-red-500/20 text-red-400 flex items-start gap-3 shadow-sm select-text print:bg-red-50/50 print:border-red-300 print:text-red-950 print:break-inside-avoid">
@@ -121,7 +121,7 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
           )
         }
 
-        const dicaMatch = trimmed.match(/^(?:[-*+•\d.\s]*|(?:\*\*)*)*(?:💡\s*)*(?:Dica|Dica\s*de\s*Prova|Dica\s*de\s*Ouro|Macete)(?:\*\*)*\s*[:\-—]\s*(.*)/i)
+        const dicaMatch = trimmed.match(/^[-*+•\d.\s]*(?:\*\*)*(?:💡\s*)*(?:Dica|Dica\s*de\s*Prova|Dica\s*de\s*Ouro|Macete)(?:\*\*)*\s*[:\-—]\s*(.*)/i)
         if (dicaMatch) {
           return (
             <div key={blockIdx} className="my-3.5 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-amber-400 flex items-start gap-3 shadow-sm select-text print:bg-amber-50/50 print:border-amber-300 print:text-amber-950 print:break-inside-avoid">
@@ -134,7 +134,7 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
           )
         }
 
-        const atencaoMatch = trimmed.match(/^(?:[-*+•\d.\s]*|(?:\*\*)*)*(?:⚠️\s*)*(?:Atenção|Aviso)(?:\*\*)*\s*[:\-—]\s*(.*)/i)
+        const atencaoMatch = trimmed.match(/^[-*+•\d.\s]*(?:\*\*)*(?:⚠️\s*)*(?:Atenção|Aviso)(?:\*\*)*\s*[:\-—]\s*(.*)/i)
         if (atencaoMatch) {
           return (
             <div key={blockIdx} className="my-3.5 p-4 rounded-xl bg-orange-500/5 border border-orange-500/20 text-orange-400 flex items-start gap-3 shadow-sm select-text print:bg-orange-50/50 print:border-orange-300 print:text-orange-950 print:break-inside-avoid">
@@ -147,7 +147,7 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
           )
         }
 
-        const importanteMatch = trimmed.match(/^(?:[-*+•\d.\s]*|(?:\*\*)*)*(?:ℹ️\s*)*Importante(?:\*\*)*\s*[:\-—]\s*(.*)/i)
+        const importanteMatch = trimmed.match(/^[-*+•\d.\s]*(?:\*\*)*(?:ℹ️\s*)*Importante(?:\*\*)*\s*[:\-—]\s*(.*)/i)
         if (importanteMatch) {
           return (
             <div key={blockIdx} className="my-3.5 p-4 rounded-xl bg-sky-500/5 border border-sky-500/20 text-sky-400 flex items-start gap-3 shadow-sm select-text print:bg-sky-50/50 print:border-sky-300 print:text-sky-950 print:break-inside-avoid">
@@ -160,7 +160,7 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
           )
         }
 
-        const resumoMatch = trimmed.match(/^(?:[-*+•\d.\s]*|(?:\*\*)*)*(?:✓\s*)*(Resumo|Conclusão)(?:\*\*)*\s*[:\-—]\s*(.*)/i)
+        const resumoMatch = trimmed.match(/^[-*+•\d.\s]*(?:\*\*)*(?:✓\s*)*(Resumo|Conclusão)(?:\*\*)*\s*[:\-—]\s*(.*)/i)
         if (resumoMatch) {
           return (
             <div key={blockIdx} className="my-3.5 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 text-emerald-400 flex items-start gap-3 shadow-sm select-text print:bg-emerald-50/50 print:border-emerald-300 print:text-emerald-950 print:break-inside-avoid">
@@ -172,6 +172,7 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
             </div>
           )
         }
+
 
         // Headings
         if (trimmed.startsWith('### ')) {
