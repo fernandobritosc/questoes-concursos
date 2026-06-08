@@ -122,8 +122,7 @@ export function parsePdfContent(
     const questao_tec_id = parseInt(questaoIdStr, 10);
 
     const subheader = lines[1] || '';
-    // eslint-disable-next-line no-useless-assignment
-    let banca = '';
+    let banca: string | undefined;
     let cargo = '';
     let orgao = '';
     let ano: number | null = null;
@@ -149,8 +148,7 @@ export function parsePdfContent(
     }
 
     const subjectLine = lines[2] || '';
-    // eslint-disable-next-line no-useless-assignment
-    let materia = '';
+    let materia: string | undefined;
     let assunto = '';
     const subjParts = subjectLine.split(' - ');
     if (subjParts.length >= 2) {
@@ -184,8 +182,7 @@ export function parsePdfContent(
       }
     }
 
-    // eslint-disable-next-line no-useless-assignment
-    let enunciado = '';
+    let enunciado: string | undefined;
 
     if (altIndices.length >= 2) {
       altIndices.sort((a: any, b: any) => a.index - b.index);

@@ -149,8 +149,7 @@ export function Mentor() {
         {children}
       </li>
     ),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    code: ({ node, inline, className, children, ...props }: any) => {
+    code: ({ inline, className, children, ...props }: any) => {
       const match = /language-(\w+)/.exec(className || '')
       const language = match ? match[1] : ''
       const content = String(children).replace(/\n$/, '')
