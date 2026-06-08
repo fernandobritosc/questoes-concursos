@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-08T23:07:48.946Z"
+last_updated: "2026-06-08T23:12:26.242Z"
 progress:
   total_phases: 3
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
-  percent: 67
+  completed_plans: 3
+  percent: 100
 ---
 
 # STATE.md — Questões Concursos
@@ -27,13 +27,13 @@ progress:
 
 | Phase | Status | Phase Goal |
 |-------|--------|------------|
-| 1 — Paginação de Questões | In Progress | Fetch de questões usa paginação server-side |
+| 1 — Paginação de Questões | Completed | Fetch de questões usa paginação server-side |
 | 2 — Extração de Hooks | Not started | useQuestoes.ts dividido em hooks menores |
 | 3 — Extração de Sub-Componentes | Not started | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [███████░░░] 67%
+**Progress:** [██████████] 100%
 
-**Active Plan:** Phase 1 — Paginação de Questões (Plans 01-02 completed, Plan 03 remaining)
+**Active Plan:** Phase 1 — Paginação de Questões (100% — all 3 plans completed)
 
 ## Performance Metrics
 
@@ -43,6 +43,7 @@ progress:
 | Phase 2 plans created | ≥1 | 0 |
 | Phase 3 plans created | ≥1 | 0 |
 | Requirement coverage | 100% | 3/3 ✓ |
+| Phase 01-paginacao-de-questoes P03 | 6min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -56,6 +57,8 @@ progress:
 | 2026-06-08 | Sub-componentes extraídos seguem padrão Questoes.tsx | Padrão já provado: 1662→334 linhas, 11 sub-componentes |
 | 2026-06-08 | buildServerFilters() traduz apenas metadata filters server-side | Assunto, carreira, status, objetivo remain client-side (dependem de fallback logic ou merged historico) |
 | 2026-06-08 | PAGE_SIZE = 200 (D-01) | 200 questões por página mantém payload leve sem exigir muitas requisições |
+| 2026-06-08 | QuestaoSkeleton renderizado inline no fluxo do conteúdo (não como overlay) | Preserva contexto visual durante transições de página |
+| 2026-06-08 | pageLoadingError só exibido quando pageLoading é false | Evita flash de erro seguido de skeleton |
 
 ### Open Todos
 
@@ -95,11 +98,16 @@ progress:
   - `visibleQuestionsCount` reset effect removed (pagination now managed by filter-change effect)
   - All 7 new pagination fields added to return object (all existing exports preserved)
   - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
-- **Plan 03 (Wave 3):** Page integration — skeleton during page transitions
+- **Plan 03 (Wave 3)** executed successfully:
+  - `Questoes.tsx` integrated with `QuestaoSkeleton` during page transitions
+  - `LoadingSpinner` preserved for initial load (not replaced)
+  - `pageLoading`, `pageLoadingError`, `page`, `totalPages`, `handleNavigatePage` destructured from `useQuestoes()`
+  - `pageLoadingError` displayed as error banner when set (and not currently loading)
+  - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
 
 ### Next Session
 
-- Executar Plan 03 to integrate pagination UI in Questoes.tsx
+- Phase 1 completed — ready for Phase 2 (Extração de Hooks) or Phase 3 (Extração de Sub-Componentes)
 
 ---
 
