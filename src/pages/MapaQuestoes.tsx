@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchAllQuestoes, fetchAllResolucoes } from '../services/supabase.service'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { 
   saveStudyMaterial,
   getStudyMaterial,
+  revokeStudyMaterialUrl,
   deleteStudyMaterial,
   listAllStudyMaterialsMetadata,
   checkCloudAvailability
@@ -70,6 +71,15 @@ export function MapaQuestoes() {
   const [uploadingKey, setUploadingKey] = useState<string | null>(null)
   const [showSqlModal, setShowSqlModal] = useState(false)
   const [copiedSql, setCopiedSql] = useState(false)
+
+  const blobUrlsRef = useRef<string[]>([])
+
+  useEffect(() => {
+    const urls = blobUrlsRef.current
+    return () => {
+      urls.forEach(revokeStudyMaterialUrl)
+    }
+  }, [])
 
   // Overall statistics variables
   const [overallStats, setOverallStats] = useState({
@@ -320,8 +330,7 @@ export function MapaQuestoes() {
     try {
       const result = await getStudyMaterial(materia, assunto, storageMode)
       if (result) {
-        // Abre o PDF compactado descompactado diretamente em uma nova aba do navegador!
-        // Excelente para Snapping (lado a lado) ou uso em monitor secundário.
+        blobUrlsRef.current.push(result.blobUrl)
         window.open(result.blobUrl, '_blank')
       } else {
         alert('Material de estudo não localizado no armazenamento.')

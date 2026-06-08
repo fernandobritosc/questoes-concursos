@@ -267,6 +267,13 @@ export async function deleteStudyMaterial(
 }
 
 /**
+ * Revoga uma URL de objeto criada por getStudyMaterial.
+ */
+export function revokeStudyMaterialUrl(blobUrl: string) {
+  URL.revokeObjectURL(blobUrl)
+}
+
+/**
  * Lista todos os metadados cadastrados para saber quais quadradinhos do Mapa possuem PDFs.
  */
 export async function listAllStudyMaterialsMetadata(
