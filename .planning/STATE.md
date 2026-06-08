@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-08T20:42:00.000Z"
+last_updated: "2026-06-08T20:45:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
-  percent: 67
+  completed_plans: 5
+  percent: 83
 ---
 
 # STATE.md — Questões Concursos
@@ -31,9 +31,9 @@ progress:
 | 2 — Extração de Hooks | In progress (1/3 plans) | useQuestoes.ts dividido em hooks menores |
 | 3 — Extração de Sub-Componentes | Not started | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [███████░░░] 67%
+**Progress:** [████████░░] 83%
 
-**Active Plan:** Phase 2 — Extração de Hooks (Plan 02-02 completed — 1/3 plans)
+**Active Plan:** Phase 2 — Extração de Hooks (Plan 02-01 completed — 2/3 plans)
 
 ## Performance Metrics
 
@@ -45,6 +45,7 @@ progress:
 | Requirement coverage | 100% | 4/4 ✓ |
 | Phase 01-paginacao-de-questoes P03 | 6min | 1 tasks | 1 files |
 | Phase 02-extracao-de-hooks P02 | 12min | 1 tasks | 1 files |
+| Phase 02-extracao-de-hooks P01 | 4min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,9 @@ progress:
 | 2026-06-08 | pageLoadingError só exibido quando pageLoading é false | Evita flash de erro seguido de skeleton |
 | 2026-06-08 | handleGerarCaderno retorna count — orquestrador faz trackEvent | Desacopla caderno hook do filter hook (totalFiltrosAtivos) |
 | 2026-06-08 | handleConfirmarResposta(questao) e handleEditQuestao(questao, fields) recebem questão como parâmetro | Evita dependência de questoesExibidas[currentQuestaoIndex] dentro do hook |
+| 2026-06-08 | useQuestoesFilter recebe ResolucaoView[] como parâmetro em vez de gerenciar dados internamente | Hook de filtro é puramente derivacional — não possui fonte própria de dados |
+| 2026-06-08 | useQuestoesResolucao usa callback onQuestoesUpdated em vez de modificar cadernoQuestoes/resolucoes diretamente | Desacopla hook de resolução do orquestrador |
+| 2026-06-08 | handleSaveResolucao(questaoId, text) aceita parâmetros explícitos | Evita dependência de questoesExibidas[currentQuestaoIndex]; orquestrador decide qual questão salvar |
 
 ### Open Todos
 
@@ -69,8 +73,9 @@ progress:
 - [x] Phase 1: Decidir estratégia de cache (D-03: flat progressivo, sem TTL)
 - [x] Phase 2: Definir quais hooks extrair e suas responsabilidades
 - [x] Phase 2: Criar useQuestoesCaderno hook (Plan 02-02)
+- [x] Phase 2: Criar useQuestoesFilter + useQuestoesResolucao (Plan 02-01)
 - [ ] Phase 2: Integrar hooks no orquestrador (Plan 02-03 -- pending)
-- [ ] Phase 2: Validar que hooks expõem actions, não setters
+- [x] Phase 2: Validar que hooks expõem actions, não setters
 - [ ] Phase 3: Identificar candidatos a sub-componente em cada página
 
 ### Known Blockers
@@ -113,6 +118,13 @@ progress:
   - `useQuestoesCaderno.ts` created (193 lines) — extracted caderno state, navigation, answer confirmation, question editing, copy, history loading
   - Actions accept questao as explicit parameter instead of resolving from questoesExibidas
   - Timer and history-loading effects intentionally excluded (stay in orquestrador)
+  - `useQuestoes.ts` untouched — zero modifications
+  - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
+- **Plan 02-01 (Wave 1)** executed successfully:
+  - `useQuestoesFilter.ts` created (293 lines) — extracted filter state, toggle actions, derived data (materiasUnicas, bancasUnicas, etc.), getFilteredQuestions, buildServerFilters, totalFiltrosAtivos
+  - `useQuestoesResolucao.ts` created (87 lines) — extracted resolução professor state/actions and IA explanation logic
+  - `handleSaveResolucao(questaoId, text)` accepts explicit parameters
+  - `handleExplicacaoIA` uses `onQuestoesUpdated` callback for sync instead of direct state mutation
   - `useQuestoes.ts` untouched — zero modifications
   - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
 
