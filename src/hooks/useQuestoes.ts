@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import { 
-  fetchAllQuestoes, 
+  fetchPaginatedQuestoes,
+  fetchFilterOptions,
   updateResolucaoProfessor,
   insertHistoricoResolucao,
   fetchHistoricoByQuestao,
@@ -59,6 +60,13 @@ export function useQuestoes() {
   const [resolucoes, setResolucoes] = useState<ResolucaoView[]>([])
   const [loading, setLoading] = useState(true)
 
+  // ── Paginação ─────────────────────────────────────────────────────────────────
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
+  const [pageLoading, setPageLoading] = useState(false)
+  const [filterOptions, setFilterOptions] = useState<{ materias: string[]; bancas: string[]; anos: number[]; orgaos: string[]; concursos: string[] } | null>(null)
+
   // ── Estado do Caderno ─────────────────────────────────────────────────────────
   const [cadernoQuestoes, setCadernoQuestoes] = useState<ResolucaoView[]>([])
   const [isCadernoActive, setIsCadernoActive] = useState(false)
@@ -68,6 +76,7 @@ export function useQuestoes() {
   const [explicacoes, setExplicacoes] = useState<Record<number, string>>({})
   const [loadingExplicacao, setLoadingExplicacao] = useState<number | null>(null)
   const [loadingError, setLoadingError] = useState<string | null>(null)
+  const [pageLoadingError, setPageLoadingError] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState<number | null>(null)
 
   // ── Resolução do Professor ────────────────────────────────────────────────────
@@ -123,13 +132,84 @@ export function useQuestoes() {
   // ── Importação PDF ────────────────────────────────────────────────────────────
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
 
-  // ─── Effects ─────────────────────────────────────────────────────────────────
+  // ── Paginação e Filtros Server-Side ──────────────────────────────────────────
+  const abortControllerRef = useRef<AbortController | null>(null)
 
-  // Reset pagination on filter change
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setVisibleQuestionsCount(25)
-  }, [selectedMaterias, selectedAssuntos, selectedBancas, selectedAnos, selectedOrgaos, selectedConcursos, selectedCarreiras, selectedStatus, objetivo])
+  const PAGE_SIZE = 200
+
+  function buildServerFilters(): Record<string, string[]> {
+    const filters: Record<string, string[]> = {}
+    if (selectedMaterias.length > 0)   filters.materia = selectedMaterias
+    if (selectedBancas.length > 0)    filters.banca_texto = selectedBancas
+    if (selectedAnos.length > 0)      filters.ano = selectedAnos.map(String)
+    if (selectedOrgaos.length > 0)    filters.orgao = selectedOrgaos
+    if (selectedConcursos.length > 0) filters.concurso = selectedConcursos
+    // NOT included (remain client-side):
+    // - selectedAssuntos (relies on materia fallback logic)
+    // - selectedCarreiras (keyword matching)
+    // - selectedStatus (depends on merged historico)
+    // - objetivo (depends on merged historico)
+    return filters
+  }
+
+  const loadPage = useCallback(async (targetPage: number, replace: boolean = false) => {
+    // Cancel any in-flight request
+    abortControllerRef.current?.abort()
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
+    // Don't set pageLoading for the initial load (loading === true already covers it)
+    if (!loading) setPageLoading(true)
+    setPageLoadingError(null)
+
+    try {
+      const serverFilters = buildServerFilters()
+      const result = await fetchPaginatedQuestoes(targetPage, PAGE_SIZE, serverFilters, controller.signal)
+
+      if (controller.signal.aborted) return  // Stale response — discard
+
+      if (replace) {
+        // Replace all data (new filter set or first load)
+        setResolucoes(result.data)
+        setCadernoQuestoes(result.data)
+      } else {
+        // Append data (same filter set, new page)
+        setResolucoes(prev => {
+          const updated = [...prev]
+          const start = (targetPage - 1) * PAGE_SIZE
+          result.data.forEach((item, i) => { updated[start + i] = item })
+          return updated
+        })
+        setCadernoQuestoes(prev => {
+          const updated = [...prev]
+          const start = (targetPage - 1) * PAGE_SIZE
+          result.data.forEach((item, i) => { updated[start + i] = item })
+          return updated
+        })
+      }
+
+      setPage(targetPage)
+      setTotalPages(result.totalPages)
+      setTotalCount(result.total)
+    } catch (err: unknown) {
+      if ((err as Error)?.name === 'AbortError') return  // Silently ignore cancelled requests
+      if (!controller.signal.aborted) {
+        setPageLoadingError(err instanceof Error ? err.message : 'Erro ao carregar página.')
+      }
+    } finally {
+      if (!controller.signal.aborted) {
+        setPageLoading(false)
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, selectedMaterias, selectedBancas, selectedAnos, selectedOrgaos, selectedConcursos])
+
+  const handleNavigatePage = useCallback(async (targetPage: number) => {
+    if (targetPage < 1 || targetPage > totalPages || targetPage === page) return
+    await loadPage(targetPage, false)
+  }, [totalPages, page, loadPage])
+
+  // ─── Effects ─────────────────────────────────────────────────────────────────
 
   // Sync resolução text when navigating caderno
   useEffect(() => {
@@ -144,33 +224,45 @@ export function useQuestoes() {
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [currentQuestaoIndex, questoesExibidas])
 
-  // Initial load
+  // Initial load — fetch page 1 and filter options
   useEffect(() => {
     let cancelled = false
     async function load() {
-      console.log('[LOG useQuestoes] Iniciando carga inicial...')
+      console.log('[LOG useQuestoes] Iniciando carga paginada...')
       setLoadingError(null)
       try {
-        const data = await Promise.race([
-          fetchAllQuestoes(),
+        // Fetch filter options in parallel with page 1
+        const serverFilters = buildServerFilters()
+        const [paginatedResult, filterOpts] = await Promise.race([
+          Promise.all([
+            fetchPaginatedQuestoes(1, PAGE_SIZE, serverFilters),
+            fetchFilterOptions(),
+          ]),
           new Promise<never>((_, reject) =>
             setTimeout(() => reject(new Error('Timeout ao conectar com o banco de dados. Verifique sua conexão.')), 30000)
           ),
         ])
+
         if (cancelled) {
           console.log('[LOG useQuestoes] Componente desmontado durante carga.')
           return
         }
-        console.log(`[LOG useQuestoes] Dados carregados com sucesso: ${data.length} questões`)
-        if (data.length > 0) {
-          const q0 = data[0]
-          console.log(`[LOG useQuestoes] 1ª questão: id=${q0.questao_tec_id}, enunciado=${(q0.enunciado || '').length}chars, alternativas=${JSON.stringify(q0.alternativas || {}).length}chars, resolucao=${(q0.resolucao_professor || '').length}chars`)
-          // Estima tamanho total dos dados em memória
-          const totalChars = data.reduce((sum, q) => sum + (q.enunciado || '').length + JSON.stringify(q.alternativas || {}).length + (q.resolucao_professor || '').length, 0)
-          console.log(`[LOG useQuestoes] Total aprox. de caracteres: ${(totalChars / 1024 / 1024).toFixed(1)}MB`)
+
+        const result = paginatedResult
+        const opts = filterOpts
+        console.log(`[LOG useQuestoes] Dados carregados: ${result.data.length} questões (página 1 de ${result.totalPages}, total=${result.total})`)
+
+        if (result.data.length > 0) {
+          const q0 = result.data[0]
+          console.log(`[LOG useQuestoes] 1ª questão: id=${q0.questao_tec_id}, enunciado=${(q0.enunciado || '').length}chars`)
         }
-        setResolucoes(data)
-        setCadernoQuestoes(data)
+
+        setResolucoes(result.data)
+        setCadernoQuestoes(result.data)
+        setPage(1)
+        setTotalPages(result.totalPages)
+        setTotalCount(result.total)
+        setFilterOptions(opts)
       } catch (err: unknown) {
         console.error('[LOG useQuestoes] Erro na carga inicial:', err)
         if (!cancelled) {
@@ -188,8 +280,55 @@ export function useQuestoes() {
     return () => {
       console.log('[LOG useQuestoes] Cleanup: cancelando carga')
       cancelled = true
+      abortControllerRef.current?.abort()
     }
-  }, [])
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
+
+  // When filters change, reset to page 1 and reload
+  useEffect(() => {
+    // Skip the initial render — initial load handles page 1
+    if (loading) return
+
+    async function reloadOnFilterChange() {
+      abortControllerRef.current?.abort()
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+
+      setPageLoading(true)
+      setPageLoadingError(null)
+
+      try {
+        const serverFilters = buildServerFilters()
+        const result = await fetchPaginatedQuestoes(1, PAGE_SIZE, serverFilters, controller.signal)
+        if (controller.signal.aborted) return
+
+        setResolucoes(result.data)
+        setCadernoQuestoes(result.data)
+        setPage(1)
+        setTotalPages(result.totalPages)
+        setTotalCount(result.total)
+        setCurrentQuestaoIndex(0)
+        setAlternativaSelecionada(null)
+        setRevelado(false)
+      } catch (err: unknown) {
+        if ((err as Error)?.name === 'AbortError') return
+        if (!controller.signal.aborted) {
+          setPageLoadingError(err instanceof Error ? err.message : 'Erro ao carregar página.')
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setPageLoading(false)
+        }
+      }
+    }
+
+    reloadOnFilterChange()
+    return () => { abortControllerRef.current?.abort() }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedMaterias, selectedBancas, selectedAnos,
+    selectedOrgaos, selectedConcursos,
+  ])
 
   // ─── Relational Timer & History Loading Effects ──────────────────────────────
   
@@ -250,24 +389,24 @@ export function useQuestoes() {
   )
 
   const materiasUnicas = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.materia).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.materias ?? Array.from(new Set(resolucoes.map(r => r.materia).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
   const bancasUnicas = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.banca_texto).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.bancas ?? Array.from(new Set(resolucoes.map(r => r.banca_texto).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
   const anosUnicos = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.ano).filter(Boolean))) as number[],
-    [resolucoes]
+    () => filterOptions?.anos ?? Array.from(new Set(resolucoes.map(r => r.ano).filter(Boolean))) as number[],
+    [filterOptions, resolucoes]
   )
   const orgaosUnicos = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.orgao).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.orgaos ?? Array.from(new Set(resolucoes.map(r => r.orgao).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
   const concursosUnicos = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.concurso).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.concursos ?? Array.from(new Set(resolucoes.map(r => r.concurso).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
 
   // ─── Actions: Filtros ─────────────────────────────────────────────────────────
@@ -595,6 +734,13 @@ export function useQuestoes() {
     setResolucoes,
     loading,
     loadingError,
+    page,
+    totalPages,
+    totalCount,
+    pageLoading,
+    pageLoadingError,
+    handleNavigatePage,
+    PAGE_SIZE,
     cadernoQuestoes,
     setCadernoQuestoes,
     isCadernoActive,
