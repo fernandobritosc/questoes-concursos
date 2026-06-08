@@ -148,6 +148,233 @@ export function clearQuestoesCache(): void {
   _questoesCache = null
   _questoesCachePromise = null
   _questoesCacheTimestamp = 0
+  // Also clear progressive cache (new questions may have been imported)
+  _progressiveCache = []
+  _progressiveCachedPages.clear()
+  _progressiveFilterHash = null
+  _progressiveTotalCount = 0
+  _progressiveTotalPages = 0
+  _historicoCache = null
+  _historicoCachePromise = null
+  _filterOptionsCache = null
+  _filterOptionsPromise = null
+}
+
+// ─── Tipos para paginação server-side ─────────────────────────────────────────
+
+export interface PaginatedResult {
+  data: ResolucaoView[]
+  total: number
+  totalPages: number
+  page: number
+}
+
+export interface FilterOptions {
+  materias: string[]
+  bancas: string[]
+  anos: number[]
+  orgaos: string[]
+  concursos: string[]
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function hashFilters(filters: Record<string, string[]>): string {
+  const sorted = Object.entries(filters)
+    .filter(([, v]) => v.length > 0)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([k, v]) => `${k}=${[...v].sort().join(',')}`)
+    .join('&')
+  return sorted || '__all__'
+}
+
+// ─── Progressive flat cache para fetchPaginatedQuestoes ────────────────────────
+
+let _progressiveCache: ResolucaoView[] = []
+const _progressiveCachedPages = new Set<string>()
+let _progressiveFilterHash: string | null = null
+let _progressiveTotalCount = 0
+let _progressiveTotalPages = 0
+
+// Historico cache (fetched once, merged client-side with each page)
+let _historicoCache: HistoricoResolucao[] | null = null
+let _historicoCachePromise: Promise<void> | null = null
+
+async function ensureHistoricoCached(): Promise<void> {
+  if (_historicoCache) return
+  if (_historicoCachePromise) {
+    await _historicoCachePromise
+    return
+  }
+  _historicoCachePromise = (async () => {
+    const { data, error } = await supabase
+      .from('historico_resolucoes')
+      .select('id, questao_id, questao_tec_id, alternativa, acertou, tempo_segundos, data_resolucao')
+      .order('data_resolucao', { ascending: false })
+    if (error) throw error
+    _historicoCache = (data || []) as HistoricoResolucao[]
+  })()
+  try {
+    await _historicoCachePromise
+  } finally {
+    _historicoCachePromise = null
+  }
+}
+
+const PAGE_SIZE_DEFAULT = 200
+
+export async function fetchPaginatedQuestoes(
+  page: number,
+  pageSize: number = PAGE_SIZE_DEFAULT,
+  filters?: Record<string, string[]>,
+  signal?: AbortSignal
+): Promise<PaginatedResult> {
+  // Ensure historico is cached (fetched once, reused across pages)
+  await ensureHistoricoCached()
+
+  const filterHash = hashFilters(filters || {})
+
+  // Check progressive cache
+  const cacheKey = `${filterHash}:${page}`
+  if (_progressiveFilterHash === filterHash && _progressiveCachedPages.has(cacheKey)) {
+    const start = (page - 1) * pageSize
+    const end = start + pageSize
+    console.log(`[LOG fetchPaginatedQuestoes] Cache hit! page=${page}, totalCached=${_progressiveCache.length}`)
+    return {
+      data: _progressiveCache.slice(start, end),
+      total: _progressiveTotalCount,
+      totalPages: _progressiveTotalPages,
+      page,
+    }
+  }
+
+  // Filter change → reset progressive cache
+  if (_progressiveFilterHash !== filterHash) {
+    console.log(`[LOG fetchPaginatedQuestoes] Filter change: resetting cache (${_progressiveFilterHash} → ${filterHash})`)
+    _progressiveCache = []
+    _progressiveCachedPages.clear()
+    _progressiveFilterHash = filterHash
+    _progressiveTotalCount = 0
+    _progressiveTotalPages = 0
+  }
+
+  // Build paginated query
+  const from = (page - 1) * pageSize
+  const to = from + pageSize - 1  // range is INCLUSIVE on both ends
+
+  let query = supabase
+    .from('questoes')
+    .select(`
+      id, questao_tec_id, materia, assunto, banca_texto, orgao,
+      concurso, prova, ano, caderno_nome, enunciado, gabarito,
+      alternativas, resolucao_professor, created_at
+    `, { count: 'exact' })
+    .order('id', { ascending: false })
+    .range(from, to)
+
+  // Apply server-side filters (Record<string, string[]> → .in())
+  if (filters?.materia?.length)     query = query.in('materia', filters.materia)
+  if (filters?.banca_texto?.length) query = query.in('banca_texto', filters.banca_texto)
+  if (filters?.ano?.length)         query = query.in('ano', filters.ano)
+  if (filters?.orgao?.length)       query = query.in('orgao', filters.orgao)
+  if (filters?.concurso?.length)    query = query.in('concurso', filters.concurso)
+
+  // Attach abort signal if provided
+  if (signal) query = query.abortSignal(signal)
+
+  console.log(`[LOG fetchPaginatedQuestoes] Fetching page ${page} (range ${from}-${to})${filters ? ` filters=${filterHash}` : ''}`)
+  const { data: questoesData, error, count } = await query
+  if (error) throw error
+  console.log(`[LOG fetchPaginatedQuestoes] Received ${questoesData?.length ?? 0} questions, total count=${count}`)
+
+  // Merge with historico (same pattern as fetchAllQuestoes)
+  const historicoMap = new Map<number, HistoricoResolucao>()
+  for (const h of (_historicoCache || [])) {
+    if (!historicoMap.has(h.questao_id)) {
+      historicoMap.set(h.questao_id, h as HistoricoResolucao)
+    }
+  }
+
+  const merged = (questoesData || []).map((q: Questao): ResolucaoView => {
+    const h = historicoMap.get(q.id!)
+    return {
+      id: h?.id ?? 0,
+      questao_id: q.id!,
+      questao_tec_id: q.questao_tec_id,
+      alternativa: h?.alternativa ?? null,
+      acertou: h?.acertou ?? false,
+      tempo_segundos: h?.tempo_segundos ?? 0,
+      data_resolucao: h?.data_resolucao ?? q.created_at ?? new Date().toISOString(),
+      materia: q.materia,
+      assunto: q.assunto,
+      banca_texto: q.banca_texto,
+      orgao: q.orgao,
+      concurso: q.concurso,
+      prova: q.prova,
+      ano: q.ano,
+      caderno_nome: q.caderno_nome,
+      enunciado: q.enunciado,
+      gabarito: q.gabarito,
+      alternativas: q.alternativas ?? {},
+      resolucao_professor: q.resolucao_professor ?? null,
+    }
+  })
+
+  // Update progressive cache
+  _progressiveCache.splice(from, merged.length, ...merged)
+  _progressiveCachedPages.add(cacheKey)
+  _progressiveTotalCount = count || 0
+  _progressiveTotalPages = Math.ceil((count || 0) / pageSize)
+
+  return {
+    data: merged,
+    total: count || 0,
+    totalPages: Math.ceil((count || 0) / pageSize),
+    page,
+  }
+}
+
+// ─── Filtros (cache, fetch-once) ──────────────────────────────────────────────
+
+let _filterOptionsCache: FilterOptions | null = null
+let _filterOptionsPromise: Promise<FilterOptions> | null = null
+
+export async function fetchFilterOptions(): Promise<FilterOptions> {
+  if (_filterOptionsCache) return _filterOptionsCache
+  if (_filterOptionsPromise) return _filterOptionsPromise
+
+  _filterOptionsPromise = (async () => {
+    const [materiasRes, bancasRes, anosRes, orgaosRes, concursosRes] = await Promise.all([
+      supabase.from('questoes').select('materia').not('materia', 'is', null),
+      supabase.from('questoes').select('banca_texto').not('banca_texto', 'is', null),
+      supabase.from('questoes').select('ano').not('ano', 'is', null),
+      supabase.from('questoes').select('orgao').not('orgao', 'is', null),
+      supabase.from('questoes').select('concurso').not('concurso', 'is', null),
+    ])
+
+    if (materiasRes.error) throw materiasRes.error
+    if (bancasRes.error) throw bancasRes.error
+    if (anosRes.error) throw anosRes.error
+    if (orgaosRes.error) throw orgaosRes.error
+    if (concursosRes.error) throw concursosRes.error
+
+    const options: FilterOptions = {
+      materias: Array.from(new Set((materiasRes.data || []).map(r => r.materia).filter(Boolean))).sort() as string[],
+      bancas: Array.from(new Set((bancasRes.data || []).map(r => r.banca_texto).filter(Boolean))).sort() as string[],
+      anos: Array.from(new Set((anosRes.data || []).map(r => r.ano).filter(Boolean))).sort((a, b) => (b as number) - (a as number)) as number[],
+      orgaos: Array.from(new Set((orgaosRes.data || []).map(r => r.orgao).filter(Boolean))).sort() as string[],
+      concursos: Array.from(new Set((concursosRes.data || []).map(r => r.concurso).filter(Boolean))).sort() as string[],
+    }
+
+    _filterOptionsCache = options
+    return options
+  })()
+
+  try {
+    return await _filterOptionsPromise
+  } finally {
+    _filterOptionsPromise = null
+  }
 }
 
 /**
