@@ -13,6 +13,7 @@ import { QuestaoResolucaoProfessor } from '../components/QuestaoResolucaoProfess
 import { QuestaoNavegacao } from '../components/QuestaoNavegacao'
 import { QuestaoPrintView } from '../components/QuestaoPrintView'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
+import { QuestaoSkeleton } from '../components/ui/QuestaoSkeleton'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { AlertCircle, RefreshCw, BrainCircuit, Layers, Upload } from 'lucide-react'
 import { ErrorBoundary } from '../components/ErrorBoundary'
@@ -58,7 +59,16 @@ export function Questoes() {
     questoesExibidas,
     handleEditQuestao,
     loadingError,
+    // NEW — pagination
+    pageLoading,
+    pageLoadingError,
+    page,
+    totalPages,
+    handleNavigatePage,
   } = useQuestoes()
+  
+  // Referenced for future use (pagination UI)
+  void page; void totalPages; void handleNavigatePage;
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
@@ -184,7 +194,11 @@ export function Questoes() {
   }
 
   if (loading) {
-    return <LoadingSpinner />
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-60px)]">
+        <LoadingSpinner />
+      </div>
+    )
   }
 
   return (
@@ -220,8 +234,17 @@ export function Questoes() {
               </div>
             ) : (
               <div className="space-y-6 max-w-4xl mx-auto pb-12">
-          
-          <ErrorBoundary>
+
+          {pageLoadingError && !pageLoading && (
+            <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">
+              {pageLoadingError}
+            </div>
+          )}
+
+          {pageLoading ? (
+            <QuestaoSkeleton />
+          ) : (
+            <ErrorBoundary>
             <QuestaoVisualizador
               questao={questoesExibidas[currentQuestaoIndex]}
               index={currentQuestaoIndex}
@@ -243,7 +266,8 @@ export function Questoes() {
               podeAnterior={currentQuestaoIndex > 0}
               podeProxima={currentQuestaoIndex < questoesExibidas.length - 1}
             />
-          </ErrorBoundary>
+            </ErrorBoundary>
+          )}
 
           <ErrorBoundary>
             <MeuDesempenho
