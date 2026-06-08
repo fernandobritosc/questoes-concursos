@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+last_updated: "2026-06-08T22:59:25.411Z"
+progress:
+  total_phases: 3
+  completed_phases: 0
+  total_plans: 3
+  completed_plans: 1
+  percent: 33
+---
+
 # STATE.md — Questões Concursos
 
 ## Project Reference
@@ -13,13 +27,13 @@
 
 | Phase | Status | Phase Goal |
 |-------|--------|------------|
-| 1 — Paginação de Questões | Not started | Fetch de questões usa paginação server-side |
+| 1 — Paginação de Questões | In Progress | Fetch de questões usa paginação server-side |
 | 2 — Extração de Hooks | Not started | useQuestoes.ts dividido em hooks menores |
 | 3 — Extração de Sub-Componentes | Not started | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [###·················] 33% (1/3 phases planned)
+**Progress:** [███░░░░░░░] 33%
 
-**Active Plan:** Phase 1 — Paginação de Questões (3 plans created, ready for execution)
+**Active Plan:** Phase 1 — Paginação de Questões (Plan 01 completed, Plans 02-03 remaining)
 
 ## Performance Metrics
 
@@ -65,17 +79,19 @@
 
 ### Last Session (2026-06-08)
 
-- Roadmap criado com 3 fases para endereçar os 3 requisitos de refactoring
-- REQUIREMENTS.md criado com traceability
-- ROADMAP.md criado
-- STATE.md criado
-- **Plan 01 (Wave 1):** Service layer + skeleton — fetchPaginatedQuestoes, fetchFilterOptions, progressive cache, QuestaoSkeleton
+- **Plan 01 (Wave 1)** executed successfully:
+  - `supabase.service.ts`: Added `fetchPaginatedQuestoes()` with `.range()` pagination, `fetchFilterOptions()`, progressive cache, `PaginatedResult`/`FilterOptions` types
+  - `QuestaoSkeleton.tsx` created with 6 skeleton block types
+  - Barrel export in `ui/index.ts`
+  - `clearQuestoesCache()` extended to reset all caches
+  - `fetchAllQuestoes()` completely untouched
+  - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
 - **Plan 02 (Wave 2):** Hook refactor — pagination state, filter-to-query, AbortController
 - **Plan 03 (Wave 3):** Page integration — skeleton during page transitions
 
 ### Next Session
 
-- Executar `/gsd-execute-phase 01-paginacao-de-questoes` para implementar os 3 planos
+- Executar Plan 02 to implement hook refactor for paginated queries
 
 ---
 

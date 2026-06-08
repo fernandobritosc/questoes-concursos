@@ -33,7 +33,7 @@ Estudar questões de concursos de forma eficiente, com dados reais de desempenho
 
 ```
 Plans:
-- [ ] 01-01-PLAN.md — Service layer: fetchPaginatedQuestoes, fetchFilterOptions, progressive cache; QuestaoSkeleton component
+- [x] 01-01-PLAN.md — Service layer: fetchPaginatedQuestoes, fetchFilterOptions, progressive cache; QuestaoSkeleton component
 - [ ] 01-02-PLAN.md — Hook refactor: pagination state, filter-to-query, AbortController, cache integration
 - [ ] 01-03-PLAN.md — Page integration: skeleton during page transitions, pageLoading states
 ```
@@ -84,7 +84,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Paginação de Questões | 3/0 | Planned | - |
+| 1. Paginação de Questões | 1/3 | In progress | 2026-06-08 |
 | 2. Extração de Hooks | 0/0 | Not started | - |
 | 3. Extração de Sub-Componentes | 0/0 | Not started | - |
 
