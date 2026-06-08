@@ -98,7 +98,7 @@ function MetricCard({
         </h4>
         <p className="text-[11px] font-bold text-muted-foreground mt-1.5">{title}</p>
       </div>
-      <div className="flex flex-col border-t border-white/[0.04] pt-2">
+      <div className="flex flex-col border-t border-border/50 dark:border-white/[0.04] pt-2">
         <p className="text-[10px] text-muted-foreground/60 leading-none">{subtitle}</p>
         <TrendIndicator trend={trend} />
       </div>
@@ -157,9 +157,9 @@ function ResolucaoItem({ res, index }: { res: ResolucaoView; index: number }) {
       {/* Background link that makes the entire card clickable */}
       <Link
         to={`/app/questoes?id=${res.questao_tec_id}`}
-        className={`absolute inset-0 rounded-lg bg-white/[0.02] ${
+        className={`absolute inset-0 rounded-lg bg-card border border-border ${
           res.acertou ? 'res-correct' : 'res-wrong'
-        } transition-all duration-200 hover:bg-white/[0.05] z-0`}
+        } transition-all duration-200 hover:bg-muted/40 dark:bg-white/[0.02] dark:border-transparent dark:hover:bg-white/[0.05] z-0`}
       />
 
       {/* Visual content overlay with pointer-events-none so click passes through to the background Link, except interactive elements */}
@@ -167,7 +167,7 @@ function ResolucaoItem({ res, index }: { res: ResolucaoView; index: number }) {
         <div className="flex items-center gap-2.5 min-w-0">
           {/* Icon status */}
           <div className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center ${
-            res.acertou ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'
+            res.acertou ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-red-500/15 text-red-650 dark:text-red-400'
           }`}>
             {res.acertou ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
           </div>
@@ -199,7 +199,7 @@ function ResolucaoItem({ res, index }: { res: ResolucaoView; index: number }) {
             href={`https://www.tecconcursos.com.br/questoes/${res.questao_tec_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground/50 hover:text-foreground p-1 transition-colors rounded-lg hover:bg-white/10 relative z-20"
+            className="text-muted-foreground/50 hover:text-foreground p-1 transition-colors rounded-lg hover:bg-muted dark:hover:bg-white/10 relative z-20"
             title="Abrir no site oficial do TEC"
           >
             <ExternalLink className="w-3.5 h-3.5" />
@@ -221,12 +221,12 @@ interface CustomTooltipProps {
 function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
   if (active && payload && payload.length) {
     return (
-      <div className="glass-card p-3 border border-white/10 text-left text-xs shadow-xl">
+      <div className="glass-card p-3 border border-border/60 dark:border-white/10 text-left text-xs shadow-xl">
         <p className="font-black text-violet-400 mb-1">{label}</p>
         {payload.map((pld) => (
           <p key={pld.name} className="font-semibold text-foreground flex items-center justify-between gap-4 mt-0.5">
             <span className="opacity-85">{pld.name}:</span>
-            <span className="font-bold text-right" style={{ color: pld.color || '#fff' }}>
+            <span className="font-bold text-right" style={{ color: pld.color || 'var(--foreground)' }}>
               {pld.value}{pld.name === 'Taxa de Acerto' || pld.name === 'Aproveitamento' ? '%' : ''}
             </span>
           </p>
@@ -325,11 +325,11 @@ function StudyHeatmap({ resolucoes }: StudyHeatmapProps) {
 
   // Cores do tema Violeta Premium
   const levelClasses = [
-    'bg-white/[0.02] border border-white/[0.03] hover:bg-white/[0.08]',
-    'bg-violet-900/35 border border-violet-500/10 hover:bg-violet-900/50',
-    'bg-violet-700/55 border border-violet-500/30 hover:bg-violet-700/70',
-    'bg-violet-50/15 dark:bg-violet-500/75 border border-violet-400/50 hover:bg-violet-500/90',
-    'bg-violet-400 border border-violet-300 hover:brightness-110 shadow-[0_0_8px_rgba(167,139,250,0.3)]'
+    'bg-muted/40 border border-border/50 hover:bg-muted/70 dark:bg-white/[0.02] dark:border-white/[0.03] dark:hover:bg-white/[0.08]',
+    'bg-violet-100 border border-violet-200 hover:bg-violet-200 dark:bg-violet-900/35 dark:border-violet-500/10 dark:hover:bg-violet-900/50',
+    'bg-violet-300 border border-violet-400 hover:bg-violet-400 dark:bg-violet-700/55 dark:border-violet-500/30 dark:hover:bg-violet-700/70',
+    'bg-violet-500/75 border border-violet-400 hover:bg-violet-500/90 dark:bg-violet-500/75 dark:border-violet-400/50',
+    'bg-violet-600 border border-violet-500 hover:bg-violet-700 dark:bg-violet-400 dark:border-violet-300 hover:brightness-110 shadow-[0_0_8px_rgba(167,139,250,0.3)]'
   ]
 
   // Agrupar dias em colunas (semanas) de 7 elementos
@@ -347,7 +347,7 @@ function StudyHeatmap({ resolucoes }: StudyHeatmapProps) {
       <div
         onClick={() => setIsExpanded(!isExpanded)}
         className={`p-5 flex items-center justify-between shrink-0 flex-wrap gap-3 cursor-pointer select-none ${
-          isExpanded ? 'border-b border-white/[0.04]' : ''
+          isExpanded ? 'border-b border-border/50 dark:border-white/[0.04]' : ''
         }`}
       >
         <div className="flex items-center gap-2">
@@ -371,7 +371,7 @@ function StudyHeatmap({ resolucoes }: StudyHeatmapProps) {
           )}
 
           {/* Botão Indicador Expandir/Recolher */}
-          <div className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground hover:text-foreground transition-all px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06]">
+          <div className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground hover:text-foreground transition-all px-2.5 py-1.5 rounded-lg bg-muted border border-border/65 hover:bg-muted/80 dark:bg-white/[0.03] dark:border-white/[0.05] dark:hover:bg-white/[0.06]">
             {isExpanded ? (
               <>
                 <span className="uppercase tracking-wider">Ocultar</span>
@@ -432,7 +432,7 @@ function StudyHeatmap({ resolucoes }: StudyHeatmapProps) {
                           className={`w-2.5 h-2.5 rounded-xs transition-colors duration-150 relative group cursor-pointer ${levelClasses[dia.level]}`}
                         >
                           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block z-50 pointer-events-none">
-                            <div className="bg-slate-950/95 backdrop-blur-md border border-white/10 text-white font-extrabold text-[9px] px-2 py-1 rounded shadow-xl whitespace-nowrap">
+                            <div className="bg-slate-950/95 backdrop-blur-md border border-border/60 dark:border-white/10 text-white font-extrabold text-[9px] px-2 py-1 rounded shadow-xl whitespace-nowrap">
                               {tooltipText}
                             </div>
                           </div>
@@ -497,10 +497,10 @@ export function Dashboard() {
       return (
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={radarData} margin={{ top: 20, right: 10, left: -20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-            <XAxis dataKey="materia" stroke="rgba(255,255,255,0.4)" fontSize={9} tickLine={false} axisLine={false} />
-            <YAxis domain={[0, 100]} stroke="rgba(255,255,255,0.4)" fontSize={9} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}%`} />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} vertical={false} />
+            <XAxis dataKey="materia" stroke="var(--muted-foreground)" opacity={0.8} fontSize={9} tickLine={false} axisLine={false} />
+            <YAxis domain={[0, 100]} stroke="var(--muted-foreground)" opacity={0.8} fontSize={9} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}%`} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--border)', opacity: 0.1 }} />
             <Bar dataKey="Aproveitamento" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={30} />
           </BarChart>
         </ResponsiveContainer>
@@ -510,15 +510,15 @@ export function Dashboard() {
     return (
       <ResponsiveContainer width="100%" height={220}>
         <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
-          <PolarGrid stroke="rgba(255,255,255,0.05)" />
+          <PolarGrid stroke="var(--border)" opacity={0.4} />
           <PolarAngleAxis
             dataKey="materia"
-            tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 9, fontWeight: 700 }}
+            tick={{ fill: 'var(--muted-foreground)', fontSize: 9, fontWeight: 700 }}
           />
           <PolarRadiusAxis
             angle={30}
             domain={[0, 100]}
-            tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 8 }}
+            tick={{ fill: 'var(--muted-foreground)', opacity: 0.8, fontSize: 8 }}
             axisLine={false}
           />
           <Tooltip content={<CustomTooltip />} />
@@ -558,10 +558,11 @@ export function Dashboard() {
               <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} vertical={false} />
           <XAxis
             dataKey="data"
-            stroke="rgba(255,255,255,0.4)"
+            stroke="var(--muted-foreground)"
+            opacity={0.8}
             fontSize={10}
             tickLine={false}
             axisLine={false}
@@ -585,7 +586,7 @@ export function Dashboard() {
             axisLine={false}
             tickFormatter={(v) => `${v}%`}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.06)', strokeWidth: 1 }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--border)', strokeWidth: 1 }} />
           <Area
             yAxisId="left"
             type="monotone"
@@ -621,7 +622,7 @@ export function Dashboard() {
         </div>
         <div className="flex items-center gap-2.5">
           {/* Period selector */}
-          <div className="flex items-center gap-1 p-0.5 bg-white/[0.04] border border-white/[0.06] rounded-xl shrink-0">
+          <div className="flex items-center gap-1 p-0.5 bg-muted/30 border border-border/60 dark:bg-white/[0.04] dark:border-white/[0.06] rounded-xl shrink-0">
             <button
               onClick={() => setPeriodo('geral')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${

@@ -8,6 +8,7 @@ Mantém estado_atual.json atualizado com:
   - últimas respostas
   - streak
   - recomendação do dia
+Também gera resumo_evolucao.md para o Hermes LLM.
 """
 
 import os
@@ -16,22 +17,34 @@ import json
 import time
 import signal
 from collections import defaultdict, deque
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+try:
+    from zoneinfo import ZoneInfo
+    FUSO_BR = ZoneInfo("America/Sao_Paulo")
+except ImportError:
+    FUSO_BR = timezone(-timedelta(hours=3), "BRT")
 from urllib.request import Request, urlopen
 from urllib.error import URLError
 
-RELAY_URL = 'http://192.168.3.84:3333'
+sys.path.insert(0, os.path.dirname(__file__))
+from _hermes_env import load_config, resolve_relay_url, ts_to_local_date
+
+
 STATE_FILE = os.path.join(os.path.dirname(__file__), '..', 'estado_atual.json')
 NOTIF_FILE = os.path.join(os.path.dirname(__file__), '..', 'notificacoes.json')
+RESUMO_FILE = os.path.join(os.path.dirname(__file__), '..', 'resumo_evolucao.md')
 POLL_INTERVAL = 3
 JANELA_RECOMENDACAO_DIAS = 7
 JANELA_DEDUP_SEGUNDOS = 120
+STREAK_GRACE_DIAS = 1
 
 running = True
 
 def signal_handler(sig, frame):
     global running
     running = False
+
+RELAY_URL = resolve_relay_url(load_config())
 
 def get_events(after):
     try:
@@ -55,8 +68,11 @@ class StatsEngine:
         self.ids_vistos = set()
         self.ids_tec = defaultdict(list)
         self.ultima_resposta_questao = {}  # dedup por questão+assunto
+        self.pendentes_revisao = {}  # questao_id -> {materia, assunto, tentativas, primeiro_erro_em, ...}
+        self.historico_resolvidos = []  # questões que saíram dos pendentes (para celebrar evolução)
         self.timeline_de = []
         self.timeline = []
+        self.datas_estudo = set()
         self.event_count = 0
 
     def _dedup_key(self, d):
@@ -66,18 +82,38 @@ class StatsEngine:
             d.get('assunto'),
         )
 
+    def _ts_to_local_date(self, ts):
+        if not ts:
+            return None
+        try:
+            dt = datetime.fromisoformat(ts)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt.astimezone(FUSO_BR).strftime('%Y-%m-%d')
+        except (ValueError, TypeError):
+            return ts[:10] if ts else None
+
     def _parse_time(self, ts):
         if not ts:
             return None
+        dt = None
         for fmt in ('%Y-%m-%dT%H:%M:%S.%f%z', '%Y-%m-%dT%H:%M:%S%z', '%Y-%m-%dT%H:%M:%S.%f', '%Y-%m-%dT%H:%M:%S'):
             try:
-                return datetime.strptime(ts, fmt)
+                dt = datetime.strptime(ts, fmt)
+                break
             except ValueError:
                 continue
-        try:
-            return datetime.fromisoformat(ts)
-        except ValueError:
-            return datetime.fromisoformat(ts[:26])
+        if not dt:
+            try:
+                dt = datetime.fromisoformat(ts)
+            except ValueError:
+                try:
+                    dt = datetime.fromisoformat(ts[:26])
+                except Exception:
+                    return None
+        if dt and dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
 
     def ingest(self, eventos):
         for e in eventos:
@@ -88,6 +124,9 @@ class StatsEngine:
             acertou = d.get('acertou', False)
             tempo = d.get('tempo_segundos', 0)
             ts = e.get('timestamp')
+            dt_local = self._ts_to_local_date(ts)
+            if dt_local:
+                self.datas_estudo.add(dt_local)
 
             # Dedup: evita duplicatas na mesma sessão (janela de 2 minutos)
             dedup_k = self._dedup_key(d)
@@ -137,6 +176,45 @@ class StatsEngine:
             if tid:
                 self.ids_tec[tid].append(e)
 
+            # Rastreamento de pendentes de revisão:
+            # - responder_questao/revisar_questao com acerto → sai dos pendentes
+            # - responder_questao/revisar_questao com erro → entra/atualiza pendente
+            tipo_evento = e.get('tipo')
+            key_revisao = tid or qid
+            if tipo_evento in ('responder_questao', 'revisar_questao') and key_revisao is not None:
+                if acertou:
+                    removido = self.pendentes_revisao.pop(key_revisao, None)
+                    if tid and qid:
+                        self.pendentes_revisao.pop(qid, None)
+                    if removido:
+                        self.historico_resolvidos.append({
+                            'questao_id': qid,
+                            'materia': mat,
+                            'assunto': ass,
+                            'tentativas': removido.get('tentativas', 1),
+                            'resolvido_em': ts or '',
+                        })
+                        if len(self.historico_resolvidos) > 50:
+                            self.historico_resolvidos = self.historico_resolvidos[-50:]
+                else:
+                    if key_revisao not in self.pendentes_revisao:
+                        self.pendentes_revisao[key_revisao] = {
+                            'primeiro_erro_em': ts or '',
+                            'tentativas': 0,
+                        }
+                    p = self.pendentes_revisao[key_revisao]
+                    p.update({
+                        'questao_id': qid,
+                        'questao_tec_id': tid,
+                        'materia': mat,
+                        'assunto': ass,
+                        'banca_texto': d.get('banca_texto') or 'Sem banca',
+                        'gabarito': d.get('gabarito'),
+                        'ultima_tentativa_em': ts or '',
+                        'ultima_marcou': d.get('alternativa_selecionada'),
+                    })
+                    p['tentativas'] = p.get('tentativas', 0) + 1
+
             self.ultima_resposta_questao[dedup_k] = {
                 'timestamp': ts,
                 'acertou': acertou,
@@ -167,7 +245,7 @@ class StatsEngine:
 
     def calcular_estado(self):
         # Janela temporal para recomendação
-        cutoff = datetime.now() - timedelta(days=JANELA_RECOMENDACAO_DIAS)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=JANELA_RECOMENDACAO_DIAS)
         timeline_recente = []
         if self.timeline_de:
             for item in self.timeline_de:
@@ -230,13 +308,14 @@ class StatsEngine:
         acertos = sum(s['acertos'] for s in self.por_assunto.values())
         taxa_geral = round(acertos / total * 100) if total else 0
 
-        datas = sorted(set(e['timestamp'][:10] for e in self.timeline if e.get('timestamp')))
+        datas = sorted(list(self.datas_estudo))
         streak = 0
-        hoje = datetime.now().strftime('%Y-%m-%d')
-        ontem = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-        if datas and datas[-1] in (hoje, ontem):
+        hoje = datetime.now(FUSO_BR).strftime('%Y-%m-%d')
+        limite = (datetime.now(FUSO_BR) - timedelta(days=STREAK_GRACE_DIAS)).strftime('%Y-%m-%d')
+        if datas and datas[-1] >= limite:
+            ultima_dt = datetime.strptime(datas[-1], '%Y-%m-%d')
             for i in range(len(datas)-1, -1, -1):
-                esperada = (datetime.now() - timedelta(days=len(datas)-1-i)).strftime('%Y-%m-%d')
+                esperada = (ultima_dt - timedelta(days=len(datas)-1-i)).strftime('%Y-%m-%d')
                 if datas[i] == esperada:
                     streak += 1
                 else:
@@ -248,10 +327,66 @@ class StatsEngine:
             key=lambda x: x['taxa']
         )
 
+        # Pendentes de revisão: tudo que errou e ainda não acertou de volta
+        pendentes = list(self.pendentes_revisao.values())
+        pendentes_por_materia = defaultdict(int)
+        for p in pendentes:
+            pendentes_por_materia[p.get('materia') or 'Sem matéria'] += 1
+        pendentes_por_materia_ord = sorted(
+            pendentes_por_materia.items(), key=lambda x: -x[1]
+        )
+
+        # Pendentes há mais de 7 dias (urgentes)
+        cutoff_antigo = datetime.now(timezone.utc) - timedelta(days=7)
+        pendentes_antigas = sorted(
+            [p for p in pendentes if self._parse_time(p.get('primeiro_erro_em')) and self._parse_time(p.get('primeiro_erro_em')) < cutoff_antigo],
+            key=lambda x: self._parse_time(x.get('primeiro_erro_em')) or datetime.min.replace(tzinfo=timezone.utc)
+        )[:10]
+
+        # Evolução: quantas pendentes foram resolvidas nas últimas 24h
+        cutoff_24h = datetime.now(timezone.utc) - timedelta(hours=24)
+        resolvidos_24h = sum(1 for r in self.historico_resolvidos if self._parse_time(r.get('resolvido_em')) and self._parse_time(r.get('resolvido_em')) >= cutoff_24h)
+
+        # Fracos RELEVANTES (≥5 tentativas, <70%) — diferente dos fracos_recentes (≥2)
+        fracos_relevantes = sorted(
+            [a for a in assuntos if a['taxa'] < 70 and a['total'] >= 5],
+            key=lambda x: x['taxa']
+        )[:5]
+
+        # Recomendação prioriza: pendentes > fraco relevante > fraco_recentes
         recomendacao = None
-        if fracos_recentes:
-            alvo = fracos_recentes[0]
+        if pendentes:
+            # Agrupa pendentes por assunto para encontrar o "carro-chefe"
+            pend_por_assunto = defaultdict(list)
+            for p in pendentes:
+                key = (p.get('materia') or '?', p.get('assunto') or '?')
+                pend_por_assunto[key].append(p)
+            top_assunto = sorted(
+                pend_por_assunto.items(), key=lambda x: -len(x[1])
+            )[0]
+            (mat, ass), qids = top_assunto
             recomendacao = {
+                'tipo': 'pendentes_revisao',
+                'materia': mat,
+                'assunto': ass,
+                'pendentes': len(qids),
+                'total_pendentes': len(pendentes),
+                'acoes': [
+                    f'Revisar {min(5, len(qids))} das {len(qids)} pendentes em {mat} → {ass}',
+                    'Use a aba "Revisão" do app e filtre por este assunto',
+                ],
+            }
+            if pendentes_antigas:
+                antiga = pendentes_antigas[0]
+                recomendacao['urgente'] = (
+                    f'{len(pendentes_antigas)} pendente(s) há mais de 7 dias — '
+                    f'a mais antiga: {antiga.get("materia")} → {antiga.get("assunto")} '
+                    f'(desde {antiga.get("primeiro_erro_em", "?")[:10]})'
+                )
+        elif fracos_relevantes:
+            alvo = fracos_relevantes[0]
+            recomendacao = {
+                'tipo': 'fraco_relevante',
                 'materia': alvo['materia'],
                 'assunto': alvo['assunto'],
                 'taxa': alvo['taxa'],
@@ -259,10 +394,21 @@ class StatsEngine:
                 'acoes': [
                     f'Revisar teoria de {alvo["materia"]} — {alvo["assunto"]}',
                     f'Fazer 5-10 questões focadas nesse tópico',
-                ]
+                ],
             }
-            if len(fracos_recentes) > 1:
-                recomendacao['proximo'] = f'{fracos_recentes[1]["materia"]} → {fracos_recentes[1]["assunto"]} ({fracos_recentes[1]["taxa"]}%)'
+        elif fracos_recentes:
+            alvo = fracos_recentes[0]
+            recomendacao = {
+                'tipo': 'fraco_recente',
+                'materia': alvo['materia'],
+                'assunto': alvo['assunto'],
+                'taxa': alvo['taxa'],
+                'total': alvo['total'],
+                'acoes': [
+                    f'Revisar teoria de {alvo["materia"]} — {alvo["assunto"]}',
+                    f'Fazer 5-10 questões focadas nesse tópico',
+                ],
+            }
 
         return {
             'atualizado_em': datetime.now().isoformat(),
@@ -277,6 +423,11 @@ class StatsEngine:
             'padroes': padroes[:10],
             'repeticoes': repeticoes[:5],
             'ultimas_acoes': self.timeline[-10:][::-1] if self.timeline else [],
+            'pendentes_revisao_total': len(pendentes),
+            'pendentes_revisao_por_materia': dict(pendentes_por_materia_ord),
+            'pendentes_antigas': pendentes_antigas,
+            'resolvidos_24h': resolvidos_24h,
+            'fracos_relevantes': fracos_relevantes,
             'recomendacao': recomendacao,
             'janela_recomendacao_dias': JANELA_RECOMENDACAO_DIAS,
         }
@@ -310,19 +461,47 @@ def main():
             continue
 
         eventos = data.get('events', [])
-        if eventos:
-            stats.ingest(eventos)
-            ultimo = eventos[-1]
-            stats.offset = ultimo.get('_offset', stats.offset)
-            print(f'[{datetime.now().strftime("%H:%M:%S")}] +{len(eventos)} eventos '
-                  f'(total: {stats.event_count})')
+        if not eventos:
+            if running:
+                time.sleep(POLL_INTERVAL)
+            continue
+
+        stats.ingest(eventos)
+        ultimo = eventos[-1]
+        stats.offset = ultimo.get('_offset', stats.offset)
+        print(f'[{datetime.now().strftime("%H:%M:%S")}] +{len(eventos)} eventos '
+              f'(total: {stats.event_count})')
 
         estado = stats.calcular_estado()
         estado['_offset_relay'] = stats.offset
 
-        with open(STATE_FILE + '.tmp', 'w') as f:
-            json.dump(estado, f, ensure_ascii=False, indent=2)
-        os.replace(STATE_FILE + '.tmp', STATE_FILE)
+        try:
+            with open(STATE_FILE + '.tmp', 'w', encoding='utf-8') as f:
+                json.dump(estado, f, ensure_ascii=False, indent=2)
+            os.replace(STATE_FILE + '.tmp', STATE_FILE)
+        except PermissionError:
+            # Outro processo (ex.: hermes agent) está lendo o arquivo — tenta de novo no próximo ciclo
+            try:
+                os.remove(STATE_FILE + '.tmp')
+            except FileNotFoundError:
+                pass
+
+        PENDENTES_FILE = os.path.join(os.path.dirname(__file__), '..', 'pendentes_revisao.json')
+        try:
+            with open(PENDENTES_FILE + '.tmp', 'w', encoding='utf-8') as f:
+                json.dump(stats.pendentes_revisao, f, ensure_ascii=False, indent=2)
+            os.replace(PENDENTES_FILE + '.tmp', PENDENTES_FILE)
+        except PermissionError:
+            try:
+                os.remove(PENDENTES_FILE + '.tmp')
+            except FileNotFoundError:
+                pass
+
+        try:
+            from gerar_todas_revisoes import gerar_guias
+            gerar_guias()
+        except Exception as e:
+            print(f"  [Erro ao gerar guias de revisão] {e}", file=sys.stderr)
 
         # Gera notificações inteligentes (a cada 30s no máximo)
         now = time.time()
@@ -331,11 +510,28 @@ def main():
             if notificacoes or stats.notificacoes_ativas:
                 stats.notificacoes_ativas = {n['id']: n for n in notificacoes}
                 stats.ultimo_envio_notif = now
-                with open(NOTIF_FILE + '.tmp', 'w') as f:
-                    json.dump({'atualizado_em': datetime.now().isoformat(), 'notificacoes': notificacoes}, f, ensure_ascii=False, indent=2)
-                os.replace(NOTIF_FILE + '.tmp', NOTIF_FILE)
+                try:
+                    with open(NOTIF_FILE + '.tmp', 'w', encoding='utf-8') as f:
+                        json.dump({'atualizado_em': datetime.now().isoformat(), 'notificacoes': notificacoes}, f, ensure_ascii=False, indent=2)
+                    os.replace(NOTIF_FILE + '.tmp', NOTIF_FILE)
+                except PermissionError:
+                    try:
+                        os.remove(NOTIF_FILE + '.tmp')
+                    except FileNotFoundError:
+                        pass
                 if notificacoes:
-                    print(f'  🔔 {len(notificacoes)} notificação(ões)')
+                    print(f'  [!] {len(notificacoes)} notificacao(oes)')
+
+        # Gera resumo pré-processado para o Hermes LLM
+        try:
+            with open(RESUMO_FILE + '.tmp', 'w', encoding='utf-8') as f:
+                f.write(gerar_resumo_evolucao(estado))
+            os.replace(RESUMO_FILE + '.tmp', RESUMO_FILE)
+        except PermissionError:
+            try:
+                os.remove(RESUMO_FILE + '.tmp')
+            except FileNotFoundError:
+                pass
 
         if running:
             time.sleep(POLL_INTERVAL)
@@ -414,6 +610,91 @@ def gerar_notificacoes(stats, estado):
             })
 
     return notificacoes[:8]  # Máximo 8 notificações
+
+def gerar_resumo_evolucao(estado):
+    rec = estado.get('recomendacao') or {}
+    pendentes_total = estado.get('pendentes_revisao_total', 0)
+    pendentes_por_mat = estado.get('pendentes_revisao_por_materia', {})
+    pendentes_antigas = estado.get('pendentes_antigas', [])
+    resolvidos_24h = estado.get('resolvidos_24h', 0)
+    fracos_relevantes = estado.get('fracos_relevantes', [])
+    ultimas = estado.get('ultimas_acoes', [])[:5]
+    padroes = estado.get('padroes', [])[:3]
+
+    hoje = datetime.now(FUSO_BR).strftime('%Y-%m-%d')
+    qtd_hoje = sum(1 for a in ultimas if ts_to_local_date(a.get('timestamp')) == hoje)
+    qtd_hoje = max(qtd_hoje, sum(1 for a in estado.get('ultimas_acoes', []) if ts_to_local_date(a.get('timestamp')) == hoje))
+
+
+    linhas = [
+        f'# Resumo de Evolução — {datetime.now().strftime("%d/%m/%Y %H:%M")}',
+        '',
+        f'**Streak:** {estado.get("streak", 0)} dia(s)  ',
+        f'**Taxa geral:** {estado.get("taxa_geral", 0)}%  ',
+        f'**Respondidas:** {estado.get("total_respondidas", 0)} ({estado.get("total_acertos", 0)} acertos)  ',
+        f'**Questões únicas:** {estado.get("total_questoes_unicas", 0)}  ',
+        f'**Respondidas hoje:** {qtd_hoje}',
+        '',
+    ]
+
+    if rec:
+        tipo = rec.get('tipo', 'fraco_recente')
+        if tipo == 'pendentes_revisao':
+            linhas.append('## 🔴 Recomendação do dia (prioridade: PENDENTES DE REVISÃO)')
+            linhas.append(f'**{rec["materia"]} → {rec["assunto"]}**')
+            linhas.append(f'Você tem **{rec["pendentes"]} pendente(s)** nesse assunto (de **{rec["total_pendentes"]} totais**).')
+            for acao in rec.get('acoes', []):
+                linhas.append(f'- {acao}')
+            if rec.get('urgente'):
+                linhas.append(f'')
+                linhas.append(f'⏰ **Urgente:** {rec["urgente"]}')
+        else:
+            linhas.append('## Recomendação do dia')
+            linhas.append(f'**{rec.get("materia", "?")} → {rec.get("assunto", "?")}** ({rec.get("taxa", "?")}% em {rec.get("total", "?")} tentativas)')
+            for acao in rec.get('acoes', []):
+                linhas.append(f'- {acao}')
+        linhas.append('')
+
+    if pendentes_total > 0:
+        linhas.append(f'## 📋 Pendentes de revisão: {pendentes_total}')
+        if resolvidos_24h > 0:
+            linhas.append(f'✅ **{resolvidos_24h} resolvida(s) nas últimas 24h** — continue assim!')
+        linhas.append('')
+        if pendentes_por_mat:
+            linhas.append('**Por matéria:**')
+            for mat, qtd in list(pendentes_por_mat.items())[:8]:
+                linhas.append(f'- {mat}: {qtd} pendente(s)')
+            linhas.append('')
+        if pendentes_antigas:
+            linhas.append('**⏰ Pendentes há mais de 7 dias (urgentes):**')
+            for p in pendentes_antigas[:5]:
+                primeiro = (p.get('primeiro_erro_em') or '?')[:10]
+                tentativas = p.get('tentativas', 1)
+                linhas.append(f'- {p.get("materia", "?")} → {p.get("assunto", "?")} (desde {primeiro}, {tentativas}ª tentativa)')
+            linhas.append('')
+
+    if fracos_relevantes:
+        linhas.append('## ⚠️ Assuntos fracos relevantes (≥5 tentativas, <70%)')
+        linhas.append('| Matéria | Assunto | Taxa | Total |')
+        linhas.append('|---|---|---|---|')
+        for a in fracos_relevantes:
+            linhas.append(f'| {a["materia"]} | {a["assunto"]} | {a["taxa"]}% | {a["total"]} |')
+        linhas.append('')
+
+    if padroes:
+        linhas.append('## Padrões por banca+assunto')
+        for p in padroes:
+            linhas.append(f'- **{p["banca"]}** em {p["assunto"]}: {p["taxa"]}% em {p["total"]} questões')
+        linhas.append('')
+
+    if ultimas:
+        linhas.append('## Últimas 5 ações')
+        for a in ultimas:
+            status = '✅' if a.get('acertou') else '❌'
+            linhas.append(f'- {status} {a.get("materia", "?")} → {a.get("assunto", "?")} ({a.get("tempo", 0)}s)')
+        linhas.append('')
+
+    return '\n'.join(linhas) + '\n'
 
 if __name__ == '__main__':
     main()

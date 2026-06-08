@@ -9,6 +9,10 @@ import json
 from collections import defaultdict
 from datetime import datetime, timedelta
 
+sys.path.insert(0, os.path.dirname(__file__))
+from _hermes_env import FUSO_BR, ts_to_local_date
+
+
 JSONL_PATH = os.path.join(os.path.dirname(__file__), '..', 'hermes_events.jsonl')
 
 def carregar_eventos():
@@ -25,8 +29,9 @@ def main():
         print('Nenhuma questão respondida.')
         return
 
-    hoje = datetime.now()
-    inicio_semana = hoje - timedelta(days=7)
+    hoje = datetime.now(FUSO_BR)
+    hoje_local = hoje.date()
+    inicio_semana = hoje_local - timedelta(days=7)
     fim_semana_passada = inicio_semana
     inicio_semana_passada = fim_semana_passada - timedelta(days=7)
 
@@ -34,12 +39,13 @@ def main():
         ts = e.get('timestamp', '')
         if not ts: return False
         try:
-            d = datetime.fromisoformat(ts[:10])
+            d = datetime.strptime(ts_to_local_date(ts), '%Y-%m-%d').date()
             return inicio <= d < fim
         except: return False
 
-    semana = [e for e in respondidas if filtro_semana(e, inicio_semana, hoje)]
+    semana = [e for e in respondidas if filtro_semana(e, inicio_semana, hoje_local)]
     passada = [e for e in respondidas if filtro_semana(e, inicio_semana_passada, fim_semana_passada)]
+
 
     total_semana = len(semana)
     total_passada = len(passada)
@@ -110,11 +116,11 @@ def main():
     if semana:
         por_dia = defaultdict(int)
         for e in semana:
-            dia = e.get('timestamp','')[:10]
+            dia = ts_to_local_date(e.get('timestamp',''))
             if dia: por_dia[dia] += 1
         melhor_dia = max(por_dia, key=por_dia.get) if por_dia else ''
         if melhor_dia:
-            data = datetime.fromisoformat(melhor_dia).strftime('%d/%m/%Y')
+            data = datetime.strptime(melhor_dia, '%Y-%m-%d').strftime('%d/%m/%Y')
             print(f'🏆 Dia mais produtivo: {data} ({por_dia[melhor_dia]} questões)')
         print()
 
@@ -128,7 +134,8 @@ def main():
         if d.get('acertou'):
             s['acertos'] += 1
         else:
-            s['erros_recentes'].append(e.get('timestamp','')[:10])
+            s['erros_recentes'].append(ts_to_local_date(e.get('timestamp','')))
+
 
     print('🎯 TOP 5 ASSUNTOS PARA REVISAR')
     print('─' * 50)

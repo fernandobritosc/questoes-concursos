@@ -108,15 +108,10 @@ export function useRevisao() {
         materia: questaoAtual.materia,
         assunto: questaoAtual.assunto,
         banca_texto: questaoAtual.banca_texto,
-        orgao: questaoAtual.orgao,
-        concurso: questaoAtual.concurso,
-        ano: questaoAtual.ano,
         gabarito: questaoAtual.gabarito,
         alternativa_selecionada: alternativaSelecionada,
         acertou,
         tempo_segundos: tempoSegundos,
-        enunciado: questaoAtual.enunciado,
-        alternativas: questaoAtual.alternativas,
       })
     } catch (err: unknown) {
       console.error('Erro ao salvar resposta:', err)

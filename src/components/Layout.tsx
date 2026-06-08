@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { 
   LayoutDashboard, 
@@ -10,7 +10,9 @@ import {
   Map, 
   Menu, 
   X,
-  LogOut
+  LogOut,
+  Sun,
+  Moon
 } from 'lucide-react'
 import { CommandPalette } from './CommandPalette'
 import { supabase } from '../lib/supabase'
@@ -20,6 +22,25 @@ import { useAuth } from '../contexts/AuthContext'
 export function Layout() {
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const saved = localStorage.getItem('app-theme')
+    return (saved as 'dark' | 'light') || 'dark'
+  })
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light')
+    } else {
+      document.documentElement.classList.remove('light')
+    }
+  }, [theme])
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(nextTheme)
+    localStorage.setItem('app-theme', nextTheme)
+  }
 
   const navItems = [
     { name: 'Dashboard', path: '/app/dashboard', icon: LayoutDashboard },
@@ -53,7 +74,7 @@ export function Layout() {
           className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm ${
             isActive 
               ? 'bg-gradient-to-r from-violet-600/90 to-indigo-600/90 text-white font-semibold shadow-lg shadow-violet-500/20 nav-glow' 
-              : 'text-muted-foreground hover:bg-white/[0.04] hover:text-foreground'
+              : 'text-muted-foreground hover:bg-muted hover:text-foreground dark:hover:bg-white/[0.04]'
           }`}
         >
           <Icon className={`w-[18px] h-[18px] ${isActive ? 'text-white' : ''}`} />
@@ -123,6 +144,13 @@ export function Layout() {
             </nav>
 
             <div className="pt-4 mt-auto">
+              <button
+                onClick={toggleTheme}
+                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted dark:hover:bg-white/[0.04] transition-all text-xs font-semibold cursor-pointer mb-2 animate-in fade-in"
+              >
+                {theme === 'dark' ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5 text-violet-500" />}
+                {theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
+              </button>
               {session && (
                 <button
                   onClick={() => {
@@ -136,8 +164,8 @@ export function Layout() {
                 </button>
               )}
               <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
-              <div className="px-4 py-3 rounded-xl bg-violet-500/[0.07] border border-violet-500/10">
-                <p className="text-xs text-violet-300 font-medium">Web Platform</p>
+              <div className="px-4 py-3 rounded-xl bg-violet-500/5 dark:bg-violet-500/[0.07] border border-violet-500/10">
+                <p className="text-xs text-violet-600 dark:text-violet-300 font-medium">Web Platform</p>
                 <p className="text-[10px] text-muted-foreground mt-0.5">v1.0.0 (Mobile)</p>
               </div>
             </div>
@@ -168,6 +196,13 @@ export function Layout() {
 
         {/* Bottom section */}
         <div className="p-4 mt-auto">
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted dark:hover:bg-white/[0.04] transition-all text-xs font-semibold cursor-pointer mb-2 animate-in fade-in"
+          >
+            {theme === 'dark' ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5 text-violet-500" />}
+            {theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
+          </button>
           {session && (
             <button
               onClick={handleLogout}
@@ -178,8 +213,8 @@ export function Layout() {
             </button>
           )}
           <div className="mx-2 h-px bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
-          <div className="px-4 py-3 rounded-xl bg-violet-500/[0.07] border border-violet-500/10">
-            <p className="text-xs text-violet-300 font-medium">Web Platform</p>
+          <div className="px-4 py-3 rounded-xl bg-violet-500/5 dark:bg-violet-500/[0.07] border border-violet-500/10">
+            <p className="text-xs text-violet-600 dark:text-violet-300 font-medium">Web Platform</p>
             <p className="text-[10px] text-muted-foreground mt-0.5">v1.0.0</p>
           </div>
         </div>

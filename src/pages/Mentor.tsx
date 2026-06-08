@@ -31,7 +31,7 @@ function NotebookLMCard({ promptText }: { promptText: string }) {
             <p className="text-[10px] text-muted-foreground mt-0.5">Foco em recall ativo e simulações de bancas</p>
           </div>
         </div>
-        <span className="text-[10px] bg-violet-500/10 text-violet-300 font-bold px-2 py-0.5 rounded-full border border-violet-500/25 w-fit">
+        <span className="text-[10px] bg-violet-500/10 text-violet-600 dark:text-violet-300 font-bold px-2 py-0.5 rounded-full border border-violet-500/25 w-fit">
           Google AI integration
         </span>
       </div>
@@ -336,7 +336,7 @@ export function Mentor() {
                                 </div>
                               </div>
                               <div className="relative">
-                                <pre className="p-2.5 rounded bg-black/40 text-[9px] font-mono overflow-x-auto text-zinc-350 border border-white/5 leading-relaxed">
+                                <pre className="p-2.5 rounded bg-black/40 text-[9px] font-mono overflow-x-auto text-zinc-350 border border-border/40 dark:border-white/5 leading-relaxed">
 {`ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_plano JSONB DEFAULT '{}'::jsonb;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAULT '{}'::jsonb;`}
                                 </pre>
@@ -357,7 +357,7 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAUL
                           {/* Diagnóstico Glassmorphism */}
                           <div className="p-5 rounded-xl border border-violet-500/20 bg-gradient-to-br from-violet-950/10 via-card to-card text-foreground shadow-xs relative overflow-hidden">
                             <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-violet-500 to-indigo-600" />
-                            <h4 className="text-xs font-black text-violet-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                            <h4 className="text-xs font-black text-violet-600 dark:text-violet-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
                               <Sparkles className="w-4 h-4 text-violet-400" /> Diagnóstico do Mentor
                             </h4>
                             <p className="text-xs text-muted-foreground leading-relaxed font-medium">
@@ -429,7 +429,7 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAUL
                                           {item.topicos && item.topicos.length > 0 && (
                                             <div className="flex flex-wrap gap-1 mt-0.5">
                                               {item.topicos.map((topico, tIdx) => (
-                                                <span key={tIdx} className="text-[10px] font-bold text-violet-300 bg-violet-500/5 px-2 py-0.5 rounded border border-white/[0.04]">
+                                                <span key={tIdx} className="text-[10px] font-bold text-violet-600 dark:text-violet-300 bg-violet-500/5 px-2 py-0.5 rounded border border-border/50 dark:border-white/[0.04]">
                                                   {topico}
                                                 </span>
                                               ))}
@@ -452,7 +452,7 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAUL
                           {plano.dica_ouro && (
                             <div className="p-5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-foreground relative overflow-hidden">
                               <div className="absolute top-0 left-0 h-full w-1 bg-indigo-500" />
-                              <h4 className="text-xs font-black text-indigo-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                              <h4 className="text-xs font-black text-indigo-650 dark:text-indigo-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
                                 <Sparkles className="w-4 h-4 animate-pulse text-indigo-400" /> Dica de Ouro do Mentor
                               </h4>
                               <p className="text-xs text-muted-foreground leading-relaxed font-semibold">

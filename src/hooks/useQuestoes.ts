@@ -516,15 +516,10 @@ export function useQuestoes() {
         materia: questao.materia,
         assunto: questao.assunto,
         banca_texto: questao.banca_texto,
-        orgao: questao.orgao,
-        concurso: questao.concurso,
-        ano: questao.ano,
         gabarito: questao.gabarito,
         alternativa_selecionada: alternativaSelecionada,
         acertou,
         tempo_segundos: tempoSegundos,
-        enunciado: questao.enunciado,
-        alternativas: questao.alternativas,
       })
 
       // Recarrega o histórico específico desta questão

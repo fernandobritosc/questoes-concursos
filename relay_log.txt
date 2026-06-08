@@ -1,0 +1,11 @@
+Hermes Relay rodando em http://127.0.0.1:3333
+Eventos salvos em: C:\Programação\questoes-concursos\hermes_events.jsonl
+Max payload: 65536 bytes
+Rotação: 50 MB ou troca de dia → hermes_events_*.jsonl.gz (mantém 30 dias)
+
+Rotas disponíveis:
+  POST /event          — receber evento (usado pelo app)
+  GET  /events?after=N  — buscar eventos a partir do byte offset N
+  GET  /health          — health check
+[hermes] JSONL rotacionado (day-2026-06-08) → C:\Programação\questoes-concursos\hermes_events_2026-06-08T02-00-34-894Z.jsonl
+[hermes] Compactado → C:\Programação\questoes-concursos\hermes_events_2026-06-08T02-00-34-894Z.jsonl.gz

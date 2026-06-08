@@ -1,4 +1,4 @@
-const RELAY_URL = 'http://127.0.0.1:3333'
+const RELAY_URL = import.meta.env.VITE_HERMES_RELAY_URL || 'http://127.0.0.1:3333'
 
 export type DadosQuestao = {
   questao_id: number
@@ -6,15 +6,10 @@ export type DadosQuestao = {
   materia: string | null
   assunto: string | null
   banca_texto: string | null
-  orgao: string | null
-  concurso: string | null
-  ano: number | null
   gabarito: string | null
   alternativa_selecionada: string | null
   acertou: boolean
   tempo_segundos: number
-  enunciado: string | null
-  alternativas: Record<string, string> | null
 }
 
 export type HermesEventPayload = {

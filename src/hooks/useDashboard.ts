@@ -84,6 +84,18 @@ function getSaudacao(): string {
 }
 
 /**
+ * Helper para formatar data no fuso de Brasília (YYYY-MM-DD)
+ */
+function getBrasiliaDateString(date: Date): string {
+  return new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(date)
+}
+
+/**
  * Calcula a streak de dias consecutivos de estudo.
  */
 function calcularStreak(resolucoes: Resolucao[]): number {
@@ -92,26 +104,27 @@ function calcularStreak(resolucoes: Resolucao[]): number {
   const diasUnicos = new Set(
     resolucoes
       .filter(r => r.data_resolucao)
-      .map(r => new Date(r.data_resolucao).toISOString().split('T')[0])
+      .map(r => getBrasiliaDateString(new Date(r.data_resolucao)))
   )
 
-  const diasOrdenados = Array.from(diasUnicos).sort().reverse()
-  if (diasOrdenados.length === 0) return 0
+  const hoje = getBrasiliaDateString(new Date())
+  const ontem = getBrasiliaDateString(new Date(Date.now() - 86400000))
 
-  // Verifica se estudou hoje ou ontem
-  const hoje = new Date().toISOString().split('T')[0]
-  const ontem = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+  // Se não estudou hoje nem ontem, o streak é 0
+  if (!diasUnicos.has(hoje) && !diasUnicos.has(ontem)) {
+    return 0
+  }
 
-  if (diasOrdenados[0] !== hoje && diasOrdenados[0] !== ontem) return 0
+  // Começa a verificar a partir da data de estudo mais recente (hoje ou ontem)
+  const dataReferencia = diasUnicos.has(hoje) ? new Date() : new Date(Date.now() - 86400000)
+  let streak = 0
 
-  let streak = 1
-  for (let i = 1; i < diasOrdenados.length; i++) {
-    const diaAtual = new Date(diasOrdenados[i - 1])
-    const diaAnterior = new Date(diasOrdenados[i])
-    const diff = (diaAtual.getTime() - diaAnterior.getTime()) / 86400000
-
-    if (diff === 1) {
+  while (true) {
+    const dataStr = getBrasiliaDateString(dataReferencia)
+    if (diasUnicos.has(dataStr)) {
       streak++
+      // Subtrai 1 dia
+      dataReferencia.setDate(dataReferencia.getDate() - 1)
     } else {
       break
     }
@@ -218,11 +231,9 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
   // Agrupamento temporal por dia para Evolução Diária (últimos 10 dias ativos)
   const porDia = respondidas.reduce((acc, curr) => {
     if (!curr.data_resolucao) return acc
-    const d = new Date(curr.data_resolucao)
-    const day = String(d.getDate()).padStart(2, '0')
-    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const fullDate = getBrasiliaDateString(new Date(curr.data_resolucao))
+    const [, month, day] = fullDate.split('-')
     const displayDate = `${day}/${month}`
-    const fullDate = d.toISOString().split('T')[0]
 
     if (!acc[fullDate]) {
       acc[fullDate] = { display: displayDate, resolvidas: 0, acertos: 0 }
@@ -242,15 +253,7 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
       taxa: val.resolvidas > 0 ? Math.round((val.acertos / val.resolvidas) * 100) : 0,
     }))
 
-  // Helper to format date in Brasília timezone (YYYY-MM-DD)
-  const getBrasiliaDateString = (date: Date): string => {
-    return new Intl.DateTimeFormat('sv-SE', {
-      timeZone: 'America/Sao_Paulo',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date)
-  }
+
 
   // Helper to get date string and hour in Brasília timezone
   const getBrasiliaDateAndHour = (dateStr: string) => {

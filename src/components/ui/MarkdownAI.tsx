@@ -69,9 +69,9 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
     const bodyRows = tableRows.slice(1).map(parseCells)
     
     return (
-      <div key={blockIdx} className="my-4 overflow-x-auto rounded-xl border border-white/[0.08] bg-white/[0.02] shadow-sm print:border-neutral-300 print:bg-transparent">
-        <table className="min-w-full divide-y divide-white/[0.06] text-left text-xs sm:text-sm print:divide-neutral-350">
-          <thead className="bg-white/[0.04] text-foreground font-semibold print:bg-neutral-100 print:text-black">
+      <div key={blockIdx} className="my-4 overflow-x-auto rounded-xl border border-border/60 bg-muted/20 dark:border-white/[0.08] dark:bg-white/[0.02] shadow-sm print:border-neutral-300 print:bg-transparent">
+        <table className="min-w-full divide-y divide-border/40 dark:divide-white/[0.06] text-left text-xs sm:text-sm print:divide-neutral-350">
+          <thead className="bg-muted/30 dark:bg-white/[0.04] text-foreground font-semibold print:bg-neutral-100 print:text-black">
             <tr>
               {headers.map((h, i) => (
                 <th key={i} className="px-4 py-2.5 font-bold print:border print:border-neutral-300">
@@ -80,9 +80,9 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.04] text-muted-foreground print:divide-neutral-250 print:text-neutral-800">
+          <tbody className="divide-y divide-border/30 dark:divide-white/[0.04] text-muted-foreground print:divide-neutral-250 print:text-neutral-800">
             {bodyRows.map((row, rowIdx) => (
-              <tr key={rowIdx} className="hover:bg-white/[0.01] transition-colors print:hover:bg-transparent">
+              <tr key={rowIdx} className="hover:bg-muted/10 dark:hover:bg-white/[0.01] transition-colors print:hover:bg-transparent">
                 {row.map((cell, cellIdx) => (
                   <td key={cellIdx} className="px-4 py-2.5 whitespace-normal break-words print:border print:border-neutral-300">
                     {parseFormatting(cell)}
@@ -185,7 +185,7 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
         }
         if (trimmed.startsWith('## ')) {
           return (
-            <h3 key={blockIdx} className="text-sm sm:text-base font-black text-violet-300 mt-5 mb-2 tracking-tight border-b border-white/[0.05] pb-1 print:text-violet-950 print:border-neutral-200 print:break-inside-avoid">
+            <h3 key={blockIdx} className="text-sm sm:text-base font-black text-violet-600 dark:text-violet-300 mt-5 mb-2 tracking-tight border-b border-border/40 dark:border-white/[0.05] pb-1 print:text-violet-950 print:border-neutral-200 print:break-inside-avoid">
               {parseFormatting(trimmed.substring(3))}
             </h3>
           )
@@ -255,7 +255,7 @@ function parseFormatting(text: string): React.ReactNode {
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       return (
-        <strong key={i} className="font-extrabold text-foreground bg-white/[0.01] px-0.5 rounded print:text-black">
+        <strong key={i} className="font-extrabold text-foreground bg-muted/10 dark:bg-white/[0.01] px-0.5 rounded print:text-black">
           {part.slice(2, -2)}
         </strong>
       )
@@ -269,7 +269,7 @@ function parseFormatting(text: string): React.ReactNode {
     }
     if (part.startsWith('`') && part.endsWith('`')) {
       return (
-        <code key={i} className="px-1.5 py-0.5 rounded bg-white/[0.06] text-violet-300 font-mono text-[10px] sm:text-xs border border-white/[0.04] font-medium print:bg-neutral-100 print:text-violet-850 print:border-neutral-200">
+        <code key={i} className="px-1.5 py-0.5 rounded bg-muted/30 text-violet-600 dark:text-violet-300 font-mono text-[10px] sm:text-xs border border-border/40 dark:bg-white/[0.06] dark:border-white/[0.04] font-medium print:bg-neutral-100 print:text-violet-850 print:border-neutral-200">
           {part.slice(1, -1)}
         </code>
       )

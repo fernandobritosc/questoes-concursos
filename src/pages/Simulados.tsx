@@ -154,7 +154,7 @@ export function Simulados() {
             {/* Card Esquerdo: Configurações */}
             <div className="lg:col-span-5 space-y-6">
               <div className="glass-card p-6 space-y-6">
-                <h2 className="text-lg font-bold text-foreground flex items-center gap-2 border-b border-white/[0.04] pb-3">
+                <h2 className="text-lg font-bold text-foreground flex items-center gap-2 border-b border-border/60 dark:border-white/[0.04] pb-3">
                   <ClipboardList className="w-5 h-5 text-violet-500" />
                   Ajustar Parâmetros da Prova
                 </h2>
@@ -173,7 +173,7 @@ export function Simulados() {
                         className={`py-3.5 px-4 rounded-xl border font-bold text-sm transition-all duration-200 cursor-pointer ${
                           selectedQtd === qtd
                             ? 'bg-gradient-to-r from-violet-600 to-indigo-650 border-violet-500 text-white shadow-lg shadow-violet-500/20'
-                            : 'bg-white/[0.02] border-white/[0.05] text-muted-foreground hover:bg-white/[0.05] hover:border-white/[0.1] hover:text-foreground'
+                            : 'bg-card border border-border text-foreground hover:bg-muted hover:border-border hover:text-foreground dark:bg-white/[0.02] dark:border-white/[0.05] dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1]'
                         }`}
                       >
                         {qtd} Questões
@@ -196,7 +196,7 @@ export function Simulados() {
                         className={`py-3.5 px-4 rounded-xl border font-bold text-sm transition-all duration-200 cursor-pointer ${
                           selectedTempo === t
                             ? 'bg-gradient-to-r from-violet-600 to-indigo-650 border-violet-500 text-white shadow-lg shadow-violet-500/20'
-                            : 'bg-white/[0.02] border-white/[0.05] text-muted-foreground hover:bg-white/[0.05] hover:border-white/[0.1] hover:text-foreground'
+                            : 'bg-card border border-border text-foreground hover:bg-muted hover:border-border hover:text-foreground dark:bg-white/[0.02] dark:border-white/[0.05] dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1]'
                         }`}
                       >
                         {t} Minutos
@@ -252,7 +252,7 @@ export function Simulados() {
                 <button
                   type="button"
                   onClick={() => setIsHistoryExpandedMobile(!isHistoryExpandedMobile)}
-                  className="w-full flex items-center justify-between p-4 glass-card text-xs font-bold text-foreground cursor-pointer hover:bg-white/[0.02] transition-all"
+                  className="w-full flex items-center justify-between p-4 glass-card text-xs font-bold text-foreground cursor-pointer hover:bg-muted/30 dark:hover:bg-white/[0.02] transition-all"
                 >
                   <div className="flex items-center gap-2">
                     <History className="w-4 h-4 text-indigo-400" />
@@ -269,7 +269,7 @@ export function Simulados() {
                 <>
                   {/* Lista de Histórico */}
                   <div className="glass-card p-5 space-y-4">
-                    <div className="flex items-center justify-between border-b border-white/[0.04] pb-3">
+                    <div className="flex items-center justify-between border-b border-border/50 dark:border-white/[0.04] pb-3">
                       <div className="flex items-center gap-2">
                         <History className="w-5 h-5 text-indigo-400" />
                         <h3 className="text-sm font-bold text-foreground">Histórico de Simulados</h3>
@@ -303,7 +303,7 @@ export function Simulados() {
                         return (
                           <div
                             key={sim.id || index}
-                            className="p-4 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-white/[0.08] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                            className="p-4 rounded-xl border border-border bg-card hover:bg-muted/30 hover:border-border dark:border-white/[0.04] dark:bg-white/[0.01] dark:hover:bg-white/[0.02] dark:hover:border-white/[0.08] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                           >
                             <div className="space-y-1">
                               <div className="flex items-center gap-2.5 flex-wrap">
@@ -362,7 +362,7 @@ export function Simulados() {
                       <button
                         type="button"
                         onClick={() => setVerTodosHistorico(!verTodosHistorico)}
-                        className="w-full py-2.5 text-center text-xs font-bold text-violet-400 hover:text-violet-300 bg-white/[0.02] border border-white/[0.04] rounded-xl hover:bg-white/[0.04] transition-all cursor-pointer mt-2"
+                        className="w-full py-2.5 text-center text-xs font-bold text-violet-400 hover:text-violet-300 bg-muted border border-border/60 hover:bg-muted/80 dark:bg-white/[0.02] dark:border-white/[0.04] dark:hover:bg-white/[0.04] transition-all cursor-pointer mt-2"
                       >
                         {verTodosHistorico ? 'Ver menos' : `Ver todos (${historicoSimulados.length})`}
                       </button>
@@ -392,7 +392,7 @@ export function Simulados() {
                               if (active && payload && payload.length) {
                                 const dataItem = payload[0].payload
                                 return (
-                                  <div className="glass-card p-2 border border-white/10 text-[10px] shadow-xl">
+                                  <div className="glass-card p-2 border border-border/60 dark:border-white/10 text-[10px] shadow-xl">
                                     <p className="font-extrabold text-violet-400">{dataItem.Data}</p>
                                     <p className="font-semibold text-foreground mt-0.5">
                                       Aproveitamento: <span className="font-bold text-emerald-400">{payload[0].value}%</span>
@@ -419,7 +419,7 @@ export function Simulados() {
               ) : (
                 /* Estado Vazio */
                 <div className="glass-card p-10 text-center flex flex-col items-center justify-center gap-4 h-full min-h-[300px]">
-                  <div className="w-14 h-14 rounded-full bg-white/[0.02] border border-white/[0.04] flex items-center justify-center text-muted-foreground/40 animate-pulse">
+                  <div className="w-14 h-14 rounded-full bg-muted/30 border border-border/50 dark:bg-white/[0.02] dark:border-white/[0.04] flex items-center justify-center text-muted-foreground/40 animate-pulse">
                     <ClipboardList className="w-7 h-7" />
                   </div>
                   <div className="space-y-1.5 max-w-sm">
@@ -439,7 +439,7 @@ export function Simulados() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
             <div className="glass-card w-full max-w-2xl max-h-[85vh] flex flex-col border-violet-500/30 overflow-hidden shadow-2xl animate-scale-in relative">
               {/* Cabeçalho do Modal */}
-              <div className="p-5 border-b border-white/[0.05] flex items-center justify-between shrink-0 bg-white/[0.01]">
+              <div className="p-5 border-b border-border/50 flex items-center justify-between shrink-0 bg-muted/10 dark:border-white/[0.05] dark:bg-white/[0.01]">
                 <div className="flex items-center gap-2.5">
                   <div className="p-2 rounded-lg bg-violet-500/10 text-violet-400">
                     <BrainCircuit className="w-5 h-5 animate-pulse" />
@@ -453,7 +453,7 @@ export function Simulados() {
                 </div>
                 <button
                   onClick={() => setSelectedSimuladoForModal(null)}
-                  className="p-1.5 rounded-lg border border-white/[0.08] hover:bg-white/[0.08] text-muted-foreground hover:text-foreground cursor-pointer text-xs font-bold transition-all"
+                  className="p-1.5 rounded-lg border border-border/60 hover:bg-muted dark:border-white/[0.08] dark:hover:bg-white/[0.08] text-muted-foreground hover:text-foreground cursor-pointer text-xs font-bold transition-all"
                 >
                   Fechar
                 </button>
@@ -465,7 +465,7 @@ export function Simulados() {
               </div>
 
               {/* Rodapé do Modal */}
-              <div className="p-4 border-t border-white/[0.05] bg-white/[0.01] shrink-0 text-right">
+              <div className="p-4 border-t border-border/50 bg-muted/10 dark:border-white/[0.05] dark:bg-white/[0.01] shrink-0 text-right">
                 <Button
                   size="sm"
                   onClick={() => setSelectedSimuladoForModal(null)}
@@ -511,7 +511,7 @@ export function Simulados() {
             <div className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 ${
               isAlertTime 
                 ? 'bg-red-500/10 border-red-500/30 text-red-400 animate-pulse ring-1 ring-red-500/20' 
-                : 'bg-white/[0.03] border-white/[0.08] text-foreground'
+                : 'bg-card border border-border dark:bg-white/[0.03] dark:border-white/[0.08] text-foreground'
             }`}>
               <Timer className="w-4 h-4 shrink-0" />
               <span className="font-mono font-bold tracking-widest text-sm">{formatCountdown(tempoRestante)}</span>
@@ -538,12 +538,12 @@ export function Simulados() {
           <div className="lg:col-span-3 glass-card p-5 flex flex-col gap-4 overflow-y-auto h-full min-h-0">
             {/* Meta-dados */}
             {qAtual && (
-              <div className="flex flex-wrap gap-2 items-center text-xs border-b border-white/[0.04] pb-3 shrink-0">
+              <div className="flex flex-wrap gap-2 items-center text-xs border-b border-border/50 pb-3 shrink-0">
                 <span className="px-2.5 py-1 rounded-md bg-violet-500/10 text-violet-300 font-bold border border-violet-500/10">
                   {qAtual.materia}
                 </span>
                 {qAtual.assunto && (
-                  <span className="px-2.5 py-1 rounded-md bg-white/[0.04] text-muted-foreground border border-white/[0.05]">
+                  <span className="px-2.5 py-1 rounded-md bg-muted/30 text-muted-foreground border border-border/50">
                     {qAtual.assunto}
                   </span>
                 )}
@@ -555,7 +555,7 @@ export function Simulados() {
 
             {/* Enunciado */}
             <div className="flex-1 min-h-0 overflow-y-auto pr-1">
-              <div className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.03] text-foreground/90 font-medium text-sm leading-relaxed whitespace-pre-wrap select-text">
+              <div className="p-4 rounded-xl bg-muted/30 border border-border text-foreground/90 font-medium text-sm leading-relaxed whitespace-pre-wrap select-text">
                 {cleanHtmlText(qAtual?.enunciado)}
               </div>
 
@@ -576,13 +576,13 @@ export function Simulados() {
                           className={`w-full text-left p-4 rounded-xl border flex items-start gap-4 transition-all duration-200 cursor-pointer ${
                             isSelected
                               ? 'bg-gradient-to-r from-violet-600/10 to-indigo-650/10 border-violet-500 text-foreground ring-1 ring-violet-500/30'
-                              : 'bg-white/[0.01] border-white/[0.05] hover:bg-white/[0.04] hover:border-white/[0.1] text-muted-foreground hover:text-foreground'
+                              : 'bg-card border border-border hover:bg-muted hover:border-border text-foreground'
                           }`}
                         >
                           <span className={`w-6 h-6 rounded-full border flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${
                             isSelected 
                               ? 'bg-violet-600 border-violet-400 text-white' 
-                              : 'border-white/[0.15] text-muted-foreground'
+                              : 'border-border/60 text-muted-foreground'
                           }`}>
                             {letra}
                           </span>
@@ -594,7 +594,7 @@ export function Simulados() {
             </div>
 
             {/* Rodapé Navegação */}
-            <div className="flex items-center justify-between border-t border-white/[0.04] pt-3 shrink-0">
+            <div className="flex items-center justify-between border-t border-border/50 pt-3 shrink-0">
               <Button
                 variant="ghost"
                 onClick={() => setQuestaoAtualIndex(prev => Math.max(0, prev - 1))}
@@ -656,7 +656,7 @@ export function Simulados() {
                           ? 'border-violet-500 text-white bg-violet-650/40 ring-1 ring-violet-500/40'
                           : isAnswered
                           ? 'bg-violet-600/10 border-violet-550/25 text-violet-300'
-                          : 'bg-white/[0.01] border-white/[0.05] text-muted-foreground/60 hover:bg-white/[0.04]'
+                          : 'bg-muted/10 border-border/60 text-muted-foreground/60 hover:bg-muted/30'
                       }`}
                     >
                       <span>{idx + 1}</span>
@@ -672,7 +672,7 @@ export function Simulados() {
             </div>
 
             {/* Dica */}
-            <div className="p-3 rounded-xl bg-white/[0.01] border border-white/[0.04] text-[10px] text-muted-foreground/80 leading-relaxed shrink-0">
+            <div className="p-3 rounded-xl bg-muted/10 border border-border/50 text-[10px] text-muted-foreground/80 leading-relaxed shrink-0">
               Ao encerrar ou zerar o tempo, as tentativas serão inseridas na base de dados, impactando suas estatísticas no Dashboard.
             </div>
           </div>
@@ -709,7 +709,7 @@ export function Simulados() {
     return (
       <div className="flex flex-col gap-6 max-w-5xl mx-auto py-6 px-4 animate-fade-in-up w-full">
         {/* Cabeçalho de Resultados */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/[0.05] pb-5 shrink-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/50 pb-5 shrink-0">
           <div className="space-y-1">
             <h1 className="text-2xl font-black text-foreground tracking-tight flex items-center gap-2">
               <Award className="w-7 h-7 text-violet-450" />
@@ -790,7 +790,7 @@ export function Simulados() {
 
         {/* Diagnóstico Exclusivo do Mentor IA (Gemini) */}
         <div className="glass-card border-violet-500/25 relative overflow-hidden bg-gradient-to-b from-violet-500/[0.05] via-transparent to-transparent">
-          <div className="px-5 py-4 border-b border-white/[0.05] flex items-center justify-between shrink-0 bg-white/[0.01]">
+          <div className="px-5 py-4 border-b border-border/50 flex items-center justify-between shrink-0 bg-muted/10">
             <div className="flex items-center gap-2">
               <BrainCircuit className="w-5 h-5 text-violet-400" />
               <span className="text-sm font-extrabold text-foreground tracking-tight">Prescrição Tática do Mentor IA</span>
@@ -844,7 +844,7 @@ export function Simulados() {
                   <button
                     type="button"
                     onClick={() => setActiveReviewIndex(isExpanded ? null : idx)}
-                    className="w-full text-left p-4 flex items-center justify-between gap-4 hover:bg-white/[0.01] transition-colors cursor-pointer"
+                    className="w-full text-left p-4 flex items-center justify-between gap-4 hover:bg-muted/10 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
                       <span className={`w-8 h-8 rounded-lg font-bold text-xs flex items-center justify-center border shrink-0 ${
@@ -884,11 +884,11 @@ export function Simulados() {
 
                   {/* Detalhes Accordion */}
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-1 border-t border-white/[0.03] space-y-4 animate-fade-in-up bg-white/[0.005]">
+                    <div className="px-5 pb-5 pt-1 border-t border-border/50 space-y-4 animate-fade-in-up bg-muted/5">
                       {/* Enunciado */}
                       <div className="space-y-1.5 mt-2">
                         <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">Enunciado</span>
-                        <div className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.03] text-foreground/90 font-medium text-xs leading-relaxed whitespace-pre-wrap select-text">
+                        <div className="p-4 rounded-xl bg-muted/15 border border-border/50 text-foreground/90 font-medium text-xs leading-relaxed whitespace-pre-wrap select-text">
                           {cleanHtmlText(q.enunciado)}
                         </div>
                       </div>
@@ -903,7 +903,7 @@ export function Simulados() {
                               const isCorrectOption = letra.toUpperCase() === gabarito.toUpperCase()
                               const isSelectedOption = letra.toUpperCase() === resposta.toUpperCase()
 
-                              let borderStyle = 'border-white/[0.04] bg-white/[0.005]'
+                              let borderStyle = 'border-border/40 bg-muted/5'
                               let badgeIcon = null
 
                               if (isCorrectOption) {
@@ -924,7 +924,7 @@ export function Simulados() {
                                       ? 'bg-emerald-600 border-emerald-400 text-white'
                                       : isSelectedOption
                                       ? 'bg-red-600 border-red-400 text-white'
-                                      : 'border-white/10'
+                                      : 'border-border/60'
                                   }`}>
                                     {letra}
                                   </span>
@@ -937,7 +937,7 @@ export function Simulados() {
                       </div>
 
                       {/* Explicações/Resoluções */}
-                      <div className="space-y-2 border-t border-white/[0.03] pt-4">
+                      <div className="space-y-2 border-t border-border/40 dark:border-white/[0.03] pt-4">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider flex items-center gap-1.5">
                             <BookOpen className="w-3.5 h-3.5 text-violet-400" />
@@ -963,7 +963,7 @@ export function Simulados() {
                             <MarkdownAI text={explicacaoLocal} />
                           </div>
                         ) : (
-                          <div className="p-4 rounded-xl bg-white/[0.005] border border-dashed border-white/[0.08] text-center text-xs text-muted-foreground/50 py-6">
+                          <div className="p-4 rounded-xl bg-muted/5 border border-dashed border-border dark:bg-white/[0.005] dark:border-white/[0.08] text-center text-xs text-muted-foreground/50 py-6">
                             Nenhuma resolução cadastrada para esta questão no momento. Clique acima para gerar uma com Inteligência Artificial!
                           </div>
                         )}

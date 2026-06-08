@@ -1,36 +1,87 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+:root {
+  --background: #030712; /* gray-950 */
+  --foreground: #f8fafc; /* slate-50 */
+  --card: #111827; /* gray-900 */
+  --card-foreground: #f8fafc;
+  --border: #1f2937; /* gray-800 */
+  --input: #1f2937;
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #8b5cf6;
+  --secondary-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
+  --info: #3b82f6;
+  --info-foreground: #ffffff;
+  --glass-bg-start: rgba(17, 24, 39, 0.8);
+  --glass-bg-end: rgba(17, 24, 39, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+  --glass-shadow-inset: rgba(255, 255, 255, 0.04);
+  --glass-shadow-hover: rgba(0, 0, 0, 0.4);
+  --glass-shadow-inset-hover: rgba(255, 255, 255, 0.06);
+}
+
+html.light {
+  --background: #f1f5f9; /* slate-100 */
+  --foreground: #0f172a; /* slate-900 */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --border: #cbd5e1; /* slate-300 */
+  --input: #cbd5e1;
+  --muted: #e2e8f0; /* slate-200 */
+  --muted-foreground: #64748b; /* slate-500 */
+  --primary: #6d28d9; /* violet-700 */
+  --primary-foreground: #ffffff;
+  --secondary: #7c3aed; /* violet-600 */
+  --secondary-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
+  --info: #3b82f6;
+  --info-foreground: #ffffff;
+
+  --glass-bg-start: rgba(255, 255, 255, 0.85);
+  --glass-bg-end: rgba(255, 255, 255, 0.98);
+  --glass-border: rgba(15, 23, 42, 0.12);
+  --glass-shadow: rgba(15, 23, 42, 0.08);
+  --glass-shadow-inset: rgba(255, 255, 255, 0.9);
+  --glass-shadow-hover: rgba(15, 23, 42, 0.16);
+  --glass-shadow-inset-hover: rgba(255, 255, 255, 1);
+}
 @theme {
-  --color-primary: #7c3aed; /* violet-600 */
-  --color-primary-foreground: #ffffff;
-  
-  --color-secondary: #8b5cf6; /* violet-500 */
-  --color-secondary-foreground: #ffffff;
-
-  --color-background: #030712; /* gray-950 */
-  --color-foreground: #f8fafc; /* slate-50 */
-
-  --color-card: #111827; /* gray-900 */
-  --color-card-foreground: #f8fafc;
-
-  --color-border: #1f2937; /* gray-800 */
-  --color-input: #1f2937;
-
-  --color-muted: #1f2937; /* gray-800 */
-  --color-muted-foreground: #9ca3af; /* gray-400 */
-
-  --color-destructive: #ef4444; /* red-500 */
-  --color-destructive-foreground: #ffffff;
-
-  --color-success: #10b981; /* emerald-500 */
-  --color-success-foreground: #ffffff;
-
-  --color-warning: #f59e0b; /* amber-500 */
-  --color-warning-foreground: #ffffff;
-
-  --color-info: #3b82f6; /* blue-500 */
-  --color-info-foreground: #ffffff;
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--color-card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
 
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
@@ -46,12 +97,12 @@
 
 @layer base {
   :root {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: var(--font-sans);
+    transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
   }
 }
-
 /* ===================== KEYFRAMES ===================== */
 
 @keyframes fadeInUp {
@@ -121,23 +172,23 @@
 @layer utilities {
   /* Glassmorphism card */
   .glass-card {
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.95));
+    background: linear-gradient(135deg, var(--glass-bg-start), var(--glass-bg-end));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
     box-shadow: 
-      0 4px 24px -4px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+      0 4px 24px -4px var(--glass-shadow),
+      inset 0 1px 0 0 var(--glass-shadow-inset);
     border-radius: var(--radius-xl);
-    transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+    transition: background-color 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
   }
 
   .glass-card:hover {
     border-color: rgba(124, 58, 237, 0.25);
     box-shadow:
-      0 8px 32px -4px rgba(0, 0, 0, 0.4),
+      0 8px 32px -4px var(--glass-shadow-hover),
       0 0 0 1px rgba(124, 58, 237, 0.1),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      inset 0 1px 0 0 var(--glass-shadow-inset-hover);
   }
 
   /* Stagger animation delays */
@@ -179,7 +230,7 @@
   .progress-bar {
     height: 10px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--muted);
     overflow: hidden;
     position: relative;
   }

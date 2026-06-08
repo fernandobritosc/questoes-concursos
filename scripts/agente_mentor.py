@@ -9,7 +9,11 @@ import json
 from collections import defaultdict
 from datetime import datetime, timedelta
 
+sys.path.insert(0, os.path.dirname(__file__))
+from _hermes_env import FUSO_BR, ts_to_local_date
+
 JSONL_PATH = os.path.join(os.path.dirname(__file__), '..', 'hermes_events.jsonl')
+
 
 def carregar_eventos():
     if not os.path.exists(JSONL_PATH):
@@ -25,7 +29,7 @@ def main():
         print('📭 Nenhuma questão respondida ainda. Comece a estudar!')
         return
 
-    hoje = datetime.now()
+    hoje = datetime.now(FUSO_BR)
     stats_assunto = defaultdict(lambda: {'total': 0, 'acertos': 0, 'tempo': 0, 'ultima': None})
     stats_banca = defaultdict(lambda: {'total': 0, 'acertos': 0})
 
@@ -125,20 +129,23 @@ def main():
                 print(f'     ✅ {mat_f} → {ass_f} ({pct_f}%)')
     else:
         print('  Continue assim! Seu desempenho está bom.')
+        hoje_str = hoje.strftime('%Y-%m-%d')
         qtd_hoje = sum(1 for e in respondidas
-                       if e.get('timestamp','').startswith(hoje.strftime('%Y-%m-%d')))
+                       if ts_to_local_date(e.get('timestamp')) == hoje_str)
         print(f'  Hoje: {qtd_hoje} questões respondidas.')
     print()
 
     # ── Streak ───────────────────────────────────────────────────────
-    datas = sorted(set(e.get('timestamp','')[:10] for e in respondidas if e.get('timestamp')))
+    datas = sorted(set(ts_to_local_date(e.get('timestamp')) for e in respondidas if e.get('timestamp')))
     streak = 0
+    hoje_date = hoje.date()
     for i in range(len(datas)-1, -1, -1):
-        esperada = (hoje - timedelta(days=len(datas)-1-i)).strftime('%Y-%m-%d')
+        esperada = (hoje_date - timedelta(days=len(datas)-1-i)).strftime('%Y-%m-%d')
         if datas[i] == esperada:
             streak += 1
         else:
             break
+
     print(f'🔥  Streak atual: {streak} dias consecutivos de estudo')
     print(f'📅  Última atualização: {hoje.strftime("%d/%m/%Y %H:%M")}')
 
