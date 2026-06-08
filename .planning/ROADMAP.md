@@ -55,7 +55,14 @@ Plans:
 4. Os 38 testes existentes continuam passando sem modificações
 5. TypeScript compila limpo (`tsc -b --noEmit` zero erros) e ESLint reporta zero erros
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+```
+Plans:
+- [ ] 02-01-PLAN.md — Criar useQuestoesFilter (filter state, toggles, derived) + useQuestoesResolucao (resolução + IA)
+- [ ] 02-02-PLAN.md — Criar useQuestoesCaderno (caderno, navegação, resposta, edição, histórico)
+- [ ] 02-03-PLAN.md — Refatorar useQuestoes.ts como orquestrador compondo 3 hooks, mesma interface
+```
 
 ---
 
@@ -85,7 +92,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Paginação de Questões | 3/3 | Completed| 2026-06-08 |
-| 2. Extração de Hooks | 0/0 | Not started | - |
+| 2. Extração de Hooks | 0/3 | Planned | - |
 | 3. Extração de Sub-Componentes | 0/0 | Not started | - |
 
 ---
