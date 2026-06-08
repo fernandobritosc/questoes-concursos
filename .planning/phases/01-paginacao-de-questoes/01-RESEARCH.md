@@ -411,24 +411,24 @@ function QuestaoSkeleton() {
 
 **If this table is empty:** N/A
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Como `useSimulados` obtém o dataset completo para o algoritmo de seleção?**
+1. **RESOLVED: Como `useSimulados` obtém o dataset completo para o algoritmo de seleção?**
    - What we know: `useSimulados` chama `fetchAllQuestoes()` e usa `allQuestoes` para filtrar por tópicos fracos, inéditas, etc.
    - What's unclear: Se devemos manter `fetchAllQuestoes()` como uma função separada (sem paginação) exclusiva para simulados, ou adaptar o algoritmo de seleção para trabalhar com dados paginados.
    - Recommendation: Manter `fetchAllQuestoes()` como função separada (renomeada para `fetchAllQuestoesLegacy()` ou mantida como está) para uso exclusivo de `useSimulados`. A remoção pode ser feita em Phase 2 (extração de hooks) quando o algoritmo de simulado for refatorado.
 
-2. **Como computar `materiasUnicas`, `bancasUnicas`, `anosUnicos`, `orgaosUnicos`, `concursosUnicos` com dados paginados?**
+2. **RESOLVED: Como computar `materiasUnicas`, `bancasUnicas`, `anosUnicos`, `orgaosUnicos`, `concursosUnicos` com dados paginados?**
    - What we know: Atualmente esses valores são derivados do array completo `resolucoes` via `useMemo`.
    - What's unclear: Se devemos fazer queries separadas `SELECT DISTINCT materia FROM questoes` ou se podemos computar incrementalmente.
    - Recommendation: Criar `fetchFilterOptions()` no serviço que retorna `{ materias: string[], bancas: string[], anos: number[], orgaos: string[], concursos: string[] }`. Chamar no load inicial e cachear. As queries são leves (`SELECT DISTINCT` de colunas indexadas).
 
-3. **Como lidar com a mesclagem do histórico (historico_resolucoes) em dados paginados?**
+3. **RESOLVED: Como lidar com a mesclagem do histórico (historico_resolucoes) em dados paginados?**
    - What we know: `fetchAllQuestoes()` atualmente busca TODO o histórico e mescla client-side com cada questão.
    - What's unclear: Com paginação, como obter o histórico das questões da página atual sem buscar todo o histórico?
    - Recommendation: Duas opções viáveis: (a) Buscar o histórico completo uma vez (historico_resolucoes é tipicamente pequeno — 1 registro por tentativa do usuário, não por questão) e mesclar com cada página; (b) Para cada página, buscar o histórico apenas das questões da página com `.in('questao_id', pageIds)`. Opção (a) é mais simples e performática se o histórico for < 5000 registros.
 
-4. **Skeleton loader substitui completamente o `LoadingSpinner` na página de Questões?**
+4. **RESOLVED: Skeleton loader substitui completamente o `LoadingSpinner` na página de Questões?**
    - What we know: Atualmente `Questoes.tsx` mostra `<LoadingSpinner />` durante `loading` inicial, e depois mostra o visualizador.
    - What's unclear: O skeleton aparece apenas quando navegando entre páginas (loading de nova página), não no load inicial?
    - Recommendation: No load inicial, usar skeleton loader (D-02). Na navegação entre páginas (cache miss), mostrar skeleton no lugar do visualizador. Manter `LoadingSpinner` para tela de erro/timeout.
