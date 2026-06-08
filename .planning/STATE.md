@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-08T22:59:25.411Z"
+last_updated: "2026-06-08T23:07:48.946Z"
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
-  percent: 33
+  completed_plans: 2
+  percent: 67
 ---
 
 # STATE.md — Questões Concursos
@@ -31,9 +31,9 @@ progress:
 | 2 — Extração de Hooks | Not started | useQuestoes.ts dividido em hooks menores |
 | 3 — Extração de Sub-Componentes | Not started | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [███░░░░░░░] 33%
+**Progress:** [███████░░░] 67%
 
-**Active Plan:** Phase 1 — Paginação de Questões (Plan 01 completed, Plans 02-03 remaining)
+**Active Plan:** Phase 1 — Paginação de Questões (Plans 01-02 completed, Plan 03 remaining)
 
 ## Performance Metrics
 
@@ -54,6 +54,8 @@ progress:
 | 2026-06-08 | Phase 1 (REFAC-03) como primeira fase | Paginação altera a camada de dados que hooks e componentes consomem |
 | 2026-06-08 | 3 fases com granularidade coarse | Apenas 3 requisitos v1 ativos; compressão natural sem artificialidades |
 | 2026-06-08 | Sub-componentes extraídos seguem padrão Questoes.tsx | Padrão já provado: 1662→334 linhas, 11 sub-componentes |
+| 2026-06-08 | buildServerFilters() traduz apenas metadata filters server-side | Assunto, carreira, status, objetivo remain client-side (dependem de fallback logic ou merged historico) |
+| 2026-06-08 | PAGE_SIZE = 200 (D-01) | 200 questões por página mantém payload leve sem exigir muitas requisições |
 
 ### Open Todos
 
@@ -86,12 +88,18 @@ progress:
   - `clearQuestoesCache()` extended to reset all caches
   - `fetchAllQuestoes()` completely untouched
   - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
-- **Plan 02 (Wave 2):** Hook refactor — pagination state, filter-to-query, AbortController
+- **Plan 02 (Wave 2)** executed successfully:
+  - `useQuestoes.ts` refactored with pagination state, `buildServerFilters()`, `AbortController`, `loadPage()`, `handleNavigatePage()`
+  - `fetchAllQuestoes` import replaced with `fetchPaginatedQuestoes` + `fetchFilterOptions`
+  - `materiasUnicas`, `bancasUnicas`, etc. now use `filterOptions` with fallback
+  - `visibleQuestionsCount` reset effect removed (pagination now managed by filter-change effect)
+  - All 7 new pagination fields added to return object (all existing exports preserved)
+  - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
 - **Plan 03 (Wave 3):** Page integration — skeleton during page transitions
 
 ### Next Session
 
-- Executar Plan 02 to implement hook refactor for paginated queries
+- Executar Plan 03 to integrate pagination UI in Questoes.tsx
 
 ---
 
