@@ -30,7 +30,16 @@ export const ENUNCIADOS_OPCOES = ['Comentadas por Professores', 'Comentadas por 
 
 // ─── Hook ──────────────────────────────────────────────────────────────────────
 
-export function useQuestoesFilter(resolucoes: ResolucaoView[]) {
+export function useQuestoesFilter(
+  resolucoes: ResolucaoView[],
+  filterOptions?: {
+    materias: string[]
+    bancas: string[]
+    anos: number[]
+    orgaos: string[]
+    concursos: string[]
+  } | null,
+) {
   // ── Filter State ─────────────────────────────────────────────────────────────
   const [objetivo, setObjetivo] = useState<ObjetivoFilter>('todos')
   const [activeTab, setActiveTab] = useState<FilterTab>('materia')
@@ -87,24 +96,24 @@ export function useQuestoesFilter(resolucoes: ResolucaoView[]) {
   )
 
   const materiasUnicas = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.materia).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.materias ?? Array.from(new Set(resolucoes.map(r => r.materia).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
   const bancasUnicas = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.banca_texto).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.bancas ?? Array.from(new Set(resolucoes.map(r => r.banca_texto).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
   const anosUnicos = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.ano).filter(Boolean))) as number[],
-    [resolucoes]
+    () => filterOptions?.anos ?? Array.from(new Set(resolucoes.map(r => r.ano).filter(Boolean))) as number[],
+    [filterOptions, resolucoes]
   )
   const orgaosUnicos = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.orgao).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.orgaos ?? Array.from(new Set(resolucoes.map(r => r.orgao).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
   const concursosUnicos = useMemo(
-    () => Array.from(new Set(resolucoes.map(r => r.concurso).filter(Boolean))) as string[],
-    [resolucoes]
+    () => filterOptions?.concursos ?? Array.from(new Set(resolucoes.map(r => r.concurso).filter(Boolean))) as string[],
+    [filterOptions, resolucoes]
   )
 
   // ── Actions: Filtros ─────────────────────────────────────────────────────────
