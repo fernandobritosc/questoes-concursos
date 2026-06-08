@@ -60,7 +60,7 @@ Plans:
 ```
 Plans:
 - [ ] 02-01-PLAN.md — Criar useQuestoesFilter (filter state, toggles, derived) + useQuestoesResolucao (resolução + IA)
-- [ ] 02-02-PLAN.md — Criar useQuestoesCaderno (caderno, navegação, resposta, edição, histórico)
+- [x] 02-02-PLAN.md — Criar useQuestoesCaderno (caderno, navegação, resposta, edição, histórico)
 - [ ] 02-03-PLAN.md — Refatorar useQuestoes.ts como orquestrador compondo 3 hooks, mesma interface
 ```
 
@@ -92,7 +92,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Paginação de Questões | 3/3 | Completed| 2026-06-08 |
-| 2. Extração de Hooks | 0/3 | Planned | - |
+| 2. Extração de Hooks | 1/3 | In progress | - |
 | 3. Extração de Sub-Componentes | 0/0 | Not started | - |
 
 ---

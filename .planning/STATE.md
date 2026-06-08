@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-08T23:12:26.242Z"
+last_updated: "2026-06-08T20:42:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 100
+  total_plans: 6
+  completed_plans: 4
+  percent: 67
 ---
 
 # STATE.md — Questões Concursos
@@ -28,22 +28,23 @@ progress:
 | Phase | Status | Phase Goal |
 |-------|--------|------------|
 | 1 — Paginação de Questões | Completed | Fetch de questões usa paginação server-side |
-| 2 — Extração de Hooks | Not started | useQuestoes.ts dividido em hooks menores |
+| 2 — Extração de Hooks | In progress (1/3 plans) | useQuestoes.ts dividido em hooks menores |
 | 3 — Extração de Sub-Componentes | Not started | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [██████████] 100%
+**Progress:** [███████░░░] 67%
 
-**Active Plan:** Phase 1 — Paginação de Questões (100% — all 3 plans completed)
+**Active Plan:** Phase 2 — Extração de Hooks (Plan 02-02 completed — 1/3 plans)
 
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
 | Phase 1 plans created | ≥1 | 3 ✓ |
-| Phase 2 plans created | ≥1 | 0 |
+| Phase 2 plans created | ≥1 | 1 ✓ |
 | Phase 3 plans created | ≥1 | 0 |
-| Requirement coverage | 100% | 3/3 ✓ |
+| Requirement coverage | 100% | 4/4 ✓ |
 | Phase 01-paginacao-de-questoes P03 | 6min | 1 tasks | 1 files |
+| Phase 02-extracao-de-hooks P02 | 12min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -59,12 +60,16 @@ progress:
 | 2026-06-08 | PAGE_SIZE = 200 (D-01) | 200 questões por página mantém payload leve sem exigir muitas requisições |
 | 2026-06-08 | QuestaoSkeleton renderizado inline no fluxo do conteúdo (não como overlay) | Preserva contexto visual durante transições de página |
 | 2026-06-08 | pageLoadingError só exibido quando pageLoading é false | Evita flash de erro seguido de skeleton |
+| 2026-06-08 | handleGerarCaderno retorna count — orquestrador faz trackEvent | Desacopla caderno hook do filter hook (totalFiltrosAtivos) |
+| 2026-06-08 | handleConfirmarResposta(questao) e handleEditQuestao(questao, fields) recebem questão como parâmetro | Evita dependência de questoesExibidas[currentQuestaoIndex] dentro do hook |
 
 ### Open Todos
 
 - [x] Phase 1: Definir tamanho do lote de paginação (D-01: 200)
 - [x] Phase 1: Decidir estratégia de cache (D-03: flat progressivo, sem TTL)
-- [ ] Phase 2: Definir quais hooks extrair e suas responsabilidades
+- [x] Phase 2: Definir quais hooks extrair e suas responsabilidades
+- [x] Phase 2: Criar useQuestoesCaderno hook (Plan 02-02)
+- [ ] Phase 2: Integrar hooks no orquestrador (Plan 02-03 -- pending)
 - [ ] Phase 2: Validar que hooks expõem actions, não setters
 - [ ] Phase 3: Identificar candidatos a sub-componente em cada página
 
@@ -104,10 +109,16 @@ progress:
   - `pageLoading`, `pageLoadingError`, `page`, `totalPages`, `handleNavigatePage` destructured from `useQuestoes()`
   - `pageLoadingError` displayed as error banner when set (and not currently loading)
   - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
+- **Plan 02-02 (Wave 1)** executed successfully:
+  - `useQuestoesCaderno.ts` created (193 lines) — extracted caderno state, navigation, answer confirmation, question editing, copy, history loading
+  - Actions accept questao as explicit parameter instead of resolving from questoesExibidas
+  - Timer and history-loading effects intentionally excluded (stay in orquestrador)
+  - `useQuestoes.ts` untouched — zero modifications
+  - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
 
 ### Next Session
 
-- Phase 1 completed — ready for Phase 2 (Extração de Hooks) or Phase 3 (Extração de Sub-Componentes)
+- Phase 2 in progress — next: Plan 02-03 (Integrate extracted hooks into orquestrador useQuestoes)
 
 ---
 
