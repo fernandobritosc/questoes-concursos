@@ -30,7 +30,7 @@
 |-------------|-------|--------|
 | REFAC-01 | Phase 2 | Pending |
 | REFAC-02 | Phase 3 | Pending |
-| REFAC-03 | Phase 1 | Pending |
+| REFAC-03 | Phase 1 | Complete |
 
 ---
 
