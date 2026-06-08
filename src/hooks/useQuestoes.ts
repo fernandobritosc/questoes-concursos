@@ -48,18 +48,6 @@ export const REGIOES_DISPONIVEIS = ['Nacional (Federal)', 'São Paulo (SP)', 'Ri
 export const FAVORITAS_OPCOES = ['Minhas Favoritas (Estrelas)', 'Questões com Anotações', 'Questões Resolvidas recentemente']
 export const ENUNCIADOS_OPCOES = ['Comentadas por Professores', 'Comentadas por IA', 'Sem Comentários', 'Com resolução em Vídeo']
 
-// ─── Helper: Validação de Questão ─────────────────────────────────────────────
-
-export const getQuestionValidation = (q: Resolucao): string[] => {
-  const errors: string[] = []
-  if (!q.questao_tec_id || q.questao_tec_id <= 0) errors.push('ID da questão ausente ou inválido')
-  if (!q.enunciado || q.enunciado.trim().length < 10) errors.push('Enunciado curto ou ausente')
-  if (!q.gabarito) errors.push('Gabarito ausente')
-  const validAlts = Object.values(q.alternativas || {}).filter(val => val && val.trim() !== '')
-  if (validAlts.length < 2) errors.push('Alternativas insuficientes')
-  return errors
-}
-
 // ─── Hook Principal ────────────────────────────────────────────────────────────
 
 /**
@@ -183,7 +171,7 @@ export function useQuestoes() {
         }
         setResolucoes(data)
         setCadernoQuestoes(data)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('[LOG useQuestoes] Erro na carga inicial:', err)
         if (!cancelled) {
           setLoadingError(err instanceof Error ? err.message : 'Erro desconhecido ao carregar questões.')
@@ -225,7 +213,7 @@ export function useQuestoes() {
     try {
       const hist = await fetchHistoricoByQuestao(questaoId)
       setHistoricoQuestaoAtiva(hist)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao carregar histórico da questão ativa:', err)
     } finally {
       setLoadingHistoricoAtivo(false)
@@ -434,7 +422,7 @@ export function useQuestoes() {
         materia: questao.materia,
         assunto: questao.assunto,
       })
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err)
       setExplicacoes(prev => ({
         ...prev,
@@ -524,7 +512,7 @@ export function useQuestoes() {
 
       // Recarrega o histórico específico desta questão
       await loadHistoricoDaQuestao(targetId)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao salvar tentativa de resolução:', err)
       alert('Erro ao registrar resposta no banco de dados.')
     } finally {
@@ -570,7 +558,7 @@ export function useQuestoes() {
       })
 
       return true
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao editar questão:', err)
       alert('Erro ao salvar alterações da questão. Verifique sua conexão.')
       return false

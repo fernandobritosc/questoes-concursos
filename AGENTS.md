@@ -91,10 +91,10 @@ Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos
 
 ## How to run
 ```bash
-npm run dev        # Dev server
-npm run build      # Build production
-npm run lint       # ESLint check
-npm test           # Run tests (vitest)
-npm run test:watch # Watch mode
-npx tsc -b --noEmit # TypeScript check
+npm run dev        # Servidor de desenvolvimento
+npm run build      # Build de produção
+npm run lint       # Verificação ESLint
+npm test           # Rodar testes (vitest)
+npm run test:watch # Modo observação
+npx tsc -b --noEmit # Verificação TypeScript
 ```

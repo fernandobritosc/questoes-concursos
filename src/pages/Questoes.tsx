@@ -65,12 +65,14 @@ export function Questoes() {
   const handleOpenEditModal = () => setIsEditModalOpen(true)
 
   const [searchParams, setSearchParams] = useSearchParams()
-  const targetId = searchParams.get('id')
 
   useEffect(() => {
-    if (targetId && cadernoQuestoes.length > 0) {
-      const idNum = parseInt(targetId, 10)
-      const index = cadernoQuestoes.findIndex(q => q.questao_tec_id === idNum)
+    const idParam = searchParams.get('id')
+    const matParam = searchParams.get('materia')
+    const assParam = searchParams.get('assunto')
+
+    if (idParam && cadernoQuestoes.length > 0) {
+      const index = cadernoQuestoes.findIndex(q => q.questao_tec_id === parseInt(idParam, 10))
       if (index !== -1) {
         setFiltros(null)
         setCurrentQuestaoIndex(index)
@@ -78,25 +80,18 @@ export function Questoes() {
         setTopTab('questoes')
         setSearchParams({}, { replace: true })
       }
-    }
-  }, [targetId, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams, setFiltros])
-
-  useEffect(() => {
-    const matParam = searchParams.get('materia')
-    const assParam = searchParams.get('assunto')
-    if ((matParam || assParam) && cadernoQuestoes.length > 0) {
+    } else if ((matParam || assParam) && cadernoQuestoes.length > 0) {
       const newFiltros: Record<string, string> = {}
-      if (matParam) newFiltros['materia'] = matParam
-      if (assParam) newFiltros['assunto'] = assParam
-      
+      if (matParam) newFiltros.materia = matParam
+      if (assParam) newFiltros.assunto = assParam
+
       setFiltros(newFiltros)
       setCurrentQuestaoIndex(0)
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTopTab('questoes')
       setSearchParams({}, { replace: true })
     }
   }, [searchParams, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams, setFiltros])
-  
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ignora atalhos se o usuário estiver focando em algum campo de texto/entrada
@@ -226,45 +221,51 @@ export function Questoes() {
             ) : (
               <div className="space-y-6 max-w-4xl mx-auto pb-12">
           
-          <QuestaoVisualizador
-            questao={questoesExibidas[currentQuestaoIndex]}
-            index={currentQuestaoIndex}
-            total={cadernoQuestoes.length}
-            alternativaSelecionada={alternativaSelecionada}
-            onSelectAlternativa={setAlternativaSelecionada}
-            revelado={revelado}
-            onReset={() => { setAlternativaSelecionada(null); setRevelado(false) }}
-            onConfirmarResposta={handleConfirmarResposta}
-            onExplicacaoIA={handleExplicacaoIA}
-            loadingExplicacao={loadingExplicacao}
-            copiedId={copiedId}
-            onCopyId={handleCopy}
-            tempoSegundos={tempoSegundos}
-            salvandoResposta={salvandoResposta}
-            onEditar={handleOpenEditModal}
-            onAnterior={() => { setCurrentQuestaoIndex(prev => prev - 1); setAlternativaSelecionada(null); setRevelado(false) }}
-            onProxima={() => { setCurrentQuestaoIndex(prev => prev + 1); setAlternativaSelecionada(null); setRevelado(false) }}
-            podeAnterior={currentQuestaoIndex > 0}
-            podeProxima={currentQuestaoIndex < questoesExibidas.length - 1}
-          />
+          <ErrorBoundary>
+            <QuestaoVisualizador
+              questao={questoesExibidas[currentQuestaoIndex]}
+              index={currentQuestaoIndex}
+              total={cadernoQuestoes.length}
+              alternativaSelecionada={alternativaSelecionada}
+              onSelectAlternativa={setAlternativaSelecionada}
+              revelado={revelado}
+              onReset={() => { setAlternativaSelecionada(null); setRevelado(false) }}
+              onConfirmarResposta={handleConfirmarResposta}
+              onExplicacaoIA={handleExplicacaoIA}
+              loadingExplicacao={loadingExplicacao}
+              copiedId={copiedId}
+              onCopyId={handleCopy}
+              tempoSegundos={tempoSegundos}
+              salvandoResposta={salvandoResposta}
+              onEditar={handleOpenEditModal}
+              onAnterior={() => { setCurrentQuestaoIndex(prev => prev - 1); setAlternativaSelecionada(null); setRevelado(false) }}
+              onProxima={() => { setCurrentQuestaoIndex(prev => prev + 1); setAlternativaSelecionada(null); setRevelado(false) }}
+              podeAnterior={currentQuestaoIndex > 0}
+              podeProxima={currentQuestaoIndex < questoesExibidas.length - 1}
+            />
+          </ErrorBoundary>
 
-          <MeuDesempenho
-            historico={historicoQuestaoAtiva} loading={loadingHistoricoAtivo} />
+          <ErrorBoundary>
+            <MeuDesempenho
+              historico={historicoQuestaoAtiva} loading={loadingHistoricoAtivo} />
+          </ErrorBoundary>
 
-          <QuestaoResolucaoProfessor
-            expanded={resolucaoExpanded}
-            onToggle={() => setResolucaoExpanded(!resolucaoExpanded)}
-            editing={editingResolucao}
-            text={resolucaoText}
-            onTextChange={setResolucaoText}
-            onStartEdit={() => setEditingResolucao(true)}
-            onCancelEdit={() => {
-              setResolucaoText(questoesExibidas[currentQuestaoIndex].resolucao_professor || '')
-              setEditingResolucao(false)
-            }}
-            onSave={handleSaveResolucao}
-            saving={savingResolucao}
-          />
+          <ErrorBoundary>
+            <QuestaoResolucaoProfessor
+              expanded={resolucaoExpanded}
+              onToggle={() => setResolucaoExpanded(!resolucaoExpanded)}
+              editing={editingResolucao}
+              text={resolucaoText}
+              onTextChange={setResolucaoText}
+              onStartEdit={() => setEditingResolucao(true)}
+              onCancelEdit={() => {
+                setResolucaoText(questoesExibidas[currentQuestaoIndex].resolucao_professor || '')
+                setEditingResolucao(false)
+              }}
+              onSave={handleSaveResolucao}
+              saving={savingResolucao}
+            />
+          </ErrorBoundary>
 
           {/* 7. Caixa de Análise do Mentor IA */}
           {explicacoes[questoesExibidas[currentQuestaoIndex].id!] && 
@@ -280,14 +281,16 @@ export function Questoes() {
             </div>
           )}
 
-          <QuestaoNavegacao
-            onAnterior={() => { setCurrentQuestaoIndex(prev => prev - 1); setAlternativaSelecionada(null); setRevelado(false) }}
-            onProxima={() => { setCurrentQuestaoIndex(prev => prev + 1); setAlternativaSelecionada(null); setRevelado(false) }}
-            onAleatorio={() => { const r = Math.floor(Math.random() * questoesExibidas.length); setCurrentQuestaoIndex(r); setAlternativaSelecionada(null); setRevelado(false) }}
-            onLimpar={() => { setAlternativaSelecionada(null); setRevelado(false) }}
-            podeAnterior={currentQuestaoIndex > 0}
-            podeProxima={currentQuestaoIndex < questoesExibidas.length - 1}
-          />
+          <ErrorBoundary>
+            <QuestaoNavegacao
+              onAnterior={() => { setCurrentQuestaoIndex(prev => prev - 1); setAlternativaSelecionada(null); setRevelado(false) }}
+              onProxima={() => { setCurrentQuestaoIndex(prev => prev + 1); setAlternativaSelecionada(null); setRevelado(false) }}
+              onAleatorio={() => { const r = Math.floor(Math.random() * questoesExibidas.length); setCurrentQuestaoIndex(r); setAlternativaSelecionada(null); setRevelado(false) }}
+              onLimpar={() => { setAlternativaSelecionada(null); setRevelado(false) }}
+              podeAnterior={currentQuestaoIndex > 0}
+              podeProxima={currentQuestaoIndex < questoesExibidas.length - 1}
+            />
+          </ErrorBoundary>
 
         </div>
             )}
@@ -295,24 +298,28 @@ export function Questoes() {
         )}
 
         {topTab === 'estatisticas' && (
-          <QuestaoEstatisticas
-            questao={questoesExibidas[currentQuestaoIndex]}
-            historico={historicoQuestaoAtiva}
-            loading={loadingHistoricoAtivo}
-            totalQuestoes={cadernoQuestoes.length}
-            onVoltar={() => setTopTab('questoes')}
-          />
+          <ErrorBoundary>
+            <QuestaoEstatisticas
+              questao={questoesExibidas[currentQuestaoIndex]}
+              historico={historicoQuestaoAtiva}
+              loading={loadingHistoricoAtivo}
+              totalQuestoes={cadernoQuestoes.length}
+              onVoltar={() => setTopTab('questoes')}
+            />
+          </ErrorBoundary>
         )}
 
         {topTab === 'gabarito' && (() => {
           const q = questoesExibidas[currentQuestaoIndex]
           return (
-            <QuestaoGabarito
-              questao={q}
-              explicacaoIA={q ? explicacoes[q.id] : undefined}
-              totalQuestoes={cadernoQuestoes.length}
-              onVoltar={() => setTopTab('questoes')}
-            />
+            <ErrorBoundary>
+              <QuestaoGabarito
+                questao={q}
+                explicacaoIA={q ? explicacoes[q.id] : undefined}
+                totalQuestoes={cadernoQuestoes.length}
+                onVoltar={() => setTopTab('questoes')}
+              />
+            </ErrorBoundary>
           )
         })()}
 

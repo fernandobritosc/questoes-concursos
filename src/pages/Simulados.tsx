@@ -93,7 +93,7 @@ export function Simulados() {
       const texto = await gerarResolucaoProfessor(q)
       setExplicacoesRevisao(prev => ({ ...prev, [id]: texto }))
       await updateResolucaoProfessor(id, texto)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err)
       setExplicacoesRevisao(prev => ({
         ...prev,

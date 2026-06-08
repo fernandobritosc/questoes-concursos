@@ -67,7 +67,7 @@ export function EditalVerticalizado() {
       try {
         const data = await fetchAllQuestoes()
         setResolucoes(data)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Erro ao carregar matérias do banco:', err)
       } finally {
         setLoading(false)

@@ -96,7 +96,7 @@ export function tentarParsearPlano(texto: string): PlanoEstruturado | null {
       }
     }
     return null
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("Erro no tentarParsearPlano:", err)
     return null
   }

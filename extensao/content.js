@@ -279,45 +279,6 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     }
   }
 
-  // Loop leve (500ms) para varrer containers e calcular tempos de início de resolução
-  const extractionInterval = setInterval(() => {
-    if (isContextInvalidated()) {
-      clearInterval(extractionInterval);
-      return;
-    }
-    
-    const questionContainers = document.querySelectorAll(".questao");
-    
-    questionContainers.forEach((container) => {
-      const idInput = container.querySelector("input[id-questao]");
-      if (!idInput || !idInput.value) return;
-
-      const questaoTecId = parseInt(idInput.value);
-      if (isNaN(questaoTecId)) return;
-
-      // 1. Inicia o cronômetro para questões novas não resolvidas
-      const isResolved = verificarSeResolvida(container);
-      if (!isResolved) {
-        if (!questionLoadTimes[questaoTecId]) {
-          questionLoadTimes[questaoTecId] = Date.now();
-          console.log(`[MonitorPro] Cronômetro iniciado para a Questão #${questaoTecId}`);
-        }
-        // Se a questão já foi marcada como enviada mas agora está desmarcada (limpa), limpa o controle para permitir novo envio
-        if (sentAttempts.has(questaoTecId)) {
-          sentAttempts.delete(questaoTecId);
-          console.log(`[MonitorPro] Questão #${questaoTecId} foi limpa/desmarcada pelo usuário. Resetando sentAttempts.`);
-        }
-      }
-
-      // 2. Failsafe: se já estiver resolvida no loop periódico tradicional, processa imediatamente
-      if (isResolved) {
-        processarResolucao(container, questaoTecId);
-      }
-    });
-  }, 500);
-
-  // Configura um MutationObserver global na página do TEC Concursos (no document.body)
-  // para ser imune a reciclagens do AngularJS ou deslocamento dos containers.
   const globalObserver = new MutationObserver(() => {
     if (isContextInvalidated()) {
       globalObserver.disconnect();
@@ -332,7 +293,18 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       const questaoTecId = parseInt(idInput.value);
       if (isNaN(questaoTecId)) return;
 
-      if (verificarSeResolvida(container)) {
+      const isResolved = verificarSeResolvida(container);
+
+      if (!isResolved) {
+        if (!questionLoadTimes[questaoTecId]) {
+          questionLoadTimes[questaoTecId] = Date.now();
+        }
+        if (sentAttempts.has(questaoTecId)) {
+          sentAttempts.delete(questaoTecId);
+        }
+      }
+
+      if (isResolved) {
         processarResolucao(container, questaoTecId);
       }
     });

@@ -64,7 +64,7 @@ export function useSimulados() {
       const hist = JSON.parse(localStorage.getItem('concursos_simulado_historico') || '[]')
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setHistoricoSimulados(hist)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao carregar histórico local de simulados:', err)
     }
   }, [etapa])
@@ -125,7 +125,7 @@ export function useSimulados() {
           acertou,
           tempo_segundos: tempoMedioQuestao,
         })
-      } catch (err) {
+      } catch (err: unknown) {
         console.error(`Erro ao salvar histórico do simulado para questão ${id}:`, err)
       }
     })
@@ -169,7 +169,7 @@ export function useSimulados() {
       const novoHistorico = [novoSimulado, ...historicoExistente]
       localStorage.setItem('concursos_simulado_historico', JSON.stringify(novoHistorico))
       setHistoricoSimulados(novoHistorico)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao salvar simulado no histórico local:', err)
     }
 
@@ -346,7 +346,7 @@ export function useSimulados() {
       try {
         localStorage.removeItem('concursos_simulado_historico')
         setHistoricoSimulados([])
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Erro ao apagar histórico local:', err)
       }
     }

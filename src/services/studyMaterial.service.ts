@@ -79,7 +79,7 @@ export async function checkCloudAvailability(): Promise<boolean> {
       return false
     }
     return true
-  } catch (err) {
+  } catch (err: unknown) {
     console.warn('Erro ao verificar disponibilidade do Supabase:', err)
     return false
   }

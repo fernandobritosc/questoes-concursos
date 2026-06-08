@@ -108,7 +108,7 @@ export function MapaQuestoes() {
       try {
         const meta = await listAllStudyMaterialsMetadata(activeMode)
         setMaterialsMetadata(meta)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Erro ao buscar metadados de estudo:', err)
       }
     }
@@ -259,7 +259,7 @@ export function MapaQuestoes() {
           setExpandedSubjects({ [formattedData[0].nome]: true })
         }
 
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Erro ao carregar mapa de questões:', err)
       } finally {
         setLoading(false)

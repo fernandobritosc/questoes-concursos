@@ -34,15 +34,7 @@ interface ImportPdfModalProps {
   existingQuestions: ResolucaoView[]
 }
 
-const getQuestionValidation = (q: Resolucao): string[] => {
-  const errors: string[] = []
-  if (!q.questao_tec_id || q.questao_tec_id <= 0) errors.push('ID da questÃ£o ausente ou invÃ¡lido')
-  if (!q.enunciado || q.enunciado.trim().length < 10) errors.push('Enunciado curto ou ausente')
-  if (!q.gabarito) errors.push('Gabarito ausente')
-  const validAlts = Object.values(q.alternativas || {}).filter(val => val && val.trim() !== '')
-  if (validAlts.length < 2) errors.push('Alternativas insuficientes')
-  return errors
-}
+import { getQuestionValidation } from '../lib/validation'
 
 export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuestions }: ImportPdfModalProps) {
   const [customCadernoName, setCustomCadernoName] = useState('')

@@ -16,14 +16,12 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, info: React.ErrorInfo) {
+  componentDidCatch(error: Error) {
     console.error('[ErrorBoundary] Erro capturado:', error)
-    console.error('[ErrorBoundary] Stack:', info.componentStack)
   }
 
   render() {
     if (this.state.hasError) {
-      console.log('[ErrorBoundary] Renderizando fallback de erro')
       return (
         <div className="p-8 text-center">
           <p className="text-red-500 font-bold">Erro ao renderizar página</p>
@@ -35,7 +33,6 @@ export class ErrorBoundary extends Component<Props, State> {
         </div>
       )
     }
-    console.log('[ErrorBoundary] Renderizando children normalmente')
     return this.props.children
   }
 }
