@@ -29,7 +29,14 @@ Estudar questões de concursos de forma eficiente, com dados reais de desempenho
 4. Cache in-memory (60s TTL) é adaptado ou substituído por um mecanismo que funciona com dados paginados
 5. Todos os hooks consumidores (`useQuestoes`, `useSimulados`, `useRevisao`, `useDashboard`) funcionam corretamente com o novo fluxo paginado — nenhuma regressão funcional
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+```
+Plans:
+- [ ] 01-01-PLAN.md — Service layer: fetchPaginatedQuestoes, fetchFilterOptions, progressive cache; QuestaoSkeleton component
+- [ ] 01-02-PLAN.md — Hook refactor: pagination state, filter-to-query, AbortController, cache integration
+- [ ] 01-03-PLAN.md — Page integration: skeleton during page transitions, pageLoading states
+```
 
 ---
 
@@ -77,7 +84,7 @@ Estudar questões de concursos de forma eficiente, com dados reais de desempenho
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Paginação de Questões | 0/0 | Not started | - |
+| 1. Paginação de Questões | 3/0 | Planned | - |
 | 2. Extração de Hooks | 0/0 | Not started | - |
 | 3. Extração de Sub-Componentes | 0/0 | Not started | - |
 

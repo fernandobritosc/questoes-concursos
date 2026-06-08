@@ -17,15 +17,15 @@
 | 2 — Extração de Hooks | Not started | useQuestoes.ts dividido em hooks menores |
 | 3 — Extração de Sub-Componentes | Not started | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [###·················] 0% (0/3 phases planned)
+**Progress:** [###·················] 33% (1/3 phases planned)
 
-**Active Plan:** None
+**Active Plan:** Phase 1 — Paginação de Questões (3 plans created, ready for execution)
 
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| Phase 1 plans created | ≥1 | 0 |
+| Phase 1 plans created | ≥1 | 3 ✓ |
 | Phase 2 plans created | ≥1 | 0 |
 | Phase 3 plans created | ≥1 | 0 |
 | Requirement coverage | 100% | 3/3 ✓ |
@@ -43,8 +43,8 @@
 
 ### Open Todos
 
-- [ ] Phase 1: Definir tamanho do lote de paginação (ex: 50 questões)
-- [ ] Phase 1: Decidir estratégia de cache com dados paginados
+- [x] Phase 1: Definir tamanho do lote de paginação (D-01: 200)
+- [x] Phase 1: Decidir estratégia de cache (D-03: flat progressivo, sem TTL)
 - [ ] Phase 2: Definir quais hooks extrair e suas responsabilidades
 - [ ] Phase 2: Validar que hooks expõem actions, não setters
 - [ ] Phase 3: Identificar candidatos a sub-componente em cada página
@@ -69,10 +69,13 @@
 - REQUIREMENTS.md criado com traceability
 - ROADMAP.md criado
 - STATE.md criado
+- **Plan 01 (Wave 1):** Service layer + skeleton — fetchPaginatedQuestoes, fetchFilterOptions, progressive cache, QuestaoSkeleton
+- **Plan 02 (Wave 2):** Hook refactor — pagination state, filter-to-query, AbortController
+- **Plan 03 (Wave 3):** Page integration — skeleton during page transitions
 
 ### Next Session
 
-- Executar `/gsd-plan-phase 1` para planejar a implementação da paginação
+- Executar `/gsd-execute-phase 01-paginacao-de-questoes` para implementar os 3 planos
 
 ---
 
