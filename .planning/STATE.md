@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-08T20:45:00.000Z"
+last_updated: "2026-06-08T23:57:03.007Z"
 progress:
   total_phases: 3
-  completed_phases: 1
-  total_plans: 6
-  completed_plans: 5
-  percent: 83
+  completed_phases: 2
+  total_plans: 12
+  completed_plans: 6
+  percent: 50
 ---
 
 # STATE.md — Questões Concursos
@@ -28,12 +28,12 @@ progress:
 | Phase | Status | Phase Goal |
 |-------|--------|------------|
 | 1 — Paginação de Questões | Completed | Fetch de questões usa paginação server-side |
-| 2 — Extração de Hooks | In progress (1/3 plans) | useQuestoes.ts dividido em hooks menores |
-| 3 — Extração de Sub-Componentes | Not started | 5 páginas grandes têm sub-componentes extraídos |
+| 2 — Extração de Hooks | In progress (2/3 plans) | useQuestoes.ts dividido em hooks menores |
+| 3 — Extração de Sub-Componentes | In progress (0/6 plans) | 5 páginas grandes têm sub-componentes extraídos |
 
 **Progress:** [████████░░] 83%
 
-**Active Plan:** Phase 2 — Extração de Hooks (Plan 02-01 completed — 2/3 plans)
+**Active Plan:** Phase 3 — Extração de Sub-Componentes (6 plans planned, 0 executed)
 
 ## Performance Metrics
 
@@ -76,7 +76,13 @@ progress:
 - [x] Phase 2: Criar useQuestoesFilter + useQuestoesResolucao (Plan 02-01)
 - [ ] Phase 2: Integrar hooks no orquestrador (Plan 02-03 -- pending)
 - [x] Phase 2: Validar que hooks expõem actions, não setters
-- [ ] Phase 3: Identificar candidatos a sub-componente em cada página
+- [x] Phase 3: Identificar candidatos a sub-componente em cada página
+- [ ] Phase 3: Executar Plan 01 — Simulados P1 (SimuladoSetup + SimuladoHistorico)
+- [ ] Phase 3: Executar Plan 02 — MapaQuestoes (3 sub-componentes)
+- [ ] Phase 3: Executar Plan 03 — Revisao (3 sub-componentes)
+- [ ] Phase 3: Executar Plan 04 — Simulados P2 (SimuladoExamView + SimuladoResultados)
+- [ ] Phase 3: Executar Plan 05 — Dashboard (3 sub-componentes)
+- [ ] Phase 3: Executar Plan 06 — EditalVerticalizado (3 sub-componentes)
 
 ### Known Blockers
 
@@ -92,7 +98,7 @@ progress:
 
 ## Session Continuity
 
-### Last Session (2026-06-08)
+### Last Session (2026-06-08 — Phase 3 Planning)
 
 - **Plan 01 (Wave 1)** executed successfully:
   - `supabase.service.ts`: Added `fetchPaginatedQuestoes()` with `.range()` pagination, `fetchFilterOptions()`, progressive cache, `PaginatedResult`/`FilterOptions` types
@@ -128,9 +134,18 @@ progress:
   - `useQuestoes.ts` untouched — zero modifications
   - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
 
+- **Phase 3 Planned (6 plans, 2 waves)**:
+  - Plan 03-01: Simulados P1 — SimuladoSetup + SimuladoHistorico
+  - Plan 03-02: MapaQuestoes — 3 sub-componentes
+  - Plan 03-03: Revisao — 3 sub-componentes
+  - Plan 03-04: Simulados P2 — SimuladoExamView + SimuladoResultados
+  - Plan 03-05: Dashboard — 3 sub-componentes
+  - Plan 03-06: EditalVerticalizado — 3 sub-componentes
+
 ### Next Session
 
-- Phase 2 in progress — next: Plan 02-03 (Integrate extracted hooks into orquestrador useQuestoes)
+- Phase 3 ready to execute — start with `/gsd-execute-phase 03 --wave 1` (Plans 01, 02, 03)
+- Phase 2 Plan 02-03 (orquestrador) remains pending
 
 ---
 
