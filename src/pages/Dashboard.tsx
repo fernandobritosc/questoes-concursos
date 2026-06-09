@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react'
-import { useDashboard, formatarTempo } from '../hooks/useDashboard'
-import type { ResolucaoView } from '../types/database'
+import { useState } from 'react'
+import { useDashboard } from '../hooks/useDashboard'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
-import { CheckCircle2, XCircle, Clock, BookOpen, Flame, Target, TrendingUp, ExternalLink, Activity, Trophy, ChevronDown, ChevronUp } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { DashboardMetricCard } from '../components/DashboardMetricCard'
+import { DashboardResolucaoItem, CustomTooltip } from '../components/DashboardResolucaoItem'
+import { DashboardStudyHeatmap } from '../components/DashboardStudyHeatmap'
+import { Clock, BookOpen, Flame, Target, TrendingUp, Activity, Trophy } from 'lucide-react'
 import {
   AreaChart,
   Area,
@@ -21,90 +22,6 @@ import {
   Bar
 } from 'recharts'
 
-
-/* ──────────────── Sparkline SVG ──────────────── */
-
-function Sparkline({ color = '#8b5cf6' }: { color?: string }) {
-  const points = [4, 6, 3, 8, 5, 9, 7, 10, 8, 12]
-  const max = Math.max(...points)
-  const min = Math.min(...points)
-  const w = 64
-  const h = 20
-  const stepX = w / (points.length - 1)
-
-  const pathData = points
-    .map((p, i) => {
-      const x = i * stepX
-      const y = h - ((p - min) / (max - min)) * h
-      return `${i === 0 ? 'M' : 'L'}${x},${y}`
-    })
-    .join(' ')
-
-  return (
-    <svg width={w} height={h} className="opacity-60">
-      <defs>
-        <linearGradient id={`spark-${color.replace('#', '')}`} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d={pathData + ` L${w},${h} L0,${h} Z`} fill={`url(#spark-${color.replace('#', '')})`} />
-      <path d={pathData} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-/* ──────────────── Trend WoW Indicator ──────────────── */
-
-function TrendIndicator({ trend }: { trend: { value: number; isImprovement: boolean; label: string } }) {
-  if (trend.value === 0) {
-    return (
-      <span className="text-[10px] font-semibold text-muted-foreground/50 flex items-center gap-0.5 mt-1.5 select-none">
-        Sem alteração WoW
-      </span>
-    )
-  }
-
-  const colorClass = trend.isImprovement ? "text-emerald-400" : "text-red-400"
-  const arrow = trend.isImprovement ? "↑" : "↓"
-
-  return (
-    <span className={`text-[10px] font-bold ${colorClass} flex items-center gap-0.5 mt-1.5 select-none`}>
-      {arrow} {trend.label} <span className="text-muted-foreground/50 font-normal">vs. semana anterior</span>
-    </span>
-  )
-}
-
-/* ──────────────── Compact Metric Card ──────────────── */
-
-function MetricCard({
-  title, value, subtitle, icon, gradientClass, sparkColor, stagger, sizeClass = "text-[40px]", trend,
-}: {
-  title: string; value: string | number; subtitle: string
-  icon: React.ReactNode; gradientClass: string; sparkColor: string; stagger: string; sizeClass?: string;
-  trend: { value: number; isImprovement: boolean; label: string }
-}) {
-  return (
-    <div className={`glass-card p-4.5 flex flex-col justify-between gap-3 animate-fade-in-up ${stagger}`}>
-      <div className="flex items-center justify-between">
-        <div className={`p-2 rounded-lg ${gradientClass} shadow-lg`}>
-          {icon}
-        </div>
-        <Sparkline color={sparkColor} />
-      </div>
-      <div>
-        <h4 className={`${sizeClass} font-black tracking-tight text-foreground leading-none`} style={{ fontVariantNumeric: 'tabular-nums' }}>
-          {value}
-        </h4>
-        <p className="text-[11px] font-bold text-muted-foreground mt-1.5">{title}</p>
-      </div>
-      <div className="flex flex-col border-t border-border/50 dark:border-white/[0.04] pt-2">
-        <p className="text-[10px] text-muted-foreground/60 leading-none">{subtitle}</p>
-        <TrendIndicator trend={trend} />
-      </div>
-    </div>
-  )
-}
 
 /* ──────────────── Progress Bar Matéria ──────────────── */
 
@@ -140,312 +57,6 @@ function MateriaBar({ materia, taxa, acertos, total, index }: { materia: string;
           }}
         />
       </div>
-    </div>
-  )
-}
-
-/* ──────────────── Resolução Item ──────────────── */
-
-function ResolucaoItem({ res, index }: { res: ResolucaoView; index: number }) {
-  const tempoDisplay = formatarTempo(res.tempo_segundos)
-
-  return (
-    <div
-      className="relative group animate-slide-in-right"
-      style={{ animationDelay: `${index * 60 + 200}ms` }}
-    >
-      {/* Background link that makes the entire card clickable */}
-      <Link
-        to={`/app/questoes?id=${res.questao_tec_id}`}
-        className={`absolute inset-0 rounded-lg bg-card border border-border ${
-          res.acertou ? 'res-correct' : 'res-wrong'
-        } transition-all duration-200 hover:bg-muted/40 dark:bg-white/[0.02] dark:border-transparent dark:hover:bg-white/[0.05] z-0`}
-      />
-
-      {/* Visual content overlay with pointer-events-none so click passes through to the background Link, except interactive elements */}
-      <div className="relative z-10 flex items-center justify-between gap-2.5 px-3 py-2.5 pointer-events-none w-full">
-        <div className="flex items-center gap-2.5 min-w-0">
-          {/* Icon status */}
-          <div className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center ${
-            res.acertou ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-red-500/15 text-red-650 dark:text-red-400'
-          }`}>
-            {res.acertou ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-medium text-foreground truncate leading-tight">
-              {res.assunto || 'Assunto Desconhecido'}
-            </p>
-            <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
-              <span className="text-violet-400 font-semibold">
-                Q{res.questao_tec_id}
-              </span>
-              <span className="text-muted-foreground/40">•</span>
-              <span className="truncate">{res.materia}</span>
-            </p>
-          </div>
-        </div>
-
-        {/* Time and external link */}
-        <div className="text-right flex-shrink-0 flex items-center gap-2 pointer-events-auto">
-          <div>
-            <p className="text-[13px] font-semibold text-foreground tabular-nums leading-tight">{tempoDisplay}</p>
-            <p className="text-[10px] text-muted-foreground/60">
-              {new Date(res.data_resolucao).toLocaleDateString('pt-BR')}
-            </p>
-          </div>
-          <a
-            href={`https://www.tecconcursos.com.br/questoes/${res.questao_tec_id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground/50 hover:text-foreground p-1 transition-colors rounded-lg hover:bg-muted dark:hover:bg-white/10 relative z-20"
-            title="Abrir no site oficial do TEC"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/* ──────────────── Custom Tooltip Recharts ──────────────── */
-
-interface CustomTooltipProps {
-  active?: boolean
-  payload?: Array<{ name: string; color: string; value: number }>
-  label?: string
-}
-
-function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
-  if (active && payload && payload.length) {
-    return (
-      <div className="glass-card p-3 border border-border/60 dark:border-white/10 text-left text-xs shadow-xl">
-        <p className="font-black text-violet-400 mb-1">{label}</p>
-        {payload.map((pld) => (
-          <p key={pld.name} className="font-semibold text-foreground flex items-center justify-between gap-4 mt-0.5">
-            <span className="opacity-85">{pld.name}:</span>
-            <span className="font-bold text-right" style={{ color: pld.color || 'var(--foreground)' }}>
-              {pld.value}{pld.name === 'Taxa de Acerto' || pld.name === 'Aproveitamento' ? '%' : ''}
-            </span>
-          </p>
-        ))}
-      </div>
-    )
-  }
-  return null
-}
-
-/* ──────────────── Componente StudyHeatmap (GitHub-style) ──────────────── */
-
-interface StudyHeatmapProps {
-  resolucoes: Array<{ alternativa: string | null; data_resolucao: string }>
-}
-
-function StudyHeatmap({ resolucoes }: StudyHeatmapProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  // 1. Agrupar resoluções válidas por dia (formato local AAAA-MM-DD)
-  const porDia = useMemo(() => {
-    const map = new Map<string, number>()
-    resolucoes.forEach(r => {
-      if (r.alternativa && r.alternativa !== '' && r.data_resolucao) {
-        const d = new Date(r.data_resolucao)
-        const year = d.getFullYear()
-        const month = String(d.getMonth() + 1).padStart(2, '0')
-        const day = String(d.getDate()).padStart(2, '0')
-        const dateKey = `${year}-${month}-${day}`
-        map.set(dateKey, (map.get(dateKey) || 0) + 1)
-      }
-    })
-    return map
-  }, [resolucoes])
-
-  // 2. Calcular o intervalo de 365 dias terminando hoje e alinhando no domingo inicial
-  const { diasGrid, mesesRotulos } = useMemo(() => {
-    const hoje = new Date()
-    // Data de 364 dias atrás
-    const dataInicial = new Date(hoje)
-    dataInicial.setDate(hoje.getDate() - 364)
-
-    // Retroceder até o domingo anterior da data inicial para alinhar o grid vertical
-    const diaSemanaInicial = dataInicial.getDay()
-    dataInicial.setDate(dataInicial.getDate() - diaSemanaInicial)
-
-    const dias = []
-    const mesesMap = new Map<number, { label: string; index: number }>()
-
-    const temp = new Date(dataInicial)
-    let indexColuna = 0
-
-    while (temp <= hoje) {
-      const year = temp.getFullYear()
-      const month = temp.getMonth()
-      const monthStr = temp.toLocaleString('pt-BR', { month: 'short' })
-      const day = String(temp.getDate()).padStart(2, '0')
-      const formattedMonth = String(month + 1).padStart(2, '0')
-      const dateKey = `${year}-${formattedMonth}-${day}`
-      const count = porDia.get(dateKey) || 0
-
-      // Registrar meses para rótulos na primeira linha (Domingo) da coluna
-      if (temp.getDay() === 0) {
-        if (!mesesMap.has(month) || temp.getDate() <= 7) {
-          mesesMap.set(month, { label: monthStr.charAt(0).toUpperCase() + monthStr.slice(1, 3), index: indexColuna })
-        }
-      }
-
-      dias.push({
-        dataKey: dateKey,
-        dataObj: new Date(temp),
-        count,
-        level: getContributionLevel(count)
-      })
-
-      if (temp.getDay() === 6) {
-        indexColuna++
-      }
-
-      temp.setDate(temp.getDate() + 1)
-    }
-
-    return {
-      diasGrid: dias,
-      mesesRotulos: Array.from(mesesMap.values()).sort((a, b) => a.index - b.index)
-    }
-  }, [porDia])
-
-  // 3. Determinar o nível de cor baseado na quantidade de questões
-  function getContributionLevel(count: number): number {
-    if (count === 0) return 0
-    if (count < 5) return 1
-    if (count < 10) return 2
-    if (count < 20) return 3
-    return 4
-  }
-
-  // Cores do tema Violeta Premium
-  const levelClasses = [
-    'bg-muted/40 border border-border/50 hover:bg-muted/70 dark:bg-white/[0.02] dark:border-white/[0.03] dark:hover:bg-white/[0.08]',
-    'bg-violet-100 border border-violet-200 hover:bg-violet-200 dark:bg-violet-900/35 dark:border-violet-500/10 dark:hover:bg-violet-900/50',
-    'bg-violet-300 border border-violet-400 hover:bg-violet-400 dark:bg-violet-700/55 dark:border-violet-500/30 dark:hover:bg-violet-700/70',
-    'bg-violet-500/75 border border-violet-400 hover:bg-violet-500/90 dark:bg-violet-500/75 dark:border-violet-400/50',
-    'bg-violet-600 border border-violet-500 hover:bg-violet-700 dark:bg-violet-400 dark:border-violet-300 hover:brightness-110 shadow-[0_0_8px_rgba(167,139,250,0.3)]'
-  ]
-
-  // Agrupar dias em colunas (semanas) de 7 elementos
-  const colunasSemanas = useMemo(() => {
-    const colunas = []
-    for (let i = 0; i < diasGrid.length; i += 7) {
-      colunas.push(diasGrid.slice(i, i + 7))
-    }
-    return colunas
-  }, [diasGrid])
-
-  return (
-    <div className="glass-card flex flex-col animate-fade-in-up col-span-full transition-all duration-300">
-      {/* Header bar - Clickable to toggle collapse */}
-      <div
-        onClick={() => setIsExpanded(!isExpanded)}
-        className={`p-5 flex items-center justify-between shrink-0 flex-wrap gap-3 cursor-pointer select-none ${
-          isExpanded ? 'border-b border-border/50 dark:border-white/[0.04]' : ''
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-violet-400" />
-          <h3 className="text-sm font-bold text-foreground">Consistência e Frequência de Estudos</h3>
-          <span className="text-[10px] text-violet-400 font-bold bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full shrink-0 ml-1.5">
-            Últimos 365 Dias
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4 text-xxs text-muted-foreground">
-          {/* Legenda de Níveis - Apenas visível quando expandido */}
-          {isExpanded && (
-            <div className="flex items-center gap-1.5 animate-scale-in">
-              <span>Menos</span>
-              {levelClasses.map((cls, idx) => (
-                <span key={idx} className={`w-2.5 h-2.5 rounded-xs ${cls.split(' ')[0]} ${cls.split(' ')[1]}`} />
-              ))}
-              <span>Mais</span>
-            </div>
-          )}
-
-          {/* Botão Indicador Expandir/Recolher */}
-          <div className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground hover:text-foreground transition-all px-2.5 py-1.5 rounded-lg bg-muted border border-border/65 hover:bg-muted/80 dark:bg-white/[0.03] dark:border-white/[0.05] dark:hover:bg-white/[0.06]">
-            {isExpanded ? (
-              <>
-                <span className="uppercase tracking-wider">Ocultar</span>
-                <ChevronUp className="w-3.5 h-3.5" />
-              </>
-            ) : (
-              <>
-                <span className="uppercase tracking-wider">Visualizar</span>
-                <ChevronDown className="w-3.5 h-3.5" />
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Heatmap Grid - Visível apenas quando expandido */}
-      {isExpanded && (
-        <div className="p-5 flex flex-1 overflow-x-auto min-h-0 py-4 scrollbar-thin select-none animate-fade-in-up">
-          <div className="flex gap-1.5 flex-1 min-w-max">
-            {/* Rótulos dos Dias da Semana */}
-            <div className="grid grid-rows-7 text-[9px] text-muted-foreground/60 font-bold w-7 pt-4 pr-1 shrink-0 select-none">
-              <span className="row-start-2 leading-none">Ter</span>
-              <span className="row-start-4 leading-none">Qui</span>
-              <span className="row-start-6 leading-none">Sáb</span>
-            </div>
-
-            {/* Grid Principal do Heatmap */}
-            <div className="flex flex-col flex-1">
-              {/* Rótulos dos Meses */}
-              <div className="relative h-4 text-[9px] text-muted-foreground/60 font-extrabold select-none mb-1">
-                {mesesRotulos.map((m, idx) => (
-                  <span
-                    key={idx}
-                    className="absolute"
-                    style={{ left: `${m.index * 13}px` }}
-                  >
-                    {m.label}
-                  </span>
-                ))}
-              </div>
-
-              {/* Grid de Quadradinhos agrupados em Colunas (Semanas) */}
-              <div className="flex gap-1">
-                {colunasSemanas.map((semana, colIdx) => (
-                  <div key={colIdx} className="grid grid-rows-7 gap-1">
-                    {semana.map((dia) => {
-                      const dataFormatada = dia.dataObj.toLocaleDateString('pt-BR', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                      })
-                      const qDesc = dia.count === 1 ? 'questão' : 'questões'
-                      const tooltipText = `${dia.count} ${qDesc} em ${dataFormatada}`
-
-                      return (
-                        <div
-                          key={dia.dataKey}
-                          className={`w-2.5 h-2.5 rounded-xs transition-colors duration-150 relative group cursor-pointer ${levelClasses[dia.level]}`}
-                        >
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block z-50 pointer-events-none">
-                            <div className="bg-slate-950/95 backdrop-blur-md border border-border/60 dark:border-white/10 text-white font-extrabold text-[9px] px-2 py-1 rounded shadow-xl whitespace-nowrap">
-                              {tooltipText}
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
@@ -657,7 +268,7 @@ export function Dashboard() {
 
       {/* ── Métricas: gauge + 3 cards numa faixa horizontal compacta ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
-        <MetricCard
+        <DashboardMetricCard
           title="Taxa de Acerto"
           value={`${taxaAcerto}%`}
           subtitle={is24h ? "Aproveitamento de hoje" : `${totalAcertos}/${totalQuestoes} corretas`}
@@ -669,7 +280,7 @@ export function Dashboard() {
           trend={stats.trends.taxa}
         />
 
-        <MetricCard
+        <DashboardMetricCard
           title="Questões Resolvidas"
           value={totalQuestoes}
           subtitle={is24h ? "Hoje (Brasília)" : "Total acumulado"}
@@ -681,7 +292,7 @@ export function Dashboard() {
           trend={stats.trends.resolvidas}
         />
 
-        <MetricCard
+        <DashboardMetricCard
           title="Tempo Médio"
           value={tempoFormatado}
           subtitle={is24h ? "Hoje (Brasília)" : "Por questão"}
@@ -693,7 +304,7 @@ export function Dashboard() {
           trend={stats.trends.tempo}
         />
 
-        <MetricCard
+        <DashboardMetricCard
           title="Erros para Revisar"
           value={errosPendentes}
           subtitle={is24h ? "Gerados hoje" : "Aguardando revisão"}
@@ -707,7 +318,7 @@ export function Dashboard() {
       </div>
 
       {/* ── Calendário de Contribuição (Heatmap) ── */}
-      <StudyHeatmap resolucoes={resolucoes} />
+      <DashboardStudyHeatmap resolucoes={resolucoes} />
 
       {/* ── Seção de Análise Visual Avançada (Recharts) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 shrink-0">
@@ -792,7 +403,7 @@ export function Dashboard() {
           </div>
           <div className="space-y-2 flex-1 overflow-y-auto min-h-0 pr-1">
             {ultimasResolucoes.map((res, i) => (
-              <ResolucaoItem key={res.id || `res-${i}`} res={res} index={i} />
+              <DashboardResolucaoItem key={res.id || `res-${i}`} res={res} index={i} />
             ))}
             {ultimasResolucoes.length === 0 && (
               <div className="flex flex-col items-center justify-center text-muted-foreground text-sm flex-1 text-center py-4 flex-col gap-1">
