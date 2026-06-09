@@ -1,15 +1,15 @@
-﻿---
+---
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-09T00:18:22.972Z"
+last_updated: "2026-06-09T00:21:20.269Z"
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 12
-  completed_plans: 8
-  percent: 67
+  completed_plans: 9
+  percent: 75
 ---
 
 # STATE.md — Questões Concursos
@@ -31,7 +31,7 @@ progress:
 | 2 — Extração de Hooks | In progress (2/3 plans) | useQuestoes.ts dividido em hooks menores |
 | 3 — Extração de Sub-Componentes | In progress (3/6 plans) | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [███████░░░] 67%
+**Progress:** [████████░░] 75%
 
 **Active Plan:** Phase 3 — Extração de Sub-Componentes (6 plans planned, 3 executed)
 
