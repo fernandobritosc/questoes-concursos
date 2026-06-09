@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-09T00:21:20.269Z"
+last_updated: "2026-06-09T00:29:05.442Z"
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 12
-  completed_plans: 9
-  percent: 75
+  completed_plans: 12
+  percent: 100
 ---
 
 # STATE.md — Questões Concursos
@@ -29,11 +29,11 @@ progress:
 |-------|--------|------------|
 | 1 — Paginação de Questões | Completed | Fetch de questões usa paginação server-side |
 | 2 — Extração de Hooks | In progress (2/3 plans) | useQuestoes.ts dividido em hooks menores |
-| 3 — Extração de Sub-Componentes | In progress (3/6 plans) | 5 páginas grandes têm sub-componentes extraídos |
+| 3 — Extração de Sub-Componentes | In progress (4/6 plans) | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [████████░░] 75%
+**Progress:** [██████████] 100%
 
-**Active Plan:** Phase 3 — Extração de Sub-Componentes (6 plans planned, 3 executed)
+**Active Plan:** Phase 3 — Extração de Sub-Componentes (6 plans planned, 6 executed)
 
 ## Performance Metrics
 
@@ -46,6 +46,7 @@ progress:
 | Phase 01-paginacao-de-questoes P03 | 6min | 1 tasks | 1 files |
 | Phase 02-extracao-de-hooks P02 | 12min | 1 tasks | 1 files |
 | Phase 02-extracao-de-hooks P01 | 4min | 2 tasks | 2 files |
+| Phase 03-extracao-de-subcomponentes P05 | 15min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -81,7 +82,7 @@ progress:
 - [ ] Phase 3: Executar Plan 02 — MapaQuestoes (3 sub-componentes)
 - [x] Phase 3: Executar Plan 03 — Revisao (3 sub-componentes)
 - [ ] Phase 3: Executar Plan 04 — Simulados P2 (SimuladoExamView + SimuladoResultados)
-- [ ] Phase 3: Executar Plan 05 — Dashboard (3 sub-componentes)
+- [x] Phase 3: Executar Plan 05 — Dashboard (3 sub-componentes)
 - [ ] Phase 3: Executar Plan 06 — EditalVerticalizado (3 sub-componentes)
 
 ### Known Blockers
@@ -142,9 +143,18 @@ progress:
   - Plan 03-05: Dashboard — 3 sub-componentes
   - Plan 03-06: EditalVerticalizado — 3 sub-componentes
 
+- **Plan 03-05 (Wave 2)** executed successfully:
+  - `DashboardMetricCard.tsx`, `DashboardResolucaoItem.tsx`, `DashboardStudyHeatmap.tsx` created
+  - `Dashboard.tsx` reduced from 808 to 419 lines (-48%)
+  - `CustomTooltip` exported from DashboardResolucaoItem for Recharts reuse
+  - Barrel exports updated in `ui/index.ts`
+  - `deferred-items.md` created with pre-existing TS6133 in EditalMateriaDetalhes.tsx
+  - Verification: ESLint zero errors, 38/38 tests passing
+  - Pre-existing TS error in EditalMateriaDetalhes.tsx (BookOpen unused import) — logged as deferred
+
 ### Next Session
 
-- Phase 3 ready to execute — start with `/gsd-execute-phase 03 --wave 1` (Plans 01, 02, 03)
+- Phase 3: 2 plans remaining (Plan 04 — Simulados P2, Plan 06 — EditalVerticalizado)
 - Phase 2 Plan 02-03 (orquestrador) remains pending
 
 ---
