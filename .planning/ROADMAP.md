@@ -68,7 +68,7 @@ Plans:
 
 ### Phase 3: Extração de Sub-Componentes
 
-**Goal**: 5 páginas grandes têm sub-componentes extraídos seguindo o padrão estabelecido em Questoes.tsx (1662→334 linhas, 11 sub-componentes), reduzindo cada página para ~300-400 linhas.
+**Goal**: 6 páginas grandes têm sub-componentes extraídos seguindo o padrão estabelecido em Questoes.tsx (1662→334 linhas, 11 sub-componentes), reduzindo cada página para ~300-400 linhas.
 
 **Depends on**: Phase 2 (hooks estáveis e bem definidos)
 
@@ -80,19 +80,21 @@ Plans:
 3. `Revisao.tsx` (~845 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
 4. `Dashboard.tsx` (~808 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
 5. `EditalVerticalizado.tsx` (~748 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
-6. Toda funcionalidade existente é preservada: importar PDF, visualizar questões, responder, navegar, imprimir, simulados, mentor IA, dashboard, mapa, edital verticalizado
-7. TypeScript compila limpo, ESLint zero erros, 38+ testes passando
+6. `ImportPdfModal.tsx` (~794 linhas) é reduzido para ~300 linhas com sub-componentes extraídos
+7. Toda funcionalidade existente é preservada: importar PDF, visualizar questões, responder, navegar, imprimir, simulados, mentor IA, dashboard, mapa, edital verticalizado
+8. TypeScript compila limpo, ESLint zero erros, 38+ testes passando
 
-**Plans**: 6 plans in 2 waves
+**Plans**: 7 plans in 2 waves
 
 ```
 Plans:
-- [ ] 03-01-PLAN.md — Simulados P1: extrair SimuladoSetup + SimuladoHistorico (983 → ~600 linhas)
+- [x] 03-01-PLAN.md — Simulados P1: extrair SimuladoSetup + SimuladoHistorico (983 → ~600 linhas)
 - [x] 03-02-PLAN.md — MapaQuestoes: extrair MapaStatsCards + MapaMateriaAccordion + MapaSqlSetupModal (892 → ~470 linhas)
 - [x] 03-03-PLAN.md — Revisao: extrair RevisaoStatsCards + RevisaoFilterBar + RevisaoFocusView (845 → ~400 linhas)
-- [ ] 03-04-PLAN.md — Simulados P2: extrair SimuladoExamView + SimuladoResultados (600 → ~330 linhas) [depends_on: 01]
-- [ ] 03-05-PLAN.md — Dashboard: extrair MetricCard + ResolucaoItem + StudyHeatmap (808 → ~400 linhas)
+- [x] 03-04-PLAN.md — Simulados P2: extrair SimuladoExamView + SimuladoResultados (600 → ~330 linhas) [depends_on: 01]
+- [x] 03-05-PLAN.md — Dashboard: extrair MetricCard + ResolucaoItem + StudyHeatmap (808 → ~400 linhas)
 - [x] 03-06-PLAN.md — EditalVerticalizado: extrair Sidebar + AssuntoItem + MateriaDetalhes (748 → ~350 linhas)
+- [x] 03-07-PLAN.md — ImportPdfModal: extrair Header + IdleStep + LoadingStep + QuestionList + QuestionEditor + SuccessState + ErrorState + ReviewFooter (794 → 299 linhas)
 ```
 
 ---
@@ -103,7 +105,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Paginação de Questões | 3/3 | Completed| 2026-06-08 |
 | 2. Extração de Hooks | 2/3 | In progress | - |
-| 3. Extração de Sub-Componentes | 6/6 | In progress | - |
+| 3. Extração de Sub-Componentes | 7/7 | In progress | - |
 
 ---
 
