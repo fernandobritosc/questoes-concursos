@@ -4,109 +4,29 @@
 
 Estudar questões de concursos de forma eficiente, com dados reais de desempenho e resoluções de qualidade, sem precisar ficar alternando entre abas do navegador.
 
+## Milestones
+
+- ✅ **v1.0 Refatoração** — Phases 1–3 (shipped 2026-06-09)
+
 ## Phases
 
-- [x] **Phase 1: Paginação de Questões** — Implementar paginação server-side no fetch de questões, substituindo a carga única de 1000+ registros
-- [ ] **Phase 2: Extração de Hooks** — Dividir `useQuestoes.ts` (~701 linhas, 20+ estados) em hooks menores e especializados
-- [ ] **Phase 3: Extração de Sub-Componentes** — Extrair sub-componentes de 5 páginas grandes seguindo o padrão estabelecido em Questoes.tsx
+<details>
+<summary>✅ v1.0 Refatoração (Phases 1–3) — SHIPPED 2026-06-09</summary>
 
----
+- [x] Phase 1: Paginação de Questões (3/3 plans) — completed 2026-06-08
+- [x] Phase 2: Extração de Hooks (3/3 plans) — completed 2026-06-08
+- [x] Phase 3: Extração de Sub-Componentes (7/7 plans) — completed 2026-06-09
 
-## Phase Details
-
-### Phase 1: Paginação de Questões
-
-**Goal**: Fetch de questões usa paginação server-side com `.range()` em vez de carga única com `.limit(1000)`, eliminando o gargalo de memória e permitindo escala para qualquer volume de questões.
-
-**Depends on**: Nothing (first phase — altera camada de dados)
-
-**Requirements**: REFAC-03
-
-**Success Criteria** (what must be TRUE):
-1. `fetchAllQuestoes()` carrega questões em lotes paginados via `.range(offset, offset + limit)` em vez de `.limit(1000)`
-2. O limite arbitrário de 1000 questões é removido — qualquer volume de dados é suportado sem estourar memória
-3. Filtros (banca, orgão, cargo, ano) são aplicados server-side com `.in()` em vez de filtragem pós-carga em `getFilteredQuestions()`
-4. Cache in-memory (60s TTL) é adaptado ou substituído por um mecanismo que funciona com dados paginados
-5. Todos os hooks consumidores (`useQuestoes`, `useSimulados`, `useRevisao`, `useDashboard`) funcionam corretamente com o novo fluxo paginado — nenhuma regressão funcional
-
-**Plans**: 3 plans
-
-```
-Plans:
-- [x] 01-01-PLAN.md — Service layer: fetchPaginatedQuestoes, fetchFilterOptions, progressive cache; QuestaoSkeleton component
-- [x] 01-02-PLAN.md — Hook refactor: pagination state, filter-to-query, AbortController, cache integration
-- [x] 01-03-PLAN.md — Page integration: skeleton during page transitions, pageLoading states
-```
-
----
-
-### Phase 2: Extração de Hooks
-
-**Goal**: `useQuestoes.ts` é decomposto em hooks menores e especializados, cada um com responsabilidade única e sem expor setters de estado diretamente aos componentes.
-
-**Depends on**: Phase 1 (paginação afeta estrutura dos hooks que consomem dados)
-
-**Requirements**: REFAC-01
-
-**Success Criteria** (what must be TRUE):
-1. `useQuestoes.ts` (~701 linhas) é substituído por pelo menos 3 hooks especializados (ex: `useQuestoesFilter`, `useQuestoesCaderno`, `useQuestoesResolucao`)
-2. Cada novo hook expõe funções de ação (ex: `responderQuestao()`, `alternarCaderno()`) em vez de expor setters de estado diretamente
-3. A página `Questoes.tsx` consome os novos hooks sem alteração de comportamento visível ao usuário
-4. Os 38 testes existentes continuam passando sem modificações
-5. TypeScript compila limpo (`tsc -b --noEmit` zero erros) e ESLint reporta zero erros
-
-**Plans**: 3 plans
-
-```
-Plans:
-- [x] 02-01-PLAN.md — Criar useQuestoesFilter (filter state, toggles, derived) + useQuestoesResolucao (resolução + IA)
-- [x] 02-02-PLAN.md — Criar useQuestoesCaderno (caderno, navegação, resposta, edição, histórico)
-- [ ] 02-03-PLAN.md — Refatorar useQuestoes.ts como orquestrador compondo 3 hooks, mesma interface
-```
-
----
-
-### Phase 3: Extração de Sub-Componentes
-
-**Goal**: 6 páginas grandes têm sub-componentes extraídos seguindo o padrão estabelecido em Questoes.tsx (1662→334 linhas, 11 sub-componentes), reduzindo cada página para ~300-400 linhas.
-
-**Depends on**: Phase 2 (hooks estáveis e bem definidos)
-
-**Requirements**: REFAC-02
-
-**Success Criteria** (what must be TRUE):
-1. `Simulados.tsx` (~983 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
-2. `MapaQuestoes.tsx` (~892 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
-3. `Revisao.tsx` (~845 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
-4. `Dashboard.tsx` (~808 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
-5. `EditalVerticalizado.tsx` (~748 linhas) é reduzido para ~350 linhas com sub-componentes extraídos
-6. `ImportPdfModal.tsx` (~794 linhas) é reduzido para ~300 linhas com sub-componentes extraídos
-7. Toda funcionalidade existente é preservada: importar PDF, visualizar questões, responder, navegar, imprimir, simulados, mentor IA, dashboard, mapa, edital verticalizado
-8. TypeScript compila limpo, ESLint zero erros, 38+ testes passando
-
-**Plans**: 7 plans in 2 waves
-
-```
-Plans:
-- [x] 03-01-PLAN.md — Simulados P1: extrair SimuladoSetup + SimuladoHistorico (983 → ~600 linhas)
-- [x] 03-02-PLAN.md — MapaQuestoes: extrair MapaStatsCards + MapaMateriaAccordion + MapaSqlSetupModal (892 → ~470 linhas)
-- [x] 03-03-PLAN.md — Revisao: extrair RevisaoStatsCards + RevisaoFilterBar + RevisaoFocusView (845 → ~400 linhas)
-- [x] 03-04-PLAN.md — Simulados P2: extrair SimuladoExamView + SimuladoResultados (600 → ~330 linhas) [depends_on: 01]
-- [x] 03-05-PLAN.md — Dashboard: extrair MetricCard + ResolucaoItem + StudyHeatmap (808 → ~400 linhas)
-- [x] 03-06-PLAN.md — EditalVerticalizado: extrair Sidebar + AssuntoItem + MateriaDetalhes (748 → ~350 linhas)
-- [x] 03-07-PLAN.md — ImportPdfModal: extrair Header + IdleStep + LoadingStep + QuestionList + QuestionEditor + SuccessState + ErrorState + ReviewFooter (794 → 299 linhas)
-```
-
----
+</details>
 
 ## Progress
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Paginação de Questões | 3/3 | Completed| 2026-06-08 |
-| 2. Extração de Hooks | 2/3 | In progress | - |
-| 3. Extração de Sub-Componentes | 7/7 | In progress | - |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Paginação de Questões | v1.0 | 3/3 | Complete | 2026-06-08 |
+| 2. Extração de Hooks | v1.0 | 3/3 | Complete | 2026-06-08 |
+| 3. Extração de Sub-Componentes | v1.0 | 7/7 | Complete | 2026-06-09 |
 
 ---
 
-*Created: 2026-06-08*
+*Created: 2026-06-08 • Last updated: 2026-06-09 after v1.0 milestone*
