@@ -10,9 +10,17 @@ import type { Questao, HistoricoResolucao, ResolucaoView } from '../types/databa
 
 // ─── Helper: mapeia o resultado do JOIN para ResolucaoView ────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mapHistoricoToView(h: any): ResolucaoView {
-  const q: Questao = h.questao ?? {}
+function mapHistoricoToView(h: {
+  id: number
+  questao_id: number
+  questao_tec_id: number
+  alternativa: string | null
+  acertou: boolean
+  tempo_segundos: number | null
+  data_resolucao: string
+  questao: Questao[] | Questao | null
+}): ResolucaoView {
+  const q = Array.isArray(h.questao) ? h.questao[0] ?? null : h.questao ?? null
   return {
     id: h.id,
     questao_id: h.questao_id,
@@ -21,19 +29,18 @@ function mapHistoricoToView(h: any): ResolucaoView {
     acertou: h.acertou,
     tempo_segundos: h.tempo_segundos ?? 0,
     data_resolucao: h.data_resolucao,
-    // Campos da questão
-    materia: q.materia ?? null,
-    assunto: q.assunto ?? null,
-    banca_texto: q.banca_texto ?? null,
-    orgao: q.orgao ?? null,
-    concurso: q.concurso ?? null,
-    prova: q.prova ?? null,
-    ano: q.ano ?? null,
-    caderno_nome: q.caderno_nome ?? null,
-    enunciado: q.enunciado ?? null,
-    gabarito: q.gabarito ?? null,
-    alternativas: q.alternativas ?? {},
-    resolucao_professor: q.resolucao_professor ?? null,
+    materia: q?.materia ?? null,
+    assunto: q?.assunto ?? null,
+    banca_texto: q?.banca_texto ?? null,
+    orgao: q?.orgao ?? null,
+    concurso: q?.concurso ?? null,
+    prova: q?.prova ?? null,
+    ano: q?.ano ?? null,
+    caderno_nome: q?.caderno_nome ?? null,
+    enunciado: q?.enunciado ?? null,
+    gabarito: q?.gabarito ?? null,
+    alternativas: q?.alternativas ?? {},
+    resolucao_professor: q?.resolucao_professor ?? null,
   }
 }
 
@@ -47,8 +54,7 @@ export async function fetchQuestaoIds(): Promise<Set<number>> {
 
   if (error) throw error
   return new Set<number>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (data || []).map((r: any) => r.questao_tec_id).filter(Boolean)
+    (data || []).map((r: { questao_tec_id: number }) => r.questao_tec_id).filter(Boolean)
   )
 }
 
@@ -573,16 +579,14 @@ export const fetchResolucaoIds = fetchQuestaoIds
 
 /** @deprecated Use insertQuestoesBatch */
 export async function insertResolucoesBatch(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  questoes: any[],
+  questoes: Questao[],
   onProgress?: (current: number, total: number) => void
 ): Promise<number> {
   return insertQuestoesBatch(questoes, onProgress)
 }
 
 /** Busca o plano de estudos e tarefas salvas no perfil do usuário no Supabase */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchMentorPlano(): Promise<{ mentor_plano: any; mentor_tarefas: any } | null> {
+export async function fetchMentorPlano(): Promise<{ mentor_plano: unknown; mentor_tarefas: unknown } | null> {
   const { data: { session } } = await supabase.auth.getSession()
   const userId = session?.user?.id
   if (!userId) return null
@@ -600,8 +604,7 @@ export async function fetchMentorPlano(): Promise<{ mentor_plano: any; mentor_ta
 }
 
 /** Salva o plano de estudos e as tarefas concluídas no perfil do usuário no Supabase */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function updateMentorPlano(planoJson: any, tarefasJson: any): Promise<void> {
+export async function updateMentorPlano(planoJson: unknown, tarefasJson: unknown): Promise<void> {
   const { data: { session } } = await supabase.auth.getSession()
   const userId = session?.user?.id
   if (!userId) return

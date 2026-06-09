@@ -12,6 +12,31 @@ interface MateriaStat {
   taxa: number
 }
 
+interface BancaStat {
+  banca: string
+  acertos: number
+  total: number
+  taxa: number
+}
+
+interface OrgaoStat {
+  orgao: string
+  categoria: string
+  acertos: number
+  total: number
+  taxa: number
+}
+
+function categorizarOrgao(orgao: string): string {
+  const nome = orgao.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  if (/^(?:stf|stj|tst|tse|stm|trf|trt|tre|tj|tjm|tam|tjdf)/.test(nome)) return 'Tribunais'
+  if (/^tribunal/.test(nome) && !/contas/.test(nome)) return 'Tribunais'
+  if (/^(?:mpu|mp[ft]|mp[etm]|mp|dpe)/.test(nome) || /ministerio publico|defensoria/.test(nome)) return 'Ministérios Públicos'
+  if (/^(?:tcu|tce|tcm|cgu|cge|cgm)/.test(nome) || /tribunal de contas|controladoria/.test(nome)) return 'Controle'
+  if (/^(?:cam|senado|sem|ale|cm\b)/.test(nome) || /assembleia/.test(nome)) return 'Legislativo'
+  return 'Executivo'
+}
+
 export interface DiaEvolucao {
   data: string
   resolvidas: number
@@ -19,7 +44,7 @@ export interface DiaEvolucao {
   taxa: number
 }
 
-interface Stats24h {
+export interface StatsPeriodo {
   totalQuestoes: number
   totalAcertos: number
   taxaAcerto: number
@@ -27,6 +52,8 @@ interface Stats24h {
   tempoFormatado: string
   resolucoes: ResolucaoView[]
   chartData: MateriaStat[]
+  porBanca: BancaStat[]
+  porOrgao: OrgaoStat[]
   evolucaoDiaria: DiaEvolucao[]
 }
 
@@ -44,11 +71,15 @@ interface DashboardStats {
   tempoFormatado: string
   errosPendentes: number
   chartData: MateriaStat[]
+  porBanca: BancaStat[]
+  porOrgao: OrgaoStat[]
   ultimasResolucoes: ResolucaoView[]
   saudacao: string
-  streak: number
   dataFormatada: string
-  stats24h: Stats24h
+  stats24h: StatsPeriodo
+  stats7d: StatsPeriodo
+  stats30d: StatsPeriodo
+  revisoesHoje: number
   evolucaoDiaria: DiaEvolucao[]
   trends: {
     taxa: Microtrend
@@ -93,44 +124,6 @@ function getBrasiliaDateString(date: Date): string {
     month: '2-digit',
     day: '2-digit'
   }).format(date)
-}
-
-/**
- * Calcula a streak de dias consecutivos de estudo.
- */
-function calcularStreak(resolucoes: Resolucao[]): number {
-  if (resolucoes.length === 0) return 0
-
-  const diasUnicos = new Set(
-    resolucoes
-      .filter(r => r.data_resolucao)
-      .map(r => getBrasiliaDateString(new Date(r.data_resolucao)))
-  )
-
-  const hoje = getBrasiliaDateString(new Date())
-  const ontem = getBrasiliaDateString(new Date(Date.now() - 86400000))
-
-  // Se não estudou hoje nem ontem, o streak é 0
-  if (!diasUnicos.has(hoje) && !diasUnicos.has(ontem)) {
-    return 0
-  }
-
-  // Começa a verificar a partir da data de estudo mais recente (hoje ou ontem)
-  const dataReferencia = diasUnicos.has(hoje) ? new Date() : new Date(Date.now() - 86400000)
-  let streak = 0
-
-  while (true) {
-    const dataStr = getBrasiliaDateString(dataReferencia)
-    if (diasUnicos.has(dataStr)) {
-      streak++
-      // Subtrai 1 dia
-      dataReferencia.setDate(dataReferencia.getDate() - 1)
-    } else {
-      break
-    }
-  }
-
-  return streak
 }
 
 function calcularStats(resolucoes: Resolucao[]): DashboardStats {
@@ -220,6 +213,39 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
     .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
     .sort((a, b) => b.total - a.total)
 
+  const porBanca = Object.values(
+    respondidas.reduce(
+      (acc, curr) => {
+        const banca = curr.banca_texto || 'Sem Banca'
+        if (!acc[banca]) acc[banca] = { banca, acertos: 0, total: 0, taxa: 0 }
+        acc[banca].total += 1
+        if (curr.acertou) acc[banca].acertos += 1
+        return acc
+      },
+      {} as Record<string, BancaStat>
+    )
+  )
+    .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
+    .sort((a, b) => b.total - a.total)
+
+  const porOrgao = Object.values(
+    respondidas.reduce(
+      (acc, curr) => {
+        const orgao = curr.orgao || 'Sem Órgão'
+        if (!acc[orgao]) acc[orgao] = { orgao, categoria: categorizarOrgao(orgao), acertos: 0, total: 0, taxa: 0 }
+        acc[orgao].total += 1
+        if (curr.acertou) acc[orgao].acertos += 1
+        return acc
+      },
+      {} as Record<string, OrgaoStat>
+    )
+  )
+    .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
+    .sort((a, b) => {
+      if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria)
+      return b.total - a.total
+    })
+
   const dataAtual = new Date()
   const dataFormatada = dataAtual.toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -274,7 +300,6 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
     return { dateString, hour }
   }
 
-  // Cálculo das estatísticas de Hoje (Horário de Brasília)
   const hojeSP = getBrasiliaDateString(new Date())
 
   const respondidasHoje = respondidas.filter(r => {
@@ -283,53 +308,146 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
     return dateString === hojeSP
   })
 
-  const totalQuestoesHoje = respondidasHoje.length
-  const totalAcertosHoje = respondidasHoje.filter(r => r.acertou).length
-  const taxaAcertoHoje = totalQuestoesHoje > 0 ? Math.round((totalAcertosHoje / totalQuestoesHoje) * 100) : 0
-  const tempoMedioHoje =
-    totalQuestoesHoje > 0
-      ? Math.round(respondidasHoje.reduce((acc, curr) => acc + curr.tempo_segundos, 0) / totalQuestoesHoje)
+  // ─── CALCULAR REVISÕES PENDENTES HOJE (SM-2 do localStorage) ───────────
+  const revisoesHoje = (() => {
+    try {
+      const schedule = JSON.parse(localStorage.getItem('concursos_spaced_repetition') || '{}')
+      const now = new Date()
+      const latestMap = new Map<number, Resolucao>()
+      respondidas.forEach(r => {
+        if (r.questao_tec_id && !latestMap.has(r.questao_tec_id)) {
+          latestMap.set(r.questao_tec_id, r)
+        }
+      })
+      return Array.from(latestMap.values()).filter(item => {
+        if (!item.acertou) return true
+        const meta = schedule[String(item.questao_tec_id || item.questao_id)]
+        if (meta?.proximaRevisao) return new Date(meta.proximaRevisao) <= now
+        return false
+      }).length
+    } catch {
+      return 0
+    }
+  })()
+
+  // ─── PERIOD STATS HELPER ──────────────────────────────────────────────
+  function calcularStatsPeriodo(
+    filtradas: Resolucao[],
+    isHourly: boolean
+  ): StatsPeriodo {
+    const total = filtradas.length
+    const acertos = filtradas.filter(r => r.acertou).length
+    const taxa = total > 0 ? Math.round((acertos / total) * 100) : 0
+    const tempo = total > 0
+      ? Math.round(filtradas.reduce((acc, curr) => acc + curr.tempo_segundos, 0) / total)
       : 0
 
-  // Estatísticas de matéria de Hoje
-  const porMateriaHoje = respondidasHoje.reduce(
-    (acc, curr) => {
-      const mat = curr.materia || 'Sem Matéria'
-      if (!acc[mat]) acc[mat] = { materia: mat, acertos: 0, total: 0, taxa: 0 }
-      acc[mat].total += 1
-      if (curr.acertou) acc[mat].acertos += 1
-      return acc
-    },
-    {} as Record<string, MateriaStat>
-  )
+    const porMateria = filtradas.reduce(
+      (acc, curr) => {
+        const mat = curr.materia || 'Sem Matéria'
+        if (!acc[mat]) acc[mat] = { materia: mat, acertos: 0, total: 0, taxa: 0 }
+        acc[mat].total += 1
+        if (curr.acertou) acc[mat].acertos += 1
+        return acc
+      },
+      {} as Record<string, MateriaStat>
+    )
+    const chart = Object.values(porMateria)
+      .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
+      .sort((a, b) => b.total - a.total)
 
-  const chartDataHoje = Object.values(porMateriaHoje)
-    .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
-    .sort((a, b) => b.total - a.total)
+    const evol = (() => {
+      if (isHourly) {
+        const porHora = filtradas.reduce((acc, curr) => {
+          if (!curr.data_resolucao) return acc
+          const { hour } = getBrasiliaDateAndHour(curr.data_resolucao)
+          if (!acc[hour]) acc[hour] = { display: `${hour}h`, resolvidas: 0, acertos: 0, hour }
+          acc[hour].resolvidas += 1
+          if (curr.acertou) acc[hour].acertos += 1
+          return acc
+        }, {} as Record<number, { display: string; resolvidas: number; acertos: number; hour: number }>)
+        return Object.values(porHora).sort((a, b) => a.hour - b.hour).map(v => ({
+          data: v.display, resolvidas: v.resolvidas, acertos: v.acertos,
+          taxa: v.resolvidas > 0 ? Math.round((v.acertos / v.resolvidas) * 100) : 0,
+        }))
+      }
+      const porDia = filtradas.reduce((acc, curr) => {
+        if (!curr.data_resolucao) return acc
+        const full = getBrasiliaDateString(new Date(curr.data_resolucao))
+        const [, m, d] = full.split('-')
+        const disp = `${d}/${m}`
+        if (!acc[full]) acc[full] = { display: disp, resolvidas: 0, acertos: 0 }
+        acc[full].resolvidas += 1
+        if (curr.acertou) acc[full].acertos += 1
+        return acc
+      }, {} as Record<string, { display: string; resolvidas: number; acertos: number }>)
+      return Object.entries(porDia)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .slice(-10)
+        .map(([, v]) => ({
+          data: v.display, resolvidas: v.resolvidas, acertos: v.acertos,
+          taxa: v.resolvidas > 0 ? Math.round((v.acertos / v.resolvidas) * 100) : 0,
+        }))
+    })()
 
-  // Agrupamento por hora (Brasília) para Hoje
-  const porHoraHoje = respondidasHoje.reduce((acc, curr) => {
-    if (!curr.data_resolucao) return acc
-    const { hour } = getBrasiliaDateAndHour(curr.data_resolucao)
-    const hourKey = hour
-    const display = `${hour}h`
+    const porBanca = Object.values(
+      filtradas.reduce(
+        (acc, curr) => {
+          const banca = curr.banca_texto || 'Sem Banca'
+          if (!acc[banca]) acc[banca] = { banca, acertos: 0, total: 0, taxa: 0 }
+          acc[banca].total += 1
+          if (curr.acertou) acc[banca].acertos += 1
+          return acc
+        },
+        {} as Record<string, BancaStat>
+      )
+    )
+      .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
+      .sort((a, b) => b.total - a.total)
 
-    if (!acc[hourKey]) {
-      acc[hourKey] = { display, resolvidas: 0, acertos: 0, hour }
+    const porOrgao = Object.values(
+      filtradas.reduce(
+        (acc, curr) => {
+          const orgao = curr.orgao || 'Sem Órgão'
+          if (!acc[orgao]) acc[orgao] = { orgao, categoria: categorizarOrgao(orgao), acertos: 0, total: 0, taxa: 0 }
+          acc[orgao].total += 1
+          if (curr.acertou) acc[orgao].acertos += 1
+          return acc
+        },
+        {} as Record<string, OrgaoStat>
+      )
+    )
+      .map(d => ({ ...d, taxa: Math.round((d.acertos / d.total) * 100) }))
+      .sort((a, b) => {
+        if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria)
+        return b.total - a.total
+      })
+
+    return {
+      totalQuestoes: total,
+      totalAcertos: acertos,
+      taxaAcerto: taxa,
+      tempoMedio: tempo,
+      tempoFormatado: formatarTempo(tempo),
+      resolucoes: filtradas,
+      chartData: chart,
+      porBanca,
+      porOrgao,
+      evolucaoDiaria: evol,
     }
-    acc[hourKey].resolvidas += 1
-    if (curr.acertou) acc[hourKey].acertos += 1
-    return acc
-  }, {} as Record<number, { display: string; resolvidas: number; acertos: number; hour: number }>)
+  }
 
-  const evolucaoDiariaHoje = Object.values(porHoraHoje)
-    .sort((a, b) => a.hour - b.hour)
-    .map(val => ({
-      data: val.display,
-      resolvidas: val.resolvidas,
-      acertos: val.acertos,
-      taxa: val.resolvidas > 0 ? Math.round((val.acertos / val.resolvidas) * 100) : 0,
-    }))
+  const stats24h = calcularStatsPeriodo(respondidasHoje, true)
+
+  // 7 dias
+  const seteDiasAtras = new Date(agora - 7 * umDia)
+  const respondidas7d = respondidas.filter(r => r.data_resolucao && new Date(r.data_resolucao) >= seteDiasAtras)
+  const stats7d = calcularStatsPeriodo(respondidas7d, false)
+
+  // 30 dias
+  const trintaDiasAtras = new Date(agora - 30 * umDia)
+  const respondidas30d = respondidas.filter(r => r.data_resolucao && new Date(r.data_resolucao) >= trintaDiasAtras)
+  const stats30d = calcularStatsPeriodo(respondidas30d, false)
 
   // Calcula erros pendentes da mesma forma que o Caderno de Erros (última tentativa incorreta)
   const latestAttemptsMap = new Map<number, Resolucao>()
@@ -348,21 +466,16 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
     tempoFormatado: formatarTempo(tempoMedio),
     errosPendentes,
     chartData,
+    porBanca,
+    porOrgao,
     ultimasResolucoes: respondidas.slice(0, 8),
     saudacao: getSaudacao(),
-    streak: calcularStreak(respondidas),
     dataFormatada: dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1),
     evolucaoDiaria,
-    stats24h: {
-      totalQuestoes: totalQuestoesHoje,
-      totalAcertos: totalAcertosHoje,
-      taxaAcerto: taxaAcertoHoje,
-      tempoMedio: tempoMedioHoje,
-      tempoFormatado: formatarTempo(tempoMedioHoje),
-      resolucoes: respondidasHoje,
-      chartData: chartDataHoje,
-      evolucaoDiaria: evolucaoDiariaHoje
-    },
+    stats24h,
+    stats7d,
+    stats30d,
+    revisoesHoje,
     trends: {
       taxa: trendTaxa,
       resolvidas: trendResolvidas,

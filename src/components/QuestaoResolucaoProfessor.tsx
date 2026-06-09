@@ -50,7 +50,7 @@ export function QuestaoResolucaoProfessor({
       </div>
 
       {expanded && (
-        <div className="p-6 space-y-4 animate-in fade-in duration-200">
+        <div className="p-6 space-y-4">
           {editing ? (
             <div className="space-y-3">
               <textarea

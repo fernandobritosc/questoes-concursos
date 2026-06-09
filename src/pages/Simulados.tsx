@@ -43,8 +43,14 @@ export function Simulados() {
   const [selectedTempo, setSelectedTempo] = useState(15)
 
   // Controle do modal de prescrição tática do histórico
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectedSimuladoForModal, setSelectedSimuladoForModal] = useState<any | null>(null)
+  const [selectedSimuladoForModal, setSelectedSimuladoForModal] = useState<{
+    id?: string
+    data: string
+    acertos: number
+    total: number
+    taxa: number
+    diagnosticoIA?: string | null
+  } | null>(null)
 
   // Controle de paginação e visualização do histórico
   const [verTodosHistorico, setVerTodosHistorico] = useState(false)

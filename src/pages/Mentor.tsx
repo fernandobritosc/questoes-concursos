@@ -86,9 +86,8 @@ export function Mentor() {
 
   if (loading) return <LoadingSpinner />
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const customRenderers = {
-    p: ({ children, ...props }: any) => {
+  const customRenderers: Record<string, (props: { children?: React.ReactNode } & Record<string, unknown>) => React.ReactNode> = {
+    p: ({ children, ...props }) => {
       // Reconhece se o texto contém "Pegadinha:" ou "Dica de Prova:"
       const textContent = Array.isArray(children)
         ? children.map(c => typeof c === 'string' ? c : '').join('')
@@ -124,40 +123,40 @@ export function Mentor() {
 
       return <p className="text-sm text-muted-foreground leading-relaxed mb-4 print:text-zinc-700" {...props}>{children}</p>
     },
-    h3: ({ children, ...props }: any) => (
+    h3: ({ children, ...props }) => (
       <h3 className="text-base font-bold text-foreground mt-6 mb-3 border-b border-border/40 pb-2 flex items-center gap-2 print:text-zinc-900 print:border-zinc-300" {...props}>
         {children}
       </h3>
     ),
-    h4: ({ children, ...props }: any) => (
+    h4: ({ children, ...props }) => (
       <h4 className="text-sm font-bold text-foreground mt-4 mb-2 flex items-center gap-2 print:text-zinc-900" {...props}>
         {children}
       </h4>
     ),
-    ul: ({ children, ...props }: any) => (
+    ul: ({ children, ...props }) => (
       <ul className="list-disc pl-5 space-y-2 mb-4 text-sm text-muted-foreground leading-relaxed print:text-zinc-700" {...props}>
         {children}
       </ul>
     ),
-    ol: ({ children, ...props }: any) => (
+    ol: ({ children, ...props }) => (
       <ol className="list-decimal pl-5 space-y-2 mb-4 text-sm text-muted-foreground leading-relaxed print:text-zinc-700" {...props}>
         {children}
       </ol>
     ),
-    li: ({ children, ...props }: any) => (
+    li: ({ children, ...props }) => (
       <li className="leading-relaxed" {...props}>
         {children}
       </li>
     ),
-    code: ({ inline, className, children, ...props }: any) => {
-      const match = /language-(\w+)/.exec(className || '')
+    code: ({ inline, className, children, ...props }) => {
+      const match = /language-(\w+)/.exec((className as string) || '')
       const language = match ? match[1] : ''
       const content = String(children).replace(/\n$/, '')
-      
+
       if (language === 'notebooklm') {
         return <NotebookLMCard promptText={content} />
       }
-      
+
       return inline ? (
         <code className="bg-muted px-1.5 py-0.5 rounded text-xs text-foreground font-mono" {...props}>{children}</code>
       ) : (
@@ -167,7 +166,6 @@ export function Mentor() {
       )
     }
   }
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   const activeMentoriaText = selectedFraqueza
     ? planosAssuntos[`${selectedFraqueza.materia} - ${selectedFraqueza.assunto}`]

@@ -177,17 +177,16 @@ export function useQuestoes() {
 
   // ─── Effects de Coordenação ──────────────────────────────────────────────────
 
-  // Sync resolucaoText + reset alternativa/revelado ao navegar no caderno
+  // Sync resolucaoText + cancel editing ao navegar entre questões
   useEffect(() => {
-    if (questoesExibidas.length > 0 && questoesExibidas[caderno.currentQuestaoIndex]) {
-      const q = questoesExibidas[caderno.currentQuestaoIndex]
+    const questoes = questoesExibidas
+    if (questoes.length > 0 && questoes[caderno.currentQuestaoIndex]) {
+      const q = questoes[caderno.currentQuestaoIndex]
       resolucao.setResolucaoText(q.resolucao_professor || '')
       resolucao.setEditingResolucao(false)
-      caderno.setAlternativaSelecionada(null)
-      caderno.setRevelado(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caderno.currentQuestaoIndex, questoesExibidas, resolucao.setResolucaoText, resolucao.setEditingResolucao, caderno.setAlternativaSelecionada, caderno.setRevelado])
+  }, [caderno.currentQuestaoIndex, resolucao.setResolucaoText, resolucao.setEditingResolucao])
 
   // ─── Effects: Carga Inicial ───────────────────────────────────────────────────
 
@@ -315,10 +314,11 @@ export function useQuestoes() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caderno.currentQuestaoIndex, caderno.setTempoSegundos])
 
-  // Load history of active question when currentQuestaoIndex or caderno changes
+  // Load history of active question when navigating to a new question
   useEffect(() => {
-    if (questoesExibidas.length > 0 && questoesExibidas[caderno.currentQuestaoIndex]) {
-      const q = questoesExibidas[caderno.currentQuestaoIndex]
+    const questoes = questoesExibidas
+    if (questoes.length > 0 && questoes[caderno.currentQuestaoIndex]) {
+      const q = questoes[caderno.currentQuestaoIndex]
       const targetId = q.questao_id || q.id
       if (targetId) {
         caderno.loadHistoricoDaQuestao(targetId)
@@ -329,7 +329,7 @@ export function useQuestoes() {
       caderno.setHistoricoQuestaoAtiva([])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caderno.currentQuestaoIndex, questoesExibidas, caderno.loadHistoricoDaQuestao, caderno.setHistoricoQuestaoAtiva])
+  }, [caderno.currentQuestaoIndex])
 
   // ─── Wrapper Actions ──────────────────────────────────────────────────────────
 

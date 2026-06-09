@@ -143,8 +143,8 @@ export function useMentor() {
             if (dbData.mentor_plano) {
               const parsed = typeof dbData.mentor_plano === 'string'
                 ? tentarParsearPlano(dbData.mentor_plano)
-                : dbData.mentor_plano
-              loadedPlano = parsed || dbData.mentor_plano
+                : dbData.mentor_plano as PlanoEstruturado
+              loadedPlano = parsed || dbData.mentor_plano as PlanoEstruturado | null
             }
             if (dbData.mentor_tarefas) {
               loadedTarefas = typeof dbData.mentor_tarefas === 'string'

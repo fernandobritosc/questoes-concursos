@@ -6,7 +6,7 @@ import type { ResolucaoView } from '../types/database'
 
 export type SimuladoEtapa = 'setup' | 'active' | 'submitting' | 'results'
 
-interface SimuladoHistoricoItem {
+export interface SimuladoHistoricoItem {
   id: string
   data: string
   qtdQuestoes: number

@@ -203,7 +203,7 @@ export function Questoes() {
 
   return (
     <ErrorBoundary>
-      <div className="h-[calc(100vh-60px)] flex flex-col bg-muted/20 animate-in fade-in duration-300 overflow-hidden print:hidden">
+      <div className="h-[calc(100vh-60px)] flex flex-col bg-muted/20 overflow-hidden print:hidden">
         
         <QuestaoTabs
           topTab={topTab}
@@ -294,7 +294,7 @@ export function Questoes() {
           {/* 7. Caixa de Análise do Mentor IA */}
           {explicacoes[questoesExibidas[currentQuestaoIndex].id!] && 
            explicacoes[questoesExibidas[currentQuestaoIndex].id!] !== resolucaoText && (
-            <div className="bg-blue-50/30 border border-border/80 rounded-xl p-6 space-y-3 animate-in fade-in slide-in-from-top-3 duration-300 shadow-sm">
+            <div className="bg-blue-50/30 border border-border/80 rounded-xl p-6 space-y-3 shadow-sm">
               <div className="flex items-center gap-2 text-primary font-black text-xs uppercase tracking-wider">
                 <BrainCircuit className="w-5 h-5 text-primary" />
                 <span>Explicação do Professor IA</span>

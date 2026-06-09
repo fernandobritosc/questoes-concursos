@@ -44,7 +44,7 @@ export function MeuDesempenho({
       </div>
       
       {isExpanded && (
-        <div className="animate-in fade-in duration-200">
+        <div>
           {total === 0 ? (
             <div className="p-6 flex items-center gap-3 text-muted-foreground text-xs font-semibold">
               <PieChart className="w-5 h-5 text-muted-foreground/50" />

@@ -61,6 +61,28 @@ function sanitizeStoragePath(materia: string, assunto: string): string {
 
 // ─── APIs do Serviço ─────────────────────────────────────────────────────────
 
+interface StudyMaterialIndexedItem {
+  id: string
+  materia: string
+  assunto: string
+  fileName: string
+  fileData: Blob
+  originalSize: number
+  compressedSize: number
+  updatedAt: string
+}
+
+interface MateriaisEstudoRow {
+  id: string
+  materia: string
+  assunto: string
+  file_name: string
+  file_url: string
+  original_size: number
+  compressed_size: number
+  updated_at: string
+}
+
 export interface StudyMaterialMetadata {
   fileName: string
   originalSize: number
@@ -210,8 +232,7 @@ export async function getStudyMaterial(
   } else {
     // Recupera do IndexedDB local
     const db = await openDB()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const item = await new Promise<any>((resolve, reject) => {
+    const item = await new Promise<StudyMaterialIndexedItem | null>((resolve, reject) => {
       const transaction = db.transaction(STORE_NAME, 'readonly')
       const store = transaction.objectStore(STORE_NAME)
       const request = store.get(`${materia} | ${assunto}`)
@@ -290,8 +311,7 @@ export async function listAllStudyMaterialsMetadata(
     }
 
     const metadata: Record<string, StudyMaterialMetadata> = {}
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(data || []).forEach((item: any) => {
+    ;(data || []).forEach((item: MateriaisEstudoRow) => {
       metadata[item.id] = {
         fileName: item.file_name,
         originalSize: item.original_size,
@@ -303,15 +323,14 @@ export async function listAllStudyMaterialsMetadata(
 
   } else {
     const db = await openDB()
-    return new Promise((resolve, reject) => {
+    return new Promise<Record<string, StudyMaterialMetadata>>((resolve, reject) => {
       const transaction = db.transaction(STORE_NAME, 'readonly')
       const store = transaction.objectStore(STORE_NAME)
       const request = store.getAll()
       request.onsuccess = () => {
-        const results = request.result || []
+        const results: StudyMaterialIndexedItem[] = request.result || []
         const metadata: Record<string, StudyMaterialMetadata> = {}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        results.forEach((item: any) => {
+        results.forEach((item) => {
           metadata[item.id] = {
             fileName: item.fileName,
             originalSize: item.originalSize || item.fileData.size,

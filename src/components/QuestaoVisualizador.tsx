@@ -40,7 +40,7 @@ export function QuestaoVisualizador({
   podeAnterior, podeProxima,
 }: QuestaoVisualizadorProps) {
   return (
-    <div className="bg-card border border-border rounded-xl shadow-lg overflow-hidden flex flex-col animate-in slide-in-from-bottom-4 duration-300">
+    <div className="bg-card border border-border rounded-xl shadow-lg overflow-hidden flex flex-col">
       <div className="p-5 border-b border-border bg-card flex items-center justify-between flex-wrap gap-4">
         <h3 className="text-sm font-extrabold text-primary flex items-center gap-2">
           <GraduationCap className="w-5.5 h-5.5 text-primary" />

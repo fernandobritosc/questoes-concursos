@@ -1,15 +1,34 @@
-﻿/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Resolucao } from '../types/database';
+﻿import type { Resolucao } from '../types/database';
 
-export async function loadPdfJs(): Promise<any> {
-  if ((window as any).pdfjsLib) {
-    return (window as any).pdfjsLib;
+interface PdfJsLib {
+  GlobalWorkerOptions: { workerSrc: string }
+  getDocument(params: { data: ArrayBuffer }): { promise: Promise<PdfDocument> }
+}
+
+interface PdfDocument {
+  numPages: number
+  getPage(pageNum: number): Promise<PdfPage>
+}
+
+interface PdfPage {
+  getTextContent(): Promise<{ items: PdfTextItem[] }>
+}
+
+interface PdfTextItem {
+  str: string
+  transform: number[]
+}
+
+export async function loadPdfJs(): Promise<PdfJsLib> {
+  const w = window as unknown as { pdfjsLib: PdfJsLib | undefined }
+  if (w.pdfjsLib) {
+    return w.pdfjsLib;
   }
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js';
     script.onload = () => {
-      const lib = (window as any).pdfjsLib;
+      const lib = w.pdfjsLib!;
       lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
       resolve(lib);
     };
@@ -19,7 +38,7 @@ export async function loadPdfJs(): Promise<any> {
 }
 
 export async function extractPdfText(
-  pdfjsLib: any,
+  pdfjsLib: PdfJsLib,
   buffer: ArrayBuffer,
   onProgress?: (pageNum: number, total: number) => void
 ): Promise<{ fullText: string; totalPages: number }> {
@@ -30,10 +49,10 @@ export async function extractPdfText(
   for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
     const page = await pdfDoc.getPage(pageNum);
     const textContent = await page.getTextContent();
-    const items = textContent.items as any[];
-    const validItems = items.filter((item: any) => item.str && item.str.trim() !== '');
+    const items = textContent.items;
+    const validItems = items.filter((item) => item.str && item.str.trim() !== '');
 
-    validItems.sort((a: any, b: any) => {
+    validItems.sort((a, b) => {
       const yDiff = b.transform[5] - a.transform[5];
       if (Math.abs(yDiff) > 4) return yDiff;
       return a.transform[4] - b.transform[4];
@@ -41,7 +60,7 @@ export async function extractPdfText(
 
     const pageLines: string[] = [];
     let currentY = -999;
-    let currentLineItems: any[] = [];
+    let currentLineItems: PdfTextItem[] = [];
 
     for (const item of validItems) {
       const y = item.transform[5];
@@ -51,15 +70,15 @@ export async function extractPdfText(
       } else if (Math.abs(y - currentY) <= 4) {
         currentLineItems.push(item);
       } else {
-        currentLineItems.sort((a: any, b: any) => a.transform[4] - b.transform[4]);
-        pageLines.push(currentLineItems.map((i: any) => i.str).join(' '));
+        currentLineItems.sort((a, b) => a.transform[4] - b.transform[4]);
+        pageLines.push(currentLineItems.map((i) => i.str).join(' '));
         currentY = y;
         currentLineItems = [item];
       }
     }
     if (currentLineItems.length > 0) {
-      currentLineItems.sort((a: any, b: any) => a.transform[4] - b.transform[4]);
-      pageLines.push(currentLineItems.map((i: any) => i.str).join(' '));
+      currentLineItems.sort((a, b) => a.transform[4] - b.transform[4]);
+      pageLines.push(currentLineItems.map((i) => i.str).join(' '));
     }
 
     fullText += pageLines.join('\n') + '\n';
@@ -172,7 +191,7 @@ export function parsePdfContent(
 
     const alternativas: Record<string, string> = {};
     const optionLetters = ['a', 'b', 'c', 'd', 'e'];
-    const altIndices: any[] = [];
+    const altIndices: { letter: string; index: number; markerLength: number }[] = [];
 
     for (const letter of optionLetters) {
       const altPattern = new RegExp(`(^|\\n)\\s*${letter}\\)\\s+`, 'i');
@@ -185,7 +204,7 @@ export function parsePdfContent(
     let enunciado: string | undefined;
 
     if (altIndices.length >= 2) {
-      altIndices.sort((a: any, b: any) => a.index - b.index);
+      altIndices.sort((a, b) => a.index - b.index);
       enunciado = remainingText.substring(0, altIndices[0].index).trim();
       for (let j = 0; j < altIndices.length; j++) {
         const current = altIndices[j];
