@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-09T00:31:07.489Z"
+last_updated: "2026-06-09T00:31:28.000Z"
 progress:
   total_phases: 3
   completed_phases: 3
@@ -46,6 +46,7 @@ progress:
 | Phase 01-paginacao-de-questoes P03 | 6min | 1 tasks | 1 files |
 | Phase 02-extracao-de-hooks P02 | 12min | 1 tasks | 1 files |
 | Phase 02-extracao-de-hooks P01 | 4min | 2 tasks | 2 files |
+| Phase 03-extracao-de-subcomponentes P04 | 3min | 2 tasks | 4 files |
 | Phase 03-extracao-de-subcomponentes P05 | 15min | 3 tasks | 6 files |
 
 ## Accumulated Context
@@ -67,6 +68,9 @@ progress:
 | 2026-06-08 | useQuestoesFilter recebe ResolucaoView[] como parâmetro em vez de gerenciar dados internamente | Hook de filtro é puramente derivacional — não possui fonte própria de dados |
 | 2026-06-08 | useQuestoesResolucao usa callback onQuestoesUpdated em vez de modificar cadernoQuestoes/resolucoes diretamente | Desacopla hook de resolução do orquestrador |
 | 2026-06-08 | handleSaveResolucao(questaoId, text) aceita parâmetros explícitos | Evita dependência de questoesExibidas[currentQuestaoIndex]; orquestrador decide qual questão salvar |
+| 2026-06-08 | Confirm dialogs mantidos no pai (Simulados.tsx) para onFinalizarSimulado | Mantém lógica de diálogo perto do hook; componente apenas chama callback |
+| 2026-06-08 | isApproved calculado localmente em SimuladoResultados | Não justifica prop separada; derivado de pontuacao.taxa >= 70 |
+| 2026-06-08 | formatCountdown privado em SimuladoExamView | Helper sem dependências externas; não precisa ser exportado |
 
 ### Open Todos
 
@@ -143,6 +147,13 @@ progress:
   - Plan 03-05: Dashboard — 3 sub-componentes
   - Plan 03-06: EditalVerticalizado — 3 sub-componentes
 
+- **Plan 03-04 (Wave 2)** executed successfully:
+  - `SimuladoExamView.tsx` (221 lines) — active exam-taking UI with timer, questions, alternatives, navigation grid
+  - `SimuladoResultados.tsx` (309 lines) — exam results with performance cards, IA diagnosis, detailed review accordions
+  - `Simulados.tsx` reduced from 691 to 233 lines (-66%)
+  - Barrel exports updated
+  - Verification: tsc zero errors, ESLint zero errors, 38/38 tests passing
+
 - **Plan 03-05 (Wave 2)** executed successfully:
   - `DashboardMetricCard.tsx`, `DashboardResolucaoItem.tsx`, `DashboardStudyHeatmap.tsx` created
   - `Dashboard.tsx` reduced from 808 to 419 lines (-48%)
@@ -154,7 +165,7 @@ progress:
 
 ### Next Session
 
-- Phase 3: 2 plans remaining (Plan 04 — Simulados P2, Plan 06 — EditalVerticalizado)
+- Phase 3: 1 plan remaining (Plan 06 — EditalVerticalizado)
 - Phase 2 Plan 02-03 (orquestrador) remains pending
 
 ---
