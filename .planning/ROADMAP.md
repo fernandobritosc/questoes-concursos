@@ -1,4 +1,4 @@
-# Questões Concursos — Roadmap
+﻿# Questões Concursos — Roadmap
 
 ## Core Value
 
@@ -88,8 +88,8 @@ Plans:
 ```
 Plans:
 - [ ] 03-01-PLAN.md — Simulados P1: extrair SimuladoSetup + SimuladoHistorico (983 → ~600 linhas)
-- [ ] 03-02-PLAN.md — MapaQuestoes: extrair MapaStatsCards + MapaMateriaAccordion + MapaSqlSetupModal (892 → ~470 linhas)
-- [ ] 03-03-PLAN.md — Revisao: extrair RevisaoStatsCards + RevisaoFilterBar + RevisaoFocusView (845 → ~400 linhas)
+- [x] 03-02-PLAN.md — MapaQuestoes: extrair MapaStatsCards + MapaMateriaAccordion + MapaSqlSetupModal (892 → ~470 linhas)
+- [x] 03-03-PLAN.md — Revisao: extrair RevisaoStatsCards + RevisaoFilterBar + RevisaoFocusView (845 → ~400 linhas)
 - [ ] 03-04-PLAN.md — Simulados P2: extrair SimuladoExamView + SimuladoResultados (600 → ~330 linhas) [depends_on: 01]
 - [ ] 03-05-PLAN.md — Dashboard: extrair MetricCard + ResolucaoItem + StudyHeatmap (808 → ~400 linhas)
 - [ ] 03-06-PLAN.md — EditalVerticalizado: extrair Sidebar + AssuntoItem + MateriaDetalhes (748 → ~350 linhas)
@@ -103,7 +103,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Paginação de Questões | 3/3 | Completed| 2026-06-08 |
 | 2. Extração de Hooks | 2/3 | In progress | - |
-| 3. Extração de Sub-Componentes | 0/6 | In progress | - |
+| 3. Extração de Sub-Componentes | 2/6 | In progress | - |
 
 ---
 

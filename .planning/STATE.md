@@ -1,15 +1,15 @@
----
+﻿---
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-06-08T23:57:03.007Z"
+last_updated: "2026-06-09T00:18:22.972Z"
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 12
-  completed_plans: 6
-  percent: 50
+  completed_plans: 8
+  percent: 67
 ---
 
 # STATE.md — Questões Concursos
@@ -29,11 +29,11 @@ progress:
 |-------|--------|------------|
 | 1 — Paginação de Questões | Completed | Fetch de questões usa paginação server-side |
 | 2 — Extração de Hooks | In progress (2/3 plans) | useQuestoes.ts dividido em hooks menores |
-| 3 — Extração de Sub-Componentes | In progress (0/6 plans) | 5 páginas grandes têm sub-componentes extraídos |
+| 3 — Extração de Sub-Componentes | In progress (3/6 plans) | 5 páginas grandes têm sub-componentes extraídos |
 
-**Progress:** [████████░░] 83%
+**Progress:** [███████░░░] 67%
 
-**Active Plan:** Phase 3 — Extração de Sub-Componentes (6 plans planned, 0 executed)
+**Active Plan:** Phase 3 — Extração de Sub-Componentes (6 plans planned, 3 executed)
 
 ## Performance Metrics
 
@@ -79,7 +79,7 @@ progress:
 - [x] Phase 3: Identificar candidatos a sub-componente em cada página
 - [ ] Phase 3: Executar Plan 01 — Simulados P1 (SimuladoSetup + SimuladoHistorico)
 - [ ] Phase 3: Executar Plan 02 — MapaQuestoes (3 sub-componentes)
-- [ ] Phase 3: Executar Plan 03 — Revisao (3 sub-componentes)
+- [x] Phase 3: Executar Plan 03 — Revisao (3 sub-componentes)
 - [ ] Phase 3: Executar Plan 04 — Simulados P2 (SimuladoExamView + SimuladoResultados)
 - [ ] Phase 3: Executar Plan 05 — Dashboard (3 sub-componentes)
 - [ ] Phase 3: Executar Plan 06 — EditalVerticalizado (3 sub-componentes)
