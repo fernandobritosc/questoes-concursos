@@ -83,7 +83,7 @@ progress:
 - [x] Phase 3: Executar Plan 03 — Revisao (3 sub-componentes)
 - [ ] Phase 3: Executar Plan 04 — Simulados P2 (SimuladoExamView + SimuladoResultados)
 - [x] Phase 3: Executar Plan 05 — Dashboard (3 sub-componentes)
-- [ ] Phase 3: Executar Plan 06 — EditalVerticalizado (3 sub-componentes)
+- [x] Phase 3: Executar Plan 06 — EditalVerticalizado (3 sub-componentes)
 
 ### Known Blockers
 
