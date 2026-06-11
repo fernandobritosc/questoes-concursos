@@ -374,20 +374,17 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     if (linksResumo.length > 1) {
       const textBloco = linksResumo[1].textContent.trim(); // Ex: "2025 - Concurso/Prova"
       
-      const regexAno = /^(\d{4})\s*-\s*(.*)$/;
-      const matchAno = textBloco.match(regexAno);
-      
-      if (matchAno) {
-        ano = parseInt(matchAno[1]);
-        const resto = matchAno[2];
-        const partes = resto.split("/");
-        concurso = partes[0] ? partes[0].trim() : null;
-        prova = partes[1] ? partes[1].trim() : null;
-      } else {
-        const partes = textBloco.split("/");
-        concurso = partes[0] ? partes[0].trim() : null;
-        prova = partes[1] ? partes[1].trim() : null;
+      // Procura ano em qualquer posição do texto
+      const anoMatch = textBloco.match(/\b(19\d\d|20\d\d)\b/);
+      if (anoMatch) {
+        ano = parseInt(anoMatch[0], 10);
       }
+      
+      // Extrai concurso/prova ignorando o ano
+      const semAno = textBloco.replace(/\b(19\d\d|20\d\d)\b\s*[-–]\s*/, '').trim();
+      const partes = semAno.split("/");
+      concurso = partes[0] ? partes[0].trim() : null;
+      prova = partes[1] ? partes[1].trim() : null;
     }
 
     // 5. Enunciado
@@ -643,20 +640,21 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
                   console.log(`[MonitorPro] Registro recuperado com sucesso. ID no banco: ${dbQuestaoId}. Tentativa existente: ${hasExistingAttempt}`);
                   
                   // Atualiza metadados (ano, banca, órgão etc.) e resolução do professor
-                  const updatePayload = {
-                    ano: questaoPayload.ano,
-                    banca_texto: questaoPayload.banca_texto,
-                    orgao: questaoPayload.orgao,
-                    concurso: questaoPayload.concurso,
-                    prova: questaoPayload.prova,
-                    materia: questaoPayload.materia,
-                    assunto: questaoPayload.assunto,
-                  };
+                  const updatePayload = Object.fromEntries(
+                    Object.entries({
+                      ano: questaoPayload.ano,
+                      banca_texto: questaoPayload.banca_texto,
+                      orgao: questaoPayload.orgao,
+                      concurso: questaoPayload.concurso,
+                      prova: questaoPayload.prova,
+                      materia: questaoPayload.materia,
+                      assunto: questaoPayload.assunto,
+                    }).filter(([, v]) => v != null)
+                  );
                   if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
                     updatePayload.resolucao_professor = questaoPayload.resolucao_professor;
                   }
-                  const hasMetadataChanges = Object.keys(updatePayload).length > 0;
-                  if (hasMetadataChanges) {
+                  if (Object.keys(updatePayload).length > 0) {
                     console.log(`[MonitorPro] Atualizando metadados pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`, updatePayload);
                     if (isContextInvalidated()) return;
                     const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
@@ -684,20 +682,21 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
           }
         } else {
           // Se a questão já existia, atualiza metadados (ano, banca, órgão etc.) e resolução do professor
-          const updatePayload = {
-            ano: questaoPayload.ano,
-            banca_texto: questaoPayload.banca_texto,
-            orgao: questaoPayload.orgao,
-            concurso: questaoPayload.concurso,
-            prova: questaoPayload.prova,
-            materia: questaoPayload.materia,
-            assunto: questaoPayload.assunto,
-          };
+          const updatePayload = Object.fromEntries(
+            Object.entries({
+              ano: questaoPayload.ano,
+              banca_texto: questaoPayload.banca_texto,
+              orgao: questaoPayload.orgao,
+              concurso: questaoPayload.concurso,
+              prova: questaoPayload.prova,
+              materia: questaoPayload.materia,
+              assunto: questaoPayload.assunto,
+            }).filter(([, v]) => v != null)
+          );
           if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
             updatePayload.resolucao_professor = questaoPayload.resolucao_professor;
           }
-          const hasMetadataChanges = Object.keys(updatePayload).length > 0;
-          if (hasMetadataChanges) {
+          if (Object.keys(updatePayload).length > 0) {
             console.log(`[MonitorPro] Atualizando metadados da Questão #${questaoPayload.questao_tec_id}...`, updatePayload);
             const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
               method: "PATCH",
