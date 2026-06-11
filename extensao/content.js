@@ -371,24 +371,31 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     if (linksResumo.length > 0) {
       bancaTexto = linksResumo[0].textContent.trim();
     }
+
+    // Ano — busca no texto completo do cabeçalho (mais robusto)
+    const cabecalhoInfo = container.querySelector(".questao-cabecalho-informacoes");
+    const cabecalhoText = cabecalhoInfo ? cabecalhoInfo.textContent : "";
+    console.log(`[MonitorPro] Questão #${questaoTecId}: cabecalho completo = "${cabecalhoText.substring(0, 250)}"`);
+    
+    const anoMatch = cabecalhoText.match(/\b(19\d\d|20\d\d)\b/);
+    if (anoMatch) {
+      ano = parseInt(anoMatch[0], 10);
+      console.log(`[MonitorPro] Questão #${questaoTecId}: ano extraído = ${ano}`);
+    } else {
+      console.log(`[MonitorPro] Questão #${questaoTecId}: NENHUM ano encontrado no cabecalho`);
+    }
+
+    // Concurso/Prova — tenta extrair da linha que contém o ano
     if (linksResumo.length > 1) {
-      const textBloco = linksResumo[1].textContent.trim(); // Ex: "2025 - Concurso/Prova"
-      console.log(`[MonitorPro] Questão #${questaoTecId}: textBloco do resumo-questao[1] = "${textBloco}"`);
-      
-      // Procura ano em qualquer posição do texto
-      const anoMatch = textBloco.match(/\b(19\d\d|20\d\d)\b/);
-      if (anoMatch) {
-        ano = parseInt(anoMatch[0], 10);
-        console.log(`[MonitorPro] Questão #${questaoTecId}: ano extraído = ${ano}`);
-      } else {
-        console.log(`[MonitorPro] Questão #${questaoTecId}: NENHUM ano encontrado em "${textBloco}"`);
-      }
-      
-      // Extrai concurso/prova ignorando o ano
+      const textBloco = linksResumo[1].textContent.trim();
       const semAno = textBloco.replace(/\b(19\d\d|20\d\d)\b\s*[-–]\s*/, '').trim();
       const partes = semAno.split("/");
-      concurso = partes[0] ? partes[0].trim() : null;
-      prova = partes[1] ? partes[1].trim() : null;
+      if (partes[0] && partes[0].trim() !== bancaTexto) {
+        concurso = partes[0].trim();
+      }
+      if (partes[1]) {
+        prova = partes[1].trim();
+      }
     }
 
     // 5. Enunciado
