@@ -308,6 +308,17 @@ class StatsEngine:
         acertos = sum(s['acertos'] for s in self.por_assunto.values())
         taxa_geral = round(acertos / total * 100) if total else 0
 
+        # Count today's responses from full timeline (not just last 10)
+        hoje_str = datetime.now(FUSO_BR).strftime('%Y-%m-%d')
+        respondidas_hoje = 0
+        acertos_hoje = 0
+        for item in self.timeline:
+            item_date = self._ts_to_local_date(item.get('timestamp'))
+            if item_date == hoje_str:
+                respondidas_hoje += 1
+                if item.get('acertou'):
+                    acertos_hoje += 1
+
         datas = sorted(list(self.datas_estudo))
         streak = 0
         hoje = datetime.now(FUSO_BR).strftime('%Y-%m-%d')
@@ -416,6 +427,8 @@ class StatsEngine:
             'total_questoes_unicas': len(self.ids_vistos),
             'total_respondidas': total,
             'total_acertos': acertos,
+            'respondidas_hoje': respondidas_hoje,
+            'acertos_hoje': acertos_hoje,
             'taxa_geral': taxa_geral,
             'streak': streak,
             'assuntos': assuntos,
@@ -621,10 +634,9 @@ def gerar_resumo_evolucao(estado):
     ultimas = estado.get('ultimas_acoes', [])[:5]
     padroes = estado.get('padroes', [])[:3]
 
-    hoje = datetime.now(FUSO_BR).strftime('%Y-%m-%d')
-    qtd_hoje = sum(1 for a in ultimas if ts_to_local_date(a.get('timestamp')) == hoje)
-    qtd_hoje = max(qtd_hoje, sum(1 for a in estado.get('ultimas_acoes', []) if ts_to_local_date(a.get('timestamp')) == hoje))
-
+    qtd_hoje = estado.get('respondidas_hoje', 0)
+    acertos_hoje = estado.get('acertos_hoje', 0)
+    erros_hoje = qtd_hoje - acertos_hoje
 
     linhas = [
         f'# Resumo de Evolução — {datetime.now().strftime("%d/%m/%Y %H:%M")}',
@@ -633,7 +645,7 @@ def gerar_resumo_evolucao(estado):
         f'**Taxa geral:** {estado.get("taxa_geral", 0)}%  ',
         f'**Respondidas:** {estado.get("total_respondidas", 0)} ({estado.get("total_acertos", 0)} acertos)  ',
         f'**Questões únicas:** {estado.get("total_questoes_unicas", 0)}  ',
-        f'**Respondidas hoje:** {qtd_hoje}',
+        f'**Respondidas hoje:** {qtd_hoje} ({acertos_hoje} acertos, {erros_hoje} erros)',
         '',
     ]
 

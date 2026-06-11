@@ -99,6 +99,22 @@ Apresente de forma objetiva:
 - Uma recomendação concreta para próxima sessão
 - Mensagem motivacional curta (sem exagero) — celebre quedas no número de pendentes
 
+### Gerar revisão dos erros do dia — COMANDO ÚNICO
+
+Quando Fernando pedir para gerar revisão dos erros de hoje (ex.: "monta a revisão", "pega os erros de hoje"), execute **APENAS**:
+
+```bash
+python3 scripts/revisar_erros_hoje.py
+```
+
+Este script:
+1. Consulta o Supabase direto (fonte da verdade)
+2. Separa os erros por matéria
+3. Gera UM arquivo por matéria em `revisoes/<Materia>/erros_<data>.md`
+4. Atualiza `controle_revisoes.md` com uma entrada por matéria
+
+**NUNCA** faça queries manuais no Supabase, NUNCA leia o `hermes_events.jsonl` inteiro, e NUNCA gere um arquivo único misturando matérias. O script faz tudo.
+
 ---
 
 ## Organização de arquivos
@@ -112,12 +128,17 @@ questoes-concursos/
 ├── Pdf/                         ← PDFs dos materiais de estudo (Fernando coloca aqui)
 ├── estudos/
 │   ├── direito_constitucional/
-│   │   └── meta_22_remedios_constitucionais.md
+│   │   ├── meta_22_remedios_constitucionais.md
+│   │   └── ... (um arquivo por aula)
 │   ├── direito_processual_trabalho/
 │   │   └── meta_22_servicos_auxiliares.md
-│   └── ... (uma pasta por disciplina)
+│   └── ... (uma pasta por disciplina, slug da matéria)
 ├── revisoes/
-│   └── (guias de revisão gerados)
+│   ├── Direito Constitucional (CF_1988 e Doutrina)/
+│   │   └── (guias de revisão e diários de erro)
+│   ├── Direito Administrativo (Doutrina e Leis Federais)/
+│   │   └── ...
+│   └── ... (uma pasta por matéria — nome IGUAL ao usado no Supabase)
 ├── relatorios/
 │   └── (relatórios diários e semanais)
 └── scripts/
@@ -136,14 +157,16 @@ questoes-concursos/
 
 - **Nunca faça tudo de uma vez.** Espere Fernando confirmar cada etapa antes de avançar.
 - **Sempre informe o que vai fazer antes de executar** qualquer script ou ler arquivo grande.
-- **Organize por matéria + meta.** Todo arquivo gerado deve ter disciplina e número da meta no nome ou caminho.
+- **REGRRA ABSOLUTA — SEPARAR POR PASTA DE MATÉRIA:** Todo arquivo gerado dentro de `revisoes/`, `estudos/` ou `relatorios/` DEVE ser colocado dentro de uma subpasta com o nome EXATO da matéria (conforme aparece no Supabase). **NUNCA** crie arquivos soltos na raiz de `revisoes/` ou `estudos/`. Se a matéria for "Direito Constitucional (CF/1988 e Doutrina)", o arquivo vai em `revisoes/Direito Constitucional (CF_1988 e Doutrina)/`. Se for "Legislação Civil e Processual Civil Especial", vai em `revisoes/Legislação Civil e Processual Civil Especial/`. Exceção: scripts e arquivos de configuração (`.json`, `.md` raiz) ficam na raiz do projeto. **Nunca misturar matérias diferentes no mesmo arquivo.** Cada matéria tem seu próprio diretório e seus próprios arquivos de revisão.
 - **Nunca pule a leitura do `hermes_state.json`** no início da sessão. Sem contexto, não age.
+- **PROIBIDO escrever código Python inline.** Você NUNCA deve executar `python3 -c "..."` ou `python3 << 'PY' ...`. Sempre use os scripts prontos em `scripts/`. Se não existir um script para o que precisa, peça para criarem, não improvise.
 - **Consultas de Estatísticas e Sincronização Obrigatória (Supabase -> Local):** Sempre que Fernando perguntar sobre quantidade de erros, pendências, streak ou estatísticas gerais (ou disser que resolveu questões recentemente), é sua **obrigação primordial garantir que os dados estejam 100% atualizados com o Supabase antes de responder**. Para isso, siga rigorosamente esta sequência de passos antes de fornecer a resposta:
   1. Execute o script de sincronização oficial: `python3 scripts/agente_carga_inicial.py`. Esse script puxará todas as resoluções novas do Supabase e as enviará ao relay.
   2. Execute o script de reconstrução estática do estado local: `python3 scripts/reconstruir_estado.py` (isso atualiza os arquivos `estado_atual.json` e `resumo_evolucao.md` localmente, mesmo se o daemon `watcher_hermes.py` não estiver em execução).
   3. Leia o arquivo local `resumo_evolucao.md` ou `estado_atual.json`.
   4. Responda ao Fernando com base nas informações contidas nesses arquivos locais recém-atualizados.
   *Nunca crie queries ad-hoc personalizadas ao Supabase nem execute códigos Python inline improvisados para isso. Use estritamente o fluxo acima.*
+- **Estatísticas específicas do dia (ex.: "quantas eu errei hoje?"):** Para perguntas sobre o dia atual APENAS, depois de executar o sync acima, use o script dedicado `python3 scripts/hermes_supabase.py`. Este script consulta o Supabase **diretamente na fonte** por todas as resoluções do dia atual (horário de Brasília) e exibe o resumo correto de acertos/erros com detalhes. É mais confiável que ler o `resumo_evolucao.md` apenas para dados do dia corrente. (Para estatísticas gerais/acumuladas, use o fluxo de sync padrão.)
 - **Entendimento de "Questões erradas/pendentes":** "Questões erradas para estudar" ou "questões pendentes" refere-se ao **acumulado total de pendentes históricos** presente no `resumo_evolucao.md`, e não apenas aos erros cometidos na data de hoje.
 - **Quando Fernando disser "terminei"**, sempre pergunte se quer o diagnóstico antes de avançar.
 - **Questões TEC Concursos**: Fernando faz no navegador. Seu papel é orientar antes e diagnosticar depois.

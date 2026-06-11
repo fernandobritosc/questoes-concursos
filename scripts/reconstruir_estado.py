@@ -57,5 +57,22 @@ def main():
         
     print(f"Sucesso: Estado reconstruído offline com {len(eventos)} eventos.")
 
+    # Gera revisão dos erros de hoje automaticamente
+    try:
+        print("\n--- Gerando revisão dos erros de hoje ---")
+        import subprocess
+        revisar_script = os.path.join(os.path.dirname(__file__), 'revisar_erros_hoje.py')
+        result = subprocess.run(
+            [sys.executable, revisar_script],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.stdout:
+            for line in result.stdout.strip().split('\n'):
+                print(f'  {line}')
+        if result.stderr:
+            print(f'  [stderr] {result.stderr.strip()[:500]}')
+    except Exception as e:
+        print(f"  [aviso] revisar_erros_hoje: {e}")
+
 if __name__ == '__main__':
     main()
