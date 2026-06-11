@@ -2,8 +2,7 @@ import { type ResolucaoView } from '../types/database'
 import { cleanHtmlText } from '../lib/cleanHtml'
 import {
   ChevronRight, ChevronLeft, RotateCcw, Copy, Check, ExternalLink,
-  BrainCircuit, Loader2, GraduationCap, Book, MessageSquare, Star,
-  Pencil, PieChart, MoreVertical, X, CheckCircle2, XCircle
+  BrainCircuit, Loader2, GraduationCap, Pencil, X, CheckCircle2, XCircle
 } from 'lucide-react'
 
 interface QuestaoVisualizadorProps {
@@ -46,18 +45,7 @@ export function QuestaoVisualizador({
           <GraduationCap className="w-5.5 h-5.5 text-primary" />
           Questão {index + 1} de {total}
         </h3>
-        <div className="flex items-center gap-3 text-muted-foreground/80">
-          <button className="hover:text-foreground transition-colors p-1" title="Visualizar Teoria/Aula Relacionada"><GraduationCap className="w-5.5 h-5.5" /></button>
-          <button className="hover:text-red-500 transition-colors p-1" title="Adicionar ao meu Caderno de Teoria"><Book className="w-5 h-5 text-red-500/80 fill-red-50" /></button>
-          <button className="hover:text-sky-500 transition-colors p-1 flex items-center relative" title="Comentários dos alunos">
-            <MessageSquare className="w-5 h-5 text-sky-500/80 fill-sky-50" />
-            <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[9px] font-black rounded-full w-4 h-4 flex items-center justify-center">3</span>
-          </button>
-          <button className="hover:text-yellow-500 transition-colors p-1" title="Marcar como Favorita"><Star className="w-5 h-5 text-amber-500/80 hover:fill-amber-400" /></button>
-          <button className="hover:text-purple-500 transition-colors p-1" title="Anotações e Rasuras"><Pencil className="w-5 h-5 text-purple-500/80" /></button>
-          <button className="hover:text-teal-500 transition-colors p-1" title="Estatísticas globais e taxas de acerto"><PieChart className="w-5 h-5 text-teal-500/80" /></button>
-          <button className="hover:text-foreground transition-colors p-1" title="Outros recursos"><MoreVertical className="w-5 h-5" /></button>
-        </div>
+
       </div>
 
       <div className="bg-muted px-6 py-2.5 border-b border-border flex flex-wrap items-center gap-2 text-xxs font-bold">
