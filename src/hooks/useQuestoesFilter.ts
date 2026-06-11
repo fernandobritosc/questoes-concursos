@@ -67,6 +67,7 @@ export function useQuestoesFilter(
   const [searchTerm, setSearchTerm] = useState('')
   const [showSearchBox, setShowSearchBox] = useState(false)
   const [selectedMaterias, setSelectedMaterias] = useState<string[]>(() => loadFilterState('selectedMaterias', []))
+  const [questaoTecId, setQuestaoTecId] = useState('')
   const [selectedAssuntos, setSelectedAssuntos] = useState<string[]>(() => loadFilterState('selectedAssuntos', []))
   const [selectedBancas, setSelectedBancas] = useState<string[]>(() => loadFilterState('selectedBancas', []))
   const [selectedAnos, setSelectedAnos] = useState<number[]>(() => loadFilterState('selectedAnos', []))
@@ -189,6 +190,7 @@ export function useQuestoesFilter(
   const handleToggleEnunciado = makeToggle(setSelectedEnunciados)
 
   const handleResetFilters = () => {
+    setQuestaoTecId('')
     setSelectedMaterias([])
     setSelectedAssuntos([])
     setSelectedBancas([])
@@ -248,7 +250,9 @@ export function useQuestoesFilter(
         })
       }
 
-      return matchesMateria && matchesBanca && matchesAno && matchesOrgao && matchesConcurso && matchesStatus && matchesCarreira
+      const matchesTecId = !questaoTecId || String(q.questao_tec_id) === questaoTecId
+
+      return matchesMateria && matchesBanca && matchesAno && matchesOrgao && matchesConcurso && matchesStatus && matchesCarreira && matchesTecId
     })
   }
 
@@ -256,7 +260,7 @@ export function useQuestoesFilter(
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const filteredQuestions = useMemo(() => getFilteredQuestions(), [
-    resolucoes, objetivo,
+    resolucoes, objetivo, questaoTecId,
     selectedMaterias, selectedAssuntos, selectedBancas, selectedAnos,
     selectedOrgaos, selectedConcursos, selectedCarreiras,
     selectedStatus,
@@ -295,6 +299,7 @@ export function useQuestoesFilter(
     selectedRegioes,
     selectedFavoritas,
     selectedEnunciados,
+    questaoTecId, setQuestaoTecId,
     selectedStatus, setSelectedStatus,
     isFilterExpanded, setIsFilterExpanded,
     visibleQuestionsCount, setVisibleQuestionsCount,

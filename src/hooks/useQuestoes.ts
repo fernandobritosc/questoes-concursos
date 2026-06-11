@@ -166,14 +166,19 @@ export function useQuestoes() {
 
   const questoesExibidas = useMemo(() => {
     const f = filter.filtros
-    if (!f) return caderno.cadernoQuestoes
-    return caderno.cadernoQuestoes.filter(q => {
-      for (const [key, val] of Object.entries(f)) {
-        if (String((q as unknown as Record<string, unknown>)[key] || `Sem ${key}`) !== val) return false;
-      }
-      return true;
-    })
-  }, [caderno.cadernoQuestoes, filter.filtros])
+    let base = f
+      ? caderno.cadernoQuestoes.filter(q => {
+          for (const [key, val] of Object.entries(f)) {
+            if (String((q as unknown as Record<string, unknown>)[key] || `Sem ${key}`) !== val) return false;
+          }
+          return true;
+        })
+      : caderno.cadernoQuestoes
+
+    // Intersect with client-side filtered questions (TEC ID, assuntos, carreiras, etc.)
+    const filteredSet = new Set(filter.filteredQuestions.map(q => q.questao_id))
+    return base.filter(q => filteredSet.has(q.questao_id))
+  }, [caderno.cadernoQuestoes, filter.filtros, filter.filteredQuestions])
 
   // ─── Effects de Coordenação ──────────────────────────────────────────────────
 
@@ -424,6 +429,8 @@ export function useQuestoes() {
     setActiveTab: filter.setActiveTab,
     searchTerm: filter.searchTerm,
     setSearchTerm: filter.setSearchTerm,
+    questaoTecId: filter.questaoTecId,
+    setQuestaoTecId: filter.setQuestaoTecId,
     showSearchBox: filter.showSearchBox,
     setShowSearchBox: filter.setShowSearchBox,
     selectedMaterias: filter.selectedMaterias,

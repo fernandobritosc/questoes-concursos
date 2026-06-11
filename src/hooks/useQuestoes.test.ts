@@ -221,6 +221,10 @@ describe('useQuestoes', () => {
       ...mockRef.cadernoResult,
       cadernoQuestoes: [questao],
     }
+    mockRef.filterResult = {
+      ...mockRef.filterResult,
+      filteredQuestions: [questao],
+    }
     mockRef.fetchPaginatedQuestoes.mockResolvedValue({
       data: [questao],
       total: 1,
@@ -246,6 +250,10 @@ describe('useQuestoes', () => {
     mockRef.cadernoResult = {
       ...mockRef.cadernoResult,
       cadernoQuestoes: [questao],
+    }
+    mockRef.filterResult = {
+      ...mockRef.filterResult,
+      filteredQuestions: [questao],
     }
     mockRef.fetchPaginatedQuestoes.mockResolvedValue({
       data: [questao],

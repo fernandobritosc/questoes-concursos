@@ -81,6 +81,8 @@ export function Questoes() {
     setActiveTab,
     searchTerm,
     setSearchTerm,
+    questaoTecId,
+    setQuestaoTecId,
     objetivo,
     setObjetivo,
     selectedMaterias,
@@ -279,6 +281,8 @@ export function Questoes() {
               setActiveCategory={setActiveTab}
               searchTerm={searchTerm}
               onSearchChange={setSearchTerm}
+              questaoTecId={questaoTecId}
+              onQuestaoTecIdChange={setQuestaoTecId}
               materias={materiasUnicas}
               materiasComAssuntos={materiasComAssuntos}
               bancas={bancasUnicas}

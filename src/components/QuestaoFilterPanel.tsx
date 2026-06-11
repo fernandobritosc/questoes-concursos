@@ -10,6 +10,8 @@ interface QuestaoFilterPanelProps {
   setActiveCategory: (v: FilterTab) => void
   searchTerm: string
   onSearchChange: (v: string) => void
+  questaoTecId: string
+  onQuestaoTecIdChange: (v: string) => void
   materias: string[]
   materiasComAssuntos: Record<string, Set<string>>
   bancas: string[]
@@ -76,6 +78,8 @@ export function QuestaoFilterPanel({
   setActiveCategory,
   searchTerm,
   onSearchChange,
+  questaoTecId,
+  onQuestaoTecIdChange,
   materias,
   materiasComAssuntos,
   bancas,
@@ -367,6 +371,26 @@ export function QuestaoFilterPanel({
                 </span>
               </label>
             ))}
+          </div>
+
+          {/* ID TEC quick search */}
+          <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
+            <span className="text-[11px] font-bold text-muted-foreground shrink-0">ID TEC:</span>
+            <input
+              type="text"
+              placeholder="Ex: 2736907"
+              value={questaoTecId}
+              onChange={e => onQuestaoTecIdChange(e.target.value.replace(/\D/g, ''))}
+              className="w-28 px-2 py-1 bg-muted/30 border border-border rounded text-[11px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 transition-colors font-mono"
+            />
+            {questaoTecId && (
+              <button
+                onClick={() => onQuestaoTecIdChange('')}
+                className="text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
           </div>
 
           {/* Responsive layout: mobile stacked, desktop 3-column */}
