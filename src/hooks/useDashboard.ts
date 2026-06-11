@@ -33,7 +33,7 @@ function categorizarOrgao(orgao: string): string {
   if (/^tribunal/.test(nome) && !/contas/.test(nome)) return 'Tribunais'
   if (/^(?:mpu|mp[ft]|mp[etm]|mp|dpe)/.test(nome) || /ministerio publico|defensoria/.test(nome)) return 'Ministérios Públicos'
   if (/^(?:tcu|tce|tcm|cgu|cge|cgm)/.test(nome) || /tribunal de contas|controladoria/.test(nome)) return 'Controle'
-  if (/^(?:cam|senado|sem|ale|cm\b)/.test(nome) || /assembleia/.test(nome)) return 'Legislativo'
+  if (/^(?:cam|senado|sen|sem|ale|cm\b)/.test(nome) || /assembleia/.test(nome)) return 'Legislativo'
   return 'Executivo'
 }
 

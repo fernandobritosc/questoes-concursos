@@ -370,7 +370,7 @@ export function QuestaoFilterPanel({
           </div>
 
           {/* Responsive layout: mobile stacked, desktop 3-column */}
-          <div className="lg:grid lg:grid-cols-[180px_1fr_220px] max-h-[75vh] flex flex-col">
+          <div className="lg:grid lg:grid-cols-[180px_1fr_220px] max-h-[75vh] overflow-y-auto flex flex-col">
             {/* Column 1: Category sidebar — horizontal pills on mobile, vertical on desktop */}
             <div className="lg:border-r border-border overflow-y-auto bg-muted/5 flex lg:flex-col gap-0.5 lg:p-0 p-1 overflow-x-auto scrollbar-none">
               {CATEGORIES.map(cat => {
