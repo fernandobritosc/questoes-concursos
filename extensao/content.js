@@ -393,9 +393,14 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       }
     }
 
-    // Concurso/Prova — tenta extrair dos links .resumo-questao
-    const resumoTextos = [...linksResumo].map(el => el.textContent.trim());
-    console.log(`[MonitorPro] Questão #${questaoTecId}: resumo-questao textos = [${resumoTextos.join(", ")}]`);
+    // Concurso/Prova — do último .resumo-questao
+    const ultimoResumo = linksResumo[linksResumo.length - 1]?.textContent.trim() ?? "";
+    if (ultimoResumo) {
+      const semAno = ultimoResumo.replace(/\b(19\d\d|20\d\d)\b\s*[-–]\s*/, '').replace(/\s+\d{4}$/, '').trim();
+      const partes = semAno.split("/");
+      if (partes[0] && partes[0].trim() !== bancaTexto) concurso = partes[0].trim();
+      if (partes.length >= 2) prova = partes.slice(1).join("/").trim();
+    }
 
     // 5. Enunciado
     let enunciado = null;
