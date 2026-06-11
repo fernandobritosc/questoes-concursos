@@ -642,21 +642,36 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
                   }
                   console.log(`[MonitorPro] Registro recuperado com sucesso. ID no banco: ${dbQuestaoId}. Tentativa existente: ${hasExistingAttempt}`);
                   
-                  // Se houver um comentário e ele for diferente, faz a atualização
+                  // Atualiza metadados (ano, banca, órgão etc.) e resolução do professor
+                  const updatePayload = {
+                    ano: questaoPayload.ano,
+                    banca_texto: questaoPayload.banca_texto,
+                    orgao: questaoPayload.orgao,
+                    concurso: questaoPayload.concurso,
+                    prova: questaoPayload.prova,
+                    materia: questaoPayload.materia,
+                    assunto: questaoPayload.assunto,
+                  };
                   if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
-                    console.log(`[MonitorPro] 📚 Atualizando comentário do professor pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`);
+                    updatePayload.resolucao_professor = questaoPayload.resolucao_professor;
+                  }
+                  const hasMetadataChanges = Object.keys(updatePayload).length > 0;
+                  if (hasMetadataChanges) {
+                    console.log(`[MonitorPro] Atualizando metadados pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`, updatePayload);
                     if (isContextInvalidated()) return;
                     const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
                       method: "PATCH",
                       headers,
-                      body: JSON.stringify({ resolucao_professor: questaoPayload.resolucao_professor })
+                      body: JSON.stringify(updatePayload)
                     });
                     if (updateRes.ok) {
-                      console.log(`[MonitorPro] 📚 Comentário do professor para a Questão #${questaoPayload.questao_tec_id} atualizado com sucesso!`);
-                      sentComments.add(questaoPayload.questao_tec_id);
+                      console.log(`[MonitorPro] ✅ Metadados da Questão #${questaoPayload.questao_tec_id} atualizados com sucesso!`);
+                      if (questaoPayload.resolucao_professor && updatePayload.resolucao_professor) {
+                        sentComments.add(questaoPayload.questao_tec_id);
+                      }
+                    } else {
+                      console.warn(`[MonitorPro] Falha ao atualizar metadados:`, await updateRes.text());
                     }
-                  } else if (questaoPayload.resolucao_professor) {
-                    sentComments.add(questaoPayload.questao_tec_id);
                   }
                 }
               }
@@ -668,25 +683,36 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
             }
           }
         } else {
-          // Se a questão já existia, mas extraímos uma resolução do professor e ela é diferente da que está no banco, atualiza!
+          // Se a questão já existia, atualiza metadados (ano, banca, órgão etc.) e resolução do professor
+          const updatePayload = {
+            ano: questaoPayload.ano,
+            banca_texto: questaoPayload.banca_texto,
+            orgao: questaoPayload.orgao,
+            concurso: questaoPayload.concurso,
+            prova: questaoPayload.prova,
+            materia: questaoPayload.materia,
+            assunto: questaoPayload.assunto,
+          };
           if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
-            console.log(`[MonitorPro] 📚 Atualizando comentário do professor da Questão #${questaoPayload.questao_tec_id}...`);
+            updatePayload.resolucao_professor = questaoPayload.resolucao_professor;
+          }
+          const hasMetadataChanges = Object.keys(updatePayload).length > 0;
+          if (hasMetadataChanges) {
+            console.log(`[MonitorPro] Atualizando metadados da Questão #${questaoPayload.questao_tec_id}...`, updatePayload);
             const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
               method: "PATCH",
               headers,
-              body: JSON.stringify({ resolucao_professor: questaoPayload.resolucao_professor })
+              body: JSON.stringify(updatePayload)
             });
 
             if (updateRes.ok) {
-              console.log(`[MonitorPro] 📚 Comentário do professor para a Questão #${questaoPayload.questao_tec_id} atualizado com sucesso!`);
-              sentComments.add(questaoPayload.questao_tec_id);
+              console.log(`[MonitorPro] ✅ Metadados da Questão #${questaoPayload.questao_tec_id} atualizados com sucesso!`);
+              if (questaoPayload.resolucao_professor && updatePayload.resolucao_professor) {
+                sentComments.add(questaoPayload.questao_tec_id);
+              }
             } else {
-              console.warn(`[MonitorPro] Falha ao atualizar comentário do professor:`, await updateRes.text());
+              console.warn(`[MonitorPro] Falha ao atualizar metadados:`, await updateRes.text());
             }
-          } else if (questaoPayload.resolucao_professor) {
-            // Se já tem resolução idêntica no banco, só marca como enviado
-            sentComments.add(questaoPayload.questao_tec_id);
-            console.log(`[MonitorPro] 📚 Comentário do professor para a Questão #${questaoPayload.questao_tec_id} já existia no banco de dados.`);
           }
         }
 

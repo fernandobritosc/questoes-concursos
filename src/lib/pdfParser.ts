@@ -157,10 +157,12 @@ export function parsePdfContent(
       if (rightparts.length >= 2) {
         orgao = rightparts[1].trim();
       }
-      const lastPart = rightparts[rightparts.length - 1];
-      const anoMatch = lastPart.match(/\b(19\d\d|20\d\d)\b/);
-      if (anoMatch) {
-        ano = parseInt(anoMatch[1], 10);
+      const anoPart = rightparts.find(p => /\b(19\d\d|20\d\d)\b/.test(p));
+      if (anoPart) {
+        const anoMatch = anoPart.match(/\b(19\d\d|20\d\d)\b/);
+        if (anoMatch) {
+          ano = parseInt(anoMatch[0], 10);
+        }
       }
     } else {
       banca = subheader.trim();
