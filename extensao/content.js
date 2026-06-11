@@ -372,31 +372,30 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       bancaTexto = linksResumo[0].textContent.trim();
     }
 
-    // Ano — busca no texto completo do cabeçalho (mais robusto)
-    const cabecalhoInfo = container.querySelector(".questao-cabecalho-informacoes");
-    const cabecalhoText = cabecalhoInfo ? cabecalhoInfo.textContent : "";
-    console.log(`[MonitorPro] Questão #${questaoTecId}: cabecalho completo = "${cabecalhoText.substring(0, 250)}"`);
+    // Ano — busca no texto de toda a .questao, excluindo falsos positivos (CF/1988, etc.)
+    const questaoText = container.textContent || "";
+    console.log(`[MonitorPro] Questão #${questaoTecId}: texto completo da .questao (primeiros 500 chars) = "${questaoText.substring(0, 500)}"`);
     
-    const anoMatch = cabecalhoText.match(/\b(19\d\d|20\d\d)\b/);
-    if (anoMatch) {
-      ano = parseInt(anoMatch[0], 10);
-      console.log(`[MonitorPro] Questão #${questaoTecId}: ano extraído = ${ano}`);
-    } else {
-      console.log(`[MonitorPro] Questão #${questaoTecId}: NENHUM ano encontrado no cabecalho`);
+    // Encontra TODOS os anos no texto
+    const todosAnos = [...questaoText.matchAll(/\b(19\d\d|20\d\d)\b/g)].map(m => parseInt(m[0], 10));
+    console.log(`[MonitorPro] Questão #${questaoTecId}: todos os anos encontrados = [${todosAnos.join(", ")}]`);
+    
+    if (todosAnos.length > 0) {
+      // Filtra anos que NÃO são de matéria/assunto (ex: CF/1988, 1789, 1822, etc.)
+      // e escolhe o mais provável (geralmente entre 1990 e ano atual)
+      const anoCorrente = new Date().getFullYear();
+      const anoCandidato = todosAnos.find(a => a >= 1990 && a <= anoCorrente && a !== 1988);
+      if (anoCandidato) {
+        ano = anoCandidato;
+        console.log(`[MonitorPro] Questão #${questaoTecId}: ano selecionado = ${ano}`);
+      } else {
+        console.log(`[MonitorPro] Questão #${questaoTecId}: nenhum candidato valido, mantendo null`);
+      }
     }
 
-    // Concurso/Prova — tenta extrair da linha que contém o ano
-    if (linksResumo.length > 1) {
-      const textBloco = linksResumo[1].textContent.trim();
-      const semAno = textBloco.replace(/\b(19\d\d|20\d\d)\b\s*[-–]\s*/, '').trim();
-      const partes = semAno.split("/");
-      if (partes[0] && partes[0].trim() !== bancaTexto) {
-        concurso = partes[0].trim();
-      }
-      if (partes[1]) {
-        prova = partes[1].trim();
-      }
-    }
+    // Concurso/Prova — tenta extrair dos links .resumo-questao
+    const resumoTextos = [...linksResumo].map(el => el.textContent.trim());
+    console.log(`[MonitorPro] Questão #${questaoTecId}: resumo-questao textos = [${resumoTextos.join(", ")}]`);
 
     // 5. Enunciado
     let enunciado = null;
