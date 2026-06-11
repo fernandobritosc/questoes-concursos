@@ -332,7 +332,8 @@ export function useQuestoes() {
     } else {
       caderno.setHistoricoQuestaoAtiva([])
     }
-  }, [caderno.currentQuestaoIndex, questoesExibidas, caderno.loadHistoricoDaQuestao, caderno.setHistoricoQuestaoAtiva])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caderno.currentQuestaoIndex])
 
   // ─── Wrapper Actions ──────────────────────────────────────────────────────────
 
