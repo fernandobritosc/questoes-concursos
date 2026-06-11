@@ -434,12 +434,12 @@ export function Dashboard() {
               </button>
             )}
           </div>
-          <div className="space-y-2 flex-1 overflow-y-auto min-h-0 pr-1">
+          <div className="space-y-3 flex-1 overflow-y-auto min-h-0 pr-1">
             {(resExpandidas ? ultimasResolucoes : ultimasResolucoes.slice(0, 5)).map((res, i) => (
               <DashboardResolucaoItem key={res.id || `res-${i}`} res={res} index={i} />
             ))}
             {ultimasResolucoes.length === 0 && (
-              <div className="flex flex-col items-center justify-center text-muted-foreground text-sm flex-1 text-center py-4 flex-col gap-1">
+              <div className="flex items-center justify-center text-muted-foreground text-sm flex-1 text-center py-6 flex-col gap-1">
                 <span>Nenhuma questão resolvida</span>
                 <span className="text-xs opacity-60 mt-0.5">{periodoLabel('empty')}</span>
               </div>

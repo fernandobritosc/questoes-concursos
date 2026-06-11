@@ -189,7 +189,7 @@ describe('Dashboard page', () => {
     expect(screen.getAllByText('Direito Constitucional').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Desempenho por Banca')).toBeInTheDocument()
     expect(screen.getByText('Desempenho por Órgão')).toBeInTheDocument()
-    expect(screen.getByText('CESPE')).toBeInTheDocument()
+    expect(screen.getAllByText('CESPE').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('STF')).toBeInTheDocument()
     expect(screen.getByText('Meta Semanal')).toBeInTheDocument()
     expect(screen.getByText('Revisões Pendentes Hoje')).toBeInTheDocument()
