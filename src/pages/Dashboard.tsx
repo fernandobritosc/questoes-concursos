@@ -68,8 +68,17 @@ function MateriaBar({ materia, taxa, acertos, total, index }: { materia: string;
 
 /* ═══════════════════ DASHBOARD PRINCIPAL ═══════════════════ */
 
+function formatTimeAgo(date: Date): string {
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
+  if (seconds < 10) return 'agora'
+  if (seconds < 60) return `${seconds}s`
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `${minutes}min`
+  return `${Math.floor(minutes / 60)}h`
+}
+
 export function Dashboard() {
-  const { loading, stats, resolucoes } = useDashboard()
+  const { loading, stats, resolucoes, refetch, lastUpdated } = useDashboard()
   const [periodo, setPeriodo] = useState<'geral' | '24h' | '7d' | '30d'>('geral')
   const [resExpandidas, setResExpandidas] = useState(false)
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -278,8 +287,13 @@ export function Dashboard() {
               )
             })}
           </div>
-
-
+          <button
+            onClick={() => refetch()}
+            className="text-[11px] text-muted-foreground/40 hover:text-violet-400 transition-colors cursor-pointer shrink-0 leading-none"
+            title="Atualizar dados"
+          >
+            {lastUpdated ? formatTimeAgo(lastUpdated) : '...'}
+          </button>
         </div>
       </div>
 

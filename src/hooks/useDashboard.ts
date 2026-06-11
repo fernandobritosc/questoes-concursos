@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { fetchAllResolucoes } from '../services/supabase.service'
+import { useEffect, useState, useCallback, useRef } from 'react'
+import { fetchAllResolucoes, clearQuestoesCache } from '../services/supabase.service'
 import type { ResolucaoView } from '../types/database'
 
 // O Dashboard consome o histórico de tentativas (historico_resolucoes com JOIN)
@@ -485,33 +485,74 @@ function calcularStats(resolucoes: Resolucao[]): DashboardStats {
   }
 }
 
+const POLL_INTERVAL_MS = 30000
+
 /**
  * Hook para o Dashboard.
- * Carrega as resoluções e calcula as métricas de performance.
+ * Carrega as resoluções, calcula as métricas e atualiza automaticamente.
  */
 export function useDashboard() {
   const [resolucoes, setResolucoes] = useState<ResolucaoView[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const mountedRef = useRef(true)
+
+  const refetch = useCallback(async () => {
+    try {
+      clearQuestoesCache()
+      const data = await fetchAllResolucoes()
+      if (mountedRef.current) {
+        setResolucoes(data)
+        setLastUpdated(new Date())
+        setError(null)
+      }
+    } catch (err: unknown) {
+      if (mountedRef.current) {
+        console.error('Erro ao buscar resoluções:', err)
+        setError(err instanceof Error ? err.message : 'Erro ao carregar dados.')
+      }
+    }
+  }, [])
 
   useEffect(() => {
+    mountedRef.current = true
+
     async function load() {
       try {
         const data = await fetchAllResolucoes()
-        setResolucoes(data)
+        if (mountedRef.current) {
+          setResolucoes(data)
+          setLastUpdated(new Date())
+        }
       } catch (err: unknown) {
-        console.error('Erro ao buscar resoluções:', err)
-        setError(err instanceof Error ? err.message : 'Erro ao carregar dados.')
+        if (mountedRef.current) {
+          console.error('Erro ao buscar resoluções:', err)
+          setError(err instanceof Error ? err.message : 'Erro ao carregar dados.')
+        }
       } finally {
-        setLoading(false)
+        if (mountedRef.current) setLoading(false)
       }
     }
     load()
-  }, [])
+
+    const interval = setInterval(() => refetch(), POLL_INTERVAL_MS)
+
+    function onVisibilityChange() {
+      if (document.visibilityState === 'visible') refetch()
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+
+    return () => {
+      mountedRef.current = false
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+    }
+  }, [refetch])
 
   const stats = calcularStats(resolucoes)
 
-  return { loading, error, resolucoes, stats }
+  return { loading, error, resolucoes, stats, refetch, lastUpdated }
 }
 
 /** Re-export para uso externo */
