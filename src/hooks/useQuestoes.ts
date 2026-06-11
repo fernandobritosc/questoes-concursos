@@ -190,8 +190,7 @@ export function useQuestoes() {
       resolucao.setResolucaoText(q.resolucao_professor || '')
       resolucao.setEditingResolucao(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caderno.currentQuestaoIndex, resolucao.setResolucaoText, resolucao.setEditingResolucao])
+  }, [caderno.currentQuestaoIndex, questoesExibidas, resolucao.setResolucaoText, resolucao.setEditingResolucao])
 
   // ─── Effects: Carga Inicial ───────────────────────────────────────────────────
 
@@ -333,8 +332,7 @@ export function useQuestoes() {
     } else {
       caderno.setHistoricoQuestaoAtiva([])
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caderno.currentQuestaoIndex])
+  }, [caderno.currentQuestaoIndex, questoesExibidas, caderno.loadHistoricoDaQuestao, caderno.setHistoricoQuestaoAtiva])
 
   // ─── Wrapper Actions ──────────────────────────────────────────────────────────
 

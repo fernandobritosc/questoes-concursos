@@ -94,7 +94,7 @@ const mockRef = vi.hoisted(() => ({
     anosUnicos: [],
     orgaosUnicos: [],
     concursosUnicos: [],
-    filteredQuestions: [],
+    filteredQuestions: [] as ResolucaoView[],
     filteredCount: 0,
     handleToggleMateria: vi.fn(),
     handleToggleAssunto: vi.fn(),
