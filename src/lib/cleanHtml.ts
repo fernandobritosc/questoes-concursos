@@ -1,8 +1,10 @@
 export function cleanHtmlText(htmlStr: string | null | undefined): string {
   if (!htmlStr) return ''
 
-  // Normaliza quebras de linha do HTML
   let text = htmlStr
+
+  // Normaliza quebras de linha do HTML
+  text = text
     .replace(/<br\s*[^>]*>/gi, '\n')
     .replace(/<\/p>/gi, '\n\n')
     .replace(/<p\s*[^>]*>/gi, '')
@@ -11,11 +13,11 @@ export function cleanHtmlText(htmlStr: string | null | undefined): string {
   text = text.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
   text = text.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
 
-  // Remove MathJax / annotation spans — eles duplicam o texto visível
-  // TEC costuma ter: texto normal + <span class="math-...">texto itálico matemático</span>
-  text = text.replace(/<span[^>]*class="[^"]*math[^"]*"[^>]*>[\s\S]*?<\/span>/gi, '')
-  text = text.replace(/<span[^>]*class="[^"]*MathJax[^"]*"[^>]*>[\s\S]*?<\/span>/gi, '')
-  text = text.replace(/<span[^>]*class="[^"]*mq-[^"]*"[^>]*>[\s\S]*?<\/span>/gi, '')
+  // Insere quebra de linha antes de qualquer tag que contenha classe math/MathJax/mq-
+  // Isso faz com que o conteúdo desses spans fique em linha separada
+  text = text.replace(/<span[^>]*class="[^"]*(?:math|MathJax|mq-)[^"]*"[^>]*>/gi, '\n')
+
+  // Remove tags <annotation> e <semantics> inteiras (incluindo conteúdo)
   text = text.replace(/<annotation[^>]*>[\s\S]*?<\/annotation>/gi, '')
   text = text.replace(/<semantics[^>]*>[\s\S]*?<\/semantics>/gi, '')
 
@@ -133,11 +135,36 @@ export function cleanHtmlText(htmlStr: string | null | undefined): string {
   }
   text = text.replace(/&(#\d+|#x[\da-fA-F]+|[a-zA-Z]+);/g, (match) => entities[match] || match)
 
-  // Remove linhas duplicadas consecutivas (caso o MathJax tenha deixado cópia)
-  text = text.replace(/^(.+)$\s+^\1$/gm, '$1')
-
-  // Remove espaços duplicados e linhas vazias excessivas
+  // Remove espaços duplicados
   text = text.replace(/[ \t]+/g, ' ')
+
+  // Normaliza caracteres matemáticos Unicode (Mathematical Alphanumeric Symbols U+1D400–U+1D7FF)
+  // para seus equivalentes ASCII
+  text = text.replace(/[\u{1D400}-\u{1D7FF}]/gu, (match) => {
+    const cp = match.codePointAt(0)!
+    if (cp >= 0x1D434 && cp <= 0x1D467) return String.fromCodePoint(cp - 0x1D434 + 0x41)
+    if (cp >= 0x1D400 && cp <= 0x1D433) return String.fromCodePoint(cp - 0x1D400 + 0x41)
+    if (cp >= 0x1D468 && cp <= 0x1D49B) return String.fromCodePoint(cp - 0x1D468 + 0x41)
+    if (cp >= 0x1D49C && cp <= 0x1D4CF) return String.fromCodePoint(cp - 0x1D49C + 0x41)
+    if (cp >= 0x1D504 && cp <= 0x1D537) return String.fromCodePoint(cp - 0x1D504 + 0x41)
+    if (cp >= 0x1D538 && cp <= 0x1D56B) return String.fromCodePoint(cp - 0x1D538 + 0x41)
+    return String.fromCodePoint(cp - 0x1D400 + 0x41)
+  })
+
+  // Remove linhas consecutivas duplicadas — pula linhas vazias na comparação
+  // (após normalização, linhas com math e ASCII viram duplicatas)
+  const lines = text.split('\n')
+  const deduped: string[] = []
+  let lastNonEmpty = ''
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (trimmed.length > 0 && trimmed === lastNonEmpty) continue
+    if (trimmed.length > 0) lastNonEmpty = trimmed
+    deduped.push(line)
+  }
+  text = deduped.join('\n')
+
+  // Remove linhas vazias excessivas
   text = text.replace(/\n{3,}/g, '\n\n')
 
   return text.trim()

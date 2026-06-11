@@ -82,8 +82,14 @@ describe('cleanHtmlText', () => {
   })
 
   it('removes MathJax spans to avoid text duplication', () => {
-    const input = 'P1: (A→B)∧(¬B→A)<span class="math-italic">(𝐴→𝐵)∧(¬𝐵→𝐴)</span>'
-    expect(cleanHtmlText(input)).toBe('P1: (A→B)∧(¬B→A)')
+    // TEC structure: P1:\n(formula in ASCII)\n(formula in math italic via MJ span)
+    const input = 'P1:<br>(A→B)∧(¬B→A)<br><span class="math-italic">(𝐴→𝐵)∧(¬𝐵→𝐴)</span>'
+    expect(cleanHtmlText(input)).toBe('P1:\n(A→B)∧(¬B→A)')
+  })
+
+  it('normalizes mathematical italic Unicode characters and removes duplicate', () => {
+    const input = '(A→B)∧(¬B→A)\n(𝐴→𝐵)∧(¬𝐵→𝐴)'
+    expect(cleanHtmlText(input)).toBe('(A→B)∧(¬B→A)')
   })
 
   it('removes annotation and semantics tags', () => {
