@@ -281,30 +281,80 @@ export async function fetchPaginatedQuestoes(
   const from = (page - 1) * pageSize
   const to = from + pageSize - 1  // range is INCLUSIVE on both ends
 
-  let query = supabase
-    .from('questoes')
-    .select(`
-      id, questao_tec_id, materia, assunto, banca_texto, orgao,
-      concurso, prova, ano, caderno_nome, enunciado, gabarito,
-      alternativas, resolucao_professor, created_at
-    `, { count: 'exact' })
-    .order('id', { ascending: false })
-    .range(from, to)
+  const MAX_PER_REQUEST = 1_000
+  const needsChunking = pageSize > MAX_PER_REQUEST && from < MAX_PER_REQUEST
 
-  // Apply server-side filters (Record<string, string[]> → .in())
-  if (filters?.materia?.length)     query = query.in('materia', filters.materia)
-  if (filters?.banca_texto?.length) query = query.in('banca_texto', filters.banca_texto)
-  if (filters?.ano?.length)         query = query.in('ano', filters.ano)
-  if (filters?.orgao?.length)       query = query.in('orgao', filters.orgao)
-  if (filters?.concurso?.length)    query = query.in('concurso', filters.concurso)
+  let questoesData: Questao[] | null = null // eslint-disable-line no-useless-assignment
+  let count: number | null = null // eslint-disable-line no-useless-assignment
 
-  // Attach abort signal if provided
-  if (signal) query = query.abortSignal(signal)
+  if (needsChunking) {
+    // Fetch in chunks of MAX_PER_REQUEST to work around Supabase's 1,000 row limit
+    const allData: Questao[] = []
+    let fetchFrom = 0
+    let firstCount: number | null = null
 
-  console.log(`[LOG fetchPaginatedQuestoes] Fetching page ${page} (range ${from}-${to})${filters ? ` filters=${filterHash}` : ''}`)
-  const { data: questoesData, error, count } = await query
-  if (error) throw error
-  console.log(`[LOG fetchPaginatedQuestoes] Received ${questoesData?.length ?? 0} questions, total count=${count}`)
+    while (true) {
+      const fetchTo = fetchFrom + MAX_PER_REQUEST - 1
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let q: any = supabase
+        .from('questoes')
+        .select(`
+          id, questao_tec_id, materia, assunto, banca_texto, orgao,
+          concurso, prova, ano, caderno_nome, enunciado, gabarito,
+          alternativas, resolucao_professor, created_at
+        `, firstCount === null ? { count: 'exact' } : undefined)
+        .order('id', { ascending: false })
+        .range(fetchFrom, fetchTo)
+
+      if (filters?.materia?.length)     q = q.in('materia', filters.materia)
+      if (filters?.banca_texto?.length) q = q.in('banca_texto', filters.banca_texto)
+      if (filters?.ano?.length)         q = q.in('ano', filters.ano)
+      if (filters?.orgao?.length)       q = q.in('orgao', filters.orgao)
+      if (filters?.concurso?.length)    q = q.in('concurso', filters.concurso)
+      if (signal) q = q.abortSignal(signal)
+
+      console.log(`[LOG fetchPaginatedQuestoes] Chunk range ${fetchFrom}-${fetchTo}`)
+      const { data: chunk, error: chunkErr, count: chunkCount } = await q
+      if (chunkErr) throw chunkErr
+
+      if (firstCount === null) firstCount = chunkCount
+      if (!chunk || chunk.length === 0) break
+
+      allData.push(...chunk)
+      if (chunk.length < MAX_PER_REQUEST) break
+      fetchFrom = fetchTo + 1
+    }
+
+    questoesData = allData
+    count = firstCount
+    console.log(`[LOG fetchPaginatedQuestoes] Chunked fetch complete: ${allData.length} questions, total count=${count}`)
+  } else {
+    // Single request for small page sizes
+    let query = supabase
+      .from('questoes')
+      .select(`
+        id, questao_tec_id, materia, assunto, banca_texto, orgao,
+        concurso, prova, ano, caderno_nome, enunciado, gabarito,
+        alternativas, resolucao_professor, created_at
+      `, { count: 'exact' })
+      .order('id', { ascending: false })
+      .range(from, to)
+
+    if (filters?.materia?.length)     query = query.in('materia', filters.materia)
+    if (filters?.banca_texto?.length) query = query.in('banca_texto', filters.banca_texto)
+    if (filters?.ano?.length)         query = query.in('ano', filters.ano)
+    if (filters?.orgao?.length)       query = query.in('orgao', filters.orgao)
+    if (filters?.concurso?.length)    query = query.in('concurso', filters.concurso)
+    if (signal) query = query.abortSignal(signal)
+
+    console.log(`[LOG fetchPaginatedQuestoes] Fetching page ${page} (range ${from}-${to})${filters ? ` filters=${filterHash}` : ''}`)
+    const { data, error, count: cnt } = await query
+    if (error) throw error
+    questoesData = data
+    count = cnt
+    console.log(`[LOG fetchPaginatedQuestoes] Received ${questoesData?.length ?? 0} questions, total count=${count}`)
+  }
 
   // Merge with historico (same pattern as fetchAllQuestoes)
   const historicoMap = new Map<number, HistoricoResolucao>()
