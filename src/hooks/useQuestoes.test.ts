@@ -193,7 +193,7 @@ describe('useQuestoes', () => {
 
     expect(mockRef.fetchPaginatedQuestoes).toHaveBeenCalled()
     expect(mockRef.fetchPaginatedQuestoes.mock.calls[0][0]).toBe(1)
-    expect(mockRef.fetchPaginatedQuestoes.mock.calls[0][1]).toBe(200)
+    expect(mockRef.fetchPaginatedQuestoes.mock.calls[0][1]).toBe(99999)
     expect(mockRef.fetchFilterOptions).toHaveBeenCalled()
     expect(result.current.resolucoes).toHaveLength(2)
     expect(result.current.totalPages).toBe(25)
@@ -212,7 +212,7 @@ describe('useQuestoes', () => {
 
     act(() => { result.current.handleNavigatePage(2) })
 
-    expect(mockRef.fetchPaginatedQuestoes).toHaveBeenCalledWith(2, 200, {}, expect.any(AbortSignal))
+    expect(mockRef.fetchPaginatedQuestoes).toHaveBeenCalledWith(2, 99999, {}, expect.any(AbortSignal))
   })
 
   it('handleConfirmarResposta delegates to caderno hook', async () => {

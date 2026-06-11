@@ -110,7 +110,11 @@ export async function updateQuestao(
  * Ordena pela tentativa mais recente.
  */
 export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
-  const { data, error } = await supabase
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) return []
+
+  const query = supabase
     .from('historico_resolucoes')
     .select(`
       id,
@@ -137,8 +141,10 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
         resolucao_professor
       )
     `)
+    .eq('user_id', userId)
     .order('data_resolucao', { ascending: false })
 
+  const { data, error } = await query
   if (error) throw error
   return (data || []).map(mapHistoricoToView)
 }
@@ -213,9 +219,16 @@ async function ensureHistoricoCached(): Promise<void> {
     return
   }
   _historicoCachePromise = (async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    const userId = session?.user?.id
+    if (!userId) {
+      _historicoCache = []
+      return
+    }
     const { data, error } = await supabase
       .from('historico_resolucoes')
       .select('id, questao_id, questao_tec_id, alternativa, acertou, tempo_segundos, data_resolucao')
+      .eq('user_id', userId)
       .order('data_resolucao', { ascending: false })
     if (error) throw error
     _historicoCache = (data || []) as HistoricoResolucao[]
@@ -417,14 +430,21 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     console.log(`[LOG fetchAllQuestoes] Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData?.length ?? 0} | error=${qErr?.message ?? 'null'}`)
     if (qErr) throw qErr
 
+    const { data: { session: histSession } } = await supabase.auth.getSession()
+    const histUserId = histSession?.user?.id
+
     console.log('[LOG fetchAllQuestoes] Iniciando busca do histórico...')
-    const { data: historico, error: hErr } = await supabase
+    let histQuery = supabase
       .from('historico_resolucoes')
       .select(`
         id, questao_id, questao_tec_id, alternativa, acertou,
         tempo_segundos, data_resolucao
       `)
       .order('data_resolucao', { ascending: false })
+
+    if (histUserId) histQuery = histQuery.eq('user_id', histUserId)
+
+    const { data: historico, error: hErr } = await histQuery
 
     const t2 = performance.now()
     console.log(`[LOG fetchAllQuestoes] Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico?.length ?? 0} | error=${hErr?.message ?? 'null'}`)
@@ -562,10 +582,15 @@ export async function insertHistoricoResolucao(payload: {
 export async function fetchHistoricoByQuestao(
   questaoId: number
 ): Promise<HistoricoResolucao[]> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) return []
+
   const { data, error } = await supabase
     .from('historico_resolucoes')
     .select('*')
     .eq('questao_id', questaoId)
+    .eq('user_id', userId)
     .order('data_resolucao', { ascending: true })
 
   if (error) throw error

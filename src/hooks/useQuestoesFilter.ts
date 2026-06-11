@@ -1,5 +1,25 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import type { ResolucaoView } from '../types/database'
+
+const FILTER_STORAGE_KEY = 'questoes_filter_state'
+
+function loadFilterState<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(`${FILTER_STORAGE_KEY}_${key}`)
+    if (raw !== null) return JSON.parse(raw) as T
+  } catch {
+    // ignore
+  }
+  return fallback
+}
+
+function saveFilterState(key: string, value: unknown) {
+  try {
+    localStorage.setItem(`${FILTER_STORAGE_KEY}_${key}`, JSON.stringify(value))
+  } catch {
+    // ignore
+  }
+}
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -8,6 +28,7 @@ export type FilterTab =
   | 'banca'
   | 'orgao'
   | 'ano'
+  | 'concurso'
   | 'carreira'
   | 'escolaridade'
   | 'formacao'
@@ -40,27 +61,42 @@ export function useQuestoesFilter(
     concursos: string[]
   } | null,
 ) {
-  // ── Filter State ─────────────────────────────────────────────────────────────
+  // ── Filter State (persistido em localStorage) ─────────────────────────────────
   const [objetivo, setObjetivo] = useState<ObjetivoFilter>('todos')
   const [activeTab, setActiveTab] = useState<FilterTab>('materia')
   const [searchTerm, setSearchTerm] = useState('')
   const [showSearchBox, setShowSearchBox] = useState(false)
-  const [selectedMaterias, setSelectedMaterias] = useState<string[]>([])
-  const [selectedAssuntos, setSelectedAssuntos] = useState<string[]>([])
-  const [selectedBancas, setSelectedBancas] = useState<string[]>([])
-  const [selectedAnos, setSelectedAnos] = useState<number[]>([])
-  const [selectedOrgaos, setSelectedOrgaos] = useState<string[]>([])
-  const [selectedConcursos, setSelectedConcursos] = useState<string[]>([])
-  const [selectedCarreiras, setSelectedCarreiras] = useState<string[]>([])
-  const [selectedEscolaridades, setSelectedEscolaridades] = useState<string[]>([])
-  const [selectedFormacoes, setSelectedFormacoes] = useState<string[]>([])
-  const [selectedRegioes, setSelectedRegioes] = useState<string[]>([])
-  const [selectedFavoritas, setSelectedFavoritas] = useState<string[]>([])
-  const [selectedEnunciados, setSelectedEnunciados] = useState<string[]>([])
+  const [selectedMaterias, setSelectedMaterias] = useState<string[]>(() => loadFilterState('selectedMaterias', []))
+  const [selectedAssuntos, setSelectedAssuntos] = useState<string[]>(() => loadFilterState('selectedAssuntos', []))
+  const [selectedBancas, setSelectedBancas] = useState<string[]>(() => loadFilterState('selectedBancas', []))
+  const [selectedAnos, setSelectedAnos] = useState<number[]>(() => loadFilterState('selectedAnos', []))
+  const [selectedOrgaos, setSelectedOrgaos] = useState<string[]>(() => loadFilterState('selectedOrgaos', []))
+  const [selectedConcursos, setSelectedConcursos] = useState<string[]>(() => loadFilterState('selectedConcursos', []))
+  const [selectedCarreiras, setSelectedCarreiras] = useState<string[]>(() => loadFilterState('selectedCarreiras', []))
+  const [selectedEscolaridades, setSelectedEscolaridades] = useState<string[]>(() => loadFilterState('selectedEscolaridades', []))
+  const [selectedFormacoes, setSelectedFormacoes] = useState<string[]>(() => loadFilterState('selectedFormacoes', []))
+  const [selectedRegioes, setSelectedRegioes] = useState<string[]>(() => loadFilterState('selectedRegioes', []))
+  const [selectedFavoritas, setSelectedFavoritas] = useState<string[]>(() => loadFilterState('selectedFavoritas', []))
+  const [selectedEnunciados, setSelectedEnunciados] = useState<string[]>(() => loadFilterState('selectedEnunciados', []))
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('todos')
-  const [isFilterExpanded, setIsFilterExpanded] = useState(false)
+  const [isFilterExpanded, setIsFilterExpanded] = useState(() => loadFilterState('isFilterExpanded', false))
   const [visibleQuestionsCount, setVisibleQuestionsCount] = useState(25)
   const [expandedMateriaFolder, setExpandedMateriaFolder] = useState<string | null>(null)
+
+  // Persist filter selections in localStorage
+  useEffect(() => { saveFilterState('selectedMaterias', selectedMaterias) }, [selectedMaterias])
+  useEffect(() => { saveFilterState('selectedAssuntos', selectedAssuntos) }, [selectedAssuntos])
+  useEffect(() => { saveFilterState('selectedBancas', selectedBancas) }, [selectedBancas])
+  useEffect(() => { saveFilterState('selectedAnos', selectedAnos) }, [selectedAnos])
+  useEffect(() => { saveFilterState('selectedOrgaos', selectedOrgaos) }, [selectedOrgaos])
+  useEffect(() => { saveFilterState('selectedConcursos', selectedConcursos) }, [selectedConcursos])
+  useEffect(() => { saveFilterState('selectedCarreiras', selectedCarreiras) }, [selectedCarreiras])
+  useEffect(() => { saveFilterState('selectedEscolaridades', selectedEscolaridades) }, [selectedEscolaridades])
+  useEffect(() => { saveFilterState('selectedFormacoes', selectedFormacoes) }, [selectedFormacoes])
+  useEffect(() => { saveFilterState('selectedRegioes', selectedRegioes) }, [selectedRegioes])
+  useEffect(() => { saveFilterState('selectedFavoritas', selectedFavoritas) }, [selectedFavoritas])
+  useEffect(() => { saveFilterState('selectedEnunciados', selectedEnunciados) }, [selectedEnunciados])
+  useEffect(() => { saveFilterState('isFilterExpanded', isFilterExpanded) }, [isFilterExpanded])
   const [cadernoNome, setCadernoNome] = useState('Caderno de Estudo')
   const [pastaDestino, setPastaDestino] = useState('Analista Legislativo (ALEGO)/2026 - Analista Admi...')
   const [gerarEmSerie, setGerarEmSerie] = useState(false)
@@ -133,13 +169,10 @@ export function useQuestoesFilter(
     })
   }
 
-  const handleToggleAssunto = (assunto: string, materia: string) => {
+  const handleToggleAssunto = (assunto: string) => {
     setSelectedAssuntos(prev => {
       const isSelected = prev.includes(assunto)
       if (isSelected) return prev.filter(a => a !== assunto)
-      if (!selectedMaterias.includes(materia)) {
-        setSelectedMaterias(mPrev => [...mPrev, materia])
-      }
       return [...prev, assunto]
     })
   }

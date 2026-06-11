@@ -15,7 +15,16 @@ import { QuestaoPrintView } from '../components/QuestaoPrintView'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { QuestaoSkeleton } from '../components/ui/QuestaoSkeleton'
 import { MarkdownAI } from '../components/ui/MarkdownAI'
-import { AlertCircle, RefreshCw, BrainCircuit, Layers, Upload } from 'lucide-react'
+import { QuestaoFilterPanel } from '../components/QuestaoFilterPanel'
+import {
+  CARREIRAS_DISPONIVEIS,
+  ESCOLARIDADES_DISPONIVEIS,
+  FORMACOES_DISPONIVEIS,
+  REGIOES_DISPONIVEIS,
+  FAVORITAS_OPCOES,
+  ENUNCIADOS_OPCOES,
+} from '../hooks/useQuestoesFilter'
+import { AlertCircle, RefreshCw, BrainCircuit, Layers, Upload, Filter, X } from 'lucide-react'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 
 
@@ -65,6 +74,50 @@ export function Questoes() {
     page,
     totalPages,
     handleNavigatePage,
+    // Filter panel
+    isFilterExpanded,
+    setIsFilterExpanded,
+    activeTab,
+    setActiveTab,
+    searchTerm,
+    setSearchTerm,
+    objetivo,
+    setObjetivo,
+    selectedMaterias,
+    selectedAssuntos,
+    selectedBancas,
+    selectedAnos,
+    selectedOrgaos,
+    selectedConcursos,
+    selectedCarreiras,
+    selectedEscolaridades,
+    selectedFormacoes,
+    selectedRegioes,
+    selectedFavoritas,
+    selectedEnunciados,
+    handleToggleMateria,
+    handleToggleAssunto,
+    handleToggleBanca,
+    handleToggleAno,
+    handleToggleOrgao,
+    handleToggleConcurso,
+    handleToggleCarreira,
+    handleToggleEscolaridade,
+    handleToggleFormacao,
+    handleToggleRegiao,
+    handleToggleFavorita,
+    handleToggleEnunciado,
+    handleResetFilters,
+    totalFiltrosAtivos,
+    filteredCount,
+    expandedMateriaFolder,
+    setExpandedMateriaFolder,
+    materiasUnicas,
+    materiasComAssuntos,
+    bancasUnicas,
+    anosUnicos,
+    orgaosUnicos,
+    concursosUnicos,
   } = useQuestoes()
   
   // Referenced for future use (pagination UI)
@@ -216,24 +269,97 @@ export function Questoes() {
       <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
         
         {topTab === 'questoes' && (
-          <div className="w-full max-w-5xl mx-auto">
+          <div className="w-full max-w-5xl mx-auto space-y-4">
+            <QuestaoFilterPanel
+              isExpanded={isFilterExpanded}
+              onToggle={() => setIsFilterExpanded(!isFilterExpanded)}
+              objetivo={objetivo}
+              setObjetivo={setObjetivo}
+              activeCategory={activeTab}
+              setActiveCategory={setActiveTab}
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              materias={materiasUnicas}
+              materiasComAssuntos={materiasComAssuntos}
+              bancas={bancasUnicas}
+              anos={anosUnicos}
+              orgaos={orgaosUnicos}
+              concursos={concursosUnicos}
+              selectedMaterias={selectedMaterias}
+              selectedAssuntos={selectedAssuntos}
+              selectedBancas={selectedBancas}
+              selectedAnos={selectedAnos}
+              selectedOrgaos={selectedOrgaos}
+              selectedConcursos={selectedConcursos}
+              selectedCarreiras={selectedCarreiras}
+              selectedEscolaridades={selectedEscolaridades}
+              selectedFormacoes={selectedFormacoes}
+              selectedRegioes={selectedRegioes}
+              selectedFavoritas={selectedFavoritas}
+              selectedEnunciados={selectedEnunciados}
+              onToggleMateria={handleToggleMateria}
+              onToggleAssunto={handleToggleAssunto}
+              onToggleBanca={handleToggleBanca}
+              onToggleAno={handleToggleAno}
+              onToggleOrgao={handleToggleOrgao}
+              onToggleConcurso={handleToggleConcurso}
+              onToggleCarreira={handleToggleCarreira}
+              onToggleEscolaridade={handleToggleEscolaridade}
+              onToggleFormacao={handleToggleFormacao}
+              onToggleRegiao={handleToggleRegiao}
+              onToggleFavorita={handleToggleFavorita}
+              onToggleEnunciado={handleToggleEnunciado}
+              onResetFilters={handleResetFilters}
+              totalFiltrosAtivos={totalFiltrosAtivos}
+              filteredCount={filteredCount}
+              expandedMateriaFolder={expandedMateriaFolder}
+              setExpandedMateriaFolder={setExpandedMateriaFolder}
+              carreiras={CARREIRAS_DISPONIVEIS}
+              escolaridades={ESCOLARIDADES_DISPONIVEIS}
+              formacoes={FORMACOES_DISPONIVEIS}
+              regioes={REGIOES_DISPONIVEIS}
+              favoritas={FAVORITAS_OPCOES}
+              enunciados={ENUNCIADOS_OPCOES}
+            />
+
             {cadernoQuestoes.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-border rounded-xl shadow-sm">
-                <Layers className="w-16 h-16 text-muted-foreground/30 mb-4" />
-                <h2 className="text-xl font-bold text-foreground mb-2">Nenhuma questão disponível</h2>
-                <p className="text-sm text-muted-foreground max-w-md">
-                  Importe um PDF do TEC Concursos para ver questões.
-                </p>
-                <button 
-                  onClick={() => setIsImportModalOpen(true)}
-                  className="mt-6 flex items-center gap-2 px-6 py-3 bg-primary hover:bg-[#1565c0] text-white rounded-lg text-sm font-bold transition-all shadow-md transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-                >
-                  <Upload className="w-4 h-4" />
-                  Importar PDF do TEC
-                </button>
+                {totalFiltrosAtivos > 0 ? (
+                  <>
+                    <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                      <Filter className="w-8 h-8 text-muted-foreground" />
+                    </div>
+                    <h2 className="text-xl font-bold text-foreground mb-2">Nenhuma questão com esses filtros</h2>
+                    <p className="text-sm text-muted-foreground max-w-md">
+                      Tente limpar os filtros ou selecionar outras opções.
+                    </p>
+                    <button
+                      onClick={handleResetFilters}
+                      className="mt-6 flex items-center gap-2 px-6 py-3 bg-primary hover:bg-[#1565c0] text-white rounded-lg text-sm font-bold transition-all shadow-md cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                      Limpar filtros
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Layers className="w-16 h-16 text-muted-foreground/30 mb-4" />
+                    <h2 className="text-xl font-bold text-foreground mb-2">Nenhuma questão disponível</h2>
+                    <p className="text-sm text-muted-foreground max-w-md">
+                      Importe um PDF do TEC Concursos para ver questões.
+                    </p>
+                    <button 
+                      onClick={() => setIsImportModalOpen(true)}
+                      className="mt-6 flex items-center gap-2 px-6 py-3 bg-primary hover:bg-[#1565c0] text-white rounded-lg text-sm font-bold transition-all shadow-md transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                    >
+                      <Upload className="w-4 h-4" />
+                      Importar PDF do TEC
+                    </button>
+                  </>
+                )}
               </div>
             ) : (
-              <div className="space-y-6 max-w-4xl mx-auto pb-12">
+              <div className="space-y-4 max-w-4xl mx-auto pb-12">
 
           {pageLoadingError && !pageLoading && (
             <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">

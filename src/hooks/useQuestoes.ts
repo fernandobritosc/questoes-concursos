@@ -99,7 +99,7 @@ export function useQuestoes() {
   // ── Paginação e Filtros Server-Side ──────────────────────────────────────────
   const abortControllerRef = useRef<AbortController | null>(null)
 
-  const PAGE_SIZE = 200
+  const PAGE_SIZE = 99_999
 
   function buildServerFilters(): Record<string, string[]> {
     return filter.buildServerFilters()

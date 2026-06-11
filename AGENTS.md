@@ -116,6 +116,7 @@ Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos
 ### 🔄 Pendente
 - **Modo claro**: ajuste das variáveis CSS `html.light` no `index.css` — usuário achou muito claro, dói a vista. Pendente de nova tentativa com paleta mais suave
 - **Questões**: verificar se o tremor foi resolvido (pendente de confirmação do usuário após push)
+- **Hierarquia 3 níveis (matéria→grupo→assunto)**: TEC mostra sub-pastas (ex: "Regime Jurídico Administrativo" como grupo intermediário dentro de "Direito Administrativo"). Atualmente só temos `materia` e `assunto` flat no banco. Pendente: decidir estratégia de extração (XHR interception na extensão? scraping da árvore de filtros? input manual?) e adicionar coluna `grupo` na tabela `questoes`. Impacta tanto o painel de filtros quanto o Edital Verticalizado.
 - Features novas (estatísticas avançadas, modo offline, exportar dados, integração IA)
 - Bundle analysis periódica (`VITE_ANALYZE=true` com `rollup-plugin-visualizer` — opcional)
 - E2E com Playwright
