@@ -369,35 +369,35 @@ export function QuestaoFilterPanel({
             ))}
           </div>
 
-          {/* 3-column grid */}
-          <div className="grid grid-cols-[180px_1fr_220px] max-h-[75vh]">
-            {/* Column 1: Category sidebar */}
-            <div className="border-r border-border overflow-y-auto bg-muted/5">
+          {/* Responsive layout: mobile stacked, desktop 3-column */}
+          <div className="lg:grid lg:grid-cols-[180px_1fr_220px] max-h-[75vh] flex flex-col">
+            {/* Column 1: Category sidebar — horizontal pills on mobile, vertical on desktop */}
+            <div className="lg:border-r border-border overflow-y-auto bg-muted/5 flex lg:flex-col gap-0.5 lg:p-0 p-1 overflow-x-auto scrollbar-none">
               {CATEGORIES.map(cat => {
                 const isActive = activeCategory === cat.key
                 return (
                   <button
                     key={cat.key}
                     onClick={() => { setActiveCategory(cat.key); onSearchChange('') }}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold transition-all cursor-pointer text-left ${
+                    className={`shrink-0 flex items-center justify-between px-3 py-2 text-xs font-bold transition-all cursor-pointer text-left rounded-lg lg:rounded-none ${
                       isActive
-                        ? 'bg-primary/10 text-primary border-r-2 border-primary'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                        ? 'bg-primary/10 text-primary lg:border-r-2 border-primary'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                     }`}
                   >
                     <span>{cat.label}</span>
-                    {isActive && <span className="text-primary">◄</span>}
+                    {isActive && <span className="text-primary hidden lg:inline">◄</span>}
                   </button>
                 )
               })}
             </div>
 
             {/* Column 2: Content panel */}
-            <div className="flex flex-col overflow-hidden border-r border-border">
+            <div className="flex flex-col overflow-hidden lg:border-r border-t lg:border-t-0 border-border">
               <div className="flex items-center justify-between px-3 py-2 bg-muted/10 border-b border-border">
                 <span className="text-xs font-bold">{categoryLabel}</span>
                 {activeCategory !== 'carreira' && activeCategory !== 'escolaridade' && activeCategory !== 'formacao' && activeCategory !== 'regiao' && activeCategory !== 'favoritas' && activeCategory !== 'enunciados' && activeCategory !== 'opcoes' && (
-                  <div className="relative w-48">
+                  <div className="relative w-36 lg:w-48">
                     <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
                     <input
                       type="text"
@@ -409,13 +409,13 @@ export function QuestaoFilterPanel({
                   </div>
                 )}
               </div>
-              <div className="flex-1 overflow-y-auto p-2">
+              <div className="flex-1 overflow-y-auto p-2 max-h-64 lg:max-h-none">
                 {renderCategoryContent()}
               </div>
             </div>
 
             {/* Column 3: Summary panel */}
-            <div className="flex flex-col overflow-hidden">
+            <div className="flex flex-col overflow-hidden border-t lg:border-t-0 border-border">
               <div className="px-3 py-2 bg-muted/10 border-b border-border flex items-center justify-between">
                 <span className="text-xs font-bold text-muted-foreground">
                   Filtros ativos: <span className="text-foreground">{totalFiltrosAtivos}</span>
@@ -428,7 +428,7 @@ export function QuestaoFilterPanel({
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-2 space-y-1">
+              <div className="flex-1 overflow-y-auto p-2 space-y-1 max-h-32 lg:max-h-none">
                 {activeFilterChips().length === 0 ? (
                   <p className="text-[11px] text-muted-foreground/50 text-center py-4 italic">Nenhum filtro ativo</p>
                 ) : (
