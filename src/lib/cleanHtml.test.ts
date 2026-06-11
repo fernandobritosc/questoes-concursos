@@ -80,4 +80,19 @@ describe('cleanHtmlText', () => {
     expect(result).not.toContain('<')
     expect(result).not.toContain('>')
   })
+
+  it('removes MathJax spans to avoid text duplication', () => {
+    const input = 'P1: (A→B)∧(¬B→A)<span class="math-italic">(𝐴→𝐵)∧(¬𝐵→𝐴)</span>'
+    expect(cleanHtmlText(input)).toBe('P1: (A→B)∧(¬B→A)')
+  })
+
+  it('removes annotation and semantics tags', () => {
+    const input = '<semantics><annotation>duplicated text</annotation></semantics>Real text'
+    expect(cleanHtmlText(input)).toBe('Real text')
+  })
+
+  it('removes consecutive duplicate lines', () => {
+    const input = 'P1: (A→B)∧(¬B→A)\nP1: (A→B)∧(¬B→A)'
+    expect(cleanHtmlText(input)).toBe('P1: (A→B)∧(¬B→A)')
+  })
 })
