@@ -373,11 +373,15 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     }
     if (linksResumo.length > 1) {
       const textBloco = linksResumo[1].textContent.trim(); // Ex: "2025 - Concurso/Prova"
+      console.log(`[MonitorPro] Questão #${questaoTecId}: textBloco do resumo-questao[1] = "${textBloco}"`);
       
       // Procura ano em qualquer posição do texto
       const anoMatch = textBloco.match(/\b(19\d\d|20\d\d)\b/);
       if (anoMatch) {
         ano = parseInt(anoMatch[0], 10);
+        console.log(`[MonitorPro] Questão #${questaoTecId}: ano extraído = ${ano}`);
+      } else {
+        console.log(`[MonitorPro] Questão #${questaoTecId}: NENHUM ano encontrado em "${textBloco}"`);
       }
       
       // Extrai concurso/prova ignorando o ano
@@ -655,7 +659,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
                     updatePayload.resolucao_professor = questaoPayload.resolucao_professor;
                   }
                   if (Object.keys(updatePayload).length > 0) {
-                    console.log(`[MonitorPro] Atualizando metadados pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`, updatePayload);
+                    console.log(`[MonitorPro] Atualizando metadados pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`, updatePayload, `ano=${questaoPayload.ano}`);
                     if (isContextInvalidated()) return;
                     const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
                       method: "PATCH",
@@ -697,7 +701,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
             updatePayload.resolucao_professor = questaoPayload.resolucao_professor;
           }
           if (Object.keys(updatePayload).length > 0) {
-            console.log(`[MonitorPro] Atualizando metadados da Questão #${questaoPayload.questao_tec_id}...`, updatePayload);
+            console.log(`[MonitorPro] Atualizando metadados da Questão #${questaoPayload.questao_tec_id}...`, updatePayload, `ano=${questaoPayload.ano}`);
             const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
               method: "PATCH",
               headers,
