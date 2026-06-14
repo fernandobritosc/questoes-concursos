@@ -128,6 +128,93 @@ Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos
 - `supabase.service.ts` teve todos os 5 `eslint-disable no-explicit-any` substituídos por tipos concretos — `HistoricoResolucao`, inline types, e `unknown` para JSONB
 - Efeito de carregar histórico (useQuestoes.ts:318) depende APENAS de `currentQuestaoIndex` — funções de callback NÃO entram nas deps para evitar loop de render por nova referência
 
+## ECC ↔ GSD Integration
+
+### O que é
+Este projeto usa o **ECC** (Enhanced Codebase Companion, [github.com/affaan-m/ECC](https://github.com/affaan-m/ECC)) como sistema de agent harness, integrado à metodologia **GSD** (Get Shit Done) para ciclo de desenvolvimento estruturado.
+
+### Componentes Instalados
+
+| Componente | Localização | Propósito |
+|---|---|---|
+| `opencode.json` | `.opencode/opencode.json` | Config principal — agents, commands, skills |
+| Bridge skill | `.opencode/skills/gsd-ecosystem-bridge/SKILL.md` | Ponte ECC ↔ GSD |
+| Agentes ECC | `opencode.json → agent` | planner, code-reviewer, architect, tdd-guide, build-error-resolver |
+| Agentes GSD | `~/.config/opencode/agents/` | 33 subagentes (gsd-planner, gsd-executor, etc.) |
+| Skills GSD | `~/.config/opencode/skills/` | 12 skills (gsd-plan-phase, gsd-execute-phase, etc.) |
+| Workflows GSD | `~/.config/opencode/get-shit-done/workflows/` | 89 workflows |
+| Agent Hermes | `.opencode/agents/hermes.md` | Mentor de estudos IA |
+
+### Comandos Disponíveis
+
+| Comando | Delegado a | O que faz |
+|---|---|---|
+| `/gsd` | `gsd-orchestrator` | Ciclo GSD completo (discuss→plan→execute→review→verify→complete) |
+| `/plan` | `planner` | Plano de implementação detalhado |
+| `/code-review` | `code-reviewer` | Revisão de código (bugs, segurança, qualidade) |
+| `/build-fix` | `build-error-resolver` | Corrige erros de build/TypeScript |
+| `/tdd` | `tdd-guide` | Ciclo TDD (RED→GREEN→REFACTOR) |
+| `/architect` | `architect` | Decisões de arquitetura e design |
+| `/gsd-discuss` | `gsd-discuss` | Fase DISCUSS — extrai decisões de gray areas |
+| `/gsd-execute` | `gsd-execute` | Fase EXECUTE — executa planos em waves |
+
+### Fluxo de Trabalho Típico
+
+```bash
+# 1. Discutir uma nova feature
+/gsd-discuss "Fase 4: Modo offline para questões"
+
+# 2. Criar plano de implementação
+/plan "Implementar cache local com IndexedDB"
+
+# 3. Executar com TDD
+/tdd "Criar hook useOfflineCache"
+
+# 4. Revisar o código
+/code-review "src/hooks/useOfflineCache.ts"
+
+# 5. Ou usar o orquestrador para tudo
+/gsd "Implementar modo offline completo"
+```
+
+### Arquitetura
+
+```
+opencode.json (config)
+  ├── agent: build (primary) — agente padrão de desenvolvimento
+  ├── agent: planner — planejamento (subagent, sem write/edit)
+  ├── agent: code-reviewer — revisão (subagent, sem write/edit)
+  ├── agent: architect — arquitetura (subagent, sem write/edit)
+  ├── agent: tdd-guide — TDD (subagent com write/edit)
+  ├── agent: build-error-resolver — correção de build (subagent)
+  ├── agent: gsd-orchestrator — orquestrador GSD (subagent)
+  ├── agent: gsd-discuss — fase discuss (subagent)
+  ├── agent: gsd-execute — fase execute (subagent)
+  └── skill: gsd-ecosystem-bridge — ponte ECC ↔ GSD
+
+Agentes GSD Globais (~/.config/opencode/agents/)
+  ├── gsd-planner, gsd-executor, gsd-code-reviewer
+  ├── gsd-verifier, gsd-debugger, gsd-ui-researcher
+  ├── gsd-security-auditor, gsd-codebase-mapper
+  └── +25 outros
+
+Workflows GSD Globais (~/.config/opencode/get-shit-done/workflows/)
+  └── 89 workflows (discuss, plan, execute, review, verify, etc.)
+```
+
+### Skills ECC Relevantes
+
+Skills do ECC disponíveis para carregar como instrução adicional em `opencode.json`:
+
+| Skill | Arquivo | Quando usar |
+|---|---|---|
+| TDD Workflow | `skills/tdd-workflow/SKILL.md` | Durante EXECUTE |
+| Security Review | `skills/security-review/SKILL.md` | Durante REVIEW |
+| Verification Loop | `skills/verification-loop/SKILL.md` | Durante VERIFY |
+| Coding Standards | `skills/coding-standards/SKILL.md` | Durante EXECUTE |
+| API Design | `skills/api-design/SKILL.md` | Durante PLAN |
+| E2E Testing | `skills/e2e-testing/SKILL.md` | Durante EXECUTE |
+
 ## How to run
 ```bash
 npm run dev        # Servidor de desenvolvimento

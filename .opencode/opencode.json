@@ -1,0 +1,205 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "deepseek/deepseek-v4-flash-free",
+  "small_model": "deepseek/deepseek-v4-flash-free",
+  "default_agent": "build",
+  "instructions": [
+    "AGENTS.md",
+    "skills/gsd-ecosystem-bridge/SKILL.md"
+  ],
+  "skills": {
+    "paths": [
+      "skills"
+    ]
+  },
+  "agent": {
+    "build": {
+      "description": "Agente principal de desenvolvimento para questoes-concursos",
+      "mode": "primary",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "task": true,
+        "todowrite": true,
+        "question": true
+      }
+    },
+    "planner": {
+      "description": "Cria planos de implementação detalhados para features complexas e refatorações. Use ANTES de escrever código.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é um especialista em planejamento de software. Crie planos de implementação passo a passo com análise de riscos, dependências e estimativa de complexidade. NUNCA escreva código — apenas planos. Aguarde confirmação do usuário antes de prosseguir.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "task": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "code-reviewer": {
+      "description": "Revisor de código especializado em qualidade, segurança e manutenibilidade. Use APÓS escrever ou modificar código.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é um revisor de código especialista. Revise o código em busca de bugs, problemas de segurança, qualidade de código e aderência às convenções do projeto. Classifique cada achado por gravidade (CRITICAL, HIGH, MEDIUM, LOW). Sugira correções específicas.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "architect": {
+      "description": "Arquiteto de software para decisões de design, escalabilidade e escolhas técnicas.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é um arquiteto de software especialista. Analise decisões de arquitetura, proponha designs, avalie trade-offs entre abordagens. NUNCA escreva código de implementação.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "task": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "tdd-guide": {
+      "description": "Especialista em TDD — enforced write-tests-first. Use ao criar novas features, corrigir bugs ou refatorar.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é um especialista em TDD. Siga o ciclo RED-GREEN-REFACTOR: 1) Escreva o teste primeiro 2) Veja falhar (RED) 3) Implemente o mínimo para passar (GREEN) 4) Refatore mantendo verde. Cobertura mínima de 80%.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "write": true,
+        "edit": true,
+        "task": true
+      }
+    },
+    "build-error-resolver": {
+      "description": "Resolvedor de erros de build e TypeScript. Use quando o build falhar ou houver erros de tipo.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é um especialista em resolução de erros de compilação. Analise erros de build/TypeScript e corrija com o mínimo de alterações possível. Preserve a semântica do código existente.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "write": true,
+        "edit": true
+      }
+    },
+    "gsd-orchestrator": {
+      "description": "Orquestrador do ciclo GSD — gerencia as fases discuss, plan, execute, review, verify e complete para cada milestone.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é o orquestrador GSD (Get Shit Done). Sua função é gerenciar o ciclo completo de desenvolvimento:\n\n1. DISCUSS — Extrair decisões de implementação dos gray areas\n2. PLAN — Criar PLAN.md executável com pesquisa integrada\n3. EXECUTE — Executar planos em waves paralelas via subagentes\n4. REVIEW — Revisar código com revisores especializados\n5. VERIFY — Verificar se o objetivo da fase foi atingido\n6. COMPLETE — Finalizar milestone com summary\n\nUse os agentes especialistas (planner, code-reviewer, etc.) e skills GSD conforme necessário. Cada fase deve produzir os artefatos esperados antes de avançar.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "task": true,
+        "todowrite": true,
+        "question": true,
+        "write": true,
+        "edit": true
+      }
+    },
+    "gsd-discuss": {
+      "description": "Especialista na fase DISCUSS do GSD — extrai decisões de implementação de gray areas.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é o especialista da fase DISCUSS do GSD. Extraia decisões de implementação que os agentes downstream precisam. 1) Carregue contexto anterior 2) Analise gray areas 3) Apresente ao usuário 4) Explore cada área 5) Crie CONTEXT.md com decisões claras.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "write": true,
+        "edit": true
+      }
+    },
+    "gsd-execute": {
+      "description": "Especialista na fase EXECUTE do GSD — executa planos em waves paralelas.",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash-free",
+      "prompt": "Você é o especialista da fase EXECUTE do GSD. Execute todos os planos de uma fase usando execução paralela em waves. 1) Descubra planos 2) Analise dependências 3) Agrupe em waves 4) Spawne subagentes 5) Colete resultados. Use --wave N para filtrar.",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "write": true,
+        "edit": true,
+        "task": true
+      }
+    }
+  },
+  "command": {
+    "gsd": {
+      "description": "Orquestrador GSD — inicia/gerencia o ciclo completo (discuss → plan → execute → review → verify → complete)",
+      "template": "Execute o ciclo GSD para: $ARGUMENTS\n\nUse o agent gsd-orchestrator para gerenciar as fases. Identifique em qual fase estamos e prossiga.",
+      "agent": "gsd-orchestrator",
+      "subtask": true
+    },
+    "plan": {
+      "description": "Cria plano de implementação detalhado com análise de riscos e dependências",
+      "template": "Crie um plano de implementação detalhado para: $ARGUMENTS\n\nSua tarefa:\n1. Restate requirements\n2. Identify risks e dependências\n3. Create step-by-step plan\n4. WAIT for user confirmation\n\nNÃO escreva código.",
+      "agent": "planner",
+      "subtask": true
+    },
+    "code-review": {
+      "description": "Revisa código modificado em busca de bugs, segurança e qualidade",
+      "template": "Revise o código modificado para: $ARGUMENTS\n\nAnalise: bugs, segurança, qualidade, aderência às convenções. Classifique cada achado (CRITICAL/HIGH/MEDIUM/LOW).",
+      "agent": "code-reviewer",
+      "subtask": true
+    },
+    "build-fix": {
+      "description": "Corrige erros de build e TypeScript com o mínimo de alterações",
+      "template": "Corrija os erros de build/TypeScript para: $ARGUMENTS\n\nAnalise os erros e corrija com o mínimo de alterações. Preserve a semântica existente.",
+      "agent": "build-error-resolver",
+      "subtask": true
+    },
+    "tdd": {
+      "description": "Executa ciclo TDD (RED → GREEN → REFACTOR) com cobertura mínima de 80%",
+      "template": "Execute TDD para: $ARGUMENTS\n\nSiga RED-GREEN-REFACTOR. Tests FIRST. Cobertura 80%+.",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "architect": {
+      "description": "Analisa decisões de arquitetura e design do sistema",
+      "template": "Analise a arquitetura para: $ARGUMENTS\n\nAvalie trade-offs, proponha designs, considere escalabilidade. NÃO implemente.",
+      "agent": "architect",
+      "subtask": true
+    },
+    "gsd-discuss": {
+      "description": "Inicia a fase DISCUSS do GSD — extrai decisões de gray areas",
+      "template": "Inicie a fase DISCUSS para: $ARGUMENTS\n\nExtraia decisões de implementação. Crie CONTEXT.md.",
+      "agent": "gsd-discuss",
+      "subtask": true
+    },
+    "gsd-execute": {
+      "description": "Inicia a fase EXECUTE do GSD — executa planos em waves paralelas",
+      "template": "Inicie a fase EXECUTE para: $ARGUMENTS\n\nExecute planos. Use --wave N para filtrar. Spawne subagentes.",
+      "agent": "gsd-execute",
+      "subtask": true
+    }
+  },
+  "permission": {
+    "mcp_*": "ask"
+  }
+}

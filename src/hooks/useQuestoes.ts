@@ -92,6 +92,7 @@ export function useQuestoes() {
   )
 
   const resolucao = useQuestoesResolucao({ onQuestoesUpdated })
+  const { setResolucaoText, setEditingResolucao } = resolucao
 
   // ── Importação PDF ────────────────────────────────────────────────────────────
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
@@ -166,7 +167,7 @@ export function useQuestoes() {
 
   const questoesExibidas = useMemo(() => {
     const f = filter.filtros
-    let base = f
+    const base = f
       ? caderno.cadernoQuestoes.filter(q => {
           for (const [key, val] of Object.entries(f)) {
             if (String((q as unknown as Record<string, unknown>)[key] || `Sem ${key}`) !== val) return false;
@@ -187,10 +188,10 @@ export function useQuestoes() {
     const questoes = questoesExibidas
     if (questoes.length > 0 && questoes[caderno.currentQuestaoIndex]) {
       const q = questoes[caderno.currentQuestaoIndex]
-      resolucao.setResolucaoText(q.resolucao_professor || '')
-      resolucao.setEditingResolucao(false)
+      setResolucaoText(q.resolucao_professor || '')
+      setEditingResolucao(false)
     }
-  }, [caderno.currentQuestaoIndex, questoesExibidas, resolucao.setResolucaoText, resolucao.setEditingResolucao])
+  }, [caderno.currentQuestaoIndex, questoesExibidas, setResolucaoText, setEditingResolucao])
 
   // ─── Effects: Carga Inicial ───────────────────────────────────────────────────
 
