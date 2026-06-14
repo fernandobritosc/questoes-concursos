@@ -1,13 +1,16 @@
 # Questões Concursos — Dev Log
 
 ## Goal
-Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos menores e estabelecer testes automatizados.
+Criar dicionário assunto → { materia, grupo } (`src/data/grupos.json`), exibir 3 níveis (matéria → grupo → assunto) no índice, e persistir coluna `grupo` no banco Supabase.
 
 ## Constraints & Preferences
 - TypeScript compila limpo (`npx tsc -b --noEmit` zero erros)
 - ESLint zero erros (`npx eslint . --max-warnings=200`)
 - Toda funcionalidade existente preservada (import PDF, visualizar, responder, navegar, imprimir)
 - Comunicação em português
+- Dicionário em JSON estático no código (`src/data/grupos.json`), versionado no git
+- Índice segue a ordem de estudo definida manualmente no JSON
+- Usuário pode alternar entre "Ordem de Estudo", "Quantidade" e "Alfabética"
 
 ## Progress
 
@@ -108,6 +111,18 @@ Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos
 - **Resoluções com limite + expand**: mostra 5 itens, botão "+ X mais / ▲ recolher"
 - **Navegação corrigida**: `<Link to="/app/revisao">` em vez de `<a href="/revisao">`
 
+#### Dicionário de Grupos (3 níveis: matéria → grupo → assunto)
+- `src/data/grupos.json`: **1.007 assuntos** mapeados em **8 matérias** (Informática, Direito Constitucional, AFO/DF/Contabilidade, Língua Portuguesa, Adm. Geral e Pública, Direito Administrativo, Direito do Trabalho, Direito Processual do Trabalho)
+- `QuestaoIndice.tsx`: reescrito para exibir 3 níveis com ordenação por estudo (default), quantidade ou alfabética; grupos colapsáveis
+- `tsconfig.app.json`: adicionado `resolveJsonModule: true` para importar JSON
+- **0 assuntos sem grupo** no banco (1232 questões, 156 assuntos únicos)
+
+#### Coluna `grupo` no Supabase
+- `ALTER TABLE questoes ADD COLUMN grupo text` + índice
+- `grupo` populado via PATCH na API para todos os 1232 registros
+- `QuestaoIndice` usa `q.grupo` do banco (removeu `GRUPO_MAP`)
+- Tipo `Questao` e `ResolucaoView` atualizados com `grupo?: string | null`
+
 #### Questões — Correção de Tremor/Loop
 - **Sync effect** (`useQuestoes.ts:180`): removido `questoesExibidas` das dependências e os `setAlternativaSelecionada(null)` + `setRevelado(false)` desnecessários — eliminou cascata de re-renders em cada ação no caderno
 - **Historico loading effect** (`useQuestoes.ts:318`): removido `questoesExibidas`, `caderno.loadHistoricoDaQuestao` e `caderno.setHistoricoQuestaoAtiva` das dependências — eliminou loop infinito (funções sem `useCallback` criavam nova referência a cada render → re-carregava histórico infinitamente)
@@ -115,8 +130,6 @@ Refatorar componentes grandes (`Questoes.tsx`, `ImportPdfModal.tsx`) em módulos
 
 ### 🔄 Pendente
 - **Modo claro**: ajuste das variáveis CSS `html.light` no `index.css` — usuário achou muito claro, dói a vista. Pendente de nova tentativa com paleta mais suave
-- **Questões**: verificar se o tremor foi resolvido (pendente de confirmação do usuário após push)
-- **Hierarquia 3 níveis (matéria→grupo→assunto)**: TEC mostra sub-pastas (ex: "Regime Jurídico Administrativo" como grupo intermediário dentro de "Direito Administrativo"). Atualmente só temos `materia` e `assunto` flat no banco. Pendente: decidir estratégia de extração (XHR interception na extensão? scraping da árvore de filtros? input manual?) e adicionar coluna `grupo` na tabela `questoes`. Impacta tanto o painel de filtros quanto o Edital Verticalizado.
 - Features novas (estatísticas avançadas, modo offline, exportar dados, integração IA)
 - Bundle analysis periódica (`VITE_ANALYZE=true` com `rollup-plugin-visualizer` — opcional)
 - E2E com Playwright

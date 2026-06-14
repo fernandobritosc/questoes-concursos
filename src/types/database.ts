@@ -14,6 +14,7 @@ export interface Questao {
   questao_tec_id: number
   materia: string | null
   assunto: string | null
+  grupo?: string | null
   banca_texto: string | null
   orgao: string | null
   concurso: string | null
@@ -57,6 +58,7 @@ export interface ResolucaoView {
   // Campos da questão (de questoes)
   materia: string | null
   assunto: string | null
+  grupo?: string | null
   banca_texto: string | null
   orgao: string | null
   concurso: string | null

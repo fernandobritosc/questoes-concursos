@@ -31,6 +31,7 @@ function mapHistoricoToView(h: {
     data_resolucao: h.data_resolucao,
     materia: q?.materia ?? null,
     assunto: q?.assunto ?? null,
+    grupo: q?.grupo ?? null,
     banca_texto: q?.banca_texto ?? null,
     orgao: q?.orgao ?? null,
     concurso: q?.concurso ?? null,
@@ -129,6 +130,7 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
         questao_tec_id,
         materia,
         assunto,
+        grupo,
         banca_texto,
         orgao,
         concurso,
@@ -300,7 +302,7 @@ export async function fetchPaginatedQuestoes(
       let q: any = supabase
         .from('questoes')
         .select(`
-          id, questao_tec_id, materia, assunto, banca_texto, orgao,
+          id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
           concurso, prova, ano, caderno_nome, enunciado, gabarito,
           alternativas, resolucao_professor, created_at
         `, firstCount === null ? { count: 'exact' } : undefined)
@@ -334,7 +336,7 @@ export async function fetchPaginatedQuestoes(
     let query = supabase
       .from('questoes')
       .select(`
-        id, questao_tec_id, materia, assunto, banca_texto, orgao,
+        id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
         concurso, prova, ano, caderno_nome, enunciado, gabarito,
         alternativas, resolucao_professor, created_at
       `, { count: 'exact' })
@@ -376,6 +378,7 @@ export async function fetchPaginatedQuestoes(
       data_resolucao: h?.data_resolucao ?? q.created_at ?? new Date().toISOString(),
       materia: q.materia,
       assunto: q.assunto,
+      grupo: q.grupo,
       banca_texto: q.banca_texto,
       orgao: q.orgao,
       concurso: q.concurso,
@@ -469,7 +472,7 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     const { data: questoesData, error: qErr } = await supabase
       .from('questoes')
       .select(`
-        id, questao_tec_id, materia, assunto, banca_texto, orgao,
+        id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
         concurso, prova, ano, caderno_nome, enunciado, gabarito,
         alternativas, resolucao_professor, created_at
       `)
@@ -520,6 +523,7 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
         data_resolucao: h?.data_resolucao ?? q.created_at ?? new Date().toISOString(),
         materia: q.materia,
         assunto: q.assunto,
+        grupo: q.grupo,
         banca_texto: q.banca_texto,
         orgao: q.orgao,
         concurso: q.concurso,
@@ -564,6 +568,7 @@ export async function fetchResolucoeComErros(): Promise<ResolucaoView[]> {
         questao_tec_id,
         materia,
         assunto,
+        grupo,
         banca_texto,
         orgao,
         concurso,

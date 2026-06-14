@@ -31,7 +31,7 @@ describe('QuestaoIndice', () => {
     expect(select).toBeInTheDocument()
   })
 
-  it('renders tree nodes with counts', () => {
+  it('renders tree nodes with counts', async () => {
     const questoes = [
       makeQuestao({ materia: 'Dir. Constitucional', assunto: 'Direitos', banca_texto: 'CESPE' }),
       makeQuestao({ materia: 'Dir. Constitucional', assunto: 'Garantias', banca_texto: 'CESPE' }),
@@ -40,6 +40,11 @@ describe('QuestaoIndice', () => {
     render(<QuestaoIndice questoes={questoes} onNavigate={vi.fn()} />)
     expect(screen.getByText('Dir. Constitucional')).toBeInTheDocument()
     expect(screen.getByText('Dir. Administrativo')).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Dir. Constitucional'))
+    await userEvent.click(screen.getByText('Dir. Administrativo'))
+    expect(screen.getAllByText('(sem grupo)')).toHaveLength(2)
+    await userEvent.click(screen.getAllByText('(sem grupo)')[0])
+    await userEvent.click(screen.getAllByText('(sem grupo)')[1])
     expect(screen.getByText('Direitos')).toBeInTheDocument()
     expect(screen.getByText('Garantias')).toBeInTheDocument()
     expect(screen.getByText('Licitações')).toBeInTheDocument()
@@ -55,17 +60,27 @@ describe('QuestaoIndice', () => {
     expect(screen.getByText('Dir. Administrativo')).toBeInTheDocument()
   })
 
+  it('toggles children visibility when level-1 node clicked', async () => {
+    const questoes = [makeQuestao({ materia: 'Dir. Constitucional', assunto: 'Direitos' })]
+    render(<QuestaoIndice questoes={questoes} onNavigate={vi.fn()} />)
+    expect(screen.queryByText('(sem grupo)')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByText('Dir. Constitucional'))
+    expect(screen.getByText('(sem grupo)')).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Dir. Constitucional'))
+    expect(screen.queryByText('(sem grupo)')).not.toBeInTheDocument()
+  })
+
   it('shows "Sem" fallback when field is null', () => {
     const questoes = [makeQuestao({ materia: null, assunto: null })]
     render(<QuestaoIndice questoes={questoes} onNavigate={vi.fn()} />)
     expect(screen.getByText('Sem materia')).toBeInTheDocument()
   })
 
-  it('calls onNavigate when level-1 node clicked', async () => {
+  it('calls onNavigate when level-1 count clicked', async () => {
     const onNavigate = vi.fn()
     const questoes = [makeQuestao({ materia: 'Dir. Constitucional', assunto: 'Direitos' })]
     render(<QuestaoIndice questoes={questoes} onNavigate={onNavigate} />)
-    await userEvent.click(screen.getByText('Dir. Constitucional'))
+    await userEvent.click(screen.getByTestId('count-materia'))
     expect(onNavigate).toHaveBeenCalledWith({ materia: 'Dir. Constitucional' })
   })
 
@@ -73,6 +88,8 @@ describe('QuestaoIndice', () => {
     const onNavigate = vi.fn()
     const questoes = [makeQuestao({ materia: 'Dir. Constitucional', assunto: 'Direitos' })]
     render(<QuestaoIndice questoes={questoes} onNavigate={onNavigate} />)
+    await userEvent.click(screen.getByText('Dir. Constitucional'))
+    await userEvent.click(screen.getByText('(sem grupo)'))
     await userEvent.click(screen.getByText('Direitos'))
     expect(onNavigate).toHaveBeenCalledWith({ materia: 'Dir. Constitucional', assunto: 'Direitos' })
   })

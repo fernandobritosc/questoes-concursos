@@ -1,0 +1,3990 @@
+{
+  "Conceitos Gerais de Informática e Introdução": {
+    "materia": "Informática",
+    "grupo": null
+  },
+  "Processador (CPU) e Arquitetura de Computador": {
+    "materia": "Informática",
+    "grupo": "Hardware"
+  },
+  "Memórias (RAM, ROM, CACHE, HD, etc.)": {
+    "materia": "Informática",
+    "grupo": "Hardware"
+  },
+  "Barramentos, Placa-mãe e BIOS": {
+    "materia": "Informática",
+    "grupo": "Hardware"
+  },
+  "Periféricos (Dispositivos de Entrada e Saída)": {
+    "materia": "Informática",
+    "grupo": "Hardware"
+  },
+  "Nobreak e Estabilizadores": {
+    "materia": "Informática",
+    "grupo": "Hardware"
+  },
+  "Tipos de Computadores": {
+    "materia": "Informática",
+    "grupo": "Hardware"
+  },
+  "Questões Mescladas de Hardware": {
+    "materia": "Informática",
+    "grupo": "Hardware"
+  },
+  "Conceitos Gerais de Sistemas Operacionais e Sistemas de Arquivos": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Windows 2000 e Versões Anteriores": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Windows XP": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Windows Vista": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Windows 7": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Windows 8": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Windows 10": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Windows 11": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Linux / Unix": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "MS-DOS": {
+    "materia": "Informática",
+    "grupo": "Sistemas Operacionais"
+  },
+  "Word 2003 e Versões Anteriores": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Word 2007": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Word 2010": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Word 2013": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Word 2016": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Word 2019": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Excel 2003 e Versões Anteriores": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Excel 2007": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Excel 2010": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Excel 2013": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Excel 2016": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Excel 2019": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Powerpoint 2003 e Versões Anteriores": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Powerpoint 2007": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Powerpoint 2010": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Powerpoint 2013": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Powerpoint 2016": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Powerpoint 2019": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Access 2003 e Versões Anteriores": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Access 2007": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Access 2010": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Access 2013": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Access 2016": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "OneNote": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Questões Mescladas de Microsoft Office": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Writer": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Calc": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Impress": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Questões Mescladas de Libre Office": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Questões Mescladas de Suítes de Escritório": {
+    "materia": "Informática",
+    "grupo": "Suítes de Escritório"
+  },
+  "Conceitos, Modelos, Tipos e Topologias de Redes": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "Equipamentos, Meios de Transmissão e Conexão": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "Protocolos de Redes": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "Conceitos de Internet": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Intranet e Extranet": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Internet Explorer": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Mozilla Firefox": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Google Chrome": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Microsoft Edge": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Safari": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Questões Mescladas de Navegadores": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Recursos, Campos, Endereçamento (Correio Eletrônico)": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outlook 2003 e Versões Anteriores": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outlook 2007": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outlook 2010": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outlook 2013": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outlook 2016": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outlook 2019": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outlook Express": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Mozilla Thunderbird": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Conceitos Gerais sobre Webmails": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Gmail": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Outros Webmails (Yahoo! Mail, Hotmail, Live Mail, etc.)": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Sites de Busca (Google, Bing, Yahoo, etc.)": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Redes Sociais (Facebook, WhatsApp, etc.)": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Grupos Colaborativos e de Discussão": {
+    "materia": "Informática",
+    "grupo": "Internet"
+  },
+  "Conceitos e Tipos de Computação em Nuvem (Cloud Computing)": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Conceitos Gerais de Google Workspace": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Google Drive": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Google Docs": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Google Sheets": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Demais Recursos do Google Workspace": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Nuvens Microsoft (OneDrive e Azure)": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Dropbox": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Serviços de Mapas e Localização (Google Maps, Waze, etc.)": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Microsoft Teams": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Aplicativos para Videoconferência (Zoom, Google Meet, etc.)": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Demais Serviços de Internet": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Questões Mescladas de Internet": {
+    "materia": "Informática",
+    "grupo": "Computação em Nuvem"
+  },
+  "Conceitos e Princípios de Segurança da Informação": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Ameaças (Vírus, Worms, Trojans, Malware, etc.)": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Firewall e Proxy": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Antivírus e Antispyware": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Procedimentos de Segurança da Informação (Senhas, Autenticação, Etc.)": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Demais Recursos (IDS, VPN, etc.)": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Criptografia, Assinatura e Certificado Digital": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Backup": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Compactadores e Descompactadores (Winzip, Winrar, etc.)": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Extensão de Arquivos": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Adobe PDF": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Outros Tópicos de Informática": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Sem Classificação de Assunto": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
+  "Direito Constitucional: Conceito e Fontes. Estado, Povo, Território, etc.": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Formas de Estado e Governo, Sistemas de Governo, Separação de Poderes. Freio e Contrapesos": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Constitucionalismo e Neoconstitucionalismo": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Princípios Constitucionais Sensíveis, Estabelecidos e Extensíveis": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Histórico das Constituições no Brasil": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Constituição: Conceito, Estrutura, Supremacia e Classificação": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Eficácia das Normas Constitucionais": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Poder Constituinte (Originário, Derivado, Reformador, Revisor, Decorrente, etc)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Aplicação das Normas Constitucionais no Tempo (Recepção, Repristinação, Desconstitucionalização)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Métodos e Princípios de Interpretação das Normas Constitucionais": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Simetria Constitucional": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Dos Princípios Fundamentais da Constituição (arts. 1º a 4º da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Teoria do Direito Constitucional"
+  },
+  "Características (Direitos Fundamentais)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Gerações de Direitos Fundamentais": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Dos Direitos e Deveres Individuais e Coletivos (art. 5º da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Habeas Corpus": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Mandado de Segurança": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Mandado de Injunção": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Habeas Data": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Ação Popular": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Questões Mescladas de Remédios Constitucionais": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Direitos Sociais e dos Trabalhadores (arts. 6º e 7º da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Direitos Coletivos dos Trabalhadores (arts. 8º a 11 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Espécies de Nacionalidade (Brasileiros Natos e Naturalizados)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Distinções Constitucionais entre Brasileiros Natos e Naturalizados": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Perda da Nacionalidade": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Extradição, Deportação, Expulsão e Banimento (da Nacionalidade)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Dos Símbolos e Idioma da República (art. 13 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Soberania Popular (Voto, Plebiscito, Referendo, Iniciativa popular), Alistamento e Elegibilidade": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Inelegibilidades (Direitos Políticos)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Perda e Suspensão dos Direitos Políticos": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Partidos Políticos (art. 17 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Dos Direitos e Garantias Fundamentais (arts. 5º a 17 da CF/1988)"
+  },
+  "Da Organização Político-Administrativa (arts. 18 e 19 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "União: Bens e Competências Exclusivas, Privativas, Comuns e Concorrentes (arts. 20 a 24 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Estados Federados - Organização, Competências, Bens (arts. 25 a 28 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Municípios - Organização e Competências (arts. 29 a 31 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Do Distrito Federal e dos Territórios (arts. 32 e 33 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Intervenção Federal e Estadual (arts. 34 a 36 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Disposições Gerais (Administração Pública - arts. 37 e 38 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Dos Servidores Públicos (arts. 39 a 41 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Dos Militares dos Estados, do Distrito Federal e dos Territórios (art. 42 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Das Regiões (Administração Pública, art. 43 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Questões Mescladas de Organização do Estado (arts. 18 a 43 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização do Estado (arts. 18 a 43 da CF/1988)"
+  },
+  "Do Congresso Nacional (arts. 44 a 47 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Das Atribuições do Congresso Nacional (arts. 48 a 50 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Da Câmara dos Deputados (art. 51 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Senado Federal (art. 52 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Deputados e Senadores (arts. 53 a 56 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Das Reuniões (art. 57 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Das Comissões Parlamentares - Permanentes e Temporárias (art. 58 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Disposição Geral (Processo Legislativo, art. 59 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Da Emenda à Constituição (art. 60 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Leis Ordinárias e Complementares": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Medidas Provisórias": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Leis Delegadas": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Resoluções e Decretos Legislativos": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Fases do Processo Legislativo (Iniciativa, Discussão, Voto, Veto, Sanção, Promulgação e Publicação)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Questões Mescladas de Processo Legislativo (arts. 59 a 69 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Competências para Fiscalização e Tribunal de Contas da União (arts. 70 a 73 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Sistema de Controle Interno (art. 74 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Tribunais de Contas Estaduais, Distrital e Municipais": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Questões Mescladas de Poder Legislativo (arts. 44 a 75 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Presidente e Vice Presidente da República (arts. 76 a 83 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Das Atribuições do Presidente da República (art. 84 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Da Responsabilidade do Presidente da República (arts. 85 e 86 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Ministros de Estado (arts. 87 e 88 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Conselho da República e Conselho da Defesa Nacional (arts. 89 a 91 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Órgãos do Poder Judiciário (art. 92 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Estatuto da Magistratura (art. 93 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Quinto Constitucional (art. 94 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Das Garantias e Vedações (Poder Judiciário, art. 95 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Competências Privativas (Poder Judiciário, art. 96 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Reserva de Plenário (Poder Judiciário, art. 97 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Juizados Especiais e Justiça de Paz (art. 98 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Autonomia Administrativa e Financeira (Poder Judiciário, art. 99 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Precatórios (art. 100 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Supremo Tribunal Federal - STF (arts. 101 a 103 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Das Súmulas Vinculantes (art. 103-A da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Conselho Nacional de Justiça - CNJ (art. 103-B da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Do Superior Tribunal de Justiça - STJ (arts. 104 e 105 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Tribunais Regionais Federais e Juízes Federais (arts. 106 a 110 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Tribunais e Juízes do Trabalho (arts. 111 a 117 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Tribunais e Juízes Eleitorais (arts. 118 a 121 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Tribunais e Juízes Militares (arts. 122 a 124 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Dos Tribunais e Juízes dos Estados (arts. 125 e 126 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Questões Mescladas de Poder Judiciário (arts. 92 a 126 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Princípios Institucionais (Ministério Público)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Funções Institucionais (Ministério Público)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Composição do Ministério Público": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Garantias e Vedações (Ministério Público)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Ministério Público junto aos Tribunais de Contas": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Conselho Nacional do Ministério Público - CNMP": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Ministério Público dos Estados e Distrito Federal e Territórios": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Questões Mescladas de Ministério Público (arts. 127 a 130 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Da Advocacia Pública (arts. 131 e 132 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Advocacia Privada e Defensoria Pública (arts. 133 a 135 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Questões Mescladas de Funções Essenciais à Justiça (arts. 127 a 135 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Questões Mescladas de Organização dos Poderes (arts. 44 a 135 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Organização dos Poderes (arts. 44 a 135 da CF/1988)"
+  },
+  "Estado de Defesa e de Sítio (arts. 136 a 141 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Defesa do Estado e das Instituições Democráticas (arts. 136 a 144 da CF/1988)"
+  },
+  "Forças Armadas (arts. 142 e 143 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Defesa do Estado e das Instituições Democráticas (arts. 136 a 144 da CF/1988)"
+  },
+  "Segurança Pública (art. 144 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Defesa do Estado e das Instituições Democráticas (arts. 136 a 144 da CF/1988)"
+  },
+  "Dos Princípios Gerais (Sistema Tributário Nacional, arts. 145 a 149-B da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Limitações do Poder de Tributar (arts. 150 a 152 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Dos Impostos da União (arts. 153 e 154 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Dos Impostos dos Estados e Distrito Federal (art. 155 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Dos Impostos dos Municípios (art. 156 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Do Imposto de Competência Compartilhada entre Estados, DF e Municípios (arts. 156-A e 156-B da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Da Repartição das Receitas Tributárias (arts. 157 a 162 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Normas Gerais (Finanças Públicas, arts. 163 e 164-A da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Dos Orçamentos (Finanças Públicas, arts. 165 a 169 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Tributação e Orçamento (arts. 145 a 169 da CF/1988)"
+  },
+  "Princípios Gerais da Ordem Econômica (arts. 170 a 172 e 175 a 181 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Ordem Econômica e Financeira (arts. 170 a 192 da CF/1988)"
+  },
+  "Atuação do Estado no Domínio Econômico (arts. 173 e 174 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Ordem Econômica e Financeira (arts. 170 a 192 da CF/1988)"
+  },
+  "Políticas Urbana, Agrária e Fundiária (arts. 182 a 191 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Ordem Econômica e Financeira (arts. 170 a 192 da CF/1988)"
+  },
+  "Sistema Financeiro Nacional (art. 192 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Da Ordem Econômica e Financeira (arts. 170 a 192 da CF/1988)"
+  },
+  "Disposição Geral da Ordem Social (art. 193 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Disposições Gerais (Seguridade Social, arts. 194 e 195 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Da Saúde (arts. 196 a 200 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Da Previdência Social (arts. 201 e 202 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Da Assistência Social (arts. 203 e 204 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Da Educação, da Cultura e do Desporto (arts. 205 a 217 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Da Ciência e Tecnologia (arts. 218 e 219 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Da Comunicação Social (arts. 220 a 224 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Do Meio Ambiente (art. 225 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Da Família, da Criança, do Adolescente e do Idoso (arts. 226 a 230 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Dos Índios (arts. 231 e 232 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Das Disposições Constitucionais Gerais (arts. 233 a 250 da CF/1988)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Ordem Social (arts. 193 a 232 da CF/1988)"
+  },
+  "Ato das Disposições Constitucionais Transitórias - ADCT": {
+    "materia": "Direito Constitucional",
+    "grupo": "Disposições Finais e Transitórias da CF/1988"
+  },
+  "Emenda Constitucional nº 103/2019 (arts. 3º a 34) - Reforma da Previdência": {
+    "materia": "Direito Constitucional",
+    "grupo": "Disposições Finais e Transitórias da CF/1988"
+  },
+  "Emenda Constitucional nº 132/2023 (arts. 6º a 23) - Reforma Tributária": {
+    "materia": "Direito Constitucional",
+    "grupo": "Disposições Finais e Transitórias da CF/1988"
+  },
+  "Introdução, Pressupostos e Tipos de Inconstitucionalidade": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Controle de Constitucionalidade no Mundo e Histórico do Controle de Constitucionalidade no Brasil": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Formas de Controle: Sistemas, Momentos, Modelos e Vias de Controle": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Controle Difuso (Incidental ou Incidenter Tantum)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Ação Direta de Inconstitucionalidade (ADI)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Ação Direta de Inconstitucionalidade por Omissão (ADI por Omissão)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Ação Declaratória de Constitucionalidade (ADC)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Arguição de Descumprimento de Preceito Fundamental (ADPF)": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Controle de Constitucionalidade pelos Tribunais de Justiça dos Estados": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "Questões Mescladas de Controle de Constitucionalidade": {
+    "materia": "Direito Constitucional",
+    "grupo": "Controle de Constitucionalidade"
+  },
+  "... sobre Direitos e Deveres Individuais e Coletivos": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Remédios Constitucionais": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Direitos Sociais e dos Trabalhadores": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Nacionalidade": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Direitos Políticos": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Partidos Políticos": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Organização Político-Administrativa": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Organização, Competências e Bens dos Entes Federativos": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Intervenção Federal e Estadual": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Administração Pública": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Congresso Nacional, Senado e Câmara dos Deputados": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Deputados e Senadores": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Comissões Parlamentares": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Processo Legislativo": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Fiscalização Contábil, Financeira e Orçamentária": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Poder Executivo": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Disposições Gerais do Poder Judiciário": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Órgãos do Poder Judiciário": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Funções Essenciais à Justiça": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Segurança Pública": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Sistema Tributário Nacional": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Finanças Públicas": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Princípios Gerais da Atividade Econômica": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Políticas Urbana, Agrária e Fundiária": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Ordem Social": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Educação, Cultura e Desporto": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Família, Criança, Adolescente, Jovem e Idoso": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Atos das Disposições Constitucionais Transitórias": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Controle de Constitucionalidade": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Simetria Constitucional": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "... sobre Outros Assuntos em Matéria Constitucional": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "A Atividade Financeira do Estado": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Introdução à Administração Financeira e Orçamentária"
+  },
+  "Normas Gerais de Direito Financeiro": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Introdução à Administração Financeira e Orçamentária"
+  },
+  "Funções de Governo": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Introdução à Administração Financeira e Orçamentária"
+  },
+  "Conceito e Natureza Jurídica do Orçamento Público": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Tipos de Orçamento Público (Executivo, Legislativo, Misto)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Aspectos/Dimensões do Orçamento Público (Jurídico, Político, Social, etc)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Técnicas/Espécies Orçamentárias (Orçamento Programa, Tradicional, Participativo, Base Zero, etc)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Histórico do Orçamento": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Princípios Orçamentários": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "PPA - Plano Plurianual (CF/1988 e Lei nº 4.320/1964)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "LDO - Lei de Diretrizes Orçamentárias (CF/1988 e Lei nº 4.320/1964)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "LOA - Lei Orçamentária Anual (CF/1988 e Lei nº 4.320/1964)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Tópicos Mesclados de PPA, LDO e LOA": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Vedações Constitucionais em Matéria Orçamentária (Art. 167 da CF/1988)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Fundos Especiais": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Ciclo Orçamentário": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Créditos Adicionais": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Orçamento Público"
+  },
+  "Conceitos Gerais (Orçamentária e Extraorçamentária, Afetação Patrimonial, Regularidade, Coercitividade)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Receita Pública"
+  },
+  "Classificação por Natureza da Receita": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Receita Pública"
+  },
+  "Classificação da Receita por Esfera Orçamentária": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Receita Pública"
+  },
+  "Classificação por Fonte / Destinação de Recursos": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Receita Pública"
+  },
+  "Classificação da Receita por Identificador de Resultado Primário": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Receita Pública"
+  },
+  "Estágios da Receita Pública": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Receita Pública"
+  },
+  "Dívida Ativa": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Receita Pública"
+  },
+  "Conceitos Gerais sobre Despesa Pública": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Despesa Pública"
+  },
+  "Classificação da Despesa Orçamentária": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Despesa Pública"
+  },
+  "Estágios da Despesa Pública": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Despesa Pública"
+  },
+  "Dívida Fundada e Dívida Flutuante - Conceitos Gerais": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Dívida Pública"
+  },
+  "Restos a Pagar (RAP)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Dívida Pública"
+  },
+  "Despesas de Exercícios Anteriores (DEA)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Dívida Pública"
+  },
+  "Regime de Adiantamento": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Suprimento de Fundos"
+  },
+  "Cartão de Pagamento do Governo Federal (CPGF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Suprimento de Fundos"
+  },
+  "Programação e Descentralização Orçamentária e Financeira": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Suprimento de Fundos"
+  },
+  "Lei Complementar nº 159/2017 (Regime de Recuperação Fiscal)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Suprimento de Fundos"
+  },
+  "SIAFI": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Sistemas Estruturantes em Matéria Orçamentária e Financeira"
+  },
+  "SIAFEM": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Sistemas Estruturantes em Matéria Orçamentária e Financeira"
+  },
+  "SIOP, SIDOR": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Sistemas Estruturantes em Matéria Orçamentária e Financeira"
+  },
+  "SIAFIC (Decreto nº 10.540/2020)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Sistemas Estruturantes em Matéria Orçamentária e Financeira"
+  },
+  "SICONFI - Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Sistemas Estruturantes em Matéria Orçamentária e Financeira"
+  },
+  "Conta Única e GRU": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Sistemas Estruturantes em Matéria Orçamentária e Financeira"
+  },
+  "Sistema de Planejamento e de Orçamento Federal (Lei 10.180/2001)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei nº 10.180/2001"
+  },
+  "Sistema de Administração Financeira Federal (Lei 10.180/2001)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei nº 10.180/2001"
+  },
+  "Sistema de Contabilidade Federal (Lei 10.180/2001 e Decreto 6.976/2009)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei nº 10.180/2001"
+  },
+  "Sistema de Controle Interno do Poder Executivo Federal (Lei 10.180/2001)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei nº 10.180/2001"
+  },
+  "Conceitos, Objeto, Objetivos e Campo de Aplicação (Estrutura Conceitual - Prefácio e caps. 1 a 4)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Introdução à Contabilidade Aplicada ao Setor Público"
+  },
+  "Regimes Orçamentário e Patrimonial e Exercício Financeiro": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Introdução à Contabilidade Aplicada ao Setor Público"
+  },
+  "Princípios da Contabilidade Pública": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Introdução à Contabilidade Aplicada ao Setor Público"
+  },
+  "Patrimônio Público": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Bens Públicos": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Inventário. Material Permanente e de Consumo.": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Variações Patrimoniais": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Avaliação de Elementos Patrimoniais Conforme o art. 106 da Lei nº 4.320/1964": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Bases de Mensuração de Ativos e Passivos (MCASP e NBC TSP EC)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Disponibilidades (MCASP e NBC TSP 12)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Créditos e Obrigações (MCASP)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Estoques (MCASP e NBC TSP 04)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Investimentos Permanentes, em Coligada e Empreendimento Controlado em Conjunto (MCASP e NBC TSP 18)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Ativo Imobilizado (MCASP e NBC TSP 07)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Ativo Intangível (MCASP e NBC TSP 08)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Redução ao Valor Recuperável (MCASP, NBC TSP 09 e 10)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Depreciação, Amortização e Exaustão (NBC TSP 07, MCASP, etc.)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Provisões, Passivos e Ativos Contingentes (MCASP e NBC TSP 03)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Receita de Transação sem Contraprestação (MCASP e NBC TSP 01)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Receita de Transação com Contraprestação (MCASP e NBC TSP 02)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Propriedade para Investimento (MCASP e NBC TSP 06)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Custos de Empréstimos (MCASP e NBC TSP 14)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Contratos de Concessão de Serviços Públicos (MCASP e NBC TSP 05)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Ativo Biológico e Produto Agrícola (MCASP e NBC TSP 26)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Acordos em Conjunto (MCASP e NBC TSP 19)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Combinações no Setor Público (MCASP e NBC TSP 21)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Efeitos das Mudanças nas Taxas de Câmbio (MCASP e NBC TSP 24)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Evento Subsequente (MCASP e NBC TSP 25)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Políticas Contábeis, Mudança de Estimativa e Retificação de Erro (MCASP e NBC TSP 23)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Benefícios a Empregados (MCASP e NBC TSP 15)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Informações por Segmento (MCASP e NBC TSP 27)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Divulgação de Participações em Outras Entidades (MCASP e NBC TSP 20)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Divulgação Sobre Partes Relacionadas (MCASP e NBC TSP 22)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Instrumentos Financeiros (MCASP e NBC TSP 30, 31 e 33)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Benefícios Sociais (MCASP e NBC TSP 29)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Plano de Contas (PCASP)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Escrituração Contábil Pública": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Aspectos Patrimoniais da Contabilidade Pública"
+  },
+  "Introdução às DCASP (Parte V, Capítulo 1 do MCASP e NBC TSP 11)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Balanço Orçamentário (MCASP e NBC TSP 13)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Balanço Financeiro": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Balanço Patrimonial (AFO e CPU)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Demonstração das Variações Patrimoniais (DVP)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Demonstração de Fluxo de Caixa (MCASP e NBC TSP 12)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Demonstração das Mutações do Patrimônio Líquido (AFO e CPU)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Notas Explicativas (AFO e CPU)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Balancete": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Consolidação das Demonstrações Contábeis": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Demonstrações Contábeis Separadas (NBC TSP 16)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "Tópicos Mesclados de Demonstrações Contábeis (MCASP, NBC TSP e Lei nº 4.320/1964)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Demonstrações Contábeis Aplicadas ao Setor Público"
+  },
+  "NBC T 16.11 e MIC 1ª Edição - Sistema de Informação de Custos do Setor Público": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Custos no Setor Público"
+  },
+  "NBC TSP 34 - Custos no Setor Público": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Custos no Setor Público"
+  },
+  "Demais Temas sobre Custos no Setor Público": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Custos no Setor Público"
+  },
+  "Disposições Preliminares (arts. 1º e 2º da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Planejamento e Orçamento Público (arts. 3º a 10 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Da Receita Pública (arts. 11 a 14 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Geração de Despesa e Despesa Obrigatória de Caráter Continuado (arts. 15 a 17 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Despesas com Pessoal e Seguridade Social (arts. 18 a 24 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Das Transferências Voluntárias (art. 25 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Da Destinação de Recursos para o Setor Privado (arts. 26 a 28 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Definições, Limites e Recondução da Dívida (arts. 29 a 31 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Operações de Crédito (arts. 32 a 39 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Garantia, Contragarantia e Restos a Pagar (arts. 40 a 42 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Gestão Patrimonial (arts. 43 a 47 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Transparência da Gestão Fiscal (arts. 48 e 49 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Escrituração e Consolidação (arts. 50 e 51 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Relatório Resumido da Execução Orçamentária - RREO (arts. 52 e 53 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Relatório de Gestão Fiscal - RGF (arts. 54 e 55 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Controle da Gestão Fiscal (arts. 56 a 59 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Disposições Finais e Transitórias (arts. 60 a 75 da LRF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Temas Mesclados sobre a LRF": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Manual de Demonstrativos Fiscais": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Precatórios": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Procedimentos Contábeis Específicos (RPPS, FUNDEB, etc.)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Índices e Análise de Demonstração no Setor Público": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Lei Complementar nº 178/2021 - Programa de Acompanhamento e Transparência Fiscal e Plano de Promoção do Equilíbrio Fiscal (arts. 1º a 8º, 17 a 24 e 28 a 32)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Lei Complementar nº 200/2023 - Novo Arcabouço Fiscal": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Lei nº 10.028/2000 - Infração Administrativa Contra as Leis de Finanças Públicas": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Lei nº 10.522/2002 - CADIN": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Decreto 2.829/1998: Normas para Elaboração e Execução do PPA e da LOA": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Contabilidade Regulatória": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Lei de Responsabilidade Fiscal - LRF"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do AC": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Complementar Estadual nº 06/1991 - Normas Gerais para Elaboração de Orçamentos e Outros (AM)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Complementar Estadual nº 175/2017 - Regime de Conta Única do Tesouro Estadual (AM)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 4.218/2015 - Repasse de Parcela dos Depósitos Judiciais e Administrativos (AM)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública da BA": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do CE": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Complementar Distrital nº 292/2000 - Condições para Instituição e Funcionamento de Fundos (DF)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Distrital nº 32.598/2010 - Planejamento, Orçamento, Finanças, Patrimônio e Contabilidade": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública do DF": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do ES": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 20.755/2020 - PPA 2020-2023 (GO)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 9.802/2021 - Folha de Pagamento na Adm. Direta, Autárquica e Fundacional (GO)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública de GO": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 03/2003 - Sistema Financeiro de Conta Única (MT)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 1.374/2008 - Sistema Integrado de Planejamento, Contabilidade e Finanças (MT)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 14.130/2015 - Sistema de Planejamento e Finanças (SPF-MS)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 15.434/2020 - Regime Financeiro Especial (RFE-MS)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 37.924/1996 - Execução Orçamentária e Financeira (MG)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública de MG": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do PA": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 11.626/2020 - Plano Plurianual - PPA (PB)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 12.371/2022 - Lei de Diretrizes Orçamentárias - LDO (PB)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 12.561/2023 - Estima a Receita e Fixa a Despesa para o Exercício Financeiro de 2023 (PB)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública da PB": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do PR": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 7.741/1978 - Código de Administração Financeira (PE)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública do PE": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do PI": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 287/1979 - Código de Administração Financeira e Contabilidade Pública (RJ)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 7.629/2017 - Plano de Recuperação Fiscal (RJ)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 49.134/2024 - Diretrizes e Procedimentos para Atos de Execução Financeira Estadual (RJ)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública do RJ": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do RN": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 14.836/2016 - Lei de Responsabilidade Fiscal (RS)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 24.846/1976 - Manual do Gestor Público da CAGE (RS)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Cadastro Informativo - CADIN/RS": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública de RR": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 12.931/2004 - Procedimento da Descentralização de Créditos Orçamentários (SC)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 18.334/2022 - Fundo Social (SC)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 37/1999 - Regime de Adiantamento de Despesas (SC)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Decreto Estadual nº 1.860/2008 - Fechamento Orçamentário, Financeiro e Contábil e Outros (SC)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública de SC": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Lei Estadual nº 17.293/2020 - Estabelece Medidas voltadas ao Ajuste Fiscal e ao Equilíbrio das Contas Públicas (SP)": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Outras Normas sobre Direito Financeiro e Contabilidade Pública de SP": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas sobre Direito Financeiro e Contabilidade Pública do TO": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Normas Municipais sobre Direito Financeiro e Contabilidade Pública": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Tópicos Mesclados e Demais Temas da Lei nº 4.320/1964": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Demais Temas de Contabilidade Pública": {
+    "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+    "grupo": "Normas Estaduais sobre Direito Financeiro e Contabilidade Pública"
+  },
+  "Ortografia - Casos Gerais e Emprego das Letras": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Fatos da Língua Portuguesa (Porque, Por Que, Porquê e Por Quê; Onde, Aonde e Donde; Há e A, etc)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Inicial Maiúscula": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Acentuação": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Uso do Hífen": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Convenções de Escrita (Itálico, Siglas, etc)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Questões Mescladas de Ortografia": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Fonética (Fonemas, Dígrafos, Encontros Consonantais, Vocálicos). Separação Silábica": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Ortografia"
+  },
+  "Formação e Estrutura das Palavras": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Artigo": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Substantivo": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Adjetivo": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Conjugação. Reconhecimento e Emprego dos Modos e Tempos Verbais": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Correlação Verbal": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Locução Verbal": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Questões Variadas de Verbo": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Pronomes Pessoais": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Pronomes de Tratamento": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Pronomes Possessivos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Pronomes Indefinidos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Pronomes Interrogativos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Pronomes Demonstrativos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Pronomes Relativos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Questões Mescladas sobre Pronomes": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Advérbio": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Numeral": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Preposição": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Conjunção": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Interjeição": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Questões Variadas de Classe de Palavras": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Colocação Pronominal": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Morfologia"
+  },
+  "Sinônimos e Antônimos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Semântica"
+  },
+  "Homônimos e Parônimos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Semântica"
+  },
+  "Denotação e Conotação": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Semântica"
+  },
+  "Polissemia": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Semântica"
+  },
+  "Ordenação de Parágrafos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Semântica"
+  },
+  "Significação de Vocábulo e Expressões": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Semântica"
+  },
+  "Outras Questões de Semântica": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Semântica"
+  },
+  "Frase, Oração e Período": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Sujeito": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Predicado": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Termos Integrantes (Objeto Direto e Indireto, Complemento Nominal e Agente da Passiva)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Termos Acessórios (Adjunto Adnominal, Adjunto Adverbial e Aposto). Vocativo": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Adjunto adnominal x Complemento Nominal": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Orações Coordenadas": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Orações Subordinadas Substantivas": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Orações Subordinadas Adjetivas": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Orações Subordinadas Adverbiais": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Orações Reduzidas": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Funções Sintáticas dos Pronomes Relativos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Função Sintática dos Pronomes Pessoais Átonos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Questões Mescladas de Sintaxe": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Pontuação (Ponto, Vírgula, Travessão, Aspas, Parênteses, etc)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Regência Nominal e Verbal (Casos Gerais)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Crase": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Concordância (Verbal e Nominal)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Vozes (Voz Passiva e Voz Ativa)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Coerência. Coesão (Anáfora, Catáfora, Uso dos Conectores - Pronomes Relativos, Conjunções, etc)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Tipos de Discurso (Direto, Indireto e Indireto Livre)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Sintaxe"
+  },
+  "Variações da Linguagem: Não Verbal, Regional, Histórica, Contextual. Neologismos e Estrangeirismos": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Linguagem Formal e Informal": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Figuras de Linguagem": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Vícios de Linguagem (Pleonasmo, Ambiguidade, Cacofonia, etc.)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Elementos da Comunicação e Funções da Linguagem": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Partícula \"Se\"": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Vocábulo \"Como\"": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Vocábulo \"Que\"": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Interpretação de Textos (Compreensão)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Tipologia e Gênero Textual": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Paralelismo": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Reescrita de Frases. Substituição de Palavras ou Trechos de Texto.": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Clareza e Correção": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Outras Questões de Português e Questões Mescladas (Interpretação de Textos ou Gramática)": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Sem Classificação de Assunto": {
+    "materia": "Língua Portuguesa",
+    "grupo": "Linguagem"
+  },
+  "Organização (Introdução à Administração)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Introdução à Administração"
+  },
+  "Administração": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Introdução à Administração"
+  },
+  "Administrador": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Introdução à Administração"
+  },
+  "Processo Organizacional e Funções Administrativas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Introdução à Administração"
+  },
+  "Eficiência, Eficácia e Efetividade": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Introdução à Administração"
+  },
+  "Introdução (Conceitos, Evolução Histórica, Princípios, Abordagens Prescritivas e Normativas)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Aspectos Gerais e Origens": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Escola da Administração Científica": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Escola da Teoria Clássica": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria das Relações Humanas (Abordagem Humanística da Administração)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria Neoclássica": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Administração por Objetivos (APO)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria da Burocracia": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria Estruturalista (Abordagem Estruturalista da Administração)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria Comportamental": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria do Desenvolvimento Organizacional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Mudança Organizacional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria dos Sistemas (Abordagem Sistêmica da Administração)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Teoria Contingencial (Abordagem Contingencial da Administração)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "O Papel do Homem nas Diversas Teorias": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Tópico Mesclado de Teorias Administrativas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Teorias Administrativas"
+  },
+  "Convergências entre a Gestão Pública e a Privada": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Convergências e Divergências entre a Gestão Pública e a Privada"
+  },
+  "Divergências entre a Gestão Pública e a Privada": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Convergências e Divergências entre a Gestão Pública e a Privada"
+  },
+  "Governabilidade": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Governança Corporativa": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Governança Pública": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Intermediação de Interesses": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Decreto nº 9.203/2017 - Política de Governança da Administração Pública Federal": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Decreto nº 10.160/2019 - Governo Aberto": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Accountability e Transparência": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Governo Eletrônico": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Governabilidade, Governança e Intermediação de Interesses"
+  },
+  "Administração Patrimonialista": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Modelos Teóricos de Gestão Pública"
+  },
+  "Administração Burocrática": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Modelos Teóricos de Gestão Pública"
+  },
+  "Administração Gerencial (Nova Gestão Pública ou Modelo Pós-Burocrático)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Modelos Teóricos de Gestão Pública"
+  },
+  "Administração Societal": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Modelos Teóricos de Gestão Pública"
+  },
+  "Tópico Mesclado de Modelos Teóricos de Gestão Pública": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Modelos Teóricos de Gestão Pública"
+  },
+  "Patrimonialismo no Brasil": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Evolução da APU no Brasil"
+  },
+  "A Reforma Burocrática no Brasil": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Evolução da APU no Brasil"
+  },
+  "A Reforma Gerencial no Brasil": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Evolução da APU no Brasil"
+  },
+  "Introdução ao Processo de Planejamento (Diretrizes, Princípios, Características, Etapas, Níveis)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Planejamento Estratégico": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Intenção Estratégica ou Desenvolvimento Institucional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Diagnóstico de Ambiente Organizacional - Matriz SWOT": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Matriz GUT": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Estratégia e Vantagem Competitiva": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Planejamento baseado em Cenários": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Indicadores de Desempenho": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Balanced Scorecard (BSC)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Redes e Alianças": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Planejamento Tático": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Planejamento Operacional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Planejamento e Estratégia no Setor Público": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Objetivos-Chaves para Resultados (OKR)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Planejamento"
+  },
+  "Desenho Organizacional (Conceitos, Tipos, Centralização e Descentralização)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Organização"
+  },
+  "Departamentalização (Conceitos e Tipos)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Organização"
+  },
+  "Noções Introdutórias (OSM)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Organização, Sistemas e Métodos (OSM)"
+  },
+  "Representações Gráficas (OSM)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Organização, Sistemas e Métodos (OSM)"
+  },
+  "Arranjo Físico ou Layout (OSM)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Organização, Sistemas e Métodos (OSM)"
+  },
+  "Técnicas de Levantamento de Dados e Informações (OSM)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Organização, Sistemas e Métodos (OSM)"
+  },
+  "Formulários e Manuais Administrativos": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Organização, Sistemas e Métodos (OSM)"
+  },
+  "Introdução ao Processo de Direção (Conceito e Características)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Direção"
+  },
+  "Liderança": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Direção"
+  },
+  "Gestão de Conflitos": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Direção"
+  },
+  "Inteligência Emocional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Direção"
+  },
+  "Processo de Controle e Avaliação": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Processo de Direção"
+  },
+  "Introdução ao Comportamento Organizacional (Definição e Características)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comportamento Organizacional"
+  },
+  "Clima Organizacional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comportamento Organizacional"
+  },
+  "Cultura Organizacional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comportamento Organizacional"
+  },
+  "Motivação": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comportamento Organizacional"
+  },
+  "Delegação e Empowerment": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comportamento Organizacional"
+  },
+  "Grupos e Equipes de Trabalho": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comportamento Organizacional"
+  },
+  "Comunicação no Processo de Gestão": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comunicação"
+  },
+  "Comunicação na Gestão Pública e Gestão de Redes Organizacionais": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comunicação"
+  },
+  "Processo Decisório (Tomada de Decisão)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Comunicação"
+  },
+  "Conceitos Gerais sobre Gestão por Processos": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão por Processos (BPM CBOK, Ciclo PDCA, 6 Sigma etc.)"
+  },
+  "Ciclo PDCA (Plan-Do-Check-Act ou Ciclo de Shewart)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão por Processos (BPM CBOK, Ciclo PDCA, 6 Sigma etc.)"
+  },
+  "BPM, BPMN e CBOK": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão por Processos (BPM CBOK, Ciclo PDCA, 6 Sigma etc.)"
+  },
+  "Seis Sigma (6 Sigma)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão por Processos (BPM CBOK, Ciclo PDCA, 6 Sigma etc.)"
+  },
+  "Society for Design and Process (SDPS)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão por Processos (BPM CBOK, Ciclo PDCA, 6 Sigma etc.)"
+  },
+  "Outros Temas e Tópicos Mesclados em Gestão por Processos": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão por Processos (BPM CBOK, Ciclo PDCA, 6 Sigma etc.)"
+  },
+  "Conceito, Princípios, Fundamentos e Evolução da Qualidade": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Principais Teóricos - Gurus da Qualidade": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "NBR ISO 9000 - Sistemas de Gestão da Qualidade - Fundamentos e Vocabulário": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "NBR ISO 9001 - Sistemas de Gestão da Qualidade - Requisitos": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "NBR ISO 9004 - Gestão para Sucesso Sustentado": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Outros Assuntos e Tópicos Mesclados de Normas ISO": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Diagrama de Causa e Efeito - Ishikawa": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Plano 5W2h": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Método 5S": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Diagrama de Pareto": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "14 Princípios de Deming": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Benchmarking": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Brainstorming e Brainwriting": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Reengenharia": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Kaizen": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Outros Métodos e Ferramentas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Tópico Mesclado de Métodos e Ferramentas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Modelo de Excelência Gerencial (FNQ)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Excelência e Qualidade nos Serviços Públicos (Gespública, MEGP)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Gestão por Resultados": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Qualidade no Atendimento ao Público": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Gerenciamento pelas Diretrizes": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Gestão do Conhecimento": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Educação Corporativa": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Coaching, Tutoria (Mentoring) e Aconselhamento (Counseling)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Empreendedorismo Governamental": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Administração da Produção e Operações": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Marketing": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Qualidade"
+  },
+  "Relações de Equilíbrio entre Indivíduo e Organização": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Gerenciamento da Diversidade nas Organizações": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "A Área de Gestão de Pessoas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Modelos Básicos de Gestão de Pessoas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Evolução e Tendências da Área de Gestão de Pessoas no Cenário Mundial": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Evolução da Área de Gestão de Pessoas no Contexto Nacional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Objetivos, Funções e Desafios da Área de Gestão de Pessoas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Gestão Estratégica de Pessoas e Planejamento Estratégico de Pessoas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Princípio da Responsabilidade de Linha e Função de Staff": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Hierarquia de Decisões na área de Gestão de Pessoas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Terceirização": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Subsistemas de Gestão de Pessoas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Recrutamento (Gestão de Pessoas)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Seleção (Gestão de Pessoas)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Análise e Desenho de Cargos": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Desempenho": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Remuneração (Administração Geral)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Benefícios e Incentivos": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Treinamento, Desenvolvimento e Educação (TDeE)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Qualidade de Vida no Trabalho (QVT)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Administração de Pessoas no Setor Público": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Decreto nº 9.991/2019 - Política Nacional de Desenvolvimento de Pessoas": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Decreto nº 7.133/2010 - Avaliação de Desempenho do Poder Executivo Federal": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Decreto nº 11.072/2022 - Programa de Gestão e Desempenho (PGD) da Administração Pública Federal": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "SIAPE": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Normas de Gestão de Pessoas Estaduais e Municipais": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Organização do Trabalho e do Tempo": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Sistemas de Informações Gerenciais (SIG)": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Gestão por Competências": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão de Pessoas"
+  },
+  "Conceitos e Teorias de Inovação e Empreendorismo": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Intraempreendedorismo": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Design Thinking": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Design de Serviços": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Pensamento Computacional": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Manual de Oslo": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Coordenação": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Administração Financeira": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Responsabilidade Social Corporativa": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Processos Participativos de Gestão Pública": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Ciclo de Gestão": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Decreto nº 9.739/2019 - Aprimoramento da Administração Federal e SIORG": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Manual de Orientação para Arranjo Institucional de Órgãos e Entidades do Poder Executivo Federal": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Gestão Hospitalar": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Outros Temas e Tópicos Variados de Administração": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Novas Tecnologias e Tendências na Administração": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Sem Classificação de Assunto": {
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
+  },
+  "Origem, Conceito e Fontes do Direito Administrativo": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Origem, Conceito e Fontes do Direito Administrativo"
+  },
+  "Regime Jurídico da Administração e Regime Jurídico Administrativo": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Regime Jurídico Administrativo"
+  },
+  "Princípios Expressos, Explícitos ou Constitucionais": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Regime Jurídico Administrativo"
+  },
+  "Princípios Implícitos, Reconhecidos e Infraconstitucionais": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Regime Jurídico Administrativo"
+  },
+  "Conceito de Atos Administrativos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Mérito Administrativo": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Elementos, Requisitos e Pressupostos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Atributos ou Características dos Atos Administrativos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Atos Administrativos: Espécies, Classificação, Fases de Constituição": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Desfazimento do Ato Administrativo (Anulação, Revogação, Cassação, Caducidade, Contraposição)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Convalidação e Conversão dos Atos Administrativos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Teoria dos Motivos Determinantes": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Tópicos Mesclados de Atos Administrativos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Poder Vinculado e Discricionário": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Poder Regulamentar": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Poder Hierárquico": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Poder Disciplinar": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Poder de Polícia": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Abuso de Poder: Excesso de Poder e Desvio de Finalidade": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Deveres da Administração": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Tópicos Mesclados de Poderes da Administração": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Administração Direta (Órgãos Públicos)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Administração Indireta": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Conselhos Profissionais": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Desconcentração e Descentralização": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Agências Reguladoras e Executivas": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Terceiro Setor (OSs, OSCIPs, Sistema S e Fundações de Apoio)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Lei nº 13.303/2016 - Estatuto Jurídico da EP e SEM (arts. 1º a 27)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Decreto nº 8.945/2016 - Regulamenta a Lei nº 13.303/2016": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Decreto nº 10.835/2021 - Cessões, Requisições e Alterações do Exercício": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Lei nº 13.934/2019 - Regulamenta o Contrato de Desempenho": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Tópicos Mesclados de Organização Administrativa da União": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Organização Administrativa (União)"
+  },
+  "Conceitos Iniciais e Teorias da Responsabilidade": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Responsabilidade Objetiva das Empresas Estatais e das Prestadoras de Serviços": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Responsabilidade dos Agentes Públicos e Direito de Regresso": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Excludentes e Atenuantes de Responsabilidade": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Responsabilidade Civil por Atos Omissivos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Responsabilidade por Atos Legislativos e Judiciais": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Casos Especiais (Danos decorrentes de Obra Pública, Tabeliães, etc.)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Tópicos Mesclados de Responsabilidade Civil do Estado": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Responsabilidade Civil do Estado"
+  },
+  "Conceitos (Lei nº 8.987/1995)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Classificação de Serviços Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Princípios (Lei nº 8.987/1995)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Repartição de Competências (Serviços Públicos)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Deveres e Direitos (Usuários, Concedente, Concessionária, Licitações)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Autorização, Permissão e Concessão": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Formas de Extinção": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Intervenção": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Subconcessão": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Convênios Administrativos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Lei nº 11.079/2004 - Parceria Público-Privada (PPP)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Lei nº 11.107/2005 - Normas Gerais de Contratação de Consórcios Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Lei nº 13.019/2014 - Estatuto das Parcerias": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Lei nº 13.460/2017 - Direitos Básicos do Usuário do Serviço Público": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Lei nº 13.726/2018 - Desburocratização e Simplificação": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Decreto nº 9.094/2017 - Simplificação e Racionalização de Serviços Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Tópicos Mesclados de Serviços Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Serviços Públicos"
+  },
+  "Controle da Administração: Conceitos, Princípios, Abrangência e Classificações": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Controle Administrativo": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Parlamentar Direto (Controle Político)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Parlamentar Indireto (Tribunais de Contas e Controle Técnico-Financeiro)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Controle Popular ou Social": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Controle Jurisdicional": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Disposições Gerais (arts. 1º a 4º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Dos Atos Lesivos à Administração Pública Nacional ou Estrangeira (art. 5º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Da Responsabilização Administrativa (arts. 6º e 7º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Do Processo Administrativo de Responsabilização (arts. 8º a 15)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Do Acordo de Leniência (arts. 16 e 17)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Da Responsabilização Judicial (arts. 18 a 21)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Disposições Finais (arts. 22 a 31)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Decreto nº 11.129/2022 - Regulamenta a Lei Anticorrupção": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Tópicos Mesclados de Controle da Administração": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Controle da Administração"
+  },
+  "Domínio Público e Bens Públicos: Conceito": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Classificação dos Bens Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Características dos Bens Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Afetação e Desafetação (Bens Públicos)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Bens Públicos em Espécie (Domínio Terrestre, Hídrico e Aéreo)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Formas de Utilização de Bens Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Aquisição de Bens pelo Estado": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Tópicos Mesclados de Bens Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Lei nº 9.636/1998 - Regularização, Administração, Aforamento e Alienação de Bens Imóveis da União": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Domínio Público"
+  },
+  "Conceito para Agentes Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Classificação dos Agentes Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Funções, Cargos e Empregos Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Criação, Transformação e Extinção de Cargos Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Concurso Público": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Acessibilidade aos Cargos e Empregos Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Acumulação de Cargos e Empregos Públicos e Funções": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Estabilidade e Estágio Probatório": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Associação Sindical e Direito de Greve": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Direitos Sociais dos Servidores Públicos (art. 7º da CF)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Remuneração (Componentes, Subsídio, Teto, Equiparação, etc)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Mandato Eletivo (art. 38 da CF)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Regime Previdenciário (Aposentadoria, Pensão, RPPS)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Disposições Preliminares e Abrangência (arts. 1º a 4º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Formas de Provimento (arts. 5º a 32)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Vacância (arts. 33 a 35)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Remoção, Redistribuição e Substituição (arts. 36 a 39)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Vencimento e Remuneração (arts. 40 a 48)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Das Vantagens: Indenizações (arts. 49 a 60-E)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Das Gratificações e Adicionais (arts. 61 a 76)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Das Férias (arts. 77 a 80)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Das Licenças, Afastamentos e Concessões (arts. 81 a 99)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Do Tempo de Serviço (arts. 100 a 103)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Do Direito de Petição (arts. 104 a 115)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Do Regime Disciplinar (arts. 116 a 142)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Do Processo Administrativo Disciplinar (arts. 143 a 182)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Da Seguridade Social do Servidor (arts. 183 a 230)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Tópicos Mesclados de Estatuto de Servidores Federais": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Decreto nº 7.003/2009 - Regulamenta a Licença para Tratamento de Saúde": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Decreto nº 7.203/2010 - Nepotismo": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Lei nº 8.730/1993 - Declaração de Bens e Rendas": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Lei nº 8.745/1993 - Contratação Temporária": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Tópicos Mesclados de Agentes Públicos": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
+  "Das Disposições Gerais (arts. 1º a 8º-A)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Dos Atos de Improbidade (arts. 9º a 11)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Das Penas (art. 12)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Da Declaração de Bens (art. 13)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Do Procedimento Administrativo e do Processo Judicial (arts. 14 a 18-A)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Das Disposições Penais (arts. 19 a 22)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Da Prescrição (arts. 23 a 23-C)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Tópicos Mesclados de Improbidade Administrativa": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Improbidade Administrativa (Lei nº 8.429/1992)"
+  },
+  "Disposições Gerais, Direitos e Deveres do Administrado (arts. 1º a 4º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Trâmite do Processo (arts. 5º a 10 e 29 a 50)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Da Competência (arts. 11 a 17)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Dos Impedimentos e da Suspeição (arts. 18 a 21)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Forma, Tempo e Lugar dos Atos do Processo (arts. 22 a 25)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Da Communication dos Atos (arts. 26 a 28)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Da Desistência e Outros Casos de Extinção do Processo (arts. 51 e 52)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Da Anulação, Revogação e Convalidação (arts. 53 a 55)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Do Recurso Administrativo e da Revisão (arts. 56 a 65)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Dos Prazos e das Sanções (arts. 66 a 68)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Das Disposições Finais (arts. 69 e 70)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Tópicos Mesclados da Lei nº 9.784/1999": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Decreto nº 8.539/2015 - Uso do Meio Eletrônico para o Processo Administrativo": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Do Âmbito de Aplicação, Definições e Agentes Públicos (arts. 1º a 4º, 6º a 10)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Princípios (art. 5º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Objetivos, Fases e Formalidades (arts. 11 a 17)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Instrução do Processo Licitatório (arts. 18 a 27)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Modalidades de Licitação (arts. 28 a 32)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Critérios de Julgamento (arts. 33 a 39)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Disposições Setoriais, Compras, Serviços (arts. 40 a 52)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Divulgação do Edital de Licitação (arts. 53 a 54)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Fases da Licitação - Julgamento, Habilitação e Encerramento (arts. 55 a 71)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Contratação Direta, Inexigibilidade e Dispensa (arts. 72 a 75)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Alienações (arts. 76 e 77)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Instrumentos Auxiliares (arts. 78 a 88)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Conceitos, Características e Formalização (arts. 89 a 95)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Garantias (arts. 96 a 102)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Alocação de Riscos (art. 103)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Prerrogativas da Administração (art. 104)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Duração dos Contratos (arts. 105 a 114)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Execução dos Contratos (arts. 115 a 123)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Alteração dos Contratos e dos Preços (art. 124 a 136)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Hipóteses de Extinção dos Contratos (arts. 137 a 139)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Recebimento do Objeto do Contrato (art. 140)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Pagamentos (arts. 141 a 146)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Nulidade dos Contratos (arts. 147 a 150)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Meios Alternativos de Resolução de Controvérsias (arts. 151 a 154)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Infrações e Sanções Administrativas (arts. 155 a 163)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Impugnações, Pedidos de Esclarecimento e Recursos (arts. 164 a 168)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Controle das Contratações (arts. 169 a 173)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Portal Nacional de Contratações Públicas - PNCP (arts. 174 a 176)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Alterações Legislativas (arts. 177 a 180)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Disposições Transitórias e Finais (arts. 181 a 194)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Tópicos Mesclados da Lei nº 14.133/2021": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Decreto nº 10.024/2019 - Pregão Eletrônico": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Decreto nº 3.555/2000 - Pregão": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Legislação Esparsa sobre Licitações": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Licitações e Contratos Administrativos (Lei nº 14.133/2021)"
+  },
+  "Servidões Administrativas": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Requisição da Propriedade Privada": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Ocupação Provisória": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Limitações Administrativas": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Tombamento - Conceitos e Decreto-Lei nº 25/1937": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Desapropriação": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Tópicos Mesclados sobre Intervenção do Estado": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Prescrição e Coisa Julgada Administrativa": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Intervenção do Estado na Propriedade Privada"
+  },
+  "Disposições Gerais (arts. 1º a 5º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Do Acesso a Informações e da sua Divulgação (arts. 6º a 9º)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Do Procedimento de Acesso à Informação (arts. 10 a 20)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Das Restrições de Acesso à Informação (arts. 21 a 31)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Das Responsabilidades (arts. 32 a 34)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Das Disposições Finais e Transitórias (arts. 35 a 47)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Tópicos Mesclados da Lei nº 12.527/2011": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Decreto nº 7.724/2012 - Regulamenta a LAI": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
+  },
+  "Temas mapeados por julgados": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Administrativa"
+  },
+  "Legislações Locais / Sem Classificação (Estadual, DF, Municipal)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Legislações Locais / Sem Classificação (Estadual, DF, Municipal)"
+  },
+  "História do Direito do Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "História do Direito do Trabalho"
+  },
+  "Interpretação, Integração e Aplicação do Direito do Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Interpretação, Integração e Aplicação do Direito do Trabalho"
+  },
+  "Fontes do Direito Individual do Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Fontes do Direito Individual do Trabalho"
+  },
+  "Princípios do Direito Individual do Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Princípios do Direito Individual do Trabalho"
+  },
+  "Natureza Jurídica, Requisitos, Características e Sujeitos. Relação de Emprego": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Contrato por Tempo Indeterminado": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Contrato por Tempo Determinado": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Contrato de Experiência": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Contrato Intermitente": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Trabalho Temporário (Lei nº 6.019/1974)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Suspensão e Interrupção (Contrato de Trabalho)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Alteração (Contrato de Trabalho)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Emprego Doméstico (LC nº 150/2015)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Aprendizagem (CLT, Lei nº 10.097/2000 e Decreto nº 9.579/2018)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Estágio (Lei nº 11.788/2008)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Trabalho Avulso (Lei nº 12.815/2013 e Lei nº 12.023/2009)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Trabalho Rural (Lei nº 5.889/1973)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Professores (arts. 317 a 323 da CLT)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Desporto Profissional (Lei nº 9.615/1998)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Aeronautas (Lei nº 13.475/2017)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Jornalistas (arts. 302 a 316 da CLT)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Químicos (arts. 325 a 350 da CLT)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Mãe Social e Mãe Crecheira (Lei nº 7.644/1987)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Trabalhador Autônomo e Atividades Específicas (Petróleo/Xisto - Lei nº 5.811/1972)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contratos Especiais de Trabalho"
+  },
+  "Formas de Ruptura do Contrato de Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Extinção do Contrato de Trabalho"
+  },
+  "Justa Causa": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Extinção do Contrato de Trabalho"
+  },
+  "Aviso Prévio": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Extinção do Contrato de Trabalho"
+  },
+  "Garantias Provisórias de Emprego": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Extinção do Contrato de Trabalho"
+  },
+  "FGTS (Fundo de Garantia do Tempo de Serviço)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Extinção do Contrato de Trabalho"
+  },
+  "Contrato Nulo, Trabalho Ilícito e Trabalho Proibido": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Extinção do Contrato de Trabalho"
+  },
+  "Inexistência de Vínculo (Cooperativas, Entidades Religiosas, Voluntariado, Empreitada)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Extinção do Contrato de Trabalho"
+  },
+  "Salário e Remuneração": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Salário Utilidade ou Salário in Natura": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Adicionais de Insalubridade, Periculosidade, Penosidade e Transferência": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Adicional Noturno": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Gratificação Natalina (13º Salário)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Gorjetas e Demais Componentes": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Regras de Proteção do Salário": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Equiparação Salarial": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Direitos Intelectuais sobre o Trabalho do Empregado": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Remuneração"
+  },
+  "Jornada de Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Horas Suplementares": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Contrato a Tempo Parcial": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Intervalos": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Repouso Semanal Remunerado": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Férias": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Trabalho Noturno": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Turnos Ininterruptos de Revezamento": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Teletrabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Duração do Trabalho"
+  },
+  "Proteção do Trabalho do Menor (Trabalho Infantil)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Tutelas Especiais"
+  },
+  "Proteção do Trabalho da Mulher": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Tutelas Especiais"
+  },
+  "Definição de Acidente de Trabalho, Abrangência e Equiparação": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Acidente de Trabalho"
+  },
+  "Direitos do Empregado (Estabilidade, Afastamento Remunerado)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Acidente de Trabalho"
+  },
+  "Responsabilidades e Obrigações do Empregador": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Acidente de Trabalho"
+  },
+  "Grupo Econômico": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Responsabilidade Trabalhista"
+  },
+  "Sucessão Trabalhista": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Responsabilidade Trabalhista"
+  },
+  "Terceirização": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Responsabilidade Trabalhista"
+  },
+  "Prescrição e Decadência (Direito do Trabalho)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Prescrição e Decadência (Direito do Trabalho)"
+  },
+  "Princípios do Direito Coletivo": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Direito Coletivo do Trabalho"
+  },
+  "Espécies: Sindicatos, Federações e Confederações": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Direito Coletivo do Trabalho"
+  },
+  "Constituição e Registro": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Direito Coletivo do Trabalho"
+  },
+  "Fontes de Receita": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Direito Coletivo do Trabalho"
+  },
+  "Negociação Coletiva (Convenções)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Direito Coletivo do Trabalho"
+  },
+  "Greve": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Direito Coletivo do Trabalho"
+  },
+  "Comissões de Conciliação Prévia Trabalhista (CCPT)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "Direito Administrativo do Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "Direito Internacional do Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "Dano Extrapatrimonial (Material, Moral, Assédio)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "Métodos de Resolução de Conflito": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "Sistema de Dados Trabalhistas (RAIS, CAGED, etc.)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "CTPS - Carteira de Trabalho e Previdência Social": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "Direitos Constitucionais Trabalhistas": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Temas Complementares e Instrumentais"
+  },
+  "Súmulas e Jurisprudência Trabalhista": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Trabalhista"
+  },
+  "Outros Temas e Questões Mescladas de Direito do Trabalho": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Outros Temas e Questões Mescladas de Direito do Trabalho"
+  },
+  "Princípios de Direito Processual do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Princípios de Direito Processual do Trabalho"
+  },
+  "Fontes de Direito Processual do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Fontes de Direito Processual do Trabalho"
+  },
+  "Organização da Justiça do Trabalho (CF e CLT)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Organização da Justiça do Trabalho (CF e CLT)"
+  },
+  "Jurisdição e Competência da Justiça do Trabalho (CF, CLT e NCPC)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Jurisdição e Competência da Justiça do Trabalho (CF, CLT e NCPC)"
+  },
+  "Disposições Preliminares do Processo Judicial do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Disposições Preliminares do Processo Judicial do Trabalho"
+  },
+  "Atos, Termos e Prazos Processuais": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Atos, Termos e Prazos Processuais"
+  },
+  "Da Distribuição": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Da Distribuição"
+  },
+  "Custas Processuais Trabalhistas": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Custas Processuais Trabalhistas"
+  },
+  "Partes e Procuradores no Processo do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Partes e Procuradores no Processo do Trabalho"
+  },
+  "Ministério Público do Trabalho (CLT e LC 75/93)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Ministério Público do Trabalho (CLT e LC 75/93)"
+  },
+  "Nulidades no Processo do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Nulidades no Processo do Trabalho"
+  },
+  "Petição Inicial Trabalhista (CLT e NCPC)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Petição Inicial Trabalhista (CLT e NCPC)"
+  },
+  "Resposta Trabalhista (Contestação, Exceções e Reconvenção)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Resposta Trabalhista (Contestação, Exceções e Reconvenção)"
+  },
+  "Audiência Trabalhista (CLT e NCPC)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Audiência Trabalhista (CLT e NCPC)"
+  },
+  "Das Provas (CLT e NCPC)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Das Provas (CLT e NCPC)"
+  },
+  "Sentença e Coisa Julgada no Processo do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Sentença e Coisa Julgada no Processo do Trabalho"
+  },
+  "Liquidação de Sentença Trabalhista": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Liquidação de Sentença Trabalhista"
+  },
+  "Homologação de Acordo Extrajudicial": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Homologação de Acordo Extrajudicial"
+  },
+  "Execução em Geral": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Execução Trabalhista"
+  },
+  "Execução contra Devedor Solvente": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Execução Trabalhista"
+  },
+  "Demais Tipos de Execução": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Execução Trabalhista"
+  },
+  "Execução contra a Fazenda Pública (NCPC e Lei 6.830/80)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Execução Trabalhista"
+  },
+  "Defesas na Execução": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Execução Trabalhista"
+  },
+  "Trâmites Finais da Execução e Expropriação de Bens": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Execução Trabalhista"
+  },
+  "Dissídios Coletivos": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Dissídios Coletivos"
+  },
+  "Procedimentos Sumário e Sumaríssimo no Processo do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Sumário e Sumaríssimo no Processo do Trabalho"
+  },
+  "Teoria Geral dos Recursos Trabalhistas": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Recursos Trabalhistas (CLT e NCPC)"
+  },
+  "Recursos em Espécie no Processo do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Recursos Trabalhistas (CLT e NCPC)"
+  },
+  "Ação Rescisória Trabalhista": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Mandado de Segurança Trabalhista (Lei 12.016/09)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Inquérito para Apuração de Falta Grave": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Do Incidente de Desconsideração da Personalidade Jurídica": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Ação Civil Pública no Processo do Trabalho (Lei 7.347/85)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Consignação em Pagamento Trabalhista": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Ação de Cumprimento (CLT e Lei 7.701/88)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Tópicos Mesclados sobre Procedimentos Especiais": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Procedimentos Especiais Trabalhistas"
+  },
+  "Decadência e Prescrição no Direito Processual do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Decadência e Prescrição no Direito Processual do Trabalho"
+  },
+  "Processo nos Tribunais Trabalhistas": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Processo nos Tribunais Trabalhistas"
+  },
+  "Súmulas e Jurisprudência Processual Trabalhista": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Processual Trabalhista"
+  },
+  "Outros Temas e Questões Mescladas de Processo do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Outros Temas e Questões Mescladas de Processo do Trabalho"
+  },
+  "Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Jurisdição e Competência da Justiça do Trabalho (CF, CLT e NCPC)"
+  },
+  "Desfazimento do Ato Administrativo (Anulação, Revogação, Cassação, Caducidade,": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Elementos, Requisitos e Pressupostos (Atos Administrativos)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Atos Administrativos"
+  },
+  "Organização da Justiça do Trabalho (arts. 111-113, 115-116 da CF; 643 a 673 e 681 a 721 da CLT)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Organização da Justiça do Trabalho (CF e CLT)"
+  },
+  "Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Processual Trabalhista"
+  },
+  "Natureza Jurídica, Requisitos, Características e Sujeitos da Relação de Trabalho. Relação de Emprego.": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Contrato de Trabalho"
+  },
+  "Arquitetura TCP/IP": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "Jurisprudência dos Tribunais Superiores sobre Remédios Constitucionais": {
+    "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "Grupo Econômico (Responsabilidade Trabalhista)": {
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Responsabilidade Trabalhista"
+  },
+  "Redes de Dados e Comunicação": {
+    "materia": "Engenharia Elétrica e Eletrônica",
+    "grupo": "Redes de Dados e Comunicação"
+  },
+  "Proposições: Definição, Reconhecimento, Princípios Lógicos": {
+    "materia": "Raciocínio Lógico",
+    "grupo": "Proposições: Definição, Reconhecimento, Princípios Lógicos"
+  },
+  "Das Associações (arts. 53 a 61)": {
+    "materia": "Direito Civil",
+    "grupo": "Das Associações (arts. 53 a 61)"
+  },
+  "Convenção Interamericana contra o Racismo e Discriminação Racial (Decreto nº 10.932/2022)": {
+    "materia": "Direitos Humanos",
+    "grupo": "Convenção Interamericana contra o Racismo e Discriminação Racial (Decreto nº 10.932/2022)"
+  },
+  "Jurisprudência dos Tribunais Superiores sobre Administração Indireta": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Administrativa"
+  },
+  "Cloud Computing (Computação em Nuvem)": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "Sem classificação": {
+    "materia": "Outras Matérias",
+    "grupo": "Sem classificação"
+  },
+  "POP3 (Post Office Protocol v3)": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "Do Mandado de Segurança (Lei nº 12.016/2009 e CF/1988)": {
+    "materia": "Legislação Civil e Processual Civil Especial",
+    "grupo": "Do Mandado de Segurança (Lei nº 12.016/2009 e CF/1988)"
+  },
+  "Dissídios Coletivos (arts. 856 a 875 da CLT)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Dissídios Coletivos"
+  },
+  "Abuso de Poder: Excesso de Poder e Desvio de Finalidade (Poderes da Administração)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Poderes e Deveres da Administração"
+  },
+  "Diagramas Lógicos, Proposições Categóricas, Negação de Quantificadores": {
+    "materia": "Raciocínio Lógico",
+    "grupo": "Diagramas Lógicos, Proposições Categóricas, Negação de Quantificadores"
+  },
+  "Disposições Preliminares (arts. 1º a 6º da Lei nº 13.709/2018 - LGPD)": {
+    "materia": "Direito Digital",
+    "grupo": "Disposições Preliminares (arts. 1º a 6º da Lei nº 13.709/2018 - LGPD)"
+  },
+  "Migração e Condição Jurídica do Estrangeiro (Lei nº 13.445/2017)": {
+    "materia": "Direito Internacional Público e Privado",
+    "grupo": "Migração e Condição Jurídica do Estrangeiro (Lei nº 13.445/2017)"
+  },
+  "Lei nº 13.300/2016 - Mandado de Injunção": {
+    "materia": "Legislação Civil e Processual Civil Especial",
+    "grupo": "Lei nº 13.300/2016 - Mandado de Injunção"
+  },
+  "Da Ação Popular (Lei nº 4.717/1965 e CF/1988)": {
+    "materia": "Legislação Civil e Processual Civil Especial",
+    "grupo": "Da Ação Popular (Lei nº 4.717/1965 e CF/1988)"
+  },
+  "Jurisprudência dos Tribunais Superiores sobre Poderes da Administração": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Administrativa"
+  }
+}
