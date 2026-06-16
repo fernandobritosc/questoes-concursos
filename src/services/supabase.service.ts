@@ -6,7 +6,8 @@
  * REGRA: Nunca chame `supabase` diretamente nas páginas ou hooks.
  */
 import { supabase } from '../lib/supabase'
-import type { Questao, HistoricoResolucao, ResolucaoView } from '../types/database'
+import type { Questao, HistoricoResolucao, ResolucaoView, FilterOptions } from '../types/database'
+import { useQuestaoStore } from '../stores/questaoStore'
 
 // ─── Helper: mapeia o resultado do JOIN para ResolucaoView ────────────────────
 
@@ -151,27 +152,9 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
   return (data || []).map(mapHistoricoToView)
 }
 
-// Cache em memória para evitar chamadas duplicadas concorrentes
-let _questoesCache: ResolucaoView[] | null = null
-let _questoesCachePromise: Promise<ResolucaoView[]> | null = null
-let _questoesCacheTimestamp = 0
-const CACHE_TTL_MS = 60000 // 1 minuto
-
 /** Invalida o cache de fetchAllQuestoes (chamado após importar PDF). */
 export function clearQuestoesCache(): void {
-  _questoesCache = null
-  _questoesCachePromise = null
-  _questoesCacheTimestamp = 0
-  // Also clear progressive cache (new questions may have been imported)
-  _progressiveCache = []
-  _progressiveCachedPages.clear()
-  _progressiveFilterHash = null
-  _progressiveTotalCount = 0
-  _progressiveTotalPages = 0
-  _historicoCache = null
-  _historicoCachePromise = null
-  _filterOptionsCache = null
-  _filterOptionsPromise = null
+  useQuestaoStore.getState().invalidateQuestoesCache()
 }
 
 // ─── Tipos para paginação server-side ─────────────────────────────────────────
@@ -183,13 +166,6 @@ export interface PaginatedResult {
   page: number
 }
 
-export interface FilterOptions {
-  materias: string[]
-  bancas: string[]
-  anos: number[]
-  orgaos: string[]
-  concursos: string[]
-}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -202,29 +178,22 @@ function hashFilters(filters: Record<string, string[]>): string {
   return sorted || '__all__'
 }
 
-// ─── Progressive flat cache para fetchPaginatedQuestoes ────────────────────────
-
-let _progressiveCache: ResolucaoView[] = []
-const _progressiveCachedPages = new Set<string>()
-let _progressiveFilterHash: string | null = null
-let _progressiveTotalCount = 0
-let _progressiveTotalPages = 0
-
-// Historico cache (fetched once, merged client-side with each page)
-let _historicoCache: HistoricoResolucao[] | null = null
-let _historicoCachePromise: Promise<void> | null = null
+// ─── Historico cache ──────────────────────────────────────────────────────────
 
 async function ensureHistoricoCached(): Promise<void> {
-  if (_historicoCache) return
-  if (_historicoCachePromise) {
-    await _historicoCachePromise
+  if (useQuestaoStore.getState().historicoCache) return
+  if (useQuestaoStore.getState().historicoCachePromise) {
+    while (useQuestaoStore.getState().historicoCachePromise) {
+      await new Promise(r => setTimeout(r, 50))
+    }
     return
   }
-  _historicoCachePromise = (async () => {
+  useQuestaoStore.getState().setHistoricoCachePromise(true)
+  try {
     const { data: { session } } = await supabase.auth.getSession()
     const userId = session?.user?.id
     if (!userId) {
-      _historicoCache = []
+      useQuestaoStore.getState().setHistoricoCache([])
       return
     }
     const { data, error } = await supabase
@@ -233,12 +202,10 @@ async function ensureHistoricoCached(): Promise<void> {
       .eq('user_id', userId)
       .order('data_resolucao', { ascending: false })
     if (error) throw error
-    _historicoCache = (data || []) as HistoricoResolucao[]
-  })()
-  try {
-    await _historicoCachePromise
-  } finally {
-    _historicoCachePromise = null
+    useQuestaoStore.getState().setHistoricoCache((data || []) as HistoricoResolucao[])
+  } catch (e) {
+    useQuestaoStore.getState().setHistoricoCachePromise(false)
+    throw e
   }
 }
 
@@ -257,26 +224,23 @@ export async function fetchPaginatedQuestoes(
 
   // Check progressive cache
   const cacheKey = `${filterHash}:${page}`
-  if (_progressiveFilterHash === filterHash && _progressiveCachedPages.has(cacheKey)) {
+  const pp = useQuestaoStore.getState().getProgressivePage(filterHash, cacheKey)
+  if (pp !== null) {
     const start = (page - 1) * pageSize
     const end = start + pageSize
-    console.log(`[LOG fetchPaginatedQuestoes] Cache hit! page=${page}, totalCached=${_progressiveCache.length}`)
+    console.log(`[LOG fetchPaginatedQuestoes] Cache hit! page=${page}, totalCached=${pp.data.length}`)
     return {
-      data: _progressiveCache.slice(start, end),
-      total: _progressiveTotalCount,
-      totalPages: _progressiveTotalPages,
+      data: pp.data.slice(start, end),
+      total: pp.totalCount,
+      totalPages: pp.totalPages,
       page,
     }
   }
 
   // Filter change → reset progressive cache
-  if (_progressiveFilterHash !== filterHash) {
-    console.log(`[LOG fetchPaginatedQuestoes] Filter change: resetting cache (${_progressiveFilterHash} → ${filterHash})`)
-    _progressiveCache = []
-    _progressiveCachedPages.clear()
-    _progressiveFilterHash = filterHash
-    _progressiveTotalCount = 0
-    _progressiveTotalPages = 0
+  if (useQuestaoStore.getState().progressiveFilterHash !== filterHash) {
+    console.log(`[LOG fetchPaginatedQuestoes] Filter change: resetting cache (${useQuestaoStore.getState().progressiveFilterHash} → ${filterHash})`)
+    useQuestaoStore.getState().resetProgressiveCache(filterHash)
   }
 
   // Build paginated query
@@ -359,8 +323,9 @@ export async function fetchPaginatedQuestoes(
   }
 
   // Merge with historico (same pattern as fetchAllQuestoes)
+  const historicoCache = useQuestaoStore.getState().historicoCache
   const historicoMap = new Map<number, HistoricoResolucao>()
-  for (const h of (_historicoCache || [])) {
+  for (const h of (historicoCache || [])) {
     if (!historicoMap.has(h.questao_id)) {
       historicoMap.set(h.questao_id, h as HistoricoResolucao)
     }
@@ -393,10 +358,7 @@ export async function fetchPaginatedQuestoes(
   })
 
   // Update progressive cache
-  _progressiveCache.splice(from, merged.length, ...merged)
-  _progressiveCachedPages.add(cacheKey)
-  _progressiveTotalCount = count || 0
-  _progressiveTotalPages = Math.ceil((count || 0) / pageSize)
+  useQuestaoStore.getState().setProgressivePage(filterHash, cacheKey, merged, count || 0, Math.ceil((count || 0) / pageSize))
 
   return {
     data: merged,
@@ -408,14 +370,18 @@ export async function fetchPaginatedQuestoes(
 
 // ─── Filtros (cache, fetch-once) ──────────────────────────────────────────────
 
-let _filterOptionsCache: FilterOptions | null = null
-let _filterOptionsPromise: Promise<FilterOptions> | null = null
-
 export async function fetchFilterOptions(): Promise<FilterOptions> {
-  if (_filterOptionsCache) return _filterOptionsCache
-  if (_filterOptionsPromise) return _filterOptionsPromise
+  const cached = useQuestaoStore.getState().getFilterOptionsCache()
+  if (cached) return cached
+  if (useQuestaoStore.getState().filterOptionsPromise) {
+    while (useQuestaoStore.getState().filterOptionsPromise) {
+      await new Promise(r => setTimeout(r, 50))
+    }
+    return useQuestaoStore.getState().getFilterOptionsCache()!
+  }
 
-  _filterOptionsPromise = (async () => {
+  useQuestaoStore.getState().setFilterOptionsPromise(true)
+  try {
     const [materiasRes, bancasRes, anosRes, orgaosRes, concursosRes] = await Promise.all([
       supabase.from('questoes').select('materia').not('materia', 'is', null),
       supabase.from('questoes').select('banca_texto').not('banca_texto', 'is', null),
@@ -438,14 +404,11 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
       concursos: Array.from(new Set((concursosRes.data || []).map(r => r.concurso).filter(Boolean))).sort() as string[],
     }
 
-    _filterOptionsCache = options
+    useQuestaoStore.getState().setFilterOptionsCache(options)
     return options
-  })()
-
-  try {
-    return await _filterOptionsPromise
-  } finally {
-    _filterOptionsPromise = null
+  } catch (e) {
+    useQuestaoStore.getState().setFilterOptionsPromise(false)
+    throw e
   }
 }
 
@@ -455,19 +418,23 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
  */
 export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
   // Retorna cache se ainda válido
-  if (_questoesCache && Date.now() - _questoesCacheTimestamp < CACHE_TTL_MS) {
+  if (useQuestaoStore.getState().isQuestoesCacheValid(60000)) {
     console.log('[LOG fetchAllQuestoes] Cache hit!')
-    return _questoesCache
+    return useQuestaoStore.getState().questoesCache!
   }
 
   // Deduplica chamadas concorrentes (Promise cache)
-  if (_questoesCachePromise) {
+  if (useQuestaoStore.getState().questoesCachePromise) {
     console.log('[LOG fetchAllQuestoes] Aguardando chamada concorrente...')
-    return _questoesCachePromise
+    while (useQuestaoStore.getState().questoesCachePromise) {
+      await new Promise(r => setTimeout(r, 50))
+    }
+    return useQuestaoStore.getState().questoesCache!
   }
 
   console.log('[LOG fetchAllQuestoes] Iniciando busca de questões...')
-  _questoesCachePromise = (async (): Promise<ResolucaoView[]> => {
+  useQuestaoStore.getState().setQuestoesCachePromise(true)
+  try {
     const t0 = performance.now()
     const { data: questoesData, error: qErr } = await supabase
       .from('questoes')
@@ -540,15 +507,11 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     const t3 = performance.now()
     console.log(`[LOG fetchAllQuestoes] Mesclagem concluída: ${(t3 - t2).toFixed(0)}ms | total=${result.length}`)
 
-    _questoesCache = result
-    _questoesCacheTimestamp = Date.now()
+    useQuestaoStore.getState().setQuestoesCache(result)
     return result
-  })()
-
-  try {
-    return await _questoesCachePromise
-  } finally {
-    _questoesCachePromise = null
+  } catch (e) {
+    useQuestaoStore.getState().setQuestoesCachePromise(false)
+    throw e
   }
 }
 

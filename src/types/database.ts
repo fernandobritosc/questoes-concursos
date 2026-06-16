@@ -77,5 +77,15 @@ export interface ResolucaoView {
   data_resolucao: string
 }
 
+// ─── Opções de filtro para a página de questões ──────────────────────────────
+
+export interface FilterOptions {
+  materias: string[]
+  bancas: string[]
+  anos: number[]
+  orgaos: string[]
+  concursos: string[]
+}
+
 /** @deprecated Use ResolucaoView. Mantido para migração gradual. */
 export type Resolucao = ResolucaoView
