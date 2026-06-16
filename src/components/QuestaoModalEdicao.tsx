@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Pencil, X, Loader2, Check } from 'lucide-react'
+import { Pencil, Loader2, Check } from 'lucide-react'
 import type { ResolucaoView } from '../types/database'
+import { Modal } from './ui/Modal'
 
 interface QuestaoModalEdicaoProps {
   isOpen: boolean
@@ -84,35 +85,44 @@ export function QuestaoModalEdicao({ isOpen, questao, onClose, onSave }: Questao
     }
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
-      <div className="bg-card rounded-2xl border border-border shadow-2xl w-full max-w-3xl overflow-hidden transform transition-all duration-300 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
-        
-        <div className="px-6 py-4 bg-muted border-b border-border flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-amber-500/20 rounded-lg text-amber-500">
-              <Pencil className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-sm font-black text-foreground">
-                Editar Dados da Questão
-              </h3>
-              <p className="text-[10px] text-muted-foreground font-bold mt-0.5">
-                Modifique o texto, alternativas e metadados diretamente no banco de dados
-              </p>
-            </div>
-          </div>
-          <button 
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Editar Dados da Questão"
+      subtitle="Modifique o texto, alternativas e metadados diretamente no banco de dados"
+      icon={<Pencil className="w-5 h-5" />}
+      size="xl"
+      footer={
+        <>
+          <button
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1.5 hover:bg-muted rounded-lg transition-colors cursor-pointer"
+            disabled={saving}
+            className="px-4 py-2 border border-border text-foreground hover:bg-muted rounded-lg text-xxs font-black uppercase tracking-wider transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            Cancelar
           </button>
-        </div>
-
-        <div className="p-6 overflow-y-auto space-y-4 flex-1 select-text scrollbar-thin">
+          <button
+            onClick={handleConfirm}
+            disabled={saving || !form.enunciado.trim()}
+            className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xxs font-black uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5 cursor-pointer active:scale-98 disabled:opacity-50"
+          >
+            {saving ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Salvando...</span>
+              </>
+            ) : (
+              <>
+                <Check className="w-3.5 h-3.5" />
+                <span>Confirmar e Salvar</span>
+              </>
+            )}
+          </button>
+        </>
+      }
+    >
+      <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Matéria</label>
@@ -235,36 +245,7 @@ export function QuestaoModalEdicao({ isOpen, questao, onClose, onSave }: Questao
               )
             })}
           </div>
-        </div>
-
-        <div className="px-6 py-4 bg-muted border-t border-border flex items-center justify-end gap-3 flex-shrink-0">
-          <button 
-            onClick={onClose}
-            disabled={saving}
-            className="px-4 py-2 border border-border text-foreground hover:bg-muted rounded-lg text-xxs font-black uppercase tracking-wider transition-colors cursor-pointer"
-          >
-            Cancelar
-          </button>
-          <button 
-            onClick={handleConfirm}
-            disabled={saving || !form.enunciado.trim()}
-            className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xxs font-black uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5 cursor-pointer active:scale-98 disabled:opacity-50"
-          >
-            {saving ? (
-              <>
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Salvando...</span>
-              </>
-            ) : (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                <span>Confirmar e Salvar</span>
-              </>
-            )}
-          </button>
-        </div>
-
       </div>
-    </div>
+    </Modal>
   )
 }

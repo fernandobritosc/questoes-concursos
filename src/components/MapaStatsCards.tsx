@@ -22,7 +22,7 @@ export function MapaStatsCards({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-xxs">
+      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-sm">
         <div className="h-12 w-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
           <Layers className="w-5.5 h-5.5" />
         </div>
@@ -33,7 +33,7 @@ export function MapaStatsCards({
         </div>
       </div>
 
-      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-xxs">
+      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-sm">
         <div className="h-12 w-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
           <CheckCircle2 className="w-5.5 h-5.5" />
         </div>
@@ -50,7 +50,7 @@ export function MapaStatsCards({
         </div>
       </div>
 
-      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-xxs">
+      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-sm">
         <div className={`h-12 w-12 rounded-xl flex items-center justify-center border ${
           aproveitamentoGeral >= 80
             ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
@@ -69,7 +69,7 @@ export function MapaStatsCards({
         </div>
       </div>
 
-      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-xxs">
+      <div className="bg-card/40 border border-border/80 p-5 rounded-2xl flex items-center gap-4 shadow-xxs backdrop-blur-sm">
         <div className="h-12 w-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
           <TrendingUp className="w-5.5 h-5.5" />
         </div>

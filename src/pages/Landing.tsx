@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export function Landing() {
   return (
-    <div className="min-h-screen bg-gray-950 text-slate-50 font-sans selection:bg-violet-500/30">
+    <div className="force-dark min-h-screen bg-gray-950 text-slate-50 font-sans selection:bg-violet-500/30">
       {/* ─── NAVBAR ─── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-gray-950/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">

@@ -237,7 +237,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
     importStatus.step === 'saving'
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
       <div className={`bg-card rounded-2xl border border-border shadow-2xl w-full overflow-hidden transform transition-all duration-300 animate-in zoom-in-95 duration-200 ${
         importStatus.step === 'review' ? 'max-w-6xl h-[85vh] flex flex-col' : 'max-w-lg'
       }`}>

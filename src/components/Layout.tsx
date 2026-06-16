@@ -44,7 +44,7 @@ export function Layout() {
 
   const navItems = [
     { name: 'Dashboard', path: '/app/dashboard', icon: LayoutDashboard },
-    { name: 'Edital Verticalizado', path: '/app/edital', icon: ClipboardList },
+    { name: 'Editais', path: '/app/edital', icon: ClipboardList },
     { name: 'Simulados IA', path: '/app/simulados', icon: Timer },
     { name: 'Mapa de Questões', path: '/app/mapa', icon: Map },
     { name: 'Caderno de Erros', path: '/app/revisao', icon: BookOpen },
@@ -114,7 +114,7 @@ export function Layout() {
           {/* Backdrop Blur escurecido */}
           <div 
             onClick={closeMobileMenu}
-            className="fixed inset-0 bg-zinc-950/60 backdrop-blur-xs z-40 md:hidden animate-in fade-in duration-200"
+            className="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm z-40 md:hidden animate-in fade-in duration-200"
           />
           
           {/* Sidebar Drawer Deslizante */}

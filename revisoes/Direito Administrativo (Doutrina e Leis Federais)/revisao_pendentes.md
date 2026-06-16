@@ -1,5 +1,5 @@
 # Questões Pendentes de Revisão — Direito Administrativo (Doutrina e Leis Federais)
-**Total de pendentes:** 17 questões
+**Total de pendentes:** 20 questões
 
 Estes são os seus erros pendentes nesta matéria. Quando resolver uma questão no TEC Concursos e acertá-la, ela sairá desta lista automaticamente.
 
@@ -322,7 +322,7 @@ Excelente questão para treinar a atenção e fixar a base da Administração In
 
 ### Q1057 — Administração Indireta
 
-- **Banca:** FCC | **Órgão:** ? | **Ano:** 2018
+- **Banca:** FCC | **Órgão:** PGE-TO | **Ano:** 2018
 - **Primeiro Erro:** 2026-05-26 | **Última Tentativa:** 2026-05-26
 - **Tentativas de Erro:** 1
 - **Sua última resposta:** `E` | **Gabarito oficial:** `D`
@@ -1338,5 +1338,302 @@ d)  A fundação pública poderá ser qualificada como Organização da Sociedad
  
 
 e)  A fundação pública poderá ser qualificada como Organização da Sociedade Civil de Interesse Público, ~~pois se dedica exclusivamente à atividade de cultura~~.** – errada.**
+
+---
+
+### Q1961 — Terceiro Setor (OSs, OSCIPs, Sistema S e Fundações de Apoio)
+
+- **Banca:** FGV | **Órgão:** Tribunal de Justiça de Mato Grosso | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `E` | **Gabarito oficial:** `D`
+- **Link no TEC Concursos:** [Questão TEC 3201990](https://www.tecconcursos.com.br/questoes/3201990)
+
+**Enunciado:**
+
+A associação privada Alfa, qualificada como organização da sociedade civil de interesse público, celebrou termo de parceria com o Poder Público, estando sujeita, por conseguinte, à fiscalização do objeto da parceria e ao acompanhamento dos resultados alcançados. De acordo com a narrativa e considerando as disposições da Lei nº 9.790/1999, analise as afirmativas a seguir.
+
+ 
+
+I. Os responsáveis pela fiscalização do termo de parceria, ao tomarem conhecimento de qualquer irregularidade ou ilegalidade na utilização de recursos ou bens de origem pública pela organização parceira, darão imediata ciência ao Tribunal de Contas respectivo e ao Ministério Público, sob pena de responsabilidade subsidiária pelos danos causados ao erário.
+
+ 
+
+II. A execução do objeto do termo de parceria será acompanhada e fiscalizada por órgão do Poder Público da área de atuação correspondente à atividade fomentada, e pelos Conselhos de Políticas Públicas das áreas correspondentes de atuação existentes, em cada nível de governo.
+
+ 
+
+III. Os resultados atingidos com a execução do termo de parceria deverão ser analisados por comissão de avaliação, composta de comum acordo entre o órgão parceiro e a Organização da Sociedade Civil de Interesse Público.
+
+ 
+
+Nesse cenário, considerando as disposições da Lei nº 9.790/1999, está correto o que se afirma em
+
+**Alternativas:**
+- A) I, apenas.
+- B) II, apenas.
+- C) III, apenas.
+- D) II e III, apenas. <- ✅ Gabarito
+- E) I, II e III. <- ❌ Sua resposta
+
+**Resolução do Professor:**
+
+**Gabarito: LETRA D.**
+
+ 
+
+A questão versa acerca da Lei nº 9.790, de 23 de março de 1999, que dispõe sobre a qualificação de pessoas jurídicas de direito privado, sem fins lucrativos, como Organizações da Sociedade Civil de Interesse Público, institui e disciplina o Termo de Parceria, e dá outras providências. Nesse contexto, vamos analisar os itens para encontrar a resposta correta.
+
+ 
+
+**I. Os responsáveis pela fiscalização do termo de parceria, ao tomarem conhecimento de qualquer irregularidade ou ilegalidade na utilização de recursos ou bens de origem pública pela organização parceira, darão imediata ciência ao Tribunal de Contas respectivo e ao Ministério Público, sob pena de responsabilidade ~~subsidiária~~ pelos danos causados ao erário.**
+
+ 
+
+**Incorreto**. Nestes casos, os responsáveis pela fiscalização do Termo de Parceria deverão dar imediata ciência ao Tribunal de Contas respectivo e ao Ministério Público, sob pena de responsabilidade solidária, e não subsidiária. Vejamos:
+
+ 
+
+> *Art. 12. Os responsáveis pela fiscalização do Termo de Parceria, ao tomarem conhecimento de qualquer irregularidade ou ilegalidade na utilização de recursos ou bens de origem pública pela organização parceira, darão **imediata ciência ao Tribunal de Contas respectivo e ao Ministério Público, sob pena de responsabilidade solidária.***
+
+ 
+
+**II. A execução do objeto do termo de parceria será acompanhada e fiscalizada por órgão do Poder Público da área de atuação correspondente à atividade fomentada, e pelos Conselhos de Políticas Públicas das áreas correspondentes de atuação existentes, em cada nível de governo.**
+
+**Correto**. É o que determina o art. 11, caput, da Lei das OSCIPs
+
+ 
+
+> *Art. 11. A execução do objeto do Termo de Parceria** será acompanhada e fiscalizada por órgão do Poder Público da área de atuação correspondente à atividade fomentada**, e pelos Conselhos de Políticas Públicas das áreas correspondentes de atuação existentes, em cada nível de governo.*
+
+ 
+
+**III. Os resultados atingidos com a execução do termo de parceria deverão ser analisados por comissão de avaliação, composta de comum acordo entre o órgão parceiro e a Organização da Sociedade Civil de Interesse Público.**
+
+ 
+
+**Correto**. É o que exige o art. 11, § 1º, da Lei das OSCIPs:
+
+ 
+
+> *Art. 11. [...]*
+> 
+> *§ 1º Os resultados atingidos com a execução do Termo de Parceria **devem ser analisados por comissão de avaliação**, composta de comum acordo entre** o órgão parceiro e a Organização da Sociedade Civil de Interesse Público**.*
+
+ 
+
+Portanto, como somente os itens **II e III** estão corretos, gabarito **LETRA D**.
+
+---
+
+### Q1099 — Terceiro Setor (OSs, OSCIPs, Sistema S e Fundações de Apoio)
+
+- **Banca:** FCC | **Órgão:** TJ BA | **Ano:** 2023
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `E` | **Gabarito oficial:** `D`
+- **Link no TEC Concursos:** [Questão TEC 2826406](https://www.tecconcursos.com.br/questoes/2826406)
+
+**Enunciado:**
+
+A qualificação de determinada entidade como Organização da Sociedade Civil de Interesse Público (OSCIP)
+
+**Alternativas:**
+- A) decorre da celebração de contrato de gestão, com transferência da execução de atividades anteriormente desempenhadas pelo setor público, mediante ato de delegação.
+- B) altera a natureza da entidade, que passa a integrar a Administração indireta no âmbito do processo de publicização, passando a submeter-se ao regime jurídico público quanto a contratação de pessoal.
+- C) condiciona-se a processo de chamamento público. com a seleção de projetos de interesse da Administração para áreas sociais e subsequente celebração de termos de colaboração.
+- D) é ato vinculado, condicionado ao cumprimento dos requisitos legais pela entidade, e possibilitará a subsequente celebração de termo de parceria para desempenho de serviços sociais não exclusivos de estado. <- ✅ Gabarito
+- E) permite a celebração de termos de fomento, com transferência de recursos. bens e cessão de pessoal da Administração, independentemente de prévio procedimento licitatório. <- ❌ Sua resposta
+
+**Resolução do Professor:**
+
+**Gabarito: ****letra D.**
+
+ 
+
+d)  é ato vinculado, condicionado ao cumprimento dos requisitos legais pela entidade, e possibilitará a subsequente celebração de termo de parceria para desempenho de serviços sociais não exclusivos de estado.** ****– certa.**
+
+ 
+
+Inicialmente, vejamos a lição de Ricardo Alexandre e João de Deus:
+
+ 
+
+> *“As **organizações da sociedade civil de interesse público (OSCIPs)** têm regime jurídico muito parecido com as organizações sociais, visto que, à semelhança destas últimas, são pessoas jurídicas de direito privado, sem fins lucrativos, que desempenham serviços sociais não exclusivos do Estado, gozando de incentivos e se sujeitando à fiscalização pelo Poder Público.*
+> 
+> *As OSCIPs, da mesma forma que as organizações sociais, não representam uma nova espécie de pessoa jurídica. São, de maneira simplificada, entidades que preenchem certos requisitos legais (detalhados adiante) e recebem uma qualificação atribuída pelo Poder Público, ficando, a partir daí, aptas a firmarem **termo de parceria** com o Poder Público, **a** **fim de cooperarem com este no desenvolvimento de serviços sociais não exclusivos do Estado**. (...)*
+> 
+> *A decisão quanto à **concessão da qualificação de OSCIP é ato vinculado** da autoridade competente, ou seja, caso o requerente atenda aos requisitos e instrua o requerimento com a documentação pertinente, seu pedido obrigatoriamente deverá ser deferido.”* (ALEXANDRE, Ricardo; DEUS, João de. *Direito Administrativo Esquematizado.*1ª ed. São Paulo: Método, 2015. E-book. P. 134 e seguintes)
+
+ 
+
+Ao analisar a lição colacionada, nota-se que a qualificação de determinada entidade como Organização da Sociedade Civil de Interesse Público é ato vinculado, condicionado ao cumprimento dos requisitos legais pela entidade, e possibilitará a subsequente celebração de termo de parceria para desempenho de serviços sociais não exclusivos de estado.
+
+ 
+
+Logo, a alternativa correta a ser assinalada é a **letra C**.
+
+ 
+
+Vejamos os erros das demais alternativas:
+
+ 
+
+a)  decorre da celebração ~~de contrato de gestão~~, com transferência da execução de atividades anteriormente desempenhadas pelo setor público, mediante ato de delegação. **– errada. **
+
+ 
+
+Conforme visto acima, o vínculo da OSCIP com o Poder Público é feito por termo de parceria.
+
+ 
+
+b)  altera a natureza da entidade, que ~~passa a integrar~~ a Administração indireta no âmbito do processo de publicização, passando a submeter-se ao regime jurídico público quanto a contratação de pessoal.** – errada.**
+
+ 
+
+Em verdade, a celebração do termo de parceria não altera a natureza da entidade e ela não passa a integrar a Administração Pública, pois as OSCIP’s são paraestatais, integrantes do terceiro setor e anda ao lado do estado, mas não fazem parte do Poder Público.
+
+ 
+
+c)  ~~condiciona-se a processo de chamamento público~~ com a seleção de projetos de interesse da Administração para áreas sociais e subsequente celebração de ~~termos de colaboração~~.** – errada.**
+
+ 
+
+O processo de chamamento público não é condição obrigatória para que a OSCIP celebre o termo de parceria com o Poder Público.
+
+ 
+
+Na lição de Ricardo Alexandre e João de Deus:
+
+ 
+
+> *“Apesar de não se enquadrar formalmente como uma modalidade de licitação, o chamamento público tem natureza semelhante, conforme se percebe pelo conceito estatuído pelo art. 2.º, XII, da Lei 13.019/2014, segundo o qual chamamento público é o*
+> 
+> *[...] procedimento destinado a selecionar organização da sociedade civil para firmar parceria por meio de termo de colaboração ou de fomento, no qual se garanta a observância dos princípios da isonomia, da legalidade, da impessoalidade, da moralidade, da igualdade, da publicidade, da probidade administrativa, da vinculação ao instrumento convocatório, do julgamento objetivo e dos que lhes são correlatos.”* (ALEXANDRE, Ricardo; DEUS, João de. *Direito Administrativo Esquematizado.*1ª ed. São Paulo: Método, 2015. E-book. P. 143)
+
+ 
+
+e) permite a celebração de ~~termos de fomento~~, com transferência de recursos, bens e cessão de pessoal da Administração, independentemente de prévio procedimento licitatório.** – errada.**
+
+ 
+
+Conforme visto acima, as OSCIP realizam o seu vínculo com a Administração Pública por meio de termo de parceria e não de termos de fomento.
+
+---
+
+### Q1019 — Tópicos Mesclados de Atos Administrativos
+
+- **Banca:** FGV | **Órgão:** Pref RJ | **Ano:** 2025
+- **Primeiro Erro:** 2026-06-11 | **Última Tentativa:** 2026-06-11
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `C` | **Gabarito oficial:** `A`
+- **Link no TEC Concursos:** [Questão TEC 3605796](https://www.tecconcursos.com.br/questoes/3605796)
+
+**Enunciado:**
+
+Relacione os conceitos de atos administrativos a seguir com suas respectivas definições ou características principais. ( ) Anulação ( ) Revogação ( ) Convalidação ( ) Presunção de legitimidade 1. Atributo do ato administrativo que assume sua validade até prova em contrário, permitindo execução imediata sem contestação inicial. 2. Extinção do ato por motivo de vício de legalidade, com efeitos retroativos ( ex tunc ) à data de sua edição. 3. Extinção do ato válido por motivo de conveniência ou oportunidade da administração, com efeitos não retroativos ( ex nunc ). 4. Sanação de vício sanável no ato, tornando-o válido retroativamente desde sua origem, quando não lesar interesse público ou terceiros. A relação correta , na ordem apresentada, é:
+
+**Alternativas:**
+- A) 2 – 3 – 4 – 1. <- ✅ Gabarito
+- B) 2 – 4 – 1 – 3.
+- C) 1 – 2 – 3 – 4. <- ❌ Sua resposta
+- D) 4 – 1 – 2 – 3.
+- E) 3 – 4 – 2 – 1.
+
+**Resolução do Professor:**
+
+**Gabarito: LETRA A.**
+
+A questão versa sobre o desfazimento do ato administrativo. Nesse contexto, vamos analisar os itens para encontrar a resposta correta.
+
+ 
+
+**1. Atributo do ato administrativo que assume sua validade até prova em contrário, permitindo execução imediata sem contestação inicial.**
+
+ 
+
+Estamos diante do **atributo da presunção de legitimidade**, o ato administrativo está conforme a Lei e o Direito; trata-se de atributo presente em todo e qualquer ato administrativo. Por sua vez, pelo atributo da** presunção de veracidade**, há presunção relativa de que os fatos alegados pela Administração são verdadeiros. É o que nos ensina Maria Sylvia Zanella di Pietro (Direito Administrativo. 27. ed. São Paulo: Atlas, 2014, p. 206-207):
+
+ 
+
+> *A presunção de legitimidade diz respeito à conformidade do ato com a lei; em decorrência desse atributo, presumem-se, até prova em contrário, que os atos administrativos foram emitidos com observância da lei. A **presunção de veracidade diz respeito aos fatos**; em decorrência desse atributo, **presumem-se verdadeiros os fatos alegados pela Administração**. [...]*
+> 
+> ***a presunção de veracidade inverte o ônus da prova**; **é errado afirmar que a presunção de legitimidade produz esse efeito**, uma vez que, quando se trata de confronto entre o ato e a lei, não há matéria de fato a ser produzida; nesse caso, o efeito é apenas o anterior, ou seja, o juiz só apreciará a nulidade se arguida pela parte.*
+
+ 
+
+ 
+
+**2. Extinção do ato por motivo de vício de legalidade, com efeitos retroativos (*ex tunc*) à data de sua edição.**
+
+ 
+
+Trata-se da **anulação **(ou invalidação), pois esta serve para retirar do mundo jurídico** atos eivados de vício de ilegalidade**,** produzindo efeitos retroativos (ex tunc)** à data em que o ato entrou em vigor, ou seja, os efeitos são ex tunc, podendo ser determinada, conforme aponta Maria Sylvia Zanella di Pietro (Direito Administrativo. 27. ed. São Paulo: Atlas, 2014, p. 248):
+
+> ***Anulação**, que alguns preferem chamar de invalidação **é o desfazimento do ato administrativo por razões de ilegalidade**. Como a desconformidade com a lei atinge o ato em suas origens, a anulação produz efeitos retroativos à data em que foi emitido (efeitos ex tunc, ou seja, a partir de então).*
+
+ 
+
+**Detalhe**: Atualmente, há a tendência da chamada modulação dos efeitos anulatórios, com possibilidade de relativização dos efeitos retroativos da anulação, conforme nos ensina Rafael Carvalho Rezende Oliveira (Curso de Direito Administrativo. 12. ed. Rio de Janeiro: Método, 2024, p. 526):
+
+> *No controle de legalidade do ato administrativo, a Administração Pública pode modular os efeitos da invalidação do ato ilegal, de forma análoga à modulação de feitos no controle de constitucionalidade (art. 27 da Lei 9.868/1999).  Em reforço à **possibilidade de relativização dos efeitos retroativos da anulação**, o art. 24 da LINDB, incluído pela Lei 13.655/2018, proíbe que a mudança de interpretação **acarrete a invalidação das situações plenamente constituídas.** A decisão administrativa, controladora e judicial que anular o ato administrativo ilegal** deve considerar as suas consequências práticas, jurídicas e administrativas**, na forma dos arts. 20 e 21 da LINDB, inseridos pela Lei 13.655/2018.*
+
+ 
+
+**3. Extinção do ato válido por motivo de conveniência ou oportunidade da administração, com efeitos não retroativos (*ex nunc*).**
+
+ 
+
+Estamos diante da **revogação**, pois se trata de ato discricionário pelo qual a própria administração que editou o ato extingue um ato **VÁLIDO**, por razões de oportunidade e conveniência. Se o ato é válido, a revogação terá efeitos prospectivos, isto é, o que já foi alcançado com o ato, permanece, seus efeitos são ex nunc (a partir da revogação). É o que nos ensina Maria Sylvia Zanella di Pietro (Direito Administrativo. 36. ed. Rio de Janeiro: Forense, 2023, p. 261):
+
+ 
+
+> *Revogação é o** ato administrativo discricionário pelo qual a Administração extingue um ato válido**, por razões de oportunidade e conveniência. Como a revogação atinge um ato que **foi editado em conformidade com a lei, ela não retroage**; os seus efeitos se produzem a partir da própria revogação; são feitos ex nunc (a partir de agora) *
+
+ 
+
+**4. Sanação de vício sanável no ato, tornando-o válido retroativamente desde sua origem, quando não lesar interesse público ou terceiros.**
+
+ 
+
+Trata-se da **convalidação**, que é o suprimento da invalidade de um ato com **efeitos retroativos**, ou seja, desde a origem. Essa é a definição de Maria Sylvia Zanella di Pietro (Direito Administrativo. 27. ed. São Paulo: Atlas, 2014, p. 258):
+
+ 
+
+> *Convalidação ou saneamento é o ato administrativo pelo qual é suprido o vício existente em um ato ilegal, **com efeitos retroativos à data em que este foi praticado. ***
+
+Tanto o ato administrativo vinculado quanto o discricionário são passíveis de convalidação. Vejamos com Alexandre Mazza (Manual de Direito Administrativo. 9. ed. São Paulo: Saraiva, 2019, p. 278):
+
+ 
+
+> *O **objeto da convalidação é um ato administrativo, vinculado ou discricionário**, possuidor de vício sanável ensejador de anulabilidade. Atos inexistentes, nulos ou irregulares nunca podem ser convalidados.*
+
+ 
+
+**Detalhe**: Vejamos interessante lista dos atos passíveis de convalidação, conforme nos ensina Alexandre Mazza (p. 280):
+
+ 
+
+> *Quanto aos **limites**, **não podem ser objeto de convalidação** os atos administrativos:*
+> 
+> ***a) com vícios no objeto, motivo e finalidade;***
+> 
+> *b) cujo defeito já tenha sido impugnado perante a Administração Pública ou o Poder Judiciário;*
+> 
+> *c) com defeitos na competência ou na forma, quando insanáveis;*
+> 
+> *d) portadores de vícios estabilizados por força de prescrição ou decadência;*
+> 
+> *e) cuja convalidação possa causar lesão ao interesse público;*
+> 
+> *f) em que a convalidação pode ilegitimamente prejudicar terceiros;*
+> 
+> *g) se a existência do vício invalidante for imputada à parte que presumidamente se beneficiará do ato;*
+> 
+> *h) se o defeito for grave e manifesto (teoria da evidência);*
+
+ 
+
+Portanto, como a sequência correta é** 2 – 3 – 4 – 1**, gabarito **LETRA A**.
 
 ---

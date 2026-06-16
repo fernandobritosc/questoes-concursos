@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Cloud, AlertCircle, X, Copy, Check } from 'lucide-react'
+import { Cloud, AlertCircle, Copy, Check } from 'lucide-react'
+import { Modal } from './ui/Modal'
 
 interface MapaSqlSetupModalProps {
   isOpen: boolean
@@ -65,28 +66,31 @@ export function MapaSqlSetupModal({ isOpen, onClose, onRetry }: MapaSqlSetupModa
     setTimeout(() => setCopiedSql(false), 2000)
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="relative w-full max-w-2xl bg-card border border-border/80 rounded-2xl overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-300">
-
-        <div className="px-6 py-4 border-b border-border/80 bg-muted/40 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-violet-400">
-            <Cloud className="w-5.5 h-5.5 animate-bounce" />
-            <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
-              Ativar Sincronização em Nuvem (Supabase)
-            </h3>
-          </div>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Ativar Sincronização em Nuvem (Supabase)"
+      icon={<Cloud className="w-5 h-5" />}
+      size="lg"
+      footer={
+        <>
           <button
             onClick={onClose}
-            className="h-8 w-8 rounded-lg border border-border/60 hover:bg-muted/60 text-muted-foreground hover:text-foreground flex items-center justify-center cursor-pointer"
+            className="px-4 py-2 border border-border/60 hover:bg-muted/60 text-xs font-bold rounded-xl cursor-pointer"
           >
-            <X className="w-4 h-4" />
+            Cancelar
           </button>
-        </div>
-
-        <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+          <button
+            onClick={onRetry}
+            className="px-4 py-2 bg-violet-600 hover:bg-violet-750 text-white text-xs font-black uppercase tracking-wider rounded-xl cursor-pointer font-bold active:scale-95"
+          >
+            Tentar Novamente
+          </button>
+        </>
+      }
+    >
+      <div className="space-y-4">
           <div className="flex items-start gap-3 bg-violet-500/10 border border-violet-500/20 p-4 rounded-xl text-violet-300 text-xs">
             <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
             <div className="space-y-1">
@@ -130,24 +134,8 @@ export function MapaSqlSetupModal({ isOpen, onClose, onRetry }: MapaSqlSetupModa
               <li>Clique em <strong>"Tentar Novamente"</strong> no botão abaixo ou mude o switch para <strong>Nuvem</strong> para começar a sincronizar instantaneamente!</li>
             </ol>
           </div>
-        </div>
-
-        <div className="px-6 py-4 border-t border-border/80 bg-muted/20 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border border-border/60 hover:bg-muted/60 text-xs font-bold rounded-xl cursor-pointer"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={onRetry}
-            className="px-4 py-2 bg-violet-600 hover:bg-violet-750 text-white text-xs font-black uppercase tracking-wider rounded-xl cursor-pointer font-bold active:scale-95"
-          >
-            Tentar Novamente
-          </button>
-        </div>
 
       </div>
-    </div>
+    </Modal>
   )
 }

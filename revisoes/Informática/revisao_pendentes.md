@@ -1,5 +1,5 @@
 # Questões Pendentes de Revisão — Informática
-**Total de pendentes:** 30 questões
+**Total de pendentes:** 38 questões
 
 Estes são os seus erros pendentes nesta matéria. Quando resolver uma questão no TEC Concursos e acertá-la, ela sairá desta lista automaticamente.
 
@@ -29,54 +29,6 @@ Considerando que todas as estações de trabalho com sistema operacional Windows
 - E) Impressão em rede local não funcionava, mas a internet estava acessível. <- ❌ Sua resposta
 
 **Resolução do Professor:** (sem resolução cadastrada)
-
----
-
-### Q1346 — Sites de Busca (Google, Bing, Yahoo, etc.)
-
-- **Banca:** FCC | **Órgão:** Tribunal Regional Eleitoral do Amapá | **Ano:** ?
-- **Primeiro Erro:** 2026-06-01 | **Última Tentativa:** 2026-06-07
-- **Tentativas de Erro:** 2
-- **Sua última resposta:** `D` | **Gabarito oficial:** `E`
-- **Link no TEC Concursos:** [Questão TEC 315712](https://www.tecconcursos.com.br/questoes/315712)
-
-**Enunciado:**
-
-<p hash="1013551246" id="00315712Q-815aa12a-e3b41b045da4" style="text-align: left;" size="">Um usuário da internet está realizando uma busca sobre terremotos que aconteceram entre os anos de 1970 e 1980 utilizando o site de busca Google. Para restringir e otimizar a busca para apresentar apenas os resultados que atendem ao desejado, ele deve inserir o seguinte texto de busca<br size="" class="elemento-vazio"> </p>
-
-**Alternativas:**
-- A) Terremoto+1970+1980.<br size="" class="elemento-vazio">
-- B) Terremoto 1970-1980.<br size="" class="elemento-vazio">
-- C) “Terremoto 1970 1980”.<br size="" class="elemento-vazio">
-- D) Terremoto-1970-1980.<br size="" class="elemento-vazio"> <- ❌ Sua resposta
-- E) Terremoto 1970..1980.<p size="" class="elemento-vazio"></p> <- ✅ Gabarito
-
-**Resolução do Professor:**
-
-### 📚 Introdução Conceitual
-Atenção: ao realizar buscas em sites de busca como o Google, é fundamental entender como utilizar os operadores de busca para obter resultados precisos e relevantes. Os operadores de busca são palavras ou símbolos que ajudam a refinar a busca, tornando-a mais eficaz. No caso específico da questão, o objetivo é buscar terremotos que ocorreram entre os anos de 1970 e 1980, o que exige uma compreensão básica de como utilizar esses operadores para delimitar o período temporal desejado.
-
-### ✅ Gabarito Comentado
-O gabarito oficial é a opção E) Terremoto 1970..1980. Essa opção está correta porque o uso dos dois pontos (..) entre os anos 1970 e 1980 é um operador de busca do Google conhecido como "intervalo de números" ou "faixa de anos". Esse operador instrui o mecanismo de busca a retornar resultados que contenham números dentro do intervalo especificado, incluindo os anos 1970 e 1980. Isso permite uma busca mais precisa e focalizada nos eventos de terremotos ocorridos durante esse período específico.
-
-### 🔍 Análise das Alternativas
-
-Alternativa A está incorreta porque o uso do sinal de mais (+) entre as palavras-chave não especifica um intervalo de anos, mas sim fornece uma lista de termos que devem ser incluídos nos resultados da busca. Portanto, a busca "Terremoto+1970+1980" retornaria resultados que contenham as palavras "terremoto", "1970" e "1980" em qualquer contexto, não necessariamente indicando um intervalo de tempo.
-
- 
-Alternativa B está incorreta porque o uso do hífen (-) entre os anos 1970 e 1980 pode ser interpretado de maneira diferente pelo mecanismo de busca. Em alguns contextos, o hífen pode ser usado para indicar um intervalo, mas não é o método padrão ou recomendado para especificar um intervalo de anos no Google. Além disso, o hífen pode ter outras funções na busca, como indicar uma faixa de valores, mas não é tão específico ou claro quanto o uso dos dois pontos (..) para esse propósito.
-
- 
-Pegadinha: Alternativa C está incorreta porque o uso de aspas ("Terremoto 1970 1980") busca a sequência exata de palavras dentro das aspas, o que não é eficaz para especificar um intervalo de anos. As aspas são usadas para buscar frases exatas, tornando essa opção inapropriada para a realização de uma busca por um intervalo de tempo.
-
- 
-Alternativa D está incorreta porque o uso do hífen antes e depois dos anos ("Terremoto-1970-1980") não é um operador de busca válido para especificar um intervalo de anos. Essa combinação pode ser interpretada de maneira confusa pelo mecanismo de busca, não produzindo os resultados desejados.
-
-### 💡 Dica de Prova
-Dica de Prova: ao realizar buscas que envolvem intervalos de números ou anos, é útil lembrar que diferentes sites de busca podem ter operadores de busca diferentes. No entanto, o uso de dois pontos (..) para indicar um intervalo é um método amplamente reconhecido e suportado pelo Google, tornando-se uma ferramenta valiosa para refinar buscas por faixas de tempo.
-
-### 📝 Resumo da Questão
-Resumo: a questão exige a compreensão de como utilizar os operadores de busca do Google para realizar uma busca eficaz por terremotos ocorridos entre os anos de 1970 e 1980. A opção correta, "Terremoto 1970..1980", demonstra o uso adequado do operador de intervalo de números, proporcionando uma busca precisa e focada. Entender e aplicar corretamente os operadores de busca é fundamental para obter resultados relevantes e precisos em buscas online.
 
 ---
 
@@ -829,29 +781,6 @@ Bons estudos e continue firme na caminhada rumo à nomeação!
 
 ---
 
-### Q1219 — Conceitos de Internet
-
-- **Banca:** ZAMBINI | **Órgão:** PRODESP | **Ano:** 2010
-- **Primeiro Erro:** 2026-05-30 | **Última Tentativa:** 2026-05-30
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `C` | **Gabarito oficial:** `B`
-- **Link no TEC Concursos:** [Questão TEC 392283](https://www.tecconcursos.com.br/questoes/392283)
-
-**Enunciado:**
-
-A transferência de um arquivo de um computador local para um servidor na Internet é denominada(o)
-
-**Alternativas:**
-- A) Casting
-- B) Upload <- ✅ Gabarito
-- C) Download <- ❌ Sua resposta
-- D) Backup
-- E) SMTP
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
 ### Q137 — Protocolos de Redes
 
 - **Banca:** FGV | **Órgão:** TJ AP | **Ano:** 2024
@@ -1258,40 +1187,656 @@ Resumo: a questão exige o conhecimento e a aplicação correta dos comandos de 
 
 ---
 
-### Q1336 — Sites de Busca (Google, Bing, Yahoo, etc.)
+### Q1915 — Nuvens Microsoft (OneDrive e Azure)
 
-- **Banca:** FGV | **Órgão:** Ministério Público do Estado do Rio de Janeiro | **Ano:** ?
-- **Primeiro Erro:** 2026-06-01 | **Última Tentativa:** 2026-06-01
+- **Banca:** VUNESP | **Órgão:** Tribunal de Justiça de São Paulo | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
 - **Tentativas de Erro:** 1
-- **Sua última resposta:** `D` | **Gabarito oficial:** `A`
-- **Link no TEC Concursos:** [Questão TEC 1067081](https://www.tecconcursos.com.br/questoes/1067081)
+- **Sua última resposta:** `A` | **Gabarito oficial:** `E`
+- **Link no TEC Concursos:** [Questão TEC 3173946](https://www.tecconcursos.com.br/questoes/3173946)
 
 **Enunciado:**
 
-<p style="text-align: left;" id="01067081Q-2267ee64-05d03e49ad59" hash="1905324208" size="">
-		Caio quer ter acesso às páginas do site http://blograro.com.br que contêm a palavra “brasil” e não contêm a palavra “governo”.</p>
-	<p style="text-align: left;" id="01067081Q-94a2a7b4-5f5594ca46cd" hash="1192528612" size="" class="elemento-vazio">
-		&nbsp;</p>
-	<p style="text-align: left;" id="01067081Q-9815a081-d67f66c55ab5" hash="1783487486" size="">
-		No contexto do site de buscas do Google, o texto de busca que deve ser utilizado para esse fim é:</p>
-	<p style="text-align: left;" id="01067081Q-8bfe7e5d-89ce5b6569e3" hash="1965524319" size="" class="elemento-vazio">
-		</p>
+Na tela “Sincronizar e fazer backup” do Microsoft OneDrive, há a possibilidade de ajustar as chamadas “Configurações avançadas”, que apresentam como opção, limitar, especificamente, as taxas de
 
 **Alternativas:**
-- A) site:.blograro.com.br brasil –governo<p size="" class="elemento-vazio"></p>
-	<p style="text-align: left;" id="01067081Q-13f627d9-66b7660c3ec1" hash="1455447745" size="" class="elemento-vazio">
-		</p> <- ✅ Gabarito
-- B) .blograro.com.br/ brasil –governo<p size="" class="elemento-vazio"></p>
-	<p style="text-align: left;" id="01067081Q-e06441af-cebe849665ab" hash="393857818" size="" class="elemento-vazio">
-		</p>
-- C) site: blograro.com.br brasil ~”governo”<p size="" class="elemento-vazio"></p>
-	<p style="text-align: left;" id="01067081Q-413737f6-5f2a02e8a2b6" hash="1610967545" size="" class="elemento-vazio">
-		</p>
-- D) site.blograro.com.br brasil – governo<p size="" class="elemento-vazio"></p>
-	<p style="text-align: left;" id="01067081Q-07bc3e75-f4b8f2746680" hash="277148275" size="" class="elemento-vazio">
-		</p> <- ❌ Sua resposta
-- E) site blograro.com.br brasil –governo<p size="" class="elemento-vazio"></p>
+- A) upload e exclusão. <- ❌ Sua resposta
+- B) monitoramento e identificação.
+- C) modificação e criptografia.
+- D) compactação e captura.
+- E) download e carregamento. <- ✅ Gabarito
 
-**Resolução do Professor:** (sem resolução cadastrada)
+**Resolução do Professor:**
+
+Para abrir as ***configurações avançadas*** do *OneDrive*, deve-se acionar as configurações, acionar a guia ***Sincronizar ***e ***Fazer Backup*** e clicar no botão ***Configurações Avançadas***, para abrir o seguinte menu:
+
+ 
+
+ 
+
+Assim sendo, **A RESPOSTA É A LETRA E.**
+
+---
+
+### Q1916 — Nuvens Microsoft (OneDrive e Azure)
+
+- **Banca:** VUNESP | **Órgão:** Tribunal de Justiça de São Paulo | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `A` | **Gabarito oficial:** `B`
+- **Link no TEC Concursos:** [Questão TEC 3173948](https://www.tecconcursos.com.br/questoes/3173948)
+
+**Enunciado:**
+
+O Microsoft OneDrive conta com uma pasta denominada Cofre Pessoal, que tem como uma de suas propriedades:
+
+**Alternativas:**
+- A) armazenar, exclusivamente, arquivos com camada dupla de criptografia. <- ❌ Sua resposta
+- B) possuir uma camada extra de proteção para seu acesso. <- ✅ Gabarito
+- C) ser acessível, exclusivamente, a partir de tablets e celulares.
+- D) não permitir armazenamento de arquivos maiores do que 1 Megabyte.
+- E) armazenar, exclusivamente, arquivos de mídia, como mp4.
+
+**Resolução do Professor:**
+
+***Criptografia*** é uma técnica para ***escrever em códigos***, de forma que ***apenas o destinatário*** *decifre e compreenda a mensagem*. Esta técnica transforma um *texto compreensível,* denominado *texto original* em uma ***informação codificada***, chamada de *texto cifrado*, que tem a aparência de um texto *gerado aleatoriamente incompreensível.*
+
+No ***mecanismo de autenticação*** ***em duas etapas***, (que pode ser chamada de *verificação em duas etapas, verificação dupla ou ainda autenticação em dois fatores*), é ***adicionada mais uma*** ***camada de proteção ***ao sistema tradicional de autenticação. Atualmente esta tecnologia é baseada em ***software***, e o código gerado por um dispositivo como um ***token, ***por exemplo, que também pode ser exibido na tela de um *smarthphone*, facilitando os usuários de telefones móveis a fornecer informações de autenticação *sem precisar de um dispositivo extra* específico para esta finalidade. 
+
+Segundo o suporte da Microsoft:
+
+> **Cofre Pessoal** é uma **área protegida** no OneDrive onde você pode armazenar seus arquivos e fotos mais importantes ou confidenciais sem sacrificar a conveniência de acesso em qualquer lugar.
+> 
+> 	
+> - O **Cofre Pessoal está disponível nos planos domésticos e pessoais do OneDrive**, não está disponível no OneDrive for Business ou em contas corporativas e de estudante.
+> 	
+> - O Cofre Pessoal está disponível no OneDrive na Web, no aplicativo móvel e no seu computador com o Windows 10.
+
+Analisando as alternativas, temos que:
+
+**A – **armazenar, exclusivamente, arquivos com camada dupla de criptografia.
+
+**Errada**: o ***cofre pessoal*** *oferece duas camadas de segurança*, mas ***não é uma camada dupla de criptografia***: uma das camadas é a responsável pela ***criptografia***, e a outra implementa ***autenticação em duas etapas***. 
+
+**B – **possuir uma camada extra de proteção para seu acesso.
+
+**Certa**: de fato, conforme comentado acima, o ***cofre pessoal*** utiliza uma ***camada extra de proteção*** a qual utiliza a ***verificação em duas etapas***. 
+
+**C – **ser acessível, exclusivamente, a partir de tablets e celulares.
+
+**Errada**: o acesso ***não é exclusivo a partir de tablets e celulares***, sendo possível também através de ***computadores***. 
+
+**D – **não permitir armazenamento de arquivos maiores do que 1 *Megabyte*.
+
+**Errada**: ***não há limite de tamanho para arquivos*** no ***cofre pessoal***. O limite que existe refere-se ao ***armazenamento de forma geral*** no OneDrive. 
+
+**E – **armazenar, exclusivamente, arquivos de mídia, como mp4.
+
+**Errada**: é possível armazenar ***qualquer tipo de arquivo, além de mp4***. 
+
+Assim sendo, **A RESPOSTA É A LETRA B.**
+
+---
+
+### Q1917 — Nuvens Microsoft (OneDrive e Azure)
+
+- **Banca:** VUNESP | **Órgão:** Tribunal de Justiça de São Paulo | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `A` | **Gabarito oficial:** `B`
+- **Link no TEC Concursos:** [Questão TEC 3068149](https://www.tecconcursos.com.br/questoes/3068149)
+
+**Enunciado:**
+
+Considerando a pasta denominada Cofre Pessoal, disponibilizada por meio do OneDrive, é correto afirmar que
+
+**Alternativas:**
+- A) ela funciona exclusivamente na plataforma Windows. <- ❌ Sua resposta
+- B) ela não permite o compartilhamento direto de arquivos nela inseridos. <- ✅ Gabarito
+- C) ela comporta somente arquivos editados e salvos por meio do Windows Office.
+- D) considerando o modo gratuito do OneDrive, podem ser adicionados até 5 arquivos em Cofre Pessoal.
+- E) uma vez bloqueada, ela é desbloqueada automaticamente após um intervalo de 2 horas.
+
+**Resolução do Professor:**
+
+Analisando as alternativas, temos que:
+
+**A – **ela funciona exclusivamente na plataforma Windows.
+
+**Errada**: o Cofre Pessoal *está disponível em **outras plataformas além do Windows***, como *iOS e Android*, como indica a documentação da Microsoft, como vemos a seguir:
+
+> 
+
+**B – **ela não permite o compartilhamento direto de arquivos nela inseridos.
+
+**Certa**: de fato, o *compartilhamento de arquivos é **bloqueado **para objetos contidos no Cofre Pessoal,* o que ***evita o compartilhamento acidental ***de arquivos que contenham dados sensíveis, como indica o suporte da Microsoft, como vemos a seguir:
+
+> 
+
+**C – **ela comporta somente arquivos editados e salvos por meio do Windows Office.
+
+**Errada**: o Cofre Pessoal ***permite o armazenamento de qualquer tipo de arquivo***, como *fotos, vídeos e documentos no formato PDF,* por exemplo, como indica a documentação da Microsoft, como vemos a seguir:
+
+> 
+
+**D – **considerando o modo gratuito do OneDrive, podem ser adicionados até 5 arquivos em Cofre Pessoal.
+
+**Errada**: no modo gratuito podem ser adicionados até 3 arquivos no Cofre pessoal, como indica a documentação da Microsoft, como vemos a seguir:
+
+> **A assinatura do Microsoft 365 Personal ou Family é necessária para o armazenamento de mais de três arquivos no Cofre Pessoal.** Os planos de 100 GB do OneDrive e **as contas gratuitas Básicas de cinco GB podem armazenar no máximo três arquivos no Cofre Pessoal**. O Cofre Pessoal não está disponível no OneDrive corporativo ou de estudante
+
+**E – **uma vez bloqueada, ela é desbloqueada automaticamente após um intervalo de 2 horas.
+
+**Errada**: o tempo para o desbloqueio automático do Cofre Pessoal após um período de inatividade de 20 minutos, varia de acordo com o dispositivo, e só pode ser definido pelo usuário, como indica a documentação da Microsoft, como vemos a seguir:
+
+> 
+
+Assim sendo, **A RESPOSTA É A LETRA B.**
+
+---
+
+### Q1922 — Nuvens Microsoft (OneDrive e Azure)
+
+- **Banca:** VUNESP | **Órgão:** Tribunal de Justiça de São Paulo | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `C` | **Gabarito oficial:** `A`
+- **Link no TEC Concursos:** [Questão TEC 2622913](https://www.tecconcursos.com.br/questoes/2622913)
+
+**Enunciado:**
+
+Tem-se os arquivos e seus status do Microsoft OneDrive, exibidos no Explorador de Arquivos do Microsoft Windows 10, todos em sua configuração original.
+
+Assinale a alternativa com o(s) item(s) em que o Windows não precisará fazer o download quando o usuário der um duplo clique com o botão principal do mouse.
+
+**Alternativas:**
+- A) Foto.jpg e Projetos.zip, apenas. <- ✅ Gabarito
+- B) Controle.xlsx, apenas.
+- C) Projetos.zip, apenas. <- ❌ Sua resposta
+- D) Foto.jpg, Projetos.zip e Controle.xlsx, apenas.
+- E) Foto.jpg, apenas.
+
+**Resolução do Professor:**
+
+Segundo o suporte da Microsoft:
+
+> Um ícone de nuvem azul ao lado de OneDrive ou pastas indica que **o arquivo só está disponível online**. Arquivos somente online não ocupam espaço no computador. Não é possível abrir arquivos somente online se o dispositivo não está conectado à Internet.
+> 
+> Quando você abre um arquivo somente online, ele é baixado para seu dispositivo e ***se torna um arquivo disponível localmente***. É possível abrir um arquivo disponível localmente a qualquer momento, mesmo sem acesso à Internet.
+
+Como vemos, os itens ***Foto.jpg ***e ***Projetos.zip*** estão ***disponíveis localmente***, e ***não será necessário fazer o download dele*** ao aplicar um clique duplo para *abrir o objeto*,  mas o item ***Controle.xls só está disponível onlin***e, e só ***será aberto após o download***. 
+
+ 
+
+Assim sendo, **A RESPOSTA É A LETRA A.**
+
+---
+
+### Q1932 — Conceitos e Tipos de Computação em Nuvem (Cloud Computing)
+
+- **Banca:** FCC | **Órgão:** Tribunal Regional do Trabalho da 2ª Região | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `D` | **Gabarito oficial:** `B`
+- **Link no TEC Concursos:** [Questão TEC 688063](https://www.tecconcursos.com.br/questoes/688063)
+
+**Enunciado:**
+
+Ao pesquisar sobre cloud storage, um Técnico verificou que há diferentes tipos de armazenamento em nuvem, dependendo de
+como o storage é feito, dentre os quais estão:
+
+
+I. Voltada para pessoas físicas, esta nuvem é composta por sites que disponibilizam um pequeno espaço de armazenamento gratuitamente e oferecem planos para expandir a capacidade. Ideal para quem quer testar o serviço de cloud storage ou possui um pequeno volume de dados e não necessita de um alto nível de segurança e desempenho.
+
+
+II. Dividida entre clientes com negócios em comum, que rateiam os custos de utilização e manutenção, esta nuvem pode ser hospedada e gerenciada dentro das empresas ou, então, terceirizada.
+
+
+III. Esta nuvem é projetada para uso exclusivo de uma única empresa, nas dependências da qual todo o hardware (storages e servidores) fica alocado. A empresa possui controle total da implementação das aplicações na nuvem.
+
+
+Os tipos de I, II e III são, correta e respectivamente,
+
+**Alternativas:**
+- A) FaaS, SaaS e IaaS.
+- B) nuvem pública, comunitária e privada. <- ✅ Gabarito
+- C) IaaS, CaaS e SaaS.
+- D) nuvem gratuita, híbrida e corporativa. <- ❌ Sua resposta
+- E) IaaS, EaaS e PaaS.
+
+**Resolução do Professor:**
+
+*Ao pesquisar sobre cloud storage, um Técnico verificou que há diferentes tipos de armazenamento em nuvem, dependendo de
+
+como o storage é feito, dentre os quais estão:*
+
+***I**. Voltada para pessoas físicas, esta nuvem é composta por sites que disponibilizam um pequeno espaço de armazenamento gratuitamente e oferecem planos para expandir a capacidade. Ideal para quem quer testar o serviço de cloud storage ou possui um pequeno volume de dados e não necessita de um alto nível de segurança e desempenho.*
+
+***II**. Dividida entre clientes com negócios em comum, que rateiam os custos de utilização e manutenção, esta nuvem pode ser hospedada e gerenciada dentro das empresas ou, então, terceirizada.*
+
+***III**. Esta nuvem é projetada para uso exclusivo de uma única empresa, nas dependências da qual todo o hardware (storages e servidores) fica alocado. A empresa possui controle total da implementação das aplicações na nuvem.*
+
+*Os tipos de **I**, **II **e **III **são, correta e respectivamente,
+
+**a) **FaaS, SaaS e IaaS.
+
+**b) **nuvem pública, comunitária e privada.
+
+**c) **IaaS, CaaS e SaaS.
+
+**d) **nuvem gratuita, híbrida e corporativa.
+
+**e) **IaaS, EaaS e PaaS.*
+
+ 
+
+A questão foi redrada do site da Infotrend (http://www.infortrendbrasil.com.br/cloud-storage/), no qual temos que:
+
+> # O que é Cloud Storage?
+> 
+> **Armazenamento em Nuvem ou Cloud Storage** é um modelo de armazenamento de arquivos online que permite que você mantenha seus dados sincronizados com todos os seus dispositivos, tais como tablets, smartphones, notebooks e Desktops. Essencialmente os dados ficam armazenados em um servidor seguro e todas as alterações realizadas em qualquer um de seus dispositivos são propagadas para os outros sincronizados nesse servidor (desde que os mesmos estejam conectados a internet).
+> 
+> Apesar de ser um muito popular atualmente, o conceito de Cloud Storage já existe a mais de 50 anos, porém devido as restrições tecnológicas da época, tais como o baixo poder de processamento e a falta de conexões banda larga inviabilizaram sua popularização.
+> 
+> Atualmente grandes empresas como Dropbox, Google e Microsoft oferecem serviços de Cloud Storage grátis, porém o espaço em disco oferecido é muito pequeno, em torno de 5GB que pode até servir suprir seu uso pessoal, porém em corporações a quantidade de informação a ser armazenada é muito maior e nesse caso o ideal é contratar uma empresa especializada em serviços de Cloud como Amazon, Mandic entre outras.
+> 
+> O serviço funciona graças às APIs *(Application Programming Interfaces) *nos moldes *REST (Representative State Transfer) *que são fundamentos de acesso a softwares desenvolvidos ou baseados na Web, como os *softwares* *as service. *Outro protocolo que também costuma ser utilizado é o *SOAP (Simple Object Access Protocol), *protocolo destinado à circulação de informações estruturadas entre plataformas distribuídas e descentralizadas.
+> 
+> Embora seu funcionamento e implementação sejam extremamente simples, a tecnologia apresenta elevado grau de complexidade. Sua operação divide-se em quatro categorias, cada uma atendendo as necessidades do usuário. Confira algumas dessas ramificações:
+> 
+> ## Software as a Service
+> 
+> No “software como serviço” o software de armazenamento cloud são sites, alguns deles vinculados a provedores de e-mail e aplicações de escritório, como o *Google Drive *(Google) e o *One Drive *(Microsoft). Outro *software as service *bastante popular é o *Dropbox*. A maioria dos sites disponibiliza o serviço gratuitamente e o usuário paga apenas se contratar planos para expandir a capacidade.** **
+> 
+> ## Plataform as Service
+> 
+> As “plataformas de serviço” são voltadas para o uso corporativo. Elas incluem recursos como aplicativos, interfaces, bancos de dados, armazenamento e testes operados à distância. A partir dessas plataformas, as equipes podem desenvolver aplicativos para uso local de empresas.
+> 
+> ## Infraestructure as a Service
+> 
+> A “infraestrutura como serviço” também é para as empresas. Nela, os servidores, softwares e equipamentos de rede não são comprados, e sim terceirizados. Quem contrata tem facilidade de gerenciamento e muita flexibilidade.** **
+> 
+> ## Tipos de Cloud Storage
+> 
+> O armazenamento cloud pode ser feito em nuvens públicas, comunitárias, híbridas e privadas. Veja quais são as diferenças entre elas:
+> 
+> ### Nuvem pública:
+> 
+> Voltada para pessoas físicas, a nuvem pública é composta por sites que disponibilizam um pequeno espaço de armazenamento gratuitamente e oferecem planos para expandir a capacidade. Ideal para quem quer testar o serviço de Cloud Storage ou possuí um pequeno volume de dados e não necessita de um alto nível de segurança e desempenho.
+> 
+> ### Nuvem Comunitária:
+> 
+> **D**ividida entre clientes com negócios em comum que rateiam os custos de utilização e manutenção. A nuvem comunitária pode ser hospedada e gerenciada dentro das empresas, ou então, terceirizada.
+> 
+> ### Nuvem Privada:
+> 
+> Projetada para uso exclusivo de uma única empresa onde todo o hardware do data center (Storages e servidores) fica alocado na empresa que possuí controle total da implementação das aplicações na nuvem. A Infortrend Brasil possuí soluções ideais para a criação de nuvens privadas para PMEs com o melhor custo x benefício do mercado
+> 
+> ### Nuvem híbrida:
+> 
+> A união entre nuvem privada e pública, o modelo híbrido ou múltiplos sistemas em nuvem oferece o melhor desses modelos. As empresas arquivam dados sigilosos na nuvem particular e os menos importantes na pública.
+
+Analisando as alternativas, temos que:
+
+ 
+
+**A – ***FaaS, SaaS e IaaS.*
+
+ 
+
+**Errada**: como no contexto de nuvens ***não há definição*** para a sigla *Faas*, já podemos descartar esta alternativa.
+
+ 
+
+**B – ***nuvem pública, comunitária e privada.*
+
+ 
+
+**Certa**: ***Nuvem Pública***: a infraestrutura é provida para uso aberto ao **público **em geral. Pode ser gerenciada por empresas, órgãos governamentais ou combinações entre tais entidades. São localizadas nos provedores de nuvens (*datacenters*) e disponibilizam grande capacidade de processamento e armazenamento. Exemplos: *Google Drive, Drop Box, OneDrive, Office 365, Prezi Sallesforce.*
+
+ 
+
+***Nuvem Comunitária***: a infraestrutura é provida para uso **exclusivo **(ou seja, o acesso é limitado) de uma **comunidade de consumidores** de grupos que têm preocupações comuns como cooperativas, instituições de segurança, blocos políticos, grupos empresariais e outros. Pode ser controlada por **uma ou mais organizações da na comunidade**, por um terceiro ou ainda uma combinação deles. Pode usar uma infraestrutura física ou virtual.
+
+ 
+
+***Nuvem privada***: a infraestrutura é provida para **uso exclusivo de uma única organização** e suas possíveis filiais. 
+
+ 
+
+**C – ***** **IaaS, CaaS e SaaS.*
+
+ 
+
+**Errada**: estas siglas não se referem a* tipos de nuvem*, mas à níveis de implementação da computação em nuvem, o que já nos permite descartar esta alternativa. Tais siglas têm as seguintes características:
+
+ 
+
+***IaaS ***(*Infraestrutura como serviço*) é uma infraestrutura de ***computação instantânea***, provisionada e gerenciada pela Internet. Escale ou reduza verticalmente com demanda e pague somente pelo que usar.
+
+ 
+
+***IaaS ***ajuda a evitar gastos e complexidade de comprar e gerenciar seus próprios servidores físicos e outras infraestruturas do datacenter. Cada recurso é oferecido como um componente de serviço separado e você  pode alugar um específico pelo tempo que precisar. O provedor de serviços de computação em nuvem gerencia a infraestrutura, enquanto você adquire, instala, configura e gerencia seu próprio software – sistemas operacionais, middleware e aplicativos".
+
+ 
+
+***CaaS ***(*Communication as a Service*) é um **provedor de soluções terceirizadas em comunicação,** responsável pelo gerenciamento de hardware e software, fornecendo serviços como **VoIP**, de **mensagens instantâneas**, além da capacidade de gerir **vídeo conferências** a seus clientes. Este modelo permite que clientes corporativos implementem seletivamente serviços e recursos em toda a empresa a partir de uma base de serviços utilizados, fornecidos **sob demanda.** 
+
+ 
+
+O conceito de ***SaaS ***(*Software as a Service*) representa **o software é oferecido como serviço**, **dispensando a compra de licenças** para a utilização de aplicativos comerciais, e **dispensando também a aquisição de máquinas** para executar estes programas. Neste caso, o **uso de aplicativos tem um custo muito menor **do que a aquisição de licenças e instalação em máquinas, já que as empresas distribuidoras de software cortam muitos gastos, como a gravação em CDs e DVDs e os produtos chegam ao mercado em tempo muito menor.
+
+ 
+
+**D – ***nuvem gratuita, híbrida e corporativa.*
+
+ 
+
+**Errada**:  no contexto de computação em nuvem, não há definição de um tipo de armazenamento denominado "nuvem gratuita", e "nuvem corporativa" é uma outra forma de se referir à nuvem privada, já comentada acima.
+
+ 
+
+***Nuvem híbrida:*** é a **combinação **do ***ambiente público*** (*Amazon, Google, Azure, etc*) com o ***ambiente privado***, que normalmente é configurado e desenvolvido **sob demanda** em um *datacenter*, de forma tal que ambientes públicos e privados atuam de maneira **independente **e interagem quando for necessário. Assim sendo, dados sensíveis (que necessitam segurança ou maior privacidade) ficam hospedados em ambiente **privado**, e dados e sistemas que precisam ter informações disponibilizas para usuários, como um aplicativo móvel, por exemplo, são hospedados em ambiente **público**. A principal vantagem da nuvem híbrida é poder **manter dados sensíveis seguros**, evitando a exposição de todos os sistemas ou dados da organização ao público.
+
+ 
+
+**E - ***IaaS, EaaS e PaaS.*
+
+ 
+
+**Errada**: estas siglas não se referem a* tipos de nuvem*, mas à níveis de implementação da computação em nuvem, o que já nos permite descartar esta alternativa. Tais siglas têm as seguintes características:
+
+ 
+
+***IaaS ***(*Infraestrutura como serviço*) é uma infraestrutura de ***computação instantânea***, provisionada e gerenciada pela Internet. Escale ou reduza verticalmente com demanda e pague somente pelo que usar.
+
+ 
+
+***IaaS ***ajuda a evitar gastos e complexidade de comprar e gerenciar seus próprios servidores físicos e outras infraestruturas do datacenter. Cada recurso é oferecido como um componente de serviço separado e você  pode alugar um específico pelo tempo que precisar. O provedor de serviços de computação em nuvem gerencia a infraestrutura, enquanto você adquire, instala, configura e gerencia seu próprio software – sistemas operacionais, middleware e aplicativos".
+
+ 
+
+***EaaS ***(*Everything as a Service*) corresponde a uma tendência verificada recentemente que é*** transformar produtos em serviços***. Atualmente, não é obrigatório comprar um software:  é possível *alugar *em forma de pacotes de serviços com diversas funcionalidades agregadas: aplicações são concebidas sob medida para cada cliente, agregando valor ao suporte técnico e às atualizações. A definição de ***Cloud Computing representa um exemplo de EaaS***, já que corporações estão adotando tal infraestrutura para reduzir custos e melhorar o processo, evitando os alto custos com aquisição de equipamentos, mão de obra ou aquisição de licenças, agregando todos os demais conceitos que correspondem aos níveis de implementação da computação em nuvem. 
+
+ 
+
+A ***Plataforma como serviço (PaaS) ***é uma oferta de cloud computing que fornece aos usuários um ambiente de *cloud*, no qual é possível desenvolver, gerenciar e fornecer aplicativos. Além de armazenamento e de outros recursos de computação, os usuários podem usar um conjunto de ferramentas pré-montadas para desenvolver, customizar e testar seus próprios aplicativos.
+
+Principais recursos
+
+	
+- O PaaS fornece uma **plataforma **com ferramentas para testar, desenvolver e hospedar aplicativos no mesmo ambiente.
+	
+- Permite que as organizações se concentrem no desenvolvimento, sem preocupações com a infraestrutura subjacente.
+	
+- Os provedores gerenciam segurança, **sistemas operacionais**, software de servidor e backups.
+	
+- Facilita o trabalho colaborativo, mesmo se as equipes trabalharem remotamente.
+
+*Plataforma*, no contexto acima, é sinônimo de ***sistema operacional*** e, como percebemos, ***PaaS fornece um ambiente operacional*** que permite manter o foco nas aplicações, fornece um ambiente padrão independente das tecnologias utilizadas, mantém o ambiente de software e ***sistema operacional***, propicia serviços prontos para uso que suportam as aplicações, propicia um ambiente on demand e pode ser construído para resistir a falhas.
+
+ 
+
+Assim sendo, **A RESPOSTA É A LETRA B.**
+
+---
+
+### Q1933 — Conceitos e Tipos de Computação em Nuvem (Cloud Computing)
+
+- **Banca:** FGV | **Órgão:** Defensoria Pública do Estado de Mato Grosso | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `A` | **Gabarito oficial:** `E`
+- **Link no TEC Concursos:** [Questão TEC 280530](https://www.tecconcursos.com.br/questoes/280530)
+
+**Enunciado:**
+
+A respeito do armazenamento de dados na nuvem, analise as afirmativas a seguir.
+
+
+I. A principal função da nuvem é o armazenamento de dados.
+
+
+II. A robustez da conexão à Internet é essencial para o uso da nuvem.
+
+
+III. Uma nuvem descartável é indicada para projetos que são realizados uma única vez.
+
+
+Assinale:
+
+**Alternativas:**
+- A) se somente a afirmativa I estiver correta. <- ❌ Sua resposta
+- B) se somente a afirmativa II estiver correta.
+- C) se somente a afirmativa III estiver correta.
+- D) se somente as afirmativas I e II estiverem corretas.
+- E) se somente as afirmativas II e III estiverem corretas. <- ✅ Gabarito
+
+**Resolução do Professor:**
+
+Analisando as alternativas, temos que:
+
+	**I - Errada**: A **nuvem** é uma *metáfora para a Internet*. **Computação em nuvem** é uma  tendência recente de tecnologia cujo **objetivo é proporcionar serviços de Tecnologia da Informação (TI) sob demanda com pagamento baseado no uso**. Ela **permite aos usuários mover seus dados e aplicações para a nuvem** e assim acessá-los de forma simples e de qualquer local. Os recursos de TI são fornecidos como um **serviço**, permitindo aos usuários acessarem os serviços sem a necessidade de conhecimento sobre a tecnologia utilizada.
+
+	**II - Certa:** levando em conta que a utilização da nuvem envolve **tráfego de quantidades consideráveis de dados** entre o computador do usuário e os servidores da nuvem, uma conexão **robusta**, ou seja, com **taxa de transferência alta e estabilidade **é realmente fundamental para o uso destes recursos com razoável conforto.
+
+	**III - Certa**: "*nuvem descartável*" é um termo **raramente** utilizado: na verdade, em pesquisas na Internet este termo surge apenas nesta questão de prova... Quando forem utilizados recursos nuvem por **uma única vez**, será possível classificar esta nuvem como *descartável*, já que será utilizada apenas esta vez.
+
+	Assim sendo, **A RESPOSTA É A LETRA E.**
+
+---
+
+### Q1934 — Conceitos e Tipos de Computação em Nuvem (Cloud Computing)
+
+- **Banca:** CEBRASPE (CESPE) | **Órgão:** Tribunal de Justiça de Sergipe | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `E` | **Gabarito oficial:** `C`
+- **Link no TEC Concursos:** [Questão TEC 320664](https://www.tecconcursos.com.br/questoes/320664)
+
+**Enunciado:**
+
+Considerando a figura acima, que ilustra um arquivo em edição no Microsoft Excel 2010, julgue o item susbsequente.
+
+ 
+
+Caso o arquivo seja salvo na nuvem, não se observará perda de qualidade dos dados.
+
+**Alternativas:**
+- C) Certo <- ✅ Gabarito
+- E) Errado <- ❌ Sua resposta
+
+**Resolução do Professor:**
+
+***Cloud Storage*** significa **armazenamento em nuvem**, armazenamento **virtualizado **ou ainda **backup online**. Este recurso permite que dados de um dispositivo (desktop, notebook, tablet, smartphone e similares) sejam **armazenados on-line** em um servidor da Internet e que a sincronização aconteça de maneira fácil e rápida. É melhor aproveitado quando se utiliza conexão em banda larga. **Quaisquer tipos** de arquivos podem ser armazenados através deste recurso – músicas, textos, vídeos, planilhas, etc. O agendamento para sincronização requer a instalação de um aplicativo.
+
+Ao utilizar o serviço de ***Cloud Storage***, arquivos armazenados **não sofrem qualquer tipo de alteração **e, por isto, **não sofrem perda de qualidade de seus dados**. Assim sendo, **O ITEM ESTÁ CERTO****.**
+
+---
+
+### Q1935 — Conceitos e Tipos de Computação em Nuvem (Cloud Computing)
+
+- **Banca:** CEBRASPE (CESPE) | **Órgão:** Tribunal Regional do Trabalho da 17ª Região | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `C` | **Gabarito oficial:** `E`
+- **Link no TEC Concursos:** [Questão TEC 203080](https://www.tecconcursos.com.br/questoes/203080)
+
+**Enunciado:**
+
+Julgue o próximo item, relativo a redes de computadores e segurança da informação.
+
+ 
+
+A velocidade de acesso aos dados é a principal vantagem do armazenamento de dados na nuvem (cloud storage).
+
+**Alternativas:**
+- C) Certo <- ❌ Sua resposta
+- E) Errado <- ✅ Gabarito
+
+**Resolução do Professor:**
+
+A expressão*** cloud computing*** define recursos que permitem a **um usuário de Internet, em qualquer lugar, com qualquer sistema operacional e qualquer dispositivo de hardware utilizar recursos na Internet da mesma maneira que utilizaria tais recursos instalados em sua própria máquina**. Entre alguns sites que disponibilizam tais programas, destacam-se o ***Google Drive*** e o ***One Drive*** (da *Microsoft*), que oferecem a seus usuários editor de textos, software de planilhas e de apresentações direto da Internet, sem que o usuário precise ter tais programas em seu computador. No caso do ***One Drive***, o usuário pode usar ***Word***, ***Excel ***e ***Power Point ****sem a necessidade de adquirir licenças para estes aplicativos, sem instalação, atualização e sem manutenção de hardware* - **tarefas de responsabilidade do portal que mantém o serviço. **
+
+A principal vantagem deste recurso **não está na velocidade** de acesso aos dados na nuvem (que depende principalmente da velocidade do serviço de conexão à Internet utilizado), mas sim na **dispensa de gastos com licenças, e procedimentos de instalação, manutenção e backup, além da possibilidade de se acessar os dados armazenados de qualquer lugar** desde que se tenha um computador com acesso à Internet.
+
+Assim sendo, **O ITEM ESTÁ ERRADO**.
+
+---
+
+### Q1942 — Nuvens Microsoft (OneDrive e Azure)
+
+- **Banca:** CEBRASPE (CESPE) | **Órgão:** Tribunal de Justiça do Acre | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `C` | **Gabarito oficial:** `E`
+- **Link no TEC Concursos:** [Questão TEC 553223](https://www.tecconcursos.com.br/questoes/553223)
+
+**Enunciado:**
+
+Julgue o próximo item sobre redes sociais e cloud computing.
+
+ 
+
+O MS Office 365 é uma solução de Cloud Computing do tipo Plataform as a service (PaaS).
+
+**Alternativas:**
+- C) Certo <- ❌ Sua resposta
+- E) Errado <- ✅ Gabarito
+
+**Resolução do Professor:**
+
+*Julgue o próximo item sobre redes sociais e cloud computing.*
+
+ 
+
+*O MS Office 365 é uma solução de Cloud Computing do tipo Plataform as a service (PaaS).*
+
+ 
+
+O pacote Office 365 é um recurso disponível ***online***, ou seja, pode ser acessado através de qualquer computador que tenha acesso à Internet, **independentemente **do sistema operacional que utilize. O recurso permite a edição de texto com o Word, a criação e gerenciamento de planilhas com o Excel e a criação e geração de apresentações com o Power Point. Também permite ler o correio eletrônico e acessar calendário, contatos e tarefas do Outlook.com. 
+
+ 
+
+A expressão*** cloud computing*** define recursos que permitem a **um usuário de Internet, em qualquer lugar, com qualquer sistema operacional e qualquer dispositivo de hardware utilizar recursos na Internet da mesma maneira que utilizaria tais recursos instalados em sua própria máquina**. Entre alguns sites que disponibilizam tais programas, destacam-se o ***Google Drive*** e o ***One Drive*** (da *Microsoft*), que oferecem a seus usuários editor de textos, software de planilhas e de apresentações direto da Internet, sem que o usuário precise ter tais programas em seu computador. No caso do ***One Drive***, o usuário pode usar ***Word***, ***Excel ***e ***Power Point ****sem a necessidade de adquirir licenças para estes aplicativos, sem instalação, atualização e sem manutenção de hardware* - **tarefas de responsabilidade do portal que mantém o serviço. **
+
+ 
+
+O conceito de ***SaaS ***(*Software as a Service*) representa **o software é oferecido como serviço**, **dispensando a compra de licenças** para a utilização de aplicativos comerciais, e **dispensando também a aquisição de máquinas** para executar estes programas. Neste caso, o **uso de aplicativos tem um custo muito menor **do que a aquisição de licenças e instalação em máquinas, já que as empresas distribuidoras de software cortam muitos gastos, como a gravação em CDs e DVDs e os produtos chegam ao mercado em tempo muito menor.
+
+ 
+
+***PaaS ***(*Plataform as a Service*) oferece **infraestrutura de alto nível de integração para implementar e testar aplicações na nuvem**. O usuário **não administra** ou controla a infraestrutura subjacente, incluindo rede, servidores, sistemas operacionais ou armazenamento. No entanto, controla as aplicações implantadas e configurações das aplicações hospedadas nesta infraestrutura. Assim sendo, ***PaaS *fornece um sistema operacional, linguagens de programação e ambientes de desenvolvimento para as aplicações,** auxiliando a implementação de sistemas de software, já que contém ferramentas de desenvolvimento e colaboração entre desenvolvedores.
+
+ 
+
+***IaaS ****(Infrastructure as a Service*) é a parte **responsável por prover toda a infraestrutura necessária para a *PaaS *e o *SaaS*.** O principal objetivo é  é **facilitar o fornecimento de recursos, tais como servidores, rede, armazenamento **e outros recursos de computação **fundamentais **para construir um ambiente sob demanda, que podem incluir sistemas operacionais e aplicativos. ***IaaS ***utiliza técnicas de **virtualização **de recursos de computação, para permitir que a estrutura aumente ou diminua os recursos de acordo com as necessidades das aplicações. 
+
+ 
+
+Graficamente, temos que:
+
+ 
+
+ 
+
+Assim sendo, o Office 365 se encaixa na descrição de ***SaaS***, e não PaaS e, por isto, **O ITEM ESTÁ ERRADO.**
+
+---
+
+### Q1944 — Conceitos e Tipos de Computação em Nuvem (Cloud Computing)
+
+- **Banca:** CEBRASPE (CESPE) | **Órgão:** Tribunal de Justiça do Acre | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `C` | **Gabarito oficial:** `E`
+- **Link no TEC Concursos:** [Questão TEC 553222](https://www.tecconcursos.com.br/questoes/553222)
+
+**Enunciado:**
+
+Julgue o próximo item sobre redes sociais e cloud computing.
+
+ 
+
+Na computação em nuvem, o software é acessível por meio da compra de licenças.
+
+**Alternativas:**
+- C) Certo <- ❌ Sua resposta
+- E) Errado <- ✅ Gabarito
+
+**Resolução do Professor:**
+
+*Julgue o próximo item sobre redes sociais e cloud computing.*
+
+*Na computação em nuvem, o software é acessível por meio da compra de licenças.*
+
+A expressão*** cloud computing*** define recursos que permitem a um usuário de Internet, em ***qualquer lugar***, com ***qualquer sistema operacional ***e qualquer dispositivo de hardware utilizar recursos na Internet ***da mesma maneira*** que utilizaria tais recursos instalados em sua própria máquina. Entre alguns sites que disponibilizam tais programas, destacam-se o ***Google Drive*** e o ***One Drive*** (da *Microsoft*), que oferecem a seus usuários editor de textos, software de planilhas e de apresentações direto da Internet, sem que o usuário precise ter tais programas em seu computador. No caso do ***One Drive***, o usuário pode usar ***Word***, ***Excel ***e ***Power Point ******sem a necessidade de adquirir licenças para estes aplicativos**, sem instalação, atualização e sem manutenção de hardware* - tarefas de responsabilidade do portal que mantém o serviço. 
+
+Assim sendo, **O ITEM ESTÁ ERRADO.**
+
+---
+
+### Q1946 — Microsoft Teams
+
+- **Banca:** VUNESP | **Órgão:** Tribunal de Justiça de São Paulo | **Ano:** ?
+- **Primeiro Erro:** 2026-06-08 | **Última Tentativa:** 2026-06-08
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `B` | **Gabarito oficial:** `E`
+- **Link no TEC Concursos:** [Questão TEC 1766590](https://www.tecconcursos.com.br/questoes/1766590)
+
+**Enunciado:**
+
+Considerando o software Microsoft Teams, é correto afirmar que
+
+**Alternativas:**
+- A) todas as equipes criadas no Teams devem ser públicas.
+- B) um canal de uma equipe deve incluir todos os membros dessa equipe. <- ❌ Sua resposta
+- C) cada usuário do Teams não pode pertencer a mais de uma equipe.
+- D) cada equipe comporta um máximo de cinco canais.
+- E) uma equipe representa um grupo de pessoas que podem compartilhar, por exemplo, conversas. <- ✅ Gabarito
+
+**Resolução do Professor:**
+
+Vamos analisar cada alternativa de acordo com o MS Teams:
+
+ 
+
+**A)** todas as equipes criadas no Teams ~~devem ser~~ públicas.
+
+**ERRADA**. As equipes podem ser **privadas**.
+
+ 
+
+ 
+
+**B) **um canal de uma equipe ~~deve incluir~~ todos os membros dessa equipe.
+
+**ERRADA**. Isto seria verdade se este canal for configurado como padrão. Mas um canal pode ser privado e, assim, ter apenas alguns membros de uma equipe.
+
+ 
+
+**C)** cada usuário do Teams ~~não~~ pode pertencer a mais de uma equipe.
+
+**ERRADA**. Um usuário pode sim participar de mais de uma equipe.
+
+ 
+
+**D)** cada equipe comporta um ~~máximo de cinco~~ canais.
+
+**ERRADA**. Segundo a especificações da Microsoft o limite é 200 canais por equipe.
+
+ 
+
+**E)** uma equipe representa um grupo de pessoas que podem compartilhar, por exemplo, conversas.
+
+**CORRETA**. Segundo a Microsoft:
+
+ 
+
+> Uma **equipe **é **um grupo de pessoas** reunidas para realizar uma tarefa importante em sua organização. Às vezes, ela engloba toda a organização.
+> 
+> As **equipes são formadas por canais, que são as conversas** que você tem com seus colegas. Cada canal é dedicado a um tópico, departamento ou projeto específico.
+
+**ATENÇÃO:** elaboramos um pacote de questões inéditas para esse concurso. E acertamos em cheio em uma delas, pois quem a resolveu fatalmente iria acertar esta questão de prova. Confiram aqui **#1686046**.
 
 ---

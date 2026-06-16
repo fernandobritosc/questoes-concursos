@@ -50,7 +50,7 @@ export function Login() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
 
       {/* Card Principal Glassmorphic */}
-      <div className="w-full max-w-md p-8 rounded-2xl border border-border/40 bg-zinc-900/60 backdrop-blur-xl shadow-2xl relative overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-500">
+      <div className="w-full max-w-md p-8 rounded-2xl border border-border/40 bg-card/70 backdrop-blur-xl shadow-2xl relative overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-500">
         
         {/* Barra superior de gradiente */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-violet-500 to-indigo-600" />
@@ -68,7 +68,7 @@ export function Login() {
         </div>
 
         {/* Abas Alternadoras */}
-        <div className="grid grid-cols-2 bg-black/40 p-1.5 rounded-lg mb-6 border border-border/20 text-xs font-bold">
+        <div className="grid grid-cols-2 bg-muted p-1.5 rounded-lg mb-6 border border-border/20 text-xs font-bold">
           <button
             onClick={() => {
               setIsSignUp(false)
@@ -127,7 +127,7 @@ export function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="nome@email.com"
-                className="w-full bg-black/35 border border-border/60 hover:border-primary/50 focus:border-primary rounded-lg pl-10 pr-4 py-2.5 text-xs text-foreground font-semibold placeholder:text-muted-foreground/60 focus:ring-1 focus:ring-primary/20 shadow-xxs transition-all"
+                className="w-full bg-muted border border-border/60 hover:border-primary/50 focus:border-primary rounded-lg pl-10 pr-4 py-2.5 text-xs text-foreground font-semibold placeholder:text-muted-foreground/60 focus:ring-1 focus:ring-primary/20 shadow-xxs transition-all"
               />
               <Mail className="absolute left-3.5 top-3 w-4 h-4 text-muted-foreground" />
             </div>
@@ -144,7 +144,7 @@ export function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-black/35 border border-border/60 hover:border-primary/50 focus:border-primary rounded-lg pl-10 pr-4 py-2.5 text-xs text-foreground font-semibold placeholder:text-muted-foreground/60 focus:ring-1 focus:ring-primary/20 shadow-xxs transition-all"
+                className="w-full bg-muted border border-border/60 hover:border-primary/50 focus:border-primary rounded-lg pl-10 pr-4 py-2.5 text-xs text-foreground font-semibold placeholder:text-muted-foreground/60 focus:ring-1 focus:ring-primary/20 shadow-xxs transition-all"
               />
               <Lock className="absolute left-3.5 top-3 w-4 h-4 text-muted-foreground" />
             </div>

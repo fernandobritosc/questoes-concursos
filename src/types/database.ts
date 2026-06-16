@@ -87,5 +87,29 @@ export interface FilterOptions {
   concursos: string[]
 }
 
+// ─── Edital (estrutura genérica de editais de concursos) ───────────────────────
+
+export interface Edital {
+  id: string
+  orgao: string
+  sigla: string
+  banca: string
+  ano: number
+  cargos: Cargo[]
+}
+
+export interface Cargo {
+  id: string
+  nome: string
+  nivel: string
+  materias: MateriaEdital[]
+}
+
+export interface MateriaEdital {
+  id: string
+  nome: string
+  topicos: string[]
+}
+
 /** @deprecated Use ResolucaoView. Mantido para migração gradual. */
 export type Resolucao = ResolucaoView

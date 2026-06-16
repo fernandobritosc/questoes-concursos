@@ -1,0 +1,235 @@
+[
+  {
+    "id": "mpes-2026",
+    "orgao": "Ministério Público do Estado do Espírito Santo",
+    "sigla": "MPES",
+    "banca": "FGV",
+    "ano": 2026,
+    "cargos": [
+      {
+        "id": "agente-apoio",
+        "nome": "Agente de Apoio",
+        "nivel": "Médio",
+        "materias": [
+          {
+            "id": "lingua-portuguesa",
+            "nome": "Língua Portuguesa",
+            "topicos": [
+              "Elementos de construção do texto e seu sentido: gênero do texto (literário e não literário, narrativo, descritivo e argumentativo); interpretação e organização interna",
+              "Semântica: sentido e emprego dos vocábulos; campos semânticos; emprego de tempos e modos dos verbos",
+              "Morfologia: reconhecimento, emprego e sentido das classes gramaticais; processos de formação de palavras; mecanismos de flexão dos nomes e verbos",
+              "Sintaxe: frase, oração e período; termos da oração; processos de coordenação e subordinação; concordância nominal e verbal; transitividade e regência de nomes e verbos; colocação pronominal",
+              "Mecanismos de coesão textual",
+              "Ortografia; Acentuação gráfica",
+              "Emprego do sinal indicativo de crase",
+              "Pontuação",
+              "Estilística: figuras de linguagem",
+              "Reescritura de frases: substituição, deslocamento, paralelismo",
+              "Variação linguística: norma padrão"
+            ]
+          },
+          {
+            "id": "raciocinio-logico-matematico",
+            "nome": "Raciocínio Lógico-matemático",
+            "topicos": [
+              "Proposições, conectivos, equivalências lógicas, quantificadores e predicados",
+              "Conjuntos e suas operações, diagramas",
+              "Números inteiros, racionais e reais e suas operações; porcentagem; proporcionalidade direta e inversa",
+              "Medidas de comprimento, área, volume, massa e tempo",
+              "Estrutura lógica de relações arbitrárias; dedução de novas informações; avaliação de condições",
+              "Raciocínio verbal, raciocínio matemático, raciocínio sequencial, reconhecimento de padrões",
+              "Orientação espacial e temporal; formação de conceitos; discriminação de elementos",
+              "Compreensão de dados em gráficos e tabelas",
+              "Problemas de contagem e noções de probabilidade",
+              "Geometria básica: ângulos, triângulos, polígonos, distâncias, proporcionalidade, perímetro e área",
+              "Noções de estatística: média, moda, mediana e desvio padrão"
+            ]
+          },
+          {
+            "id": "legislacao-etica-mpes",
+            "nome": "Legislação e Código de Ética do MPES",
+            "topicos": [
+              "Lei Orgânica do MPES — LC Estadual nº 95/1997 (Título I, Capítulos I e II)",
+              "Constituição do Estado do Espírito Santo de 1989 (Título I, II e IV, Capítulo IV, Seção I)",
+              "Lei Estadual nº 7233/2002 — Plano de Carreiras dos Servidores do MPES",
+              "LGPD — Lei nº 13709/2018",
+              "Portaria PGJ nº 897/2023 — Política de Privacidade e Proteção de Dados no MPES",
+              "Código de Ética do MP — Resolução CNMP nº 261/2023",
+              "Portaria nº 8565/2017 — Estratégia Institucional e Governança do MPES",
+              "Planejamento Estratégico 2024-2032 do MPES",
+              "Regimento Interno da Estrutura Organizacional do MPES — Resolução nº 12/2012"
+            ]
+          },
+          {
+            "id": "direito-constitucional",
+            "nome": "Noções de Direito Constitucional",
+            "topicos": [
+              "Constituição da República Federativa do Brasil de 1988: princípios fundamentais",
+              "Organização do Estado Brasileiro: União, Estados, DF e Municípios",
+              "Direitos e Garantias Fundamentais: direitos e deveres individuais e coletivos; direitos sociais; nacionalidade",
+              "Organização dos Poderes: Executivo, Legislativo e Judiciário",
+              "Ministério Público: princípios institucionais, garantias e vedações; funções institucionais (Art. 129 da CRFB/88)",
+              "Serviços Públicos: princípios gerais; direitos dos usuários",
+              "Controle da Administração Pública: controle interno e externo; papel do MP"
+            ]
+          },
+          {
+            "id": "direito-administrativo",
+            "nome": "Noções de Direito Administrativo",
+            "topicos": [
+              "Regime Jurídico-Administrativo: princípios da Administração Pública (legalidade, impessoalidade, moralidade, publicidade, eficiência)",
+              "Organização Administrativa: Administração direta e indireta; autarquias, fundações, empresas públicas e sociedades de economia mista",
+              "Atos Administrativos: conceito, elementos, atributos e classificação; vinculação e discricionariedade; invalidade, revogação e anulação",
+              "Servidores Públicos: regime jurídico (LC nº 46/1994); direitos e deveres; processo administrativo disciplinar",
+              "Licitações e contratos administrativos: princípios; modalidades; Lei nº 14.133/2021",
+              "Improbidade Administrativa: Lei nº 8.429/1992; atos de improbidade e sanções",
+              "Processo Administrativo: princípios e fases"
+            ]
+          },
+          {
+            "id": "administracao",
+            "nome": "Noções de Administração",
+            "topicos": [
+              "Conceitos fundamentais: planejamento, organização, direção e controle",
+              "Eficiência, eficácia e efetividade",
+              "Comunicação Organizacional; tipos de comunicação",
+              "Redação oficial e administrativa",
+              "Atendimento ao público",
+              "Gestão de Documentos; protocolo e arquivo",
+              "Tabela de temporalidade: classificação e arquivamento de documentos",
+              "Noções de Gestão de Materiais: controle de estoques, aquisições, armazenamento"
+            ]
+          },
+          {
+            "id": "administracao-publica",
+            "nome": "Noções de Administração Pública",
+            "topicos": [
+              "Conceito e evolução; modelos de Administração Pública; reformas administrativas no Brasil",
+              "Princípios da Administração Pública (Art. 37 da CRFB/88)",
+              "Organização: Administração direta e indireta; autarquias, fundações, empresas públicas e sociedades de economia mista",
+              "Poderes do Administrador Público: vinculado, discricionário, hierárquico, disciplinar e regulamentar",
+              "Serviços Públicos: conceito, classificação, formas de prestação, princípios",
+              "Transparência e controle; Lei de Acesso à Informação (Lei nº 12.527/2011); Portal da Transparência; controle social",
+              "Ética no Serviço Público: Código de Ética Profissional (Decreto nº 1.171/1994); conflito de interesses",
+              "Qualidade no Serviço Público: ouvidoria e atendimento ao cidadão; gestão por resultados",
+              "SEI — Sistema Eletrônico de Informações: noções básicas; tramitação de processos digitais; protocolo eletrônico",
+              "Gestão de documentos no MPES: normas internas de arquivamento; controle de prazos processuais; preservação de documentos",
+              "Atendimento no MPES: postura institucional; sigilo e confidencialidade; relacionamento interpessoal"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "agente-tecnico",
+        "nome": "Agente Técnico",
+        "nivel": "Superior",
+        "materias": [
+          {
+            "id": "lingua-portuguesa",
+            "nome": "Língua Portuguesa",
+            "topicos": [
+              "Elementos de construção do texto e seu sentido: gênero do texto (literário e não literário, narrativo, descritivo e argumentativo); interpretação e organização interna",
+              "Semântica: sentido e emprego dos vocábulos; campos semânticos; emprego de tempos e modos dos verbos",
+              "Morfologia: reconhecimento, emprego e sentido das classes gramaticais; processos de formação de palavras; mecanismos de flexão dos nomes e verbos",
+              "Sintaxe: frase, oração e período; termos da oração; processos de coordenação e subordinação; concordância nominal e verbal; transitividade e regência de nomes e verbos; colocação pronominal",
+              "Mecanismos de coesão textual",
+              "Ortografia; Acentuação gráfica",
+              "Emprego do sinal indicativo de crase",
+              "Pontuação",
+              "Estilística: figuras de linguagem",
+              "Reescritura de frases: substituição, deslocamento, paralelismo",
+              "Variação linguística: norma padrão"
+            ]
+          },
+          {
+            "id": "raciocinio-logico-matematico",
+            "nome": "Raciocínio Lógico-matemático",
+            "topicos": [
+              "Proposições, conectivos, equivalências lógicas, quantificadores e predicados",
+              "Conjuntos e suas operações, diagramas",
+              "Números inteiros, racionais e reais e suas operações; porcentagem; proporcionalidade direta e inversa",
+              "Medidas de comprimento, área, volume, massa e tempo",
+              "Estrutura lógica de relações arbitrárias; dedução de novas informações; avaliação de condições",
+              "Raciocínio verbal, raciocínio matemático, raciocínio sequencial, reconhecimento de padrões",
+              "Orientação espacial e temporal; formação de conceitos; discriminação de elementos",
+              "Compreensão de dados em gráficos e tabelas",
+              "Problemas de contagem e noções de probabilidade",
+              "Geometria básica: ângulos, triângulos, polígonos, distâncias, proporcionalidade, perímetro e área",
+              "Noções de estatística: média, moda, mediana e desvio padrão"
+            ]
+          },
+          {
+            "id": "legislacao-etica-mpes",
+            "nome": "Legislação e Código de Ética do MPES",
+            "topicos": [
+              "Lei Orgânica do MPES — LC Estadual nº 95/1997 (Título I, Capítulos I e II)",
+              "Constituição do Estado do Espírito Santo de 1989 (Título I, II e IV, Capítulo IV, Seção I)",
+              "Lei Estadual nº 7233/2002 — Plano de Carreiras dos Servidores do MPES",
+              "LGPD — Lei nº 13709/2018",
+              "Portaria PGJ nº 897/2023 — Política de Privacidade e Proteção de Dados no MPES",
+              "Código de Ética do MP — Resolução CNMP nº 261/2023",
+              "Portaria nº 8565/2017 — Estratégia Institucional e Governança do MPES",
+              "Planejamento Estratégico 2024-2032 do MPES",
+              "Regimento Interno da Estrutura Organizacional do MPES — Resolução nº 12/2012"
+            ]
+          },
+          {
+            "id": "direito-constitucional",
+            "nome": "Noções de Direito Constitucional",
+            "topicos": [
+              "Constituição da República Federativa do Brasil de 1988: princípios fundamentais",
+              "Organização do Estado Brasileiro: União, Estados, DF e Municípios",
+              "Direitos e Garantias Fundamentais: direitos e deveres individuais e coletivos; direitos sociais; nacionalidade",
+              "Organização dos Poderes: Executivo, Legislativo e Judiciário",
+              "Ministério Público: princípios institucionais, garantias e vedações; funções institucionais (Art. 129 da CRFB/88)",
+              "Serviços Públicos: princípios gerais; direitos dos usuários",
+              "Controle da Administração Pública: controle interno e externo; papel do MP"
+            ]
+          },
+          {
+            "id": "direito-administrativo",
+            "nome": "Noções de Direito Administrativo",
+            "topicos": [
+              "Regime Jurídico-Administrativo: princípios da Administração Pública",
+              "Organização Administrativa: Administração direta e indireta",
+              "Atos Administrativos: conceito, elementos, atributos e classificação",
+              "Servidores Públicos: regime jurídico (LC nº 46/1994)",
+              "Licitações e contratos administrativos: Lei nº 14.133/2021",
+              "Improbidade Administrativa: Lei nº 8.429/1992",
+              "Processo Administrativo: princípios e fases"
+            ]
+          },
+          {
+            "id": "administracao",
+            "nome": "Noções de Administração",
+            "topicos": [
+              "Conceitos fundamentais: planejamento, organização, direção e controle",
+              "Eficiência, eficácia e efetividade",
+              "Comunicação Organizacional; redação oficial e administrativa",
+              "Atendimento ao público",
+              "Gestão de Documentos; protocolo e arquivo",
+              "Tabela de temporalidade",
+              "Noções de Gestão de Materiais"
+            ]
+          },
+          {
+            "id": "administracao-publica",
+            "nome": "Noções de Administração Pública",
+            "topicos": [
+              "Conceito e evolução; modelos de Administração Pública",
+              "Princípios da Administração Pública (Art. 37 da CRFB/88)",
+              "Organização: Administração direta e indireta",
+              "Poderes do Administrador Público",
+              "Serviços Públicos: conceito, classificação, princípios",
+              "Transparência; Lei de Acesso à Informação (Lei nº 12.527/2011)",
+              "Ética no Serviço Público (Decreto nº 1.171/1994)",
+              "SEI: noções básicas",
+              "Gestão de documentos no MPES",
+              "Atendimento no MPES"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

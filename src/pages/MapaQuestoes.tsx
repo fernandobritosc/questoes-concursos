@@ -343,7 +343,7 @@ export function MapaQuestoes() {
         </div>
 
         {/* Seletor de Modo de Armazenamento */}
-        <div className="flex items-center gap-3 bg-card/45 border border-border/80 px-4 py-2 rounded-xl shadow-xxs backdrop-blur-xxs self-start md:self-auto shrink-0">
+        <div className="flex items-center gap-3 bg-card/45 border border-border/80 px-4 py-2 rounded-xl shadow-xxs backdrop-blur-sm self-start md:self-auto shrink-0">
           <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Estudo PDF:</span>
           <div className="flex items-center bg-muted/65 p-0.5 rounded-lg border border-border/40">
             <button

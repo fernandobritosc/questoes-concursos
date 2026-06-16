@@ -80,84 +80,6 @@ Sobre competência material, o Supremo Tribunal Federal adotou Tema de Repercuss
 
 ---
 
-### Q143 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
-
-- **Banca:** VUNESP | **Órgão:** CIJUN | **Ano:** 2023
-- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `?` | **Gabarito oficial:** `D`
-- **Link no TEC Concursos:** [Questão TEC 2896922](https://www.tecconcursos.com.br/questoes/2896922)
-
-**Enunciado:**
-
-Mariana, residente e domiciliada em Campinas, firmou contrato de emprego com a Empresa X sediada na cidade de São Paulo, para prestar serviços em Jundiaí, na medida em que seu empregador exerce atividades em diversas localidades do Estado de São Paulo. Considere que Mariana foi dispensada sem receber integralmente as verbas rescisórias a que teria direito. Com base nas regras de competência previstas na CLT, eventual reclamação trabalhista da Mariana deverá ser proposta:
-
-**Alternativas:**
-- A) somente na cidade de São Paulo, por ser o local da contratação.
-- B) somente na cidade de Campinas, por ser o local do seu domicílio.
-- C) nas cidades de São Paulo, Jundiaí ou Campinas, por serem, respectivamente, o foro da celebração do contrato, o foro da prestação dos serviços e o foro do domicílio do empregado.
-- D) somente nas cidades de São Paulo ou Jundiaí, por serem, respectivamente, o foro da celebração do contrato e o da prestação dos serviços. <- ✅ Gabarito
-- E) somente nas cidades de São Paulo ou Campinas, por ser, respectivamente, o foro da celebração do contrato e o foro do domicílio do empregado.
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
-### Q239 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
-
-- **Banca:** VUNESP | **Órgão:** Pref Paulínia | **Ano:** 2025
-- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `?` | **Gabarito oficial:** `D`
-- **Link no TEC Concursos:** [Questão TEC 3772813](https://www.tecconcursos.com.br/questoes/3772813)
-
-**Enunciado:**
-
-Nos termos da Constituição Federal e da jurisprudência consolidada do TST, a Justiça do Trabalho é competente para processar e julgar as ações a) relativas à indenização por dano moral ou patrimonial decorrentes da relação de trabalho, salvo quando propostas por sucessores de empregado falecido. 19/05/2026, 18:11 Tec Concursos - Questões para concursos, provas, editais, simulados. https://
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
-### Q78 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
-
-- **Banca:** NOSSO RUMO | **Órgão:** Pref São Carlos | **Ano:** 2023
-- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `?` | **Gabarito oficial:** `C`
-- **Link no TEC Concursos:** [Questão TEC 2569975](https://www.tecconcursos.com.br/questoes/2569975)
-
-**Enunciado:**
-
-Nos exatos termos da Consolidação das Leis do Trabalho, o local competente para julgar ação movida por viajante comercial é
-
-**Alternativas:**
-- A) no local da prestação dos serviços.
-- B) no local de residência do empregado.
-- C) no local da sede da empresa empregadora. <- ✅ Gabarito
-- D) no local da celebração do contrato.
-- E) no local da sede do Tribunal Regional do Trabalho da Jurisdição competente.
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
-### Q84 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
-
-- **Banca:** VUNESP | **Órgão:** QC (EsFCEx) | **Ano:** 2023
-- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `?` | **Gabarito oficial:** `E`
-- **Link no TEC Concursos:** [Questão TEC 2620742](https://www.tecconcursos.com.br/questoes/2620742)
-
-**Enunciado:**
-
-Relativamente à competência da Justiça do Trabalho, à luz da Constituição Federal e do entendimento sumulado pelo TST, analise as afirmações abaixo e assinale a correta. a) A Justiça do Trabalho não possui competência material para determinar o recolhimento das contribuições fiscais, devendo os autos serem encaminhados à Justiça Federal Comum para esse mister. 19/05/2026, 18:11 Tec Concursos - Questões para concursos, provas, editais, simulados. https://
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
 ### Q87 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
 
 - **Banca:** FAU UNICENTRO | **Órgão:** Pref Foz do Jordão | **Ano:** 2023
@@ -201,6 +123,84 @@ No que concerne ao processo do trabalho, julgue o item. A competência da Justi�
 
 ---
 
+### Q84 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
+
+- **Banca:** VUNESP | **Órgão:** QC (EsFCEx) | **Ano:** 2023
+- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `?` | **Gabarito oficial:** `E`
+- **Link no TEC Concursos:** [Questão TEC 2620742](https://www.tecconcursos.com.br/questoes/2620742)
+
+**Enunciado:**
+
+Relativamente à competência da Justiça do Trabalho, à luz da Constituição Federal e do entendimento sumulado pelo TST, analise as afirmações abaixo e assinale a correta. a) A Justiça do Trabalho não possui competência material para determinar o recolhimento das contribuições fiscais, devendo os autos serem encaminhados à Justiça Federal Comum para esse mister. 19/05/2026, 18:11 Tec Concursos - Questões para concursos, provas, editais, simulados. https://
+
+**Resolução do Professor:** (sem resolução cadastrada)
+
+---
+
+### Q78 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
+
+- **Banca:** NOSSO RUMO | **Órgão:** Pref São Carlos | **Ano:** 2023
+- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `?` | **Gabarito oficial:** `C`
+- **Link no TEC Concursos:** [Questão TEC 2569975](https://www.tecconcursos.com.br/questoes/2569975)
+
+**Enunciado:**
+
+Nos exatos termos da Consolidação das Leis do Trabalho, o local competente para julgar ação movida por viajante comercial é
+
+**Alternativas:**
+- A) no local da prestação dos serviços.
+- B) no local de residência do empregado.
+- C) no local da sede da empresa empregadora. <- ✅ Gabarito
+- D) no local da celebração do contrato.
+- E) no local da sede do Tribunal Regional do Trabalho da Jurisdição competente.
+
+**Resolução do Professor:** (sem resolução cadastrada)
+
+---
+
+### Q239 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
+
+- **Banca:** VUNESP | **Órgão:** Pref Paulínia | **Ano:** 2025
+- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `?` | **Gabarito oficial:** `D`
+- **Link no TEC Concursos:** [Questão TEC 3772813](https://www.tecconcursos.com.br/questoes/3772813)
+
+**Enunciado:**
+
+Nos termos da Constituição Federal e da jurisprudência consolidada do TST, a Justiça do Trabalho é competente para processar e julgar as ações a) relativas à indenização por dano moral ou patrimonial decorrentes da relação de trabalho, salvo quando propostas por sucessores de empregado falecido. 19/05/2026, 18:11 Tec Concursos - Questões para concursos, provas, editais, simulados. https://
+
+**Resolução do Professor:** (sem resolução cadastrada)
+
+---
+
+### Q143 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
+
+- **Banca:** VUNESP | **Órgão:** CIJUN | **Ano:** 2023
+- **Primeiro Erro:** 2026-05-24 | **Última Tentativa:** 2026-05-24
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `?` | **Gabarito oficial:** `D`
+- **Link no TEC Concursos:** [Questão TEC 2896922](https://www.tecconcursos.com.br/questoes/2896922)
+
+**Enunciado:**
+
+Mariana, residente e domiciliada em Campinas, firmou contrato de emprego com a Empresa X sediada na cidade de São Paulo, para prestar serviços em Jundiaí, na medida em que seu empregador exerce atividades em diversas localidades do Estado de São Paulo. Considere que Mariana foi dispensada sem receber integralmente as verbas rescisórias a que teria direito. Com base nas regras de competência previstas na CLT, eventual reclamação trabalhista da Mariana deverá ser proposta:
+
+**Alternativas:**
+- A) somente na cidade de São Paulo, por ser o local da contratação.
+- B) somente na cidade de Campinas, por ser o local do seu domicílio.
+- C) nas cidades de São Paulo, Jundiaí ou Campinas, por serem, respectivamente, o foro da celebração do contrato, o foro da prestação dos serviços e o foro do domicílio do empregado.
+- D) somente nas cidades de São Paulo ou Jundiaí, por serem, respectivamente, o foro da celebração do contrato e o da prestação dos serviços. <- ✅ Gabarito
+- E) somente nas cidades de São Paulo ou Campinas, por ser, respectivamente, o foro da celebração do contrato e o foro do domicílio do empregado.
+
+**Resolução do Professor:** (sem resolução cadastrada)
+
+---
+
 ### Q72 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
 
 - **Banca:** IBFC | **Órgão:** CM Franca | **Ano:** 2022
@@ -218,6 +218,28 @@ A respeito das disposições constitucionais sobre o Direito Processual do Traba
 - B) Ações de indenização por dano moral ou patrimonial, decorrentes da relação de trabalho
 - C) Ações sobre representação sindical, entre sindicatos, entre sindicatos e trabalhadores e entre sindicatos e empregadores <- ❌ Sua resposta
 - D) Ações que disponham sobre crimes contra a organização do trabalho <- ✅ Gabarito
+
+**Resolução do Professor:** (sem resolução cadastrada)
+
+---
+
+### Q177 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
+
+- **Banca:** VUNESP | **Órgão:** Pref Lins | **Ano:** 2024
+- **Primeiro Erro:** 2026-05-25 | **Última Tentativa:** 2026-05-25
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `B` | **Gabarito oficial:** `C`
+- **Link no TEC Concursos:** [Questão TEC 3141192](https://www.tecconcursos.com.br/questoes/3141192)
+
+**Enunciado:**
+
+Relativamente ao processo trabalhista, assinale a alternativa correta.
+
+**Alternativas:**
+- A) De acordo com jurisprudência do TST, o jus postulandi das partes, no âmbito da Justiça Laboral, limita-se às Varas do Trabalho, não alcançando as ações processadas nos Tribunais Regionais do Trabalho.
+- B) Conforme orientação sumulada do TST, compete ao Presidente do Tribunal Regional do Trabalho decidir conflito de competência entre o Tribunal Regional do Trabalho e a Vara do Trabalho a ele vinculada. <- ❌ Sua resposta
+- C) Compete à Justiça do Trabalho processar e julgar as ações relativas às penalidades administrativas impostas aos empregadores pelos órgãos de fiscalização das relações de trabalho. <- ✅ Gabarito
+- D) Ainda que se trate de matéria decorrente da relação de trabalho, a Justiça Trabalhista não possui competência para apreciar ações de habeas corpus e/ou habeas data.
 
 **Resolução do Professor:** (sem resolução cadastrada)
 
@@ -241,28 +263,6 @@ A Consolidação das Leis do Trabalho (Decreto nº 5.452/1943) estabelece que co
 - C) julgar os embargos opostos às decisões do Tribunal Superior do Trabalho.
 - D) impor multas e demais penalidades relativas aos atos da Justiça Comum.
 - E) decidir quanto à homologação de acordo extrajudicial em matéria de competência da Justiça do Trabalho. <- ✅ Gabarito
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
-### Q177 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
-
-- **Banca:** VUNESP | **Órgão:** Pref Lins | **Ano:** 2024
-- **Primeiro Erro:** 2026-05-25 | **Última Tentativa:** 2026-05-25
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `B` | **Gabarito oficial:** `C`
-- **Link no TEC Concursos:** [Questão TEC 3141192](https://www.tecconcursos.com.br/questoes/3141192)
-
-**Enunciado:**
-
-Relativamente ao processo trabalhista, assinale a alternativa correta.
-
-**Alternativas:**
-- A) De acordo com jurisprudência do TST, o jus postulandi das partes, no âmbito da Justiça Laboral, limita-se às Varas do Trabalho, não alcançando as ações processadas nos Tribunais Regionais do Trabalho.
-- B) Conforme orientação sumulada do TST, compete ao Presidente do Tribunal Regional do Trabalho decidir conflito de competência entre o Tribunal Regional do Trabalho e a Vara do Trabalho a ele vinculada. <- ❌ Sua resposta
-- C) Compete à Justiça do Trabalho processar e julgar as ações relativas às penalidades administrativas impostas aos empregadores pelos órgãos de fiscalização das relações de trabalho. <- ✅ Gabarito
-- D) Ainda que se trate de matéria decorrente da relação de trabalho, a Justiça Trabalhista não possui competência para apreciar ações de habeas corpus e/ou habeas data.
 
 **Resolução do Professor:** (sem resolução cadastrada)
 
@@ -372,28 +372,6 @@ Continue firme nos estudos. Cada questão resolvida é um passo a mais rumo à s
 
 ---
 
-### Q218 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
-
-- **Banca:** SELECON | **Órgão:** ION | **Ano:** 2025
-- **Primeiro Erro:** 2026-05-25 | **Última Tentativa:** 2026-05-25
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `A` | **Gabarito oficial:** `B`
-- **Link no TEC Concursos:** [Questão TEC 3519665](https://www.tecconcursos.com.br/questoes/3519665)
-
-**Enunciado:**
-
-A competência da Justiça do Trabalho está definida na Constituição Federal e abrange a resolução de conflitos trabalhistas, incluindo dissídios individuais e coletivos entre trabalhadores e empregadores. A competência em razão da matéria no processo do trabalho é:
-
-**Alternativas:**
-- A) determinada de acordo com o valor da causa <- ❌ Sua resposta
-- B) fixada em decorrência da causa de pedir e do pedido <- ✅ Gabarito
-- C) estabelecida de acordo com as funções que o julgador exerce no processo
-- D) atribuída tendo como referência as divisões dos diversos órgãos jurisdicionais no território nacional
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
 ### Q228 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
 
 - **Banca:** FGV | **Órgão:** OAB | **Ano:** 2025
@@ -411,6 +389,28 @@ Helena foi empregada de uma sociedade empresária de fevereiro de 2022 a janeiro
 - B) A reclamação trabalhista será livremente distribuída a uma das Varas do Trabalho de São Paulo. <- ✅ Gabarito
 - C) Qualquer Juízo do Trabalho poderá apreciar a demanda na localidade de São Paulo, exceto a 950ª Vara, que já realizou parte da instrução e formou juízo de valor. <- ❌ Sua resposta
 - D) Far-se-á a distribuição por dependência à 950ª Vara do Trabalho de São Paulo, cabendo ao(à) advogado(a) do réu suscitar exceção de suspeição, caso o mesmo Magistrado que instruiu a produção antecipada da prova queira julgar a causa.
+
+**Resolução do Professor:** (sem resolução cadastrada)
+
+---
+
+### Q218 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
+
+- **Banca:** SELECON | **Órgão:** ION | **Ano:** 2025
+- **Primeiro Erro:** 2026-05-25 | **Última Tentativa:** 2026-05-25
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `A` | **Gabarito oficial:** `B`
+- **Link no TEC Concursos:** [Questão TEC 3519665](https://www.tecconcursos.com.br/questoes/3519665)
+
+**Enunciado:**
+
+A competência da Justiça do Trabalho está definida na Constituição Federal e abrange a resolução de conflitos trabalhistas, incluindo dissídios individuais e coletivos entre trabalhadores e empregadores. A competência em razão da matéria no processo do trabalho é:
+
+**Alternativas:**
+- A) determinada de acordo com o valor da causa <- ❌ Sua resposta
+- B) fixada em decorrência da causa de pedir e do pedido <- ✅ Gabarito
+- C) estabelecida de acordo com as funções que o julgador exerce no processo
+- D) atribuída tendo como referência as divisões dos diversos órgãos jurisdicionais no território nacional
 
 **Resolução do Professor:** (sem resolução cadastrada)
 
@@ -644,29 +644,6 @@ A luz da CF/1988, sobre a competência da Justiça do Trabalho para processar e 
 
 ---
 
-### Q128 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
-
-- **Banca:** Instituto AOCP | **Órgão:** TRT 19 | **Ano:** 2022
-- **Primeiro Erro:** 2026-05-31 | **Última Tentativa:** 2026-05-31
-- **Tentativas de Erro:** 1
-- **Sua última resposta:** `A` | **Gabarito oficial:** `C`
-- **Link no TEC Concursos:** [Questão TEC 2872581](https://www.tecconcursos.com.br/questoes/2872581)
-
-**Enunciado:**
-
-Acerca da competência, a Constituição da República Federativa do Brasil e a Consolidação das Leis do Trabalho estabelecem que será competência da Justiça do Trabalho brasileira
-
-**Alternativas:**
-- A) a execução das contribuições previdenciárias que sejam incidentes sobre os salários pagos durante a contratualidade, no caso de sentença que reconheça o vínculo empregatício. <- ❌ Sua resposta
-- B) processar e julgar as ações de indenização por danos patrimoniais e extrapatrimoniais, inclusive as decorrentes de acidente de trabalho, ocorridas nas relações de trabalho, abrangidas as relações de natureza estatutária.
-- C) processar e julgar os conflitos de competência entre os seus próprios órgãos e os eventuais conflitos de competência que envolvam os juízes de direito que possuam jurisdição trabalhista. <- ✅ Gabarito
-- D) processar e julgar os dissídios individuais quando o empregado for brasileiro e tenha prestado serviços em agência ou filial no estrangeiro, independente da disposição em convenção internacional.
-- E) processar e julgar os dissídios individuais cujos serviços tenham sido prestados no Brasil, ainda que o empregado tenha sido contratado no estrangeiro, desde que ele seja brasileiro e o autor da ação.
-
-**Resolução do Professor:** (sem resolução cadastrada)
-
----
-
 ### Q51 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
 
 - **Banca:** FUMARC | **Órgão:** TRT 3 | **Ano:** 2022
@@ -707,6 +684,29 @@ Segundo a Consolidação das Leis do Trabalho, sobre processo judiciário do tra
 - B) E - C. <- ✅ Gabarito
 - C) C - E. <- ❌ Sua resposta
 - D) E - E.
+
+**Resolução do Professor:** (sem resolução cadastrada)
+
+---
+
+### Q128 — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)
+
+- **Banca:** Instituto AOCP | **Órgão:** TRT 19 | **Ano:** 2022
+- **Primeiro Erro:** 2026-05-31 | **Última Tentativa:** 2026-05-31
+- **Tentativas de Erro:** 1
+- **Sua última resposta:** `A` | **Gabarito oficial:** `C`
+- **Link no TEC Concursos:** [Questão TEC 2872581](https://www.tecconcursos.com.br/questoes/2872581)
+
+**Enunciado:**
+
+Acerca da competência, a Constituição da República Federativa do Brasil e a Consolidação das Leis do Trabalho estabelecem que será competência da Justiça do Trabalho brasileira
+
+**Alternativas:**
+- A) a execução das contribuições previdenciárias que sejam incidentes sobre os salários pagos durante a contratualidade, no caso de sentença que reconheça o vínculo empregatício. <- ❌ Sua resposta
+- B) processar e julgar as ações de indenização por danos patrimoniais e extrapatrimoniais, inclusive as decorrentes de acidente de trabalho, ocorridas nas relações de trabalho, abrangidas as relações de natureza estatutária.
+- C) processar e julgar os conflitos de competência entre os seus próprios órgãos e os eventuais conflitos de competência que envolvam os juízes de direito que possuam jurisdição trabalhista. <- ✅ Gabarito
+- D) processar e julgar os dissídios individuais quando o empregado for brasileiro e tenha prestado serviços em agência ou filial no estrangeiro, independente da disposição em convenção internacional.
+- E) processar e julgar os dissídios individuais cujos serviços tenham sido prestados no Brasil, ainda que o empregado tenha sido contratado no estrangeiro, desde que ele seja brasileiro e o autor da ação.
 
 **Resolução do Professor:** (sem resolução cadastrada)
 

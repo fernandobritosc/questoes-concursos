@@ -1,16 +1,22 @@
 import { useState, useMemo, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import {
   BookOpen,
   Loader2,
   ClipboardList,
   PieChart,
+  FileText,
+  Settings2,
 } from 'lucide-react'
 import { fetchAllQuestoes } from '../services/supabase.service'
 import type { ResolucaoView } from '../types/database'
 import { EditalSidebar } from '../components/EditalSidebar'
 import { EditalMateriaDetalhes } from '../components/EditalMateriaDetalhes'
 import { EditalAssuntoItem } from '../components/EditalAssuntoItem'
+import { EditalTreeSidebar } from '../components/EditalTreeSidebar'
+import { EditalTopicoDetalhes } from '../components/EditalTopicoDetalhes'
 import { useToast } from '../contexts/ToastContext'
+import { listEditais } from '../lib/editaisStorage'
 
 export function EditalVerticalizado() {
   const toast = useToast()
@@ -54,6 +60,18 @@ export function EditalVerticalizado() {
   const [showAddMateria, setShowAddMateria] = useState(false)
   const [statusFiltro, setStatusFiltro] = useState<'todos' | 'criticos' | 'nao_iniciados'>('todos')
 
+  // Estados do Modo Edital
+  const [editaisList] = useState(() => listEditais())
+  const [selectedEditalId, setSelectedEditalId] = useState<string | null>(null)
+  const [selectedCargoId, setSelectedCargoId] = useState<string | null>(null)
+  const [selectedMateriaIdEdital, setSelectedMateriaIdEdital] = useState<string | null>(null)
+
+  const selectedEdital = selectedEditalId
+    ? editaisList.find(e => e.id === selectedEditalId) ?? null
+    : null
+
+  const isEditalMode = selectedEdital !== null
+
   // Carregar dados iniciais da base
   useEffect(() => {
     async function load() {
@@ -68,6 +86,14 @@ export function EditalVerticalizado() {
     }
     load()
   }, [])
+
+  // Auto-selecionar primeiro cargo ao entrar em modo edital
+  useEffect(() => {
+    if (isEditalMode && !selectedCargoId && selectedEdital.cargos.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedCargoId(selectedEdital.cargos[0].id)
+    }
+  }, [isEditalMode, selectedCargoId, selectedEdital])
 
   // Auto-selecionar a primeira matéria ao carregar
   const uniqueMateriasList = useMemo(() => {
@@ -299,6 +325,19 @@ export function EditalVerticalizado() {
       }, 0)
   }, [resolucoes, customOrder])
 
+  // Computações do Modo Edital
+  const selectedCargo = useMemo(() => {
+    if (!selectedEdital || !selectedCargoId) return null
+    return selectedEdital.cargos.find(c => c.id === selectedCargoId) ?? null
+  }, [selectedEdital, selectedCargoId])
+
+  const selectedMateriaEdital = useMemo(() => {
+    if (!selectedCargo || !selectedMateriaIdEdital) return null
+    return selectedCargo.materias.find(m => m.id === selectedMateriaIdEdital) ?? null
+  }, [selectedCargo, selectedMateriaIdEdital])
+
+
+
   if (loading) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center min-h-[300px] text-muted-foreground gap-3">
@@ -323,90 +362,165 @@ export function EditalVerticalizado() {
           </div>
         </div>
 
-        {/* Estatísticas Rápidas do Topo */}
-        <div className="hidden md:flex items-center gap-6 text-xxs font-bold">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/40 border border-border rounded-lg">
-            <BookOpen className="w-4 h-4 text-primary" />
-            <span>Matérias: <strong className="text-foreground">{uniqueMateriasList.length}</strong></span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/40 border border-border rounded-lg">
-            <PieChart className="w-4 h-4 text-teal-600 animate-pulse" />
-            <span>Assuntos Totais: <strong className="text-foreground">{totalAssuntosCount}</strong></span>
-          </div>
+        {/* Seletor de Edital + Estatísticas */}
+        <div className="flex items-center gap-3">
+          <Link
+            to="/app/edital/gerenciar"
+            className="p-2 text-muted-foreground hover:text-primary hover:bg-muted border border-border rounded-lg transition-all cursor-pointer hidden md:flex"
+            title="Gerenciar Editais"
+          >
+            <Settings2 className="w-4 h-4" />
+          </Link>
+          <select
+            value={selectedEditalId ?? ''}
+            onChange={(e) => {
+              const val = e.target.value || null
+              setSelectedEditalId(val)
+              setSelectedCargoId(null)
+              setSelectedMateriaIdEdital(null)
+              setSelectedMateria(null)
+            }}
+            className="px-3 py-1.5 border border-border rounded-lg bg-card text-[11px] font-bold text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer max-w-[200px]"
+          >
+            <option value="">Catálogo Geral</option>
+            {editaisList.map(ed => (
+              <option key={ed.id} value={ed.id}>{ed.sigla} {ed.ano} — {ed.banca}</option>
+            ))}
+          </select>
+
+          {!isEditalMode && (
+            <div className="hidden md:flex items-center gap-6 text-xxs font-bold">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/40 border border-border rounded-lg">
+                <BookOpen className="w-4 h-4 text-primary" />
+                <span>Matérias: <strong className="text-foreground">{uniqueMateriasList.length}</strong></span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/40 border border-border rounded-lg">
+                <PieChart className="w-4 h-4 text-teal-600" />
+                <span>Assuntos Totais: <strong className="text-foreground">{totalAssuntosCount}</strong></span>
+              </div>
+            </div>
+          )}
+
+          {isEditalMode && selectedEdital && (
+            <div className="hidden md:flex items-center gap-6 text-xxs font-bold">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/40 border border-border rounded-lg">
+                <FileText className="w-4 h-4 text-primary" />
+                <span>Órgão: <strong className="text-foreground">{selectedEdital.sigla}</strong></span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/40 border border-border rounded-lg">
+                <PieChart className="w-4 h-4 text-teal-600" />
+                <span>Cargos: <strong className="text-foreground">{selectedEdital.cargos.length}</strong></span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Grid de 2 Colunas (Responsivo no celular) */}
       <div className="flex-1 flex overflow-hidden relative">
 
-        <EditalSidebar
-          materias={materiasFiltradas}
-          selectedMateria={selectedMateria}
-          onSelectMateria={setSelectedMateria}
-          materiaSearch={materiaSearch}
-          onMateriaSearchChange={setMateriaSearch}
-          showAddMateria={showAddMateria}
-          onToggleAddMateria={() => setShowAddMateria(!showAddMateria)}
-          newMateriaName={newMateriaName}
-          onNewMateriaNameChange={setNewMateriaName}
-          onAddMateria={handleAddMateria}
-          customMaterias={customMaterias}
-          onRemoveCustomMateria={handleRemoveCustomMateria}
-          getQuestaoCount={(materia) => resolucoes.filter(r => r.materia === materia).length}
-        />
+        {isEditalMode && selectedEdital ? (
+          <EditalTreeSidebar
+            edital={selectedEdital}
+            selectedCargoId={selectedCargoId}
+            onSelectCargo={(cargoId) => {
+              setSelectedCargoId(cargoId)
+              setSelectedMateriaIdEdital(null)
+            }}
+            selectedMateriaId={selectedMateriaIdEdital}
+            onSelectMateria={setSelectedMateriaIdEdital}
+            resolucoes={resolucoes}
+          />
+        ) : (
+          <EditalSidebar
+            materias={materiasFiltradas}
+            selectedMateria={selectedMateria}
+            onSelectMateria={setSelectedMateria}
+            materiaSearch={materiaSearch}
+            onMateriaSearchChange={setMateriaSearch}
+            showAddMateria={showAddMateria}
+            onToggleAddMateria={() => setShowAddMateria(!showAddMateria)}
+            newMateriaName={newMateriaName}
+            onNewMateriaNameChange={setNewMateriaName}
+            onAddMateria={handleAddMateria}
+            customMaterias={customMaterias}
+            onRemoveCustomMateria={handleRemoveCustomMateria}
+            getQuestaoCount={(materia) => resolucoes.filter(r => r.materia === materia).length}
+          />
+        )}
 
-        <EditalMateriaDetalhes
-          selectedMateria={selectedMateria}
-          onVoltar={() => setSelectedMateria(null)}
-          assuntosCount={assuntosDaMateria.length}
-          totalQuestoes={materiaMetrics.totalQuestoes}
-          taxaAcerto={materiaMetrics.taxaAcerto}
-          resolvidosCount={materiaMetrics.resolvidosCount}
-          assuntoSearch={assuntoSearch}
-          onAssuntoSearchChange={setAssuntoSearch}
-          newAssuntoName={newAssuntoName}
-          onNewAssuntoNameChange={setNewAssuntoName}
-          onAddAssunto={handleAddAssunto}
-          statusFiltro={statusFiltro}
-          onStatusFiltroChange={setStatusFiltro}
-        >
-          {assuntosFiltrados.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-border border-dashed rounded-xl text-muted-foreground gap-2">
-              <BookOpen className="w-10 h-10 text-muted-foreground/30" />
-              <h4 className="text-xs font-bold text-foreground">Nenhum assunto catalogado</h4>
-              <p className="text-xxs text-muted-foreground max-w-sm">Adicione um assunto manualmente acima para iniciar a organização verticalizada da matéria.</p>
+        {isEditalMode && selectedMateriaEdital ? (
+          <EditalTopicoDetalhes
+            materiaEdital={selectedMateriaEdital}
+            onVoltar={() => setSelectedMateriaIdEdital(null)}
+            resolucoes={resolucoes}
+            assuntoSearch={assuntoSearch}
+            onAssuntoSearchChange={setAssuntoSearch}
+            statusFiltro={statusFiltro === 'nao_iniciados' ? 'todos' : statusFiltro}
+            onStatusFiltroChange={(f) => setStatusFiltro(f)}
+            uniqueMateriasList={uniqueMateriasList}
+          />
+        ) : !isEditalMode ? (
+          <EditalMateriaDetalhes
+            selectedMateria={selectedMateria}
+            onVoltar={() => setSelectedMateria(null)}
+            assuntosCount={assuntosDaMateria.length}
+            totalQuestoes={materiaMetrics.totalQuestoes}
+            taxaAcerto={materiaMetrics.taxaAcerto}
+            resolvidosCount={materiaMetrics.resolvidosCount}
+            assuntoSearch={assuntoSearch}
+            onAssuntoSearchChange={setAssuntoSearch}
+            newAssuntoName={newAssuntoName}
+            onNewAssuntoNameChange={setNewAssuntoName}
+            onAddAssunto={handleAddAssunto}
+            statusFiltro={statusFiltro}
+            onStatusFiltroChange={setStatusFiltro}
+          >
+            {assuntosFiltrados.length === 0 ? (
+              <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-border border-dashed rounded-xl text-muted-foreground gap-2">
+                <BookOpen className="w-10 h-10 text-muted-foreground/30" />
+                <h4 className="text-xs font-bold text-foreground">Nenhum assunto catalogado</h4>
+                <p className="text-xxs text-muted-foreground max-w-sm">Adicione um assunto manualmente acima para iniciar a organização verticalizada da matéria.</p>
+              </div>
+            ) : (
+              assuntosFiltrados.map((assunto) => {
+                const originalIndex = assuntosDaMateria.indexOf(assunto)
+                const isStudied = studiedAssuntos[`${selectedMateria}::${assunto}`] || false
+                const questoesDoAssunto = resolucoes.filter(r => r.materia === selectedMateria && r.assunto === assunto)
+                const countQuestoes = questoesDoAssunto.length
+                const resolvidas = questoesDoAssunto.filter(q => q.alternativa && q.alternativa !== '')
+                const acertos = resolvidas.filter(q => q.acertou).length
+                const taxaAcerto = resolvidas.length > 0 ? Math.round((acertos / resolvidas.length) * 100) : 0
+
+                return (
+                  <EditalAssuntoItem
+                    key={assunto}
+                    assunto={assunto}
+                    index={originalIndex}
+                    total={assuntosDaMateria.length}
+                    isStudied={isStudied}
+                    onToggleStudied={() => toggleAssuntoStudied(assunto)}
+                    questaoCount={countQuestoes}
+                    taxaAcerto={taxaAcerto}
+                    onMove={(direction) => moveAssunto(originalIndex, direction)}
+                    onRemove={(e) => handleRemoveAssunto(assunto, e)}
+                    canRemove={!resolucoes.some(r => r.materia === selectedMateria && r.assunto === assunto)}
+                  />
+                )
+              })
+            )}
+          </EditalMateriaDetalhes>
+        ) : isEditalMode && !selectedMateriaIdEdital ? (
+          <div className="flex-1 bg-muted/10 flex items-center justify-center">
+            <div className="flex flex-col items-center text-muted-foreground gap-3">
+              <FileText className="w-12 h-12 text-muted-foreground/35" />
+              <h3 className="text-xs font-bold text-foreground">Selecione uma matéria</h3>
+              <p className="text-xxs text-muted-foreground max-w-sm text-center">
+                Escolha um cargo e uma matéria na coluna da esquerda para ver os tópicos do edital e as questões no banco.
+              </p>
             </div>
-          ) : (
-            assuntosFiltrados.map((assunto) => {
-              const originalIndex = assuntosDaMateria.indexOf(assunto)
-              const isStudied = studiedAssuntos[`${selectedMateria}::${assunto}`] || false
-
-              // Estatísticas de questões específicas deste assunto
-              const questoesDoAssunto = resolucoes.filter(r => r.materia === selectedMateria && r.assunto === assunto)
-              const countQuestoes = questoesDoAssunto.length
-
-              const resolvidas = questoesDoAssunto.filter(q => q.alternativa && q.alternativa !== '')
-              const acertos = resolvidas.filter(q => q.acertou).length
-              const taxaAcerto = resolvidas.length > 0 ? Math.round((acertos / resolvidas.length) * 100) : 0
-
-              return (
-                <EditalAssuntoItem
-                  key={assunto}
-                  assunto={assunto}
-                  index={originalIndex}
-                  total={assuntosDaMateria.length}
-                  isStudied={isStudied}
-                  onToggleStudied={() => toggleAssuntoStudied(assunto)}
-                  questaoCount={countQuestoes}
-                  taxaAcerto={taxaAcerto}
-                  onMove={(direction) => moveAssunto(originalIndex, direction)}
-                  onRemove={(e) => handleRemoveAssunto(assunto, e)}
-                  canRemove={!resolucoes.some(r => r.materia === selectedMateria && r.assunto === assunto)}
-                />
-              )
-            })
-          )}
-        </EditalMateriaDetalhes>
+          </div>
+        ) : null}
 
       </div>
 
