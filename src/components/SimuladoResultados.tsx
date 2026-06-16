@@ -237,8 +237,8 @@ export function SimuladoResultados({
                     {/* Enunciado */}
                     <div className="space-y-1.5 mt-2">
                       <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">Enunciado</span>
-                      <div className="p-4 rounded-xl bg-muted/15 border border-border/50 text-foreground/90 font-medium text-xs leading-relaxed whitespace-pre-wrap select-text">
-                        {cleanHtmlText(q.enunciado)}
+                      <div className="p-4 rounded-xl bg-muted/15 border border-border/50 select-text">
+                        <MarkdownAI text={q.enunciado} />
                       </div>
                     </div>
 

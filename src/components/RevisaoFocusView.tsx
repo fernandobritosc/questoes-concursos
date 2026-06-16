@@ -144,9 +144,9 @@ export function RevisaoFocusView({
               <div className="p-6 md:p-8 space-y-6">
 
                 {/* Enunciado */}
-                <p className="text-foreground leading-relaxed text-sm font-medium whitespace-pre-line bg-card/40 rounded-xl select-text">
-                  {cleanHtmlText(questaoAtual.enunciado)}
-                </p>
+                <div className="bg-card/40 rounded-xl select-text">
+                  <MarkdownAI text={questaoAtual.enunciado} />
+                </div>
 
                 {/* Alternativas */}
                 <div className="grid grid-cols-1 gap-2.5 pt-2">

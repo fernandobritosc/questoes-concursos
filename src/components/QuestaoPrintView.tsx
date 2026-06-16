@@ -52,9 +52,9 @@ export function QuestaoPrintView({ questao, alternativaSelecionada, explicacoes 
       </div>
 
       <div className="space-y-4 print:break-inside-avoid">
-        <p className="text-neutral-800 font-medium leading-relaxed whitespace-pre-line text-sm bg-neutral-50 p-4 rounded border border-neutral-200">
-          {cleanHtmlText(questao?.enunciado)}
-        </p>
+        <div className="bg-neutral-50 p-4 rounded border border-neutral-200">
+          <MarkdownAI text={questao?.enunciado} />
+        </div>
       </div>
 
       {questao?.alternativas && (

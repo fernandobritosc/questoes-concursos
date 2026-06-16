@@ -1,5 +1,6 @@
 import { type ResolucaoView } from '../types/database'
 import { cleanHtmlText } from '../lib/cleanHtml'
+import { MarkdownAI } from './ui/MarkdownAI'
 import {
   ChevronRight, ChevronLeft, RotateCcw, Copy, Check, ExternalLink,
   BrainCircuit, Loader2, GraduationCap, Pencil, X, CheckCircle2, XCircle
@@ -127,9 +128,9 @@ export function QuestaoVisualizador({
       </div>
 
       <div className="px-6 py-6 md:p-8 space-y-6">
-        <p className="text-foreground leading-relaxed text-sm font-medium whitespace-pre-line bg-card rounded-lg selection:bg-primary/20">
-          {cleanHtmlText(questao.enunciado)}
-        </p>
+        <div className="bg-card rounded-lg selection:bg-primary/20">
+          <MarkdownAI text={questao.enunciado} />
+        </div>
 
         {questao.alternativas && (
           <div className="grid grid-cols-1 gap-3 pt-2">

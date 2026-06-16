@@ -1,4 +1,5 @@
 import { cleanHtmlText } from '../lib/cleanHtml'
+import { MarkdownAI } from './ui/MarkdownAI'
 import { Button } from './ui/Button'
 import type { ResolucaoView } from '../types/database'
 import {
@@ -110,8 +111,8 @@ export function SimuladoExamView({
 
           {/* Enunciado */}
           <div className="flex-1 min-h-0 overflow-y-auto pr-1">
-            <div className="p-4 rounded-xl bg-muted/30 border border-border text-foreground/90 font-medium text-sm leading-relaxed whitespace-pre-wrap select-text">
-              {cleanHtmlText(qAtual?.enunciado)}
+            <div className="p-4 rounded-xl bg-muted/30 border border-border select-text">
+              <MarkdownAI text={qAtual?.enunciado} />
             </div>
 
             {/* Alternativas */}
