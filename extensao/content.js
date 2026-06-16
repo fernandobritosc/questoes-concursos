@@ -408,7 +408,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     let enunciado = null;
     const enunciadoEl = container.querySelector(".questao-enunciado-texto");
     if (enunciadoEl) {
-      enunciado = enunciadoEl.innerText ? enunciadoEl.innerText.trim() : enunciadoEl.textContent.trim();
+      enunciado = convertElementToMarkdown(enunciadoEl);
     }
 
     // 6. Alternativas
