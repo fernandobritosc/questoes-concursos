@@ -32,9 +32,18 @@ export function MarkdownAI({ text }: MarkdownAIProps) {
     | { type: 'table'; content: string[] };
 
   const blocks: Block[] = []
-  
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
+
+  // Normalize lines that look like table data but lack leading pipe
+  const normalizedLines = lines.map(line => {
+    const trimmed = line.trim()
+    if (!trimmed.startsWith('|') && trimmed.split('|').filter(s => s.trim()).length >= 2) {
+      return `| ${line.replace(/ \| $/, ' |').replace(/\s*\|\s*/g, ' | ').trim()} |`
+    }
+    return line
+  })
+
+  for (let i = 0; i < normalizedLines.length; i++) {
+    const line = normalizedLines[i]
     const trimmed = line.trim()
     
     if (trimmed.startsWith('|')) {

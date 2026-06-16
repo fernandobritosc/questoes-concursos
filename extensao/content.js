@@ -110,7 +110,9 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     
     // Se for nó de texto (TEXT_NODE = 3)
     if (node.nodeType === 3) {
-      return node.textContent;
+      const text = node.textContent;
+      if (text.trim() === "") return "";
+      return text;
     }
     
     // Se for elemento (ELEMENT_NODE = 1)
