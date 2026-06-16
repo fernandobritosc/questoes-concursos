@@ -3935,6 +3935,10 @@
     "materia": "Direitos Humanos",
     "grupo": "Convenção Interamericana contra o Racismo e Discriminação Racial (Decreto nº 10.932/2022)"
   },
+  "Incorporação dos Tratados Internacionais de DH ao Direito Brasileiro. Posição Hierárquica.": {
+    "materia": "Direitos Humanos",
+    "grupo": "Tratados Internacionais de Direitos Humanos"
+  },
   "Jurisprudência dos Tribunais Superiores sobre Administração Indireta": {
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",
     "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Administrativa"
@@ -3958,6 +3962,18 @@
   "Dissídios Coletivos (arts. 856 a 875 da CLT)": {
     "materia": "Direito Processual do Trabalho",
     "grupo": "Dissídios Coletivos"
+  },
+  "Disposições Preliminares do Processo Judicial do Trabalho (arts. 763 a 769 da CLT)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Disposições Preliminares e Atos Processuais"
+  },
+  "Atos, Termos e Prazos Processuais (arts. 770 a 782 da CLT)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Disposições Preliminares e Atos Processuais"
+  },
+  "Custas Processuais Trabalhistas (arts. 789 a 790-B da CLT)": {
+    "materia": "Direito Processual do Trabalho",
+    "grupo": "Custas Processuais Trabalhistas"
   },
   "Abuso de Poder: Excesso de Poder e Desvio de Finalidade (Poderes da Administração)": {
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",

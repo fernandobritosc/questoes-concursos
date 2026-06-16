@@ -2,35 +2,16 @@ import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useRevisao } from '../hooks/useRevisao'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
-import { 
-  BookOpen, 
+import {
+  BookOpen,
   CheckCircle2,
-  Play,
-  Layers,
-  BookOpenCheck, 
-  ChevronDown, 
-  ChevronRight 
+  BookOpenCheck,
 } from 'lucide-react'
-import { RevisaoStatsCards } from '../components/RevisaoStatsCards'
+import { RevisaoMiniStats } from '../components/RevisaoMiniStats'
 import { RevisaoFilterBar } from '../components/RevisaoFilterBar'
+import { RevisaoMateriaTable } from '../components/RevisaoMateriaTable'
 import { RevisaoFocusView } from '../components/RevisaoFocusView'
 import { updateResolucaoProfessor } from '../services/supabase.service'
-import type { ResolucaoView } from '../types/database'
-
-interface AssuntoGrupo {
-  nome: string
-  quantidade: number
-  erros: ResolucaoView[]
-}
-
-interface MateriaGrupo {
-  materia: string
-  assuntos: AssuntoGrupo[]
-  quantidadeTotal: number
-  maisRecente: number
-}
-
-
 
 export function Revisao() {
   const {
@@ -51,27 +32,13 @@ export function Revisao() {
     obterPrazosEstimados,
   } = useRevisao()
 
-  // Parâmetros de busca da URL
   const [searchParams, setSearchParams] = useSearchParams()
   const materiaParam = searchParams.get('materia')
   const assuntoParam = searchParams.get('assunto')
 
-  // Estados locais de Filtro, Busca e Ordenação
   const [busca, setBusca] = useState('')
-  const [ordenacao, setOrdenacao] = useState<'mais_erros' | 'mais_recentes' | 'alfabetica'>('mais_erros')
-  const [collapsedMaterias, setCollapsedMaterias] = useState<Record<string, boolean>>(() => {
-    try {
-      const cached = sessionStorage.getItem('revisao_collapsed_materias')
-      return cached ? JSON.parse(cached) : {}
-    } catch {
-      return {}
-    }
-  })
-
-  // Estado para armazenar a contagem inicial de erros por matéria na sessão atual
   const [initialCounts, setInitialCounts] = useState<Record<string, number>>({})
 
-  // Inicializa o initialCounts apenas uma vez quando o carregamento termina
   useEffect(() => {
     if (!loading && erros.length > 0 && Object.keys(initialCounts).length === 0) {
       const counts: Record<string, number> = {}
@@ -84,31 +51,17 @@ export function Revisao() {
     }
   }, [loading, erros, initialCounts])
 
-  const toggleMateriaCollapse = (materia: string) => {
-    setCollapsedMaterias(prev => {
-      const updated = { ...prev, [materia]: !prev[materia] }
-      sessionStorage.setItem('revisao_collapsed_materias', JSON.stringify(updated))
-      return updated
-    })
-  }
-
-  // Estados locais para a Resolução do Professor
   const [resolucaoExpanded, setResolucaoExpanded] = useState(false)
   const [editingResolucao, setEditingResolucao] = useState(false)
   const [resolucaoText, setResolucaoText] = useState('')
   const [savingResolucao, setSavingResolucao] = useState(false)
 
-  // Sincroniza o texto e expansão da resolução ao carregar/navegar questão ou responder
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
     if (questaoAtual) {
       setResolucaoText(questaoAtual.resolucao_professor || '')
       setEditingResolucao(false)
-      if (revelado) {
-        setResolucaoExpanded(!!questaoAtual.resolucao_professor)
-      } else {
-        setResolucaoExpanded(false)
-      }
+      setResolucaoExpanded(revelado && !!questaoAtual.resolucao_professor)
     }
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [questaoAtual, revelado])
@@ -127,7 +80,6 @@ export function Revisao() {
     }
   }
 
-  // Filtramos os erros com base no parâmetro de matéria e assunto se houver
   const errosFiltrados = useMemo(() => {
     if (materiaParam && assuntoParam) {
       return erros.filter(e => e.materia === materiaParam && e.assunto === assuntoParam)
@@ -135,13 +87,11 @@ export function Revisao() {
     return erros
   }, [erros, materiaParam, assuntoParam])
 
-  // Encontra qual é a questão ativa dentro de errosFiltrados
   const activeInFilterIndex = useMemo(() => {
     if (!questaoAtual || errosFiltrados.length === 0) return -1
     return errosFiltrados.findIndex(e => e.questao_tec_id === questaoAtual.questao_tec_id)
   }, [errosFiltrados, questaoAtual])
 
-  // Mantém a questão ativa síncrona com os filtros do modo de foco
   useEffect(() => {
     if (materiaParam && assuntoParam && errosFiltrados.length > 0) {
       const isCurrentInFilter = errosFiltrados.some(e => e.questao_tec_id === questaoAtual?.questao_tec_id)
@@ -155,81 +105,11 @@ export function Revisao() {
     }
   }, [materiaParam, assuntoParam, errosFiltrados, questaoAtual, erros, setQuestaoAtualIndex, setAlternativaSelecionada])
 
-  // Agrupamento dos erros por matéria e assunto para o modo grade
-  const errosPorMateriaEAssunto = useMemo(() => {
-    const map: Record<string, Record<string, ResolucaoView[]>> = {}
-    
-    erros.forEach(e => {
-      const mat = e.materia || 'Sem Matéria'
-      const ass = e.assunto || 'Sem Assunto'
-      
-      const textoBusca = busca.toLowerCase().trim()
-      const matchesTexto = !textoBusca || 
-        (e.enunciado && e.enunciado.toLowerCase().includes(textoBusca)) ||
-        (e.questao_tec_id && String(e.questao_tec_id).includes(textoBusca)) ||
-        (e.assunto && e.assunto.toLowerCase().includes(textoBusca)) ||
-        (e.banca_texto && e.banca_texto.toLowerCase().includes(textoBusca))
-        
-      if (!matchesTexto) return
-
-      if (!map[mat]) map[mat] = {}
-      if (!map[mat][ass]) map[mat][ass] = []
-      map[mat][ass].push(e)
-    })
-
-    const list: MateriaGrupo[] = Object.entries(map).map(([materia, assuntosMap]) => {
-      const assuntos: AssuntoGrupo[] = Object.entries(assuntosMap).map(([nome, listaErros]) => ({
-        nome,
-        quantidade: listaErros.length,
-        erros: listaErros
-      })).sort((a, b) => b.quantidade - a.quantidade || a.nome.localeCompare(b.nome))
-
-      const quantidadeTotal = assuntos.reduce((sum, ass) => sum + ass.quantidade, 0)
-      
-      const maisRecente = assuntos.reduce((latest: number, ass: AssuntoGrupo) => {
-        const d = ass.erros.reduce((latestD: number, curr: ResolucaoView) => {
-          const time = curr.data_resolucao ? new Date(curr.data_resolucao).getTime() : 0
-          return time > latestD ? time : latestD
-        }, 0)
-        return d > latest ? d : latest
-      }, 0)
-
-      return {
-        materia,
-        assuntos,
-        quantidadeTotal,
-        maisRecente
-      }
-    })
-
-    list.sort((a, b) => {
-      if (ordenacao === 'mais_erros') {
-        return b.quantidadeTotal - a.quantidadeTotal
-      }
-      if (ordenacao === 'mais_recentes') {
-        return b.maisRecente - a.maisRecente
-      }
-      return a.materia.localeCompare(b.materia)
-    })
-
-    return list
-  }, [erros, busca, ordenacao])
-
-  // Estatísticas globais do caderno de erros
   const stats = useMemo(() => {
-    const totalPendentes = erros.length
-    const totalMaterias = new Set(erros.map(e => e.materia || 'Sem Matéria')).size
-    
-    const assuntosSet = new Set<string>()
-    erros.forEach(e => {
-      assuntosSet.add(`${e.materia || 'Sem Matéria'} | ${e.assunto || 'Sem Assunto'}`)
-    })
-    const totalAssuntos = assuntosSet.size
-
     return {
-      totalPendentes,
-      totalMaterias,
-      totalAssuntos
+      totalPendentes: erros.length,
+      totalMaterias: new Set(erros.map(e => e.materia || 'Sem Matéria')).size,
+      totalAssuntos: new Set(erros.map(e => `${e.materia || ''}|${e.assunto || ''}`)).size,
     }
   }, [erros])
 
@@ -252,7 +132,6 @@ export function Revisao() {
     )
   }
 
-  // Path A: Modo de Foco (Questão Única Ampliada)
   if (materiaParam && assuntoParam) {
     if (errosFiltrados.length === 0) {
       return (
@@ -322,136 +201,35 @@ export function Revisao() {
     )
   }
 
-  // Path B: Visão de Grade Geral
   return (
-    <div className="flex flex-col gap-6 h-full min-h-0 flex-1 pb-12">
-      
-      {/* Header Inline */}
-      <div className="flex items-center justify-between shrink-0 animate-fade-in-up">
+    <div className="flex flex-col gap-4 h-full min-h-0 flex-1 pb-12">
+
+      <div className="flex items-center justify-between shrink-0 gap-3 flex-wrap">
         <div className="flex items-baseline gap-3">
           <h1 className="text-2xl font-black text-foreground tracking-tight">Caderno de Erros</h1>
-          <span className="text-sm text-muted-foreground hidden sm:inline">
-            Treine seu cérebro nas questões que você falhou
-          </span>
+          <RevisaoMiniStats
+            totalPendentes={stats.totalPendentes}
+            totalMaterias={stats.totalMaterias}
+            totalAssuntos={stats.totalAssuntos}
+          />
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-350 text-xs font-black animate-scale-in">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-350 text-xs font-black">
           <BookOpen className="w-3.5 h-3.5" />
           <span>{totalErros === 1 ? '1 erro pendente' : `${totalErros} erros pendentes`}</span>
         </div>
       </div>
 
-      <RevisaoStatsCards
-        totalPendentes={stats.totalPendentes}
-        totalMaterias={stats.totalMaterias}
-        totalAssuntos={stats.totalAssuntos}
-      />
-
       <RevisaoFilterBar
         busca={busca}
         onBuscaChange={setBusca}
-        ordenacao={ordenacao}
-        onOrdenacaoChange={setOrdenacao}
       />
 
-      {/* Grid de Matérias (Accordions) */}
-      <div className="flex-1 overflow-y-auto min-h-0 space-y-4 pr-1">
-        {errosPorMateriaEAssunto.map((grupo) => {
-          const isCollapsed = !!collapsedMaterias[grupo.materia]
-          const totalOriginal = initialCounts[grupo.materia] || grupo.quantidadeTotal
-          const revisadasCount = Math.max(0, totalOriginal - grupo.quantidadeTotal)
-          const progress = Math.round((revisadasCount / totalOriginal) * 100)
-
-          return (
-            <div key={grupo.materia} className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm transition-all">
-              
-              {/* Accordion Header */}
-              <div
-                onClick={() => toggleMateriaCollapse(grupo.materia)}
-                className={`p-5 flex items-center justify-between cursor-pointer select-none transition-colors hover:bg-card/45 ${
-                  !isCollapsed ? 'bg-muted/30 border-b border-border/80' : ''
-                }`}
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-sm font-extrabold text-foreground truncate max-w-lg">
-                      {grupo.materia}
-                    </h2>
-                    
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20">
-                      {grupo.quantidadeTotal} {grupo.quantidadeTotal === 1 ? 'erro pendente' : 'erros pendentes'}
-                    </span>
-
-                    {progress > 0 && (
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        Progresso: {progress}%
-                      </span>
-                    )}
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="w-full max-w-xs bg-muted/40 rounded-full h-1 mt-3 overflow-hidden border border-border/30 dark:bg-white/[0.04] dark:border-white/[0.02]">
-                    <div 
-                      className="bg-gradient-to-r from-violet-500 to-indigo-650 h-full transition-all duration-300 rounded-full"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                </div>
-
-                <div className="ml-4 text-muted-foreground hover:text-foreground transition-colors shrink-0">
-                  {isCollapsed ? (
-                    <ChevronRight className="w-5 h-5" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5" />
-                  )}
-                </div>
-              </div>
-
-              {/* Accordion Content (Grid of Cards) */}
-              {!isCollapsed && (
-                <div className="p-5 bg-background/50 dark:bg-black/20 border-t border-border animate-in slide-in-from-top-2 duration-300">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {grupo.assuntos.map((assunto) => {
-                      return (
-                        <div
-                          key={assunto.nome}
-                          className="bg-card border border-border hover:border-violet-500/50 p-4 rounded-xl flex flex-col justify-between gap-4 shadow-sm hover:shadow-md transition-all group min-h-[120px]"
-                        >
-                          <div className="space-y-2">
-                            <h3 className="text-xs sm:text-sm font-bold text-foreground leading-snug line-clamp-2" title={assunto.nome}>
-                              {assunto.nome}
-                            </h3>
-                            
-                            <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border bg-red-500/10 text-red-400 border-red-500/20 w-fit flex items-center gap-1">
-                              <BookOpen className="w-3 h-3" />
-                              {assunto.quantidade} {assunto.quantidade === 1 ? 'erro' : 'erros'}
-                            </span>
-                          </div>
-
-                          <button
-                            onClick={() => setSearchParams({ materia: grupo.materia, assunto: assunto.nome })}
-                            className="w-full py-2 px-3 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 bg-violet-600 hover:bg-violet-700 text-white transition-all shadow-sm active:scale-95 cursor-pointer"
-                          >
-                            <Play className="w-3 h-3 fill-white" />
-                            <span>Resolver Erros</span>
-                          </button>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-
-            </div>
-          )
-        })}
-
-        {errosPorMateriaEAssunto.length === 0 && (
-          <div className="h-full flex items-center justify-center text-center p-12 text-muted-foreground text-sm italic flex-col gap-2 border border-dashed border-border rounded-2xl bg-muted/10 dark:border-white/[0.08] dark:bg-white/[0.01]">
-            <Layers className="w-12 h-12 text-muted-foreground/30" />
-            <span>Nenhum erro encontrado com a busca/filtros atuais.</span>
-          </div>
-        )}
-      </div>
+      <RevisaoMateriaTable
+        erros={erros}
+        busca={busca}
+        initialCounts={initialCounts}
+        onNavigateAssunto={(materia, assunto) => setSearchParams({ materia, assunto })}
+      />
 
     </div>
   )

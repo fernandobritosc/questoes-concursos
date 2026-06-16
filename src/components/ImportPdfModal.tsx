@@ -33,6 +33,7 @@ interface ImportPdfModalProps {
 }
 
 import { getQuestionValidation } from '../lib/validation'
+import { getGrupo } from '../lib/grupoUtils'
 
 export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuestions }: ImportPdfModalProps) {
   const [customCadernoName, setCustomCadernoName] = useState('')
@@ -178,6 +179,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
           questao_tec_id: q.questao_tec_id,
           materia: q.materia,
           assunto: q.assunto,
+          grupo: getGrupo(q.materia, q.assunto),
           banca_texto: q.banca_texto,
           orgao: q.orgao,
           concurso: q.concurso,

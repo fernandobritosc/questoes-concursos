@@ -92,9 +92,10 @@ describe('Revisao page', () => {
     render(<Revisao />)
     expect(screen.getByText('Caderno de Erros')).toBeInTheDocument()
     expect(screen.getAllByText(/1 erro pendente/).length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('Erros Pendentes')).toBeInTheDocument()
-    expect(screen.getByText('Matérias')).toBeInTheDocument()
-    expect(screen.getByText('Tópicos com Erro')).toBeInTheDocument()
+    expect(screen.getByText('pendentes')).toBeInTheDocument()
+    expect(screen.getByText('matérias')).toBeInTheDocument()
+    expect(screen.getByText('assuntos')).toBeInTheDocument()
+    expect(screen.getByText('SM-2')).toBeInTheDocument()
   })
 
   it('shows focus view when materia/assunto params are set', () => {
@@ -133,7 +134,6 @@ describe('Revisao page', () => {
       totalErros: 1,
     })
     render(<Revisao />)
-    expect(screen.getByPlaceholderText('Buscar por assunto, banca, ID...')).toBeInTheDocument()
-    expect(screen.getByText('Ordenar por:')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Buscar matéria, assunto, banca, ID...')).toBeInTheDocument()
   })
 })
