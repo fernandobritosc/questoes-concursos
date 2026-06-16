@@ -578,7 +578,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
         if (isContextInvalidated()) return;
 
         // Passo A: Verifica se a questão já está cadastrada na tabela 'questoes' e busca tentativas existentes
-        const searchUrl = `${SUPABASE_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`;
+        const searchUrl = `${SUPABASE_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,enunciado,alternativas,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`;
         const searchRes = await fetch(searchUrl, {
           method: "GET",
           headers
@@ -656,7 +656,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
                   }
                   console.log(`[MonitorPro] Registro recuperado com sucesso. ID no banco: ${dbQuestaoId}. Tentativa existente: ${hasExistingAttempt}`);
                   
-                  // Atualiza metadados (ano, banca, órgão etc.) e resolução do professor
+                  // Atualiza metadados (ano, banca, órgão etc.), enunciado e resolução do professor
                   const updatePayload = Object.fromEntries(
                     Object.entries({
                       ano: questaoPayload.ano,
@@ -666,6 +666,8 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
                       prova: questaoPayload.prova,
                       materia: questaoPayload.materia,
                       assunto: questaoPayload.assunto,
+                      enunciado: questaoPayload.enunciado,
+                      alternativas: questaoPayload.alternativas,
                     }).filter(([, v]) => v != null)
                   );
                   if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
@@ -698,7 +700,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
             }
           }
         } else {
-          // Se a questão já existia, atualiza metadados (ano, banca, órgão etc.) e resolução do professor
+          // Se a questão já existia, atualiza metadados (ano, banca, órgão etc.), enunciado e resolução do professor
           const updatePayload = Object.fromEntries(
             Object.entries({
               ano: questaoPayload.ano,
@@ -708,6 +710,8 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
               prova: questaoPayload.prova,
               materia: questaoPayload.materia,
               assunto: questaoPayload.assunto,
+              enunciado: questaoPayload.enunciado,
+              alternativas: questaoPayload.alternativas,
             }).filter(([, v]) => v != null)
           );
           if (questaoPayload.resolucao_professor && questaoPayload.resolucao_professor !== existingResolucao) {
