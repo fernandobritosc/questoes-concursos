@@ -116,40 +116,54 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
   const userId = session?.user?.id
   if (!userId) return []
 
-  const query = supabase
-    .from('historico_resolucoes')
-    .select(`
-      id,
-      questao_id,
-      questao_tec_id,
-      alternativa,
-      acertou,
-      tempo_segundos,
-      data_resolucao,
-      questao:questoes!historico_resolucoes_questao_id_fkey (
-        id,
-        questao_tec_id,
-        materia,
-        assunto,
-        grupo,
-        banca_texto,
-        orgao,
-        concurso,
-        prova,
-        ano,
-        caderno_nome,
-        enunciado,
-        gabarito,
-        alternativas,
-        resolucao_professor
-      )
-    `)
-    .eq('user_id', userId)
-    .order('data_resolucao', { ascending: false })
+  const MAX_PER_REQUEST = 1_000
+  const allData: ResolucaoView[] = []
+  let fetchFrom = 0
 
-  const { data, error } = await query
-  if (error) throw error
-  return (data || []).map(mapHistoricoToView)
+  while (true) {
+    const fetchTo = fetchFrom + MAX_PER_REQUEST - 1
+
+    const { data: chunk, error } = await supabase
+      .from('historico_resolucoes')
+      .select(`
+        id,
+        questao_id,
+        questao_tec_id,
+        alternativa,
+        acertou,
+        tempo_segundos,
+        data_resolucao,
+        questao:questoes!historico_resolucoes_questao_id_fkey (
+          id,
+          questao_tec_id,
+          materia,
+          assunto,
+          grupo,
+          banca_texto,
+          orgao,
+          concurso,
+          prova,
+          ano,
+          caderno_nome,
+          enunciado,
+          gabarito,
+          alternativas,
+          resolucao_professor
+        )
+      `)
+      .eq('user_id', userId)
+      .order('data_resolucao', { ascending: false })
+      .range(fetchFrom, fetchTo)
+
+    if (error) throw error
+    if (!chunk || chunk.length === 0) break
+
+    allData.push(...chunk.map(mapHistoricoToView))
+    if (chunk.length < MAX_PER_REQUEST) break
+    fetchFrom = fetchTo + 1
+  }
+
+  return allData
 }
 
 /** Invalida o cache de fetchAllQuestoes (chamado após importar PDF). */
@@ -436,39 +450,62 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
   useQuestaoStore.getState().setQuestoesCachePromise(true)
   try {
     const t0 = performance.now()
-    const { data: questoesData, error: qErr } = await supabase
-      .from('questoes')
-      .select(`
-        id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
-        concurso, prova, ano, caderno_nome, enunciado, gabarito,
-        alternativas, resolucao_professor, created_at
-      `)
-      .order('id', { ascending: false })
-      .limit(1000)
+    const MAX_PER_REQUEST = 1_000
+    const questoesData: Questao[] = []
+    let fetchFromQuestoes = 0
+
+    while (true) {
+      const fetchTo = fetchFromQuestoes + MAX_PER_REQUEST - 1
+      const { data: chunk, error: qErr } = await supabase
+        .from('questoes')
+        .select(`
+          id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
+          concurso, prova, ano, caderno_nome, enunciado, gabarito,
+          alternativas, resolucao_professor, created_at
+        `)
+        .order('id', { ascending: false })
+        .range(fetchFromQuestoes, fetchTo)
+
+      if (qErr) throw qErr
+      if (!chunk || chunk.length === 0) break
+      questoesData.push(...chunk)
+      if (chunk.length < MAX_PER_REQUEST) break
+      fetchFromQuestoes = fetchTo + 1
+    }
 
     const t1 = performance.now()
-    console.log(`[LOG fetchAllQuestoes] Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData?.length ?? 0} | error=${qErr?.message ?? 'null'}`)
-    if (qErr) throw qErr
+    console.log(`[LOG fetchAllQuestoes] Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData.length}`)
 
     const { data: { session: histSession } } = await supabase.auth.getSession()
     const histUserId = histSession?.user?.id
 
     console.log('[LOG fetchAllQuestoes] Iniciando busca do histórico...')
-    let histQuery = supabase
-      .from('historico_resolucoes')
-      .select(`
-        id, questao_id, questao_tec_id, alternativa, acertou,
-        tempo_segundos, data_resolucao
-      `)
-      .order('data_resolucao', { ascending: false })
+    const historico: HistoricoResolucao[] = []
+    let fetchFromHist = 0
 
-    if (histUserId) histQuery = histQuery.eq('user_id', histUserId)
+    while (true) {
+      const fetchTo = fetchFromHist + MAX_PER_REQUEST - 1
+      let histQuery = supabase
+        .from('historico_resolucoes')
+        .select(`
+          id, questao_id, questao_tec_id, alternativa, acertou,
+          tempo_segundos, data_resolucao
+        `)
+        .order('data_resolucao', { ascending: false })
+        .range(fetchFromHist, fetchTo)
 
-    const { data: historico, error: hErr } = await histQuery
+      if (histUserId) histQuery = histQuery.eq('user_id', histUserId)
+
+      const { data: histChunk, error: hErr } = await histQuery
+      if (hErr) throw hErr
+      if (!histChunk || histChunk.length === 0) break
+      historico.push(...histChunk as HistoricoResolucao[])
+      if (histChunk.length < MAX_PER_REQUEST) break
+      fetchFromHist = fetchTo + 1
+    }
 
     const t2 = performance.now()
-    console.log(`[LOG fetchAllQuestoes] Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico?.length ?? 0} | error=${hErr?.message ?? 'null'}`)
-    if (hErr) throw hErr
+    console.log(`[LOG fetchAllQuestoes] Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico.length}`)
 
     console.log('[LOG fetchAllQuestoes] Mesclando dados...')
     const historicoMap = new Map<number, HistoricoResolucao>()
