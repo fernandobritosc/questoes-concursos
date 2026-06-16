@@ -15,8 +15,10 @@ import { Map as MapIcon, Cloud, HardDrive } from 'lucide-react'
 import { MapaStatsCards } from '../components/MapaStatsCards'
 import { MapaMateriaAccordion, type SubjectData, type SubTopicData } from '../components/MapaMateriaAccordion'
 import { MapaSqlSetupModal } from '../components/MapaSqlSetupModal'
+import { useToast } from '../contexts/ToastContext'
 
 export function MapaQuestoes() {
+  const toast = useToast()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [expandedSubjects, setExpandedSubjects] = useState<Record<string, boolean>>({})
@@ -256,7 +258,7 @@ export function MapaQuestoes() {
     if (!file) return
 
     if (file.type !== 'application/pdf') {
-      alert('Por favor, selecione um arquivo válido no formato PDF.')
+      toast.warning('Arquivo inválido', 'Por favor, selecione um arquivo válido no formato PDF.')
       return
     }
 
@@ -277,7 +279,7 @@ export function MapaQuestoes() {
       }))
     } catch (err: unknown) {
       console.error('Erro ao salvar material:', err)
-      alert(`Erro ao salvar material de estudo: ${err instanceof Error ? err.message : String(err)}`)
+      toast.error('Erro ao salvar', `Erro ao salvar material de estudo: ${err instanceof Error ? err.message : String(err)}`)
     } finally {
       setUploadingKey(null)
     }
@@ -292,11 +294,11 @@ export function MapaQuestoes() {
         blobUrlsRef.current.push(result.blobUrl)
         window.open(result.blobUrl, '_blank')
       } else {
-        alert('Material de estudo não localizado no armazenamento.')
+        toast.warning('Não encontrado', 'Material de estudo não localizado no armazenamento.')
       }
     } catch (err: unknown) {
       console.error('Erro ao abrir material:', err)
-      alert(`Erro ao abrir material de estudo: ${err instanceof Error ? err.message : String(err)}`)
+      toast.error('Erro ao abrir', `Erro ao abrir material de estudo: ${err instanceof Error ? err.message : String(err)}`)
     } finally {
       setUploadingKey(null)
     }
@@ -316,7 +318,7 @@ export function MapaQuestoes() {
       })
     } catch (err: unknown) {
       console.error('Erro ao remover material:', err)
-      alert(`Erro ao remover material de estudo: ${err instanceof Error ? err.message : String(err)}`)
+      toast.error('Erro ao remover', `Erro ao remover material de estudo: ${err instanceof Error ? err.message : String(err)}`)
     }
   }
 
@@ -402,9 +404,9 @@ export function MapaQuestoes() {
             setStorageMode('cloud')
             localStorage.setItem('mapa_storage_mode', 'cloud')
             setShowSqlModal(false)
-            alert('Sincronização na Nuvem ativada com sucesso!')
+            toast.success('Nuvem ativada', 'Sincronização na Nuvem ativada com sucesso!')
           } else {
-            alert('A tabela ainda não foi detectada. Verifique se executou o SQL no editor do Supabase.')
+            toast.warning('Tabela não encontrada', 'A tabela ainda não foi detectada. Verifique se executou o SQL no editor do Supabase.')
           }
         }}
       />

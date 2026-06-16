@@ -8,6 +8,7 @@ interface ImportPdfIdleStepProps {
   onNameChange: (name: string) => void
   onCancel: () => void
   onAnalyze: () => void
+  onError?: (msg: string) => void
 }
 
 export function ImportPdfIdleStep({
@@ -18,6 +19,7 @@ export function ImportPdfIdleStep({
   onNameChange,
   onCancel,
   onAnalyze,
+  onError,
 }: ImportPdfIdleStepProps) {
   return (
     <div className="space-y-5">
@@ -30,7 +32,7 @@ export function ImportPdfIdleStep({
             if (file && file.type === 'application/pdf') {
               onFileChange(file)
             } else {
-              alert('Apenas arquivos PDF são permitidos.')
+              onError?.('Apenas arquivos PDF são permitidos.')
             }
           }}
           className="flex flex-col items-center justify-center border-2 border-dashed border-border hover:border-[#1976d2] bg-blue-50/10 hover:bg-blue-50/20 rounded-xl p-8 text-center cursor-pointer transition-all group"

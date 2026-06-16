@@ -4,6 +4,7 @@ import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { Button } from '../components/ui/Button'
 import { BrainCircuit, Sparkles, Calendar, ChevronRight, GraduationCap, Printer, Cpu, Copy, Check, Info } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
+import { useToast } from '../contexts/ToastContext'
 
 // Card Interativo e Premium para Google NotebookLM com ação de cópia integrada
 function NotebookLMCard({ promptText }: { promptText: string }) {
@@ -67,6 +68,7 @@ function NotebookLMCard({ promptText }: { promptText: string }) {
 }
 
 export function Mentor() {
+  const toast = useToast()
   const {
     loading,
     fraquezas,
@@ -341,7 +343,7 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAUL
                                   type="button"
                                   onClick={() => {
                                     navigator.clipboard.writeText(`ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_plano JSONB DEFAULT '{}'::jsonb;\nALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS mentor_tarefas JSONB DEFAULT '{}'::jsonb;`);
-                                    alert('Código SQL copiado para a área de transferência!');
+                                    toast.success('Copiado', 'Código SQL copiado para a área de transferência!');
                                   }}
                                   className="absolute top-2 right-2 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider bg-zinc-800/80 border border-zinc-700 text-zinc-300 rounded hover:bg-zinc-700 cursor-pointer"
                                 >

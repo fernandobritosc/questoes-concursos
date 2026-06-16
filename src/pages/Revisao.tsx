@@ -12,6 +12,7 @@ import { RevisaoFilterBar } from '../components/RevisaoFilterBar'
 import { RevisaoMateriaTable } from '../components/RevisaoMateriaTable'
 import { RevisaoFocusView } from '../components/RevisaoFocusView'
 import { updateResolucaoProfessor } from '../services/supabase.service'
+import { useToast } from '../contexts/ToastContext'
 
 export function Revisao() {
   const {
@@ -31,6 +32,7 @@ export function Revisao() {
     handleClassificar,
     obterPrazosEstimados,
   } = useRevisao()
+  const toast = useToast()
 
   const [searchParams, setSearchParams] = useSearchParams()
   const materiaParam = searchParams.get('materia')
@@ -74,7 +76,7 @@ export function Revisao() {
       setEditingResolucao(false)
     } catch (err: unknown) {
       console.error('Erro ao salvar resolução:', err)
-      alert('Erro ao salvar a resolução do professor. Verifique sua conexão.')
+      toast.error('Erro ao salvar', 'Não foi possível salvar a resolução do professor. Verifique sua conexão.')
     } finally {
       setSavingResolucao(false)
     }

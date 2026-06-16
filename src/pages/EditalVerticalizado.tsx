@@ -10,8 +10,10 @@ import type { ResolucaoView } from '../types/database'
 import { EditalSidebar } from '../components/EditalSidebar'
 import { EditalMateriaDetalhes } from '../components/EditalMateriaDetalhes'
 import { EditalAssuntoItem } from '../components/EditalAssuntoItem'
+import { useToast } from '../contexts/ToastContext'
 
 export function EditalVerticalizado() {
+  const toast = useToast()
   const [resolucoes, setResolucoes] = useState<ResolucaoView[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -213,7 +215,7 @@ export function EditalVerticalizado() {
     const nomeLimpo = newMateriaName.trim()
     if (!nomeLimpo) return
     if (uniqueMateriasList.includes(nomeLimpo)) {
-      alert('Esta matéria já existe no seu catálogo!')
+      toast.warning('Matéria duplicada', 'Esta matéria já existe no seu catálogo!')
       return
     }
 
@@ -231,7 +233,7 @@ export function EditalVerticalizado() {
     const nomeLimpo = newAssuntoName.trim()
     if (!nomeLimpo) return
     if (assuntosDaMateria.includes(nomeLimpo)) {
-      alert('Este assunto já existe nesta matéria!')
+      toast.warning('Assunto duplicado', 'Este assunto já existe nesta matéria!')
       return
     }
 
@@ -267,7 +269,7 @@ export function EditalVerticalizado() {
     // Verifica se existem questões reais usando esse assunto
     const temQuestoesNoBanco = resolucoes.some(r => r.materia === selectedMateria && r.assunto === assunto)
     if (temQuestoesNoBanco) {
-      alert('Não é possível remover este assunto porque ele possui questões reais importadas no banco de dados.')
+      toast.warning('Remoção bloqueada', 'Não é possível remover este assunto porque ele possui questões reais importadas no banco de dados.')
       return
     }
 

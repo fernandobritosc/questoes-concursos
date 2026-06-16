@@ -2,6 +2,7 @@
 import { fetchQuestaoIds, insertQuestoesBatch, fetchAllQuestoes, clearQuestoesCache } from '../services/supabase.service'
 import { trackEvent } from '../services/hermesTracker'
 import type { Questao, ResolucaoView } from '../types/database'
+import { useToast } from '../contexts/ToastContext'
 
 import { loadPdfJs, extractPdfText, parsePdfContent } from '../lib/pdfParser'
 
@@ -36,6 +37,7 @@ import { getQuestionValidation } from '../lib/validation'
 import { getGrupo } from '../lib/grupoUtils'
 
 export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuestions }: ImportPdfModalProps) {
+  const toast = useToast()
   const [customCadernoName, setCustomCadernoName] = useState('')
   const [importFile, setImportFile] = useState<File | null>(null)
   const [importStatus, setImportStatus] = useState<ImportStatus>({ step: 'idle', progress: 0, total: 0 })
@@ -266,6 +268,7 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
               onNameChange={setCustomCadernoName}
               onCancel={handleCloseWithReset}
               onAnalyze={handleImportPdf}
+              onError={(msg) => toast.warning('Arquivo inválido', msg)}
             />
           )}
 
