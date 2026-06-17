@@ -1,5 +1,6 @@
 import { Book, Pencil, Check, Loader2 } from 'lucide-react'
 import { MarkdownAI } from './ui/MarkdownAI'
+import { MarkdownEditor } from './ui/MarkdownEditor'
 
 interface QuestaoResolucaoProfessorProps {
   expanded: boolean
@@ -53,11 +54,11 @@ export function QuestaoResolucaoProfessor({
         <div className="p-6 space-y-4">
           {editing ? (
             <div className="space-y-3">
-              <textarea
+              <MarkdownEditor
                 value={text}
-                onChange={(e) => onTextChange(e.target.value)}
+                onChange={onTextChange}
                 placeholder="Digite a resolução detalhada do professor para esta questão..."
-                className="w-full min-h-[180px] p-3 text-xs border border-border rounded-lg focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] bg-card font-medium text-foreground shadow-inner resize-y leading-relaxed"
+                minHeight="180"
               />
               <div className="flex items-center justify-end gap-2">
                 <button
