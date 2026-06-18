@@ -540,6 +540,16 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     // Evita re-envio
     if (sentMetas.has(semanaNumero)) { historicoJaProcessado = false; return; }
 
+    // Datas: "16/06 – 23/06"
+    let dataInicio = null;
+    let dataFim = null;
+    const datasMatch = pageText.match(/(\d{2}\/\d{2})\s*[–-]\s*(\d{2}\/\d{2})/i);
+    if (datasMatch) {
+      const ano = new Date().getFullYear();
+      dataInicio = `${ano}-${datasMatch[1].split("/")[1].padStart(2, "0")}-${datasMatch[1].split("/")[0].padStart(2, "0")}`;
+      dataFim = `${ano}-${datasMatch[2].split("/")[1].padStart(2, "0")}-${datasMatch[2].split("/")[0].padStart(2, "0")}`;
+    }
+
     // Resumo
     const resumoEl = document.querySelector(".v3-meta-box-resumo");
     let desempenho = null;
@@ -604,7 +614,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     if (tarefas.length === 0) { historicoJaProcessado = false; return; }
 
     console.log(`[LS-Metas] Histórico #${semanaNumero} extraído: ${tarefas.length} tarefas`);
-    salvarMeta(semanaNumero, tituloTexto, null, null, tarefas.length, tarefas);
+    salvarMeta(semanaNumero, tituloTexto, dataInicio, dataFim, tarefas.length, tarefas);
   }
 
   // Observa hash para detectar navegação
