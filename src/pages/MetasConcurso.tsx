@@ -128,6 +128,18 @@ export function MetasConcurso() {
     }
   }, [metaExpandida, carregarTarefasDaMeta])
 
+  // Carrega tarefas de todas as metas pro totalizador geral
+  useEffect(() => {
+    if (metas.length > 0) {
+      metas.forEach(meta => {
+        if (meta.id && !tarefasMap[meta.id]) {
+          carregarTarefasDaMeta(meta.id)
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metas])
+
   async function handleCriarMeta() {
     if (!novaMetaTitulo.trim()) return
     const meta = await criarMeta(
