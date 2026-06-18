@@ -43,6 +43,28 @@ function formatarData(d: string | null): string {
   return new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
+function somarHoras(tarefas: TarefaMeta[]): number {
+  return tarefas.reduce((acc, t) => {
+    if (!t.tempo_estimado) return acc
+    const [h, m] = t.tempo_estimado.split(':').map(Number)
+    return acc + (h || 0) + (m || 0) / 60
+  }, 0)
+}
+
+function formatarHoras(totalHoras: number): string {
+  const h = Math.floor(totalHoras)
+  const m = Math.round((totalHoras - h) * 60)
+  if (h === 0) return `${m}min`
+  if (m === 0) return `${h}h`
+  return `${h}h${m}min`
+}
+
+function mediaDesempenho(tarefas: TarefaMeta[]): number | null {
+  const comNota = tarefas.filter(t => t.desempenho !== null)
+  if (comNota.length === 0) return null
+  return Math.round(comNota.reduce((acc, t) => acc + t.desempenho!, 0) / comNota.length)
+}
+
 function calcularProgresso(tarefas: TarefaMeta[]): { concluidas: number; total: number; pct: number } {
   const total = tarefas.length
   const concluidas = tarefas.filter(t => t.status === 'concluída').length
@@ -275,6 +297,31 @@ export function MetasConcurso() {
         </div>
       ) : (
         <div className="flex flex-col gap-3">
+          {/* Totalizador geral */}
+          {(() => {
+            const todasTarefas = Object.values(tarefasMap).flat()
+            if (todasTarefas.length === 0) return null
+            const totalHoras = somarHoras(todasTarefas)
+            const media = mediaDesempenho(todasTarefas)
+            return (
+              <div className="rounded-2xl border border-border bg-gradient-to-r from-violet-500/5 to-indigo-500/5 p-4 flex items-center gap-6">
+                <div>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Total Horas</span>
+                  <p className="text-xl font-black text-foreground mt-0.5">{formatarHoras(totalHoras)}</p>
+                </div>
+                {media !== null && (
+                  <div>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Média Geral</span>
+                    <p className="text-xl font-black text-foreground mt-0.5">{media}%</p>
+                  </div>
+                )}
+                <div>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Tarefas</span>
+                  <p className="text-xl font-black text-foreground mt-0.5">{todasTarefas.length}</p>
+                </div>
+              </div>
+            )
+          })()}
           {metas.map(meta => (
             <MetaCard
               key={meta.id}
@@ -733,6 +780,22 @@ function MetaCard({
                     <Plus className="w-3 h-3" />
                     Add
                   </button>
+                </div>
+              )}
+
+              {/* Stats da meta */}
+              {tarefas.length > 0 && (
+                <div className="flex items-center gap-4 mb-4 px-1 text-[11px] text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {formatarHoras(somarHoras(tarefas))}
+                  </span>
+                  {mediaDesempenho(tarefas) !== null && (
+                    <span className="flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3" />
+                      Média: {mediaDesempenho(tarefas)}%
+                    </span>
+                  )}
                 </div>
               )}
 
