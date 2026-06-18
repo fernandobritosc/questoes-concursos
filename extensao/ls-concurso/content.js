@@ -90,11 +90,19 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     // Datas: "16/06 – 23/06"
     let dataInicio = null;
     let dataFim = null;
-    const datasMatch = pageText.match(/(\d{2}\/\d{2})\s*[–-]\s*(\d{2}\/\d{2})/i);
+    // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
+    const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
     if (datasMatch) {
-      const ano = new Date().getFullYear();
-      dataInicio = `${ano}-${datasMatch[1].split("/")[1].padStart(2, "0")}-${datasMatch[1].split("/")[0].padStart(2, "0")}`;
-      dataFim = `${ano}-${datasMatch[2].split("/")[1].padStart(2, "0")}-${datasMatch[2].split("/")[0].padStart(2, "0")}`;
+      const partesInicio = datasMatch[1].split("/");
+      const partesFim = datasMatch[2].split("/");
+      let ano;
+      if (partesInicio.length === 3 && partesInicio[2].length >= 2) {
+        ano = partesInicio[2].length === 2 ? 2000 + parseInt(partesInicio[2], 10) : parseInt(partesInicio[2], 10);
+      } else {
+        ano = new Date().getFullYear();
+      }
+      dataInicio = `${ano}-${partesInicio[1].padStart(2, "0")}-${partesInicio[0].padStart(2, "0")}`;
+      dataFim = `${ano}-${partesFim[1].padStart(2, "0")}-${partesFim[0].padStart(2, "0")}`;
     }
 
     // Total de tarefas: "10 tarefa(s)" ou "10/10"
@@ -543,11 +551,19 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     // Datas: "16/06 – 23/06"
     let dataInicio = null;
     let dataFim = null;
-    const datasMatch = pageText.match(/(\d{2}\/\d{2})\s*[–-]\s*(\d{2}\/\d{2})/i);
+    // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
+    const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
     if (datasMatch) {
-      const ano = new Date().getFullYear();
-      dataInicio = `${ano}-${datasMatch[1].split("/")[1].padStart(2, "0")}-${datasMatch[1].split("/")[0].padStart(2, "0")}`;
-      dataFim = `${ano}-${datasMatch[2].split("/")[1].padStart(2, "0")}-${datasMatch[2].split("/")[0].padStart(2, "0")}`;
+      const partesInicio = datasMatch[1].split("/");
+      const partesFim = datasMatch[2].split("/");
+      let ano;
+      if (partesInicio.length === 3 && partesInicio[2].length >= 2) {
+        ano = partesInicio[2].length === 2 ? 2000 + parseInt(partesInicio[2], 10) : parseInt(partesInicio[2], 10);
+      } else {
+        ano = new Date().getFullYear();
+      }
+      dataInicio = `${ano}-${partesInicio[1].padStart(2, "0")}-${partesInicio[0].padStart(2, "0")}`;
+      dataFim = `${ano}-${partesFim[1].padStart(2, "0")}-${partesFim[0].padStart(2, "0")}`;
     }
 
     // Resumo
