@@ -548,6 +548,18 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     // Evita re-envio
     if (sentMetas.has(semanaNumero)) { historicoJaProcessado = false; return; }
 
+    // Resumo (precisa vir antes da extração de datas)
+    const resumoEl = document.querySelector(".v3-meta-box-resumo");
+    let desempenho = null;
+    let horasEstudadas = null;
+    let questoesResolvidas = null;
+    if (resumoEl) {
+      const dados = resumoEl.querySelectorAll(".v3-meta-box-resumo-dados");
+      if (dados.length >= 1) desempenho = dados[0]?.textContent?.trim() || null;
+      if (dados.length >= 2) horasEstudadas = dados[1]?.textContent?.trim() || null;
+      if (dados.length >= 4) questoesResolvidas = dados[3]?.textContent?.trim() || null;
+    }
+
     // Datas: "meta iniciada em 09/06/2026" e "Próxima meta 23/06/2026" no resumo
     let dataInicio = null;
     let dataFim = null;
@@ -579,18 +591,6 @@ if (window.location.hostname.includes("lsensino.com.br")) {
         dataInicio = `${ano}-${partesInicio[1].padStart(2, "0")}-${partesInicio[0].padStart(2, "0")}`;
         dataFim = `${ano}-${partesFim[1].padStart(2, "0")}-${partesFim[0].padStart(2, "0")}`;
       }
-    }
-
-    // Resumo
-    const resumoEl = document.querySelector(".v3-meta-box-resumo");
-    let desempenho = null;
-    let horasEstudadas = null;
-    let questoesResolvidas = null;
-    if (resumoEl) {
-      const dados = resumoEl.querySelectorAll(".v3-meta-box-resumo-dados");
-      if (dados.length >= 1) desempenho = dados[0]?.textContent?.trim() || null;
-      if (dados.length >= 2) horasEstudadas = dados[1]?.textContent?.trim() || null;
-      if (dados.length >= 4) questoesResolvidas = dados[3]?.textContent?.trim() || null;
     }
 
     // Tarefas
