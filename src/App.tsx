@@ -15,6 +15,8 @@ const EditaisManager = lazy(() => import('./pages/EditaisManager').then(m => ({ 
 const Landing = lazy(() => import('./pages/Landing').then(m => ({ default: m.Landing })))
 const Simulados = lazy(() => import('./pages/Simulados').then(m => ({ default: m.Simulados })))
 const MapaQuestoes = lazy(() => import('./pages/MapaQuestoes').then(m => ({ default: m.MapaQuestoes })))
+const MetasConcurso = lazy(() => import('./pages/MetasConcurso').then(m => ({ default: m.MetasConcurso })))
+const TarefaDetalhe = lazy(() => import('./pages/TarefaDetalhe').then(m => ({ default: m.TarefaDetalhe })))
 const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })))
 
 function SuspenseRoute({ children }: { children: React.ReactNode }) {
@@ -41,6 +43,8 @@ function App() {
             <Route path="edital" element={<SuspenseRoute><EditalVerticalizado /></SuspenseRoute>} />
             <Route path="edital/gerenciar" element={<SuspenseRoute><EditaisManager /></SuspenseRoute>} />
             <Route path="mapa" element={<SuspenseRoute><MapaQuestoes /></SuspenseRoute>} />
+            <Route path="metas" element={<SuspenseRoute><MetasConcurso /></SuspenseRoute>} />
+            <Route path="metas/tarefa/:id" element={<SuspenseRoute><TarefaDetalhe /></SuspenseRoute>} />
           </Route>
 
           {/* Fallback temporário caso a pessoa estivesse acostumada com a rota antiga */}

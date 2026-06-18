@@ -8,6 +8,7 @@ import {
   ClipboardList, 
   Timer, 
   Map, 
+  Target,
   Menu, 
   X,
   LogOut,
@@ -50,6 +51,7 @@ export function Layout() {
     { name: 'Caderno de Erros', path: '/app/revisao', icon: BookOpen },
     { name: 'Banco de Questões', path: '/app/questoes', icon: Database },
     { name: 'Mentor IA', path: '/app/mentor', icon: BrainCircuit },
+    { name: 'Metas de Estudo', path: '/app/metas', icon: Target },
   ]
 
   const { session } = useAuth()

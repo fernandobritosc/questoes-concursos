@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "LS Concurso - Extrator de Metas",
+  "version": "1.0",
+  "description": "Extrai metas semanais do LS Concurso e salva no MonitorPro.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://aluno.lsensino.com.br/*",
+    "https://dyxtalcvjcprmhuktyfd.supabase.co/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*",
+    "https://*.vercel.app/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://aluno.lsensino.com.br/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://*.vercel.app/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

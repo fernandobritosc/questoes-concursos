@@ -113,3 +113,37 @@ export interface MateriaEdital {
 
 /** @deprecated Use ResolucaoView. Mantido para migração gradual. */
 export type Resolucao = ResolucaoView
+
+// ─── Metas de Concurso (Plano de Estudos LS Concurso) ────────
+
+export interface MetaConcurso {
+  id?: number
+  user_id?: string
+  titulo: string
+  semana_numero: number
+  data_inicio: string | null
+  data_fim: string | null
+  total_tarefas: number
+  created_at?: string
+  tarefas?: TarefaMeta[]
+}
+
+export interface TarefaMeta {
+  id?: number
+  meta_id: number
+  ordem: number
+  disciplina: string
+  formato: string
+  descricao: string
+  tempo_estimado: string | null
+  status: 'pendente' | 'iniciada' | 'concluída' | 'ignorada'
+  desempenho: number | null
+  avaliacao: string | null
+  relevancia: string | null
+  material_indicado: string | null
+  link_tec: string | null
+  assunto: string | null
+  conteudo: string | null
+  conteudo_dicas: string | null
+  created_at?: string
+}

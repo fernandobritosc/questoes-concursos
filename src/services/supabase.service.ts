@@ -6,7 +6,7 @@
  * REGRA: Nunca chame `supabase` diretamente nas páginas ou hooks.
  */
 import { supabase } from '../lib/supabase'
-import type { Questao, HistoricoResolucao, ResolucaoView, FilterOptions } from '../types/database'
+import type { Questao, HistoricoResolucao, ResolucaoView, FilterOptions, MetaConcurso, TarefaMeta } from '../types/database'
 import { useQuestaoStore } from '../stores/questaoStore'
 
 // ─── Helper: mapeia o resultado do JOIN para ResolucaoView ────────────────────
@@ -700,4 +700,137 @@ export async function updateMentorPlano(planoJson: unknown, tarefasJson: unknown
   if (error) {
     throw error
   }
+}
+
+// ─── Metas de Concurso ───────────────────────────────────────
+
+export async function fetchMetasConcurso(): Promise<MetaConcurso[]> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) return []
+
+  const { data, error } = await supabase
+    .from('metas_concurso')
+    .select('*')
+    .eq('user_id', userId)
+    .order('semana_numero', { ascending: false })
+
+  if (error) throw error
+  return (data || []) as MetaConcurso[]
+}
+
+export async function fetchMetaConcursoPorId(id: number): Promise<MetaConcurso | null> {
+  const { data, error } = await supabase
+    .from('metas_concurso')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error) throw error
+  return data as MetaConcurso | null
+}
+
+export async function insertMetaConcurso(meta: Omit<MetaConcurso, 'id' | 'user_id' | 'created_at'>): Promise<MetaConcurso> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) throw new Error('Usuário não autenticado')
+
+  const { data, error } = await supabase
+    .from('metas_concurso')
+    .insert({ ...meta, user_id: userId })
+    .select()
+    .single()
+
+  if (error) throw error
+  return data as MetaConcurso
+}
+
+export async function updateMetaConcurso(id: number, payload: Partial<MetaConcurso>): Promise<void> {
+  const { error } = await supabase
+    .from('metas_concurso')
+    .update(payload)
+    .eq('id', id)
+
+  if (error) throw error
+}
+
+export async function deleteMetaConcurso(id: number): Promise<void> {
+  const { error } = await supabase
+    .from('metas_concurso')
+    .delete()
+    .eq('id', id)
+
+  if (error) throw error
+}
+
+// ─── Tarefas da Meta ─────────────────────────────────────────
+
+export async function fetchTarefasDaMeta(metaId: number): Promise<TarefaMeta[]> {
+  const { data, error } = await supabase
+    .from('tarefas_meta')
+    .select('*')
+    .eq('meta_id', metaId)
+    .order('ordem', { ascending: true })
+
+  if (error) throw error
+  return (data || []) as TarefaMeta[]
+}
+
+export async function fetchTarefaById(id: number): Promise<TarefaMeta | null> {
+  const { data, error } = await supabase
+    .from('tarefas_meta')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw error
+  return data as TarefaMeta | null
+}
+
+export async function insertTarefaMeta(tarefa: Omit<TarefaMeta, 'id' | 'created_at'>): Promise<TarefaMeta> {
+  const { data, error } = await supabase
+    .from('tarefas_meta')
+    .insert(tarefa)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data as TarefaMeta
+}
+
+export async function insertTarefasMetaBatch(tarefas: Omit<TarefaMeta, 'id' | 'created_at'>[]): Promise<TarefaMeta[]> {
+  const { data, error } = await supabase
+    .from('tarefas_meta')
+    .insert(tarefas)
+    .select()
+
+  if (error) throw error
+  return (data || []) as TarefaMeta[]
+}
+
+export async function updateTarefaMeta(id: number, payload: Partial<TarefaMeta>): Promise<void> {
+  const { error } = await supabase
+    .from('tarefas_meta')
+    .update(payload)
+    .eq('id', id)
+
+  if (error) throw error
+}
+
+export async function deleteTarefaMeta(id: number): Promise<void> {
+  const { error } = await supabase
+    .from('tarefas_meta')
+    .delete()
+    .eq('id', id)
+
+  if (error) throw error
+}
+
+export async function updateTarefaMetaStatus(id: number, status: TarefaMeta['status']): Promise<void> {
+  const { error } = await supabase
+    .from('tarefas_meta')
+    .update({ status })
+    .eq('id', id)
+
+  if (error) throw error
 }

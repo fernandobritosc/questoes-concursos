@@ -1,7 +1,7 @@
 # Questões Concursos — Dev Log
 
 ## Goal
-Criar dicionário assunto → { materia, grupo } (`src/data/grupos.json`), exibir 3 níveis (matéria → grupo → assunto) no índice, e persistir coluna `grupo` no banco Supabase.
+Sistema de importação e registro de metas semanais do LS Concurso, com página web e extensão de navegador para extração automática.
 
 ## Constraints & Preferences
 - TypeScript compila limpo (`npx tsc -b --noEmit` zero erros)
@@ -128,12 +128,23 @@ Criar dicionário assunto → { materia, grupo } (`src/data/grupos.json`), exibi
 - **Historico loading effect** (`useQuestoes.ts:318`): removido `questoesExibidas`, `caderno.loadHistoricoDaQuestao` e `caderno.setHistoricoQuestaoAtiva` das dependências — eliminou loop infinito (funções sem `useCallback` criavam nova referência a cada render → re-carregava histórico infinitamente)
 - **Animações removidas**: `animate-in` removido de QuestaoVisualizador, MeuDesempenho, QuestaoResolucaoProfessor, caixa IA e container principal — slide/fade causavam empurrão visual no layout
 
+#### Metas de Estudo (Página + Extensão LS Concurso)
+- **SQL Migration** (`tools/create_metas_tables.sql`): tabelas `metas_concurso` (cabeçalho) + `tarefas_meta` (tarefas) com RLS, índices e constraints
+- **Tipos**: `MetaConcurso` e `TarefaMeta` em `src/types/database.ts`
+- **CRUD**: 10 funções em `src/services/supabase.service.ts`
+- **Hook**: `src/hooks/useMetasConcurso.ts` com estado reativo
+- **Página**: `src/pages/MetasConcurso.tsx` (~700 linhas) — listagem em cards expansíveis, 3 modais (criar meta, adicionar tarefas em lote, editar status/desempenho), barra de progresso, alternância de status em 1 clique
+- **Rota**: `/app/metas` em `src/App.tsx` com lazy loading
+- **Nav**: "Metas de Estudo" (ícone Target) em `src/components/Layout.tsx`
+- **Extensão LS Concurso** (`extensao/ls-concurso/`): extrai metas semanais de `aluno.lsensino.com.br/#/app/metaAtual` — parseia `.v3-meta-titulo-pagina`, datas, tabela `.v3-table` com disciplinas/formato/descrição, e salva no Supabase via REST API
+
 ### 🔄 Pendente
 - **Modo claro**: ajuste das variáveis CSS `html.light` no `index.css` — usuário achou muito claro, dói a vista. Pendente de nova tentativa com paleta mais suave
 - Features novas (estatísticas avançadas, modo offline, exportar dados, integração IA)
 - Bundle analysis periódica (`VITE_ANALYZE=true` com `rollup-plugin-visualizer` — opcional)
 - E2E com Playwright
 - Segurança da extensão Chrome
+- **Validação da extensão LS Concurso**: testar extração com dados reais da LS
 
 ## Key Decisions
 - `ReactMarkdown` custom renderers usam `any` com eslint-disable porque o tipo `Components` é complexo — aceito como dívida técnica

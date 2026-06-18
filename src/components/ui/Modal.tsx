@@ -9,6 +9,7 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
   children: React.ReactNode
   footer?: React.ReactNode
+  headerAction?: React.ReactNode
 }
 
 const SIZE_MAP = {
@@ -19,32 +20,35 @@ const SIZE_MAP = {
   full: 'max-w-6xl',
 }
 
-export function Modal({ isOpen, onClose, title, subtitle, icon, size = 'md', children, footer }: ModalProps) {
+export function Modal({ isOpen, onClose, title, subtitle, icon, size = 'md', children, footer, headerAction }: ModalProps) {
   if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
       <div className={`bg-card rounded-2xl border border-border shadow-2xl w-full ${SIZE_MAP[size]} overflow-hidden transform transition-all duration-300 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]`}>
-        <div className="px-6 py-4 bg-muted border-b border-border flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-2.5">
+        <div className="px-6 py-4 bg-muted border-b border-border flex items-center justify-between flex-shrink-0 gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
             {icon && (
-              <div className="p-2 bg-primary/20 rounded-lg text-primary">
+              <div className="p-2 bg-primary/20 rounded-lg text-primary shrink-0">
                 {icon}
               </div>
             )}
-            <div>
-              <h3 className="text-sm font-black text-foreground">{title}</h3>
+            <div className="min-w-0">
+              <h3 className="text-sm font-black text-foreground truncate">{title}</h3>
               {subtitle && (
-                <p className="text-[10px] text-muted-foreground font-bold mt-0.5">{subtitle}</p>
+                <p className="text-[10px] text-muted-foreground font-bold mt-0.5 truncate">{subtitle}</p>
               )}
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1.5 hover:bg-muted rounded-lg transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {headerAction}
+            <button
+              onClick={onClose}
+              className="text-muted-foreground hover:text-foreground p-1.5 hover:bg-muted rounded-lg transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
         <div className="p-6 overflow-y-auto flex-1">
           {children}
