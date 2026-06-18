@@ -92,8 +92,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     let dataFim = null;
     // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
     const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
-    console.log(`[LS-Metas] Debug datas: match=${datasMatch ? datasMatch[0] : 'null'}, titulo=${tituloTexto}`);
-    if (datasMatch) {
+if (datasMatch) {
       const partesInicio = datasMatch[1].split("/");
       const partesFim = datasMatch[2].split("/");
       let ano;
@@ -549,13 +548,16 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     // Evita re-envio
     if (sentMetas.has(semanaNumero)) { historicoJaProcessado = false; return; }
 
+    // Debug: loga HTML ao redor do título pra encontrar onde estão as datas
+    const parentDoTitulo = tituloEl ? tituloEl.closest("div,section") : null;
+    console.log(`[LS-Metas] Debug datas: parent HTML=${parentDoTitulo ? parentDoTitulo.innerHTML.substring(0, 3000) : 'sem parent'}`);
+
     // Datas: "16/06 – 23/06"
     let dataInicio = null;
     let dataFim = null;
     // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
     const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
-    console.log(`[LS-Metas] Debug datas: match=${datasMatch ? datasMatch[0] : 'null'}, titulo=${tituloTexto}`);
-    if (datasMatch) {
+if (datasMatch) {
       const partesInicio = datasMatch[1].split("/");
       const partesFim = datasMatch[2].split("/");
       let ano;
