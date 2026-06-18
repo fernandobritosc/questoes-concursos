@@ -40,7 +40,7 @@ const FORMATO_CORES: Record<string, string> = {
 
 function formatarData(d: string | null): string {
   if (!d) return '—'
-  return new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+  return new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 function calcularProgresso(tarefas: TarefaMeta[]): { concluidas: number; total: number; pct: number } {
