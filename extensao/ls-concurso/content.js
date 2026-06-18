@@ -92,6 +92,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     let dataFim = null;
     // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
     const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
+    console.log(`[LS-Metas] Debug datas: match=${datasMatch ? datasMatch[0] : 'null'}, titulo=${tituloTexto}`);
     if (datasMatch) {
       const partesInicio = datasMatch[1].split("/");
       const partesFim = datasMatch[2].split("/");
@@ -553,6 +554,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     let dataFim = null;
     // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
     const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
+    console.log(`[LS-Metas] Debug datas: match=${datasMatch ? datasMatch[0] : 'null'}, titulo=${tituloTexto}`);
     if (datasMatch) {
       const partesInicio = datasMatch[1].split("/");
       const partesFim = datasMatch[2].split("/");
