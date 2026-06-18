@@ -92,7 +92,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     let dataFim = null;
     // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
     const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
-if (datasMatch) {
+    if (datasMatch) {
       const partesInicio = datasMatch[1].split("/");
       const partesFim = datasMatch[2].split("/");
       let ano;
@@ -548,26 +548,37 @@ if (datasMatch) {
     // Evita re-envio
     if (sentMetas.has(semanaNumero)) { historicoJaProcessado = false; return; }
 
-    // Debug: loga HTML ao redor do título pra encontrar onde estão as datas
-    const parentDoTitulo = tituloEl ? tituloEl.closest("div,section") : null;
-    console.log(`[LS-Metas] Debug datas: parent HTML=${parentDoTitulo ? parentDoTitulo.innerHTML.substring(0, 3000) : 'sem parent'}`);
-
-    // Datas: "16/06 – 23/06"
+    // Datas: "meta iniciada em 09/06/2026" e "Próxima meta 23/06/2026" no resumo
     let dataInicio = null;
     let dataFim = null;
-    // Regex: captura DD/MM opcionalmente seguido de /YYYY ou /YY
-    const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
-if (datasMatch) {
-      const partesInicio = datasMatch[1].split("/");
-      const partesFim = datasMatch[2].split("/");
-      let ano;
-      if (partesInicio.length === 3 && partesInicio[2].length >= 2) {
-        ano = partesInicio[2].length === 2 ? 2000 + parseInt(partesInicio[2], 10) : parseInt(partesInicio[2], 10);
-      } else {
-        ano = new Date().getFullYear();
+    if (resumoEl) {
+      const resumoText = resumoEl.textContent || "";
+      const inicioMatch = resumoText.match(/meta iniciada em\s*(\d{2}\/\d{2}\/\d{4})/i);
+      const fimMatch = resumoText.match(/pr[óo]xima meta\s*(\d{2}\/\d{2}\/\d{4})/i);
+      if (inicioMatch) {
+        const [dia, mes, ano] = inicioMatch[1].split("/");
+        dataInicio = `${ano}-${mes}-${dia}`;
       }
-      dataInicio = `${ano}-${partesInicio[1].padStart(2, "0")}-${partesInicio[0].padStart(2, "0")}`;
-      dataFim = `${ano}-${partesFim[1].padStart(2, "0")}-${partesFim[0].padStart(2, "0")}`;
+      if (fimMatch) {
+        const [dia, mes, ano] = fimMatch[1].split("/");
+        dataFim = `${ano}-${mes}-${dia}`;
+      }
+    }
+    // Fallback: regex no body text caso não ache no resumo
+    if (!dataInicio && !dataFim) {
+      const datasMatch = pageText.match(/(\d{2}\/\d{2}(?:\/\d{2,4})?)\s*[–-]\s*(\d{2}\/\d{2}(?:\/\d{2,4})?)/i);
+      if (datasMatch) {
+        const partesInicio = datasMatch[1].split("/");
+        const partesFim = datasMatch[2].split("/");
+        let ano;
+        if (partesInicio.length === 3 && partesInicio[2].length >= 2) {
+          ano = partesInicio[2].length === 2 ? 2000 + parseInt(partesInicio[2], 10) : parseInt(partesInicio[2], 10);
+        } else {
+          ano = new Date().getFullYear();
+        }
+        dataInicio = `${ano}-${partesInicio[1].padStart(2, "0")}-${partesInicio[0].padStart(2, "0")}`;
+        dataFim = `${ano}-${partesFim[1].padStart(2, "0")}-${partesFim[0].padStart(2, "0")}`;
+      }
     }
 
     // Resumo
