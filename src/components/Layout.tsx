@@ -50,7 +50,6 @@ export function Layout() {
     { name: 'Mapa de Questões', path: '/app/mapa', icon: Map },
     { name: 'Caderno de Erros', path: '/app/revisao', icon: BookOpen },
     { name: 'Banco de Questões', path: '/app/questoes', icon: Database },
-    { name: 'Mentor IA', path: '/app/mentor', icon: BrainCircuit },
     { name: 'Metas de Estudo', path: '/app/metas', icon: Target },
   ]
 

@@ -8,7 +8,6 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })))
 const Revisao = lazy(() => import('./pages/Revisao').then(m => ({ default: m.Revisao })))
-const Mentor = lazy(() => import('./pages/Mentor').then(m => ({ default: m.Mentor })))
 const Questoes = lazy(() => import('./pages/Questoes').then(m => ({ default: m.Questoes })))
 const EditalVerticalizado = lazy(() => import('./pages/EditalVerticalizado').then(m => ({ default: m.EditalVerticalizado })))
 const EditaisManager = lazy(() => import('./pages/EditaisManager').then(m => ({ default: m.EditaisManager })))
@@ -38,7 +37,6 @@ function App() {
             <Route path="dashboard" element={<SuspenseRoute><Dashboard /></SuspenseRoute>} />
             <Route path="revisao" element={<SuspenseRoute><Revisao /></SuspenseRoute>} />
             <Route path="simulados" element={<SuspenseRoute><Simulados /></SuspenseRoute>} />
-            <Route path="mentor" element={<SuspenseRoute><Mentor /></SuspenseRoute>} />
             <Route path="questoes" element={<SuspenseRoute><Questoes /></SuspenseRoute>} />
             <Route path="edital" element={<SuspenseRoute><EditalVerticalizado /></SuspenseRoute>} />
             <Route path="edital/gerenciar" element={<SuspenseRoute><EditaisManager /></SuspenseRoute>} />

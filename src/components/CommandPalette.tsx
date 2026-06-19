@@ -6,8 +6,6 @@ import {
   ClipboardList, 
   BookOpen, 
   Database, 
-  BrainCircuit, 
-  Sparkles, 
   Command, 
   ChevronRight 
 } from 'lucide-react'
@@ -96,17 +94,6 @@ export function CommandPalette() {
         closePalette()
       }
     },
-    {
-      id: 'nav-mentor',
-      title: 'Mentor IA',
-      subtitle: 'Análise de fraquezas e planos semanais de estudos táticos',
-      icon: BrainCircuit,
-      category: 'Navegação',
-      action: () => {
-        navigate('/app/mentor')
-        closePalette()
-      }
-    }
   ], [navigate])
 
   // 5. Filtrar e Computar Comandos Dinâmicos com base na busca do aluno
@@ -141,22 +128,7 @@ export function CommandPalette() {
       })
     }
 
-    // Lógica de Perguntar ao Mentor IA
-    if (cleanQuery !== '' && !numericMatch) {
-      list.push({
-        id: 'action-ask-mentor',
-        title: `Perguntar ao Mentor: "${query}"`,
-        subtitle: `Abre a página do Mentor IA com sua dúvida contextualizada`,
-        icon: Sparkles,
-        category: 'Busca',
-        action: () => {
-          // Salva no sessionStorage para a página do Mentor resgatar
-          sessionStorage.setItem('mentor_initial_query', query)
-          navigate('/app/mentor')
-          closePalette()
-        }
-      })
-    }
+
 
     return list
   }, [query, baseCommands, navigate])

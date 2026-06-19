@@ -22,8 +22,6 @@ export type HermesEventPayload = {
   finalizar_simulado: { acertos: number; total: number; taxa: number }
   revisar_questao: DadosQuestao
   classificar_revisao: { questao_id?: number; grade: number }
-  gerar_plano_estudos: { fraquezas: number }
-  gerar_mentoria: { materia: string; assunto: string }
   alternar_tarefa: { index: number; concluida: boolean }
 }
 
