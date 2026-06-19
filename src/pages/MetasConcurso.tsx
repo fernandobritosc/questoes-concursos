@@ -707,6 +707,8 @@ function MetaCard({
   onVerTarefa: (t: TarefaMeta) => void
 }) {
   const { concluidas, total, pct } = calcularProgresso(tarefas)
+  const totalHoras = somarHoras(tarefas)
+  const media = mediaDesempenho(tarefas)
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all">
@@ -727,19 +729,35 @@ function MetaCard({
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             {tarefas.length > 0 && (
-              <div className="flex items-center gap-2 mr-2">
-                <span className={`text-xs font-bold ${pct >= 80 ? 'text-green-400' : pct >= 50 ? 'text-amber-400' : 'text-muted-foreground'}`}>
-                  {pct}%
-                </span>
-                <div className="w-20 h-1.5 rounded-full bg-muted overflow-hidden hidden sm:block">
-                  <div
-                    className={`h-full rounded-full transition-all ${pct >= 80 ? 'bg-green-500' : pct >= 50 ? 'bg-amber-500' : 'bg-violet-500'}`}
-                    style={{ width: `${pct}%` }}
-                  />
+              <>
+                <div className="hidden sm:flex items-center gap-3 mr-1">
+                  <div className="text-right">
+                    <p className="text-[9px] font-bold text-muted-foreground">{formatarHoras(totalHoras)}</p>
+                    <p className="text-[7px] text-muted-foreground/60">horas</p>
+                  </div>
+                  {media !== null && (
+                    <div className="text-right">
+                      <p className="text-[9px] font-bold" style={{ color: media >= 70 ? '#4ade80' : media >= 40 ? '#fbbf24' : '#f87171' }}>{media}%</p>
+                      <p className="text-[7px] text-muted-foreground/60">média</p>
+                    </div>
+                  )}
                 </div>
-              </div>
+                <div className="flex items-center gap-2 mr-1">
+                  <div className="flex flex-col items-end">
+                    <span className={`text-[10px] font-bold ${pct >= 80 ? 'text-green-400' : pct >= 50 ? 'text-amber-400' : 'text-muted-foreground'}`}>
+                      {pct}%
+                    </span>
+                    <div className="w-16 h-1 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${pct >= 80 ? 'bg-green-500' : pct >= 50 ? 'bg-amber-500' : 'bg-violet-500'}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
             {expandida ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
           </div>
@@ -774,46 +792,63 @@ function MetaCard({
             </div>
           ) : (
             <div className="p-4">
-              {/* Barra de progresso */}
+              {/* Stats + Progresso */}
               {total > 0 && (
-                <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-muted/50">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Progresso</span>
-                      <span className="text-[10px] font-bold text-foreground">{concluidas}/{total} ({pct}%)</span>
-                    </div>
-                    <div className="w-full h-2 rounded-full bg-muted overflow-hidden">
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  {/* Progresso */}
+                  <div className="p-3 rounded-xl bg-muted/50">
+                    <p className="text-[9px] text-muted-foreground mb-1">Progresso</p>
+                    <p className="text-sm font-bold text-foreground">{concluidas}/{total} ({pct}%)</p>
+                    <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden mt-1.5">
                       <div
                         className={`h-full rounded-full transition-all ${pct >= 80 ? 'bg-green-500' : pct >= 50 ? 'bg-amber-500' : 'bg-violet-500'}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>
                   </div>
-                  <button
-                    onClick={onAddTarefas}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-500/10 text-violet-400 text-[10px] font-bold hover:bg-violet-500/20 transition-all shrink-0 cursor-pointer"
-                  >
-                    <Plus className="w-3 h-3" />
-                    Add
-                  </button>
+                  {/* Horas */}
+                  <div className="p-3 rounded-xl bg-muted/50">
+                    <p className="text-[9px] text-muted-foreground mb-1">Horas</p>
+                    <p className="text-sm font-bold text-foreground">{formatarHoras(totalHoras)}</p>
+                    <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden mt-1.5">
+                      <div
+                        className="h-full rounded-full bg-violet-500/60 transition-all"
+                        style={{ width: `${Math.min((totalHoras / 20) * 100, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                  {/* Média */}
+                  <div className="p-3 rounded-xl bg-muted/50">
+                    <p className="text-[9px] text-muted-foreground mb-1">Desempenho</p>
+                    {media !== null ? (
+                      <>
+                        <p className="text-sm font-bold" style={{ color: media >= 70 ? '#4ade80' : media >= 40 ? '#fbbf24' : '#f87171' }}>
+                          {media}%
+                        </p>
+                        <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden mt-1.5">
+                          <div
+                            className="h-full rounded-full transition-all"
+                            style={{ width: `${media}%`, backgroundColor: media >= 70 ? '#4ade80' : media >= 40 ? '#fbbf24' : '#f87171' }}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-sm text-muted-foreground/40">—</p>
+                    )}
+                  </div>
                 </div>
               )}
 
-              {/* Stats da meta */}
-              {tarefas.length > 0 && (
-                <div className="flex items-center gap-4 mb-4 px-1 text-[11px] text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {formatarHoras(somarHoras(tarefas))}
-                  </span>
-                  {mediaDesempenho(tarefas) !== null && (
-                    <span className="flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3" />
-                      Média: {mediaDesempenho(tarefas)}%
-                    </span>
-                  )}
-                </div>
-              )}
+              {/* Botão Add no canto */}
+              <div className="flex justify-end mb-3">
+                <button
+                  onClick={onAddTarefas}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-500/10 text-violet-400 text-[10px] font-bold hover:bg-violet-500/20 transition-all cursor-pointer"
+                >
+                  <Plus className="w-3 h-3" />
+                  Adicionar Tarefas
+                </button>
+              </div>
 
               {/* Tabela de tarefas */}
               <div className="flex flex-col gap-1.5">
@@ -891,9 +926,20 @@ function TarefaRow({
       </div>
       <div className="col-span-1 text-center">
         {tarefa.desempenho !== null ? (
-          <span className={`text-[10px] font-bold ${tarefa.desempenho >= 70 ? 'text-green-400' : tarefa.desempenho >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
-            {tarefa.desempenho}%
-          </span>
+          <div className="flex flex-col items-center gap-0.5">
+            <span className={`text-[10px] font-bold ${tarefa.desempenho >= 70 ? 'text-green-400' : tarefa.desempenho >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
+              {tarefa.desempenho}%
+            </span>
+            <div className="w-full max-w-[32px] h-1 rounded-full bg-muted overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${tarefa.desempenho}%`,
+                  backgroundColor: tarefa.desempenho >= 70 ? '#4ade80' : tarefa.desempenho >= 40 ? '#fbbf24' : '#f87171',
+                }}
+              />
+            </div>
+          </div>
         ) : (
           <span className="text-[10px] text-muted-foreground/40">—</span>
         )}

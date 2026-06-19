@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { BarChart3, Clock, TrendingUp, ChevronDown, ChevronRight, Target, CheckCircle2, AlertCircle } from 'lucide-react'
+import { BarChart3, Clock, TrendingUp, ChevronDown, ChevronRight, Target } from 'lucide-react'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { fetchTarefasComMetas } from '../services/supabase.service'
 import type { TarefaMeta } from '../types/database'
@@ -34,10 +34,6 @@ function calcularMedia(tarefas: TarefaMeta[]): number | null {
   return Math.round(comNota.reduce((acc, t) => acc + t.desempenho!, 0) / comNota.length)
 }
 
-function contarConcluidas(tarefas: TarefaMeta[]): number {
-  return tarefas.filter(t => t.status === 'concluída').length
-}
-
 function corDesempenho(valor: number | null): string {
   if (valor === null) return 'text-muted-foreground'
   if (valor >= 70) return 'text-green-400'
@@ -61,14 +57,12 @@ interface MetaInfo {
   horas: number
   desempenho: number | null
   totalTarefas: number
-  concluidas: number
 }
 
 interface AssuntoInfo {
   assunto: string
   tarefas: TarefaComMeta[]
   totalHoras: number
-  maxHoras: number
   mediaDesempenho: number | null
   metas: MetaInfo[]
 }
@@ -77,10 +71,8 @@ interface DisciplinaInfo {
   disciplina: string
   assuntos: AssuntoInfo[]
   totalHoras: number
-  maxHoras: number
   mediaDesempenho: number | null
   totalTarefas: number
-  concluidas: number
 }
 
 export function Apuracao() {
@@ -123,43 +115,35 @@ export function Apuracao() {
           arr.push(t)
           metasMap.set(t.meta_id, arr)
         }
-        const metas: MetaInfo[] = Array.from(metasMap.entries()).map(([metaId, tArr]) => ({
-          id: metaId,
-          titulo: tArr[0].meta_titulo,
-          semana: tArr[0].meta_semana,
-          dataInicio: tArr[0].meta_data_inicio,
-          dataFim: tArr[0].meta_data_fim,
-          horas: somarHoras(tArr),
-          desempenho: calcularMedia(tArr),
-          totalTarefas: tArr.length,
-          concluidas: contarConcluidas(tArr),
-        }))
+const metas: MetaInfo[] = Array.from(metasMap.entries()).map(([metaId, tArr]) => ({
+  id: metaId,
+  titulo: tArr[0].meta_titulo,
+  semana: tArr[0].meta_semana,
+  dataInicio: tArr[0].meta_data_inicio,
+  dataFim: tArr[0].meta_data_fim,
+  horas: somarHoras(tArr),
+  desempenho: calcularMedia(tArr),
+  totalTarefas: tArr.length,
+}))
         metas.sort((a, b) => b.semana - a.semana)
         assuntos.push({
-          assunto,
-          tarefas: ats,
-          totalHoras: somarHoras(ats),
-          maxHoras: 0,
-          mediaDesempenho: calcularMedia(ats),
-          metas,
-        })
+  assunto,
+  tarefas: ats,
+  totalHoras: somarHoras(ats),
+  mediaDesempenho: calcularMedia(ats),
+  metas,
+})
       }
       assuntos.sort((a, b) => (b.mediaDesempenho || 0) - (a.mediaDesempenho || 0))
-
-      const maxH = Math.max(...assuntos.map(a => a.totalHoras), 1)
-      for (const a of assuntos) a.maxHoras = maxH
 
       result.push({
         disciplina,
         assuntos,
         totalHoras: somarHoras(ts),
-        maxHoras: 0,
         mediaDesempenho: calcularMedia(ts),
         totalTarefas: ts.length,
-        concluidas: contarConcluidas(ts),
       })
     }
-    for (const d of result) d.maxHoras = Math.max(...d.assuntos.map(a => a.totalHoras), 1)
     result.sort((a, b) => (a.mediaDesempenho || 0) - (b.mediaDesempenho || 0))
     return result
   }, [tarefas])
@@ -193,7 +177,6 @@ export function Apuracao() {
   )
 
   const totalAssuntos = disciplinas.reduce((acc, d) => acc + d.assuntos.length, 0)
-  const totalConcluidas = disciplinas.reduce((acc, d) => acc + d.concluidas, 0)
 
   return (
     <div className="flex-1 flex flex-col p-4 lg:p-6 gap-4 overflow-y-auto">
@@ -206,7 +189,6 @@ export function Apuracao() {
           <h1 className="text-lg font-black text-foreground">Apuração por Matéria</h1>
           <p className="text-[11px] text-muted-foreground font-medium">
             {disciplinas.length} matéria(s) · {totalAssuntos} assunto(s) · {tarefas.length} tarefa(s)
-            {totalConcluidas > 0 && ` · ${totalConcluidas} concluída(s)`}
           </p>
         </div>
       </div>
@@ -250,15 +232,6 @@ export function Apuracao() {
                   </div>
 
                   <div className="flex items-center gap-4 shrink-0">
-                    {/* Tarefas concluídas */}
-                    <div className="text-right hidden sm:block">
-                      <p className="text-xs font-bold text-foreground flex items-center gap-1 justify-end">
-                        <CheckCircle2 className="w-3 h-3 text-green-400" />
-                        <span>{d.concluidas}/{d.totalTarefas}</span>
-                      </p>
-                      <p className="text-[9px] text-muted-foreground">concluídas</p>
-                    </div>
-
                     {/* Horas */}
                     <div className="text-right">
                       <p className="text-xs font-bold text-foreground">{formatarHoras(d.totalHoras)}</p>
@@ -279,30 +252,17 @@ export function Apuracao() {
                   </div>
                 </button>
 
-                {/* Barra de progresso geral da matéria */}
-                {discExp && (
-                  <div className="px-4 pb-1">
-                    <div className="flex gap-2 items-center">
-                      {/* Barra de horas */}
+                {/* Barra de desempenho geral da matéria */}
+                {discExp && d.mediaDesempenho !== null && (
+                  <div className="px-4 pb-3">
+                    <div className="flex items-center gap-2">
                       <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-violet-500/60 transition-all"
-                          style={{ width: `${Math.min((d.totalHoras / 40) * 100, 100)}%` }}
+                          className={`h-full rounded-full transition-all ${bgDesempenho(d.mediaDesempenho)}`}
+                          style={{ width: `${d.mediaDesempenho}%` }}
                         />
                       </div>
-                      {/* Barra de desempenho */}
-                      {d.mediaDesempenho !== null && (
-                        <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all ${bgDesempenho(d.mediaDesempenho)}`}
-                            style={{ width: `${d.mediaDesempenho}%` }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex justify-between text-[9px] text-muted-foreground mt-1">
-                      <span>horas ({formatarHoras(d.totalHoras)} de 40h)</span>
-                      {d.mediaDesempenho !== null && <span>desempenho ({d.mediaDesempenho}%)</span>}
+                      <span className="text-[10px] font-bold text-muted-foreground">{d.mediaDesempenho}%</span>
                     </div>
                   </div>
                 )}
@@ -333,20 +293,7 @@ export function Apuracao() {
                             </div>
 
                             <div className="flex items-center gap-3 shrink-0">
-                              {/* Barra de horas miniatura */}
-                              <div className="hidden sm:flex items-center gap-1.5">
-                                <div className="w-12 h-1.5 rounded-full bg-muted overflow-hidden">
-                                  <div
-                                    className="h-full rounded-full bg-violet-500/50 transition-all"
-                                    style={{ width: `${(a.totalHoras / a.maxHoras) * 100}%` }}
-                                  />
-                                </div>
-                                <span className="text-[10px] font-bold text-muted-foreground min-w-[32px] text-right">
-                                  {formatarHoras(a.totalHoras)}
-                                </span>
-                              </div>
-
-                              <span className="text-[10px] font-bold text-muted-foreground sm:hidden">{formatarHoras(a.totalHoras)}</span>
+                              <span className="text-[10px] font-bold text-muted-foreground">{formatarHoras(a.totalHoras)}</span>
 
                               {a.mediaDesempenho !== null && (
                                 <span className={`text-[10px] font-bold ${corDesempenho(a.mediaDesempenho)}`}>
@@ -357,24 +304,14 @@ export function Apuracao() {
                             </div>
                           </button>
 
-                          {/* Barra de progresso do assunto */}
-                          {assExp && (
+                          {/* Barra de desempenho do assunto */}
+                          {assExp && a.mediaDesempenho !== null && (
                             <div className="px-4 pl-8 pb-1">
-                              <div className="flex gap-2">
-                                <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
-                                  <div
-                                    className="h-full rounded-full bg-violet-500/40 transition-all"
-                                    style={{ width: `${(a.totalHoras / d.maxHoras) * 100}%` }}
-                                  />
-                                </div>
-                                {a.mediaDesempenho !== null && (
-                                  <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
-                                    <div
-                                      className={`h-full rounded-full transition-all ${bgDesempenho(a.mediaDesempenho)}`}
-                                      style={{ width: `${a.mediaDesempenho}%` }}
-                                    />
-                                  </div>
-                                )}
+                              <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full transition-all ${bgDesempenho(a.mediaDesempenho)}`}
+                                  style={{ width: `${a.mediaDesempenho}%` }}
+                                />
                               </div>
                             </div>
                           )}
@@ -384,9 +321,6 @@ export function Apuracao() {
                             <div className="px-4 pb-3 pl-8">
                               <div className="flex flex-col gap-1.5">
                                 {a.metas.map(m => {
-                                  const metaConcluidas = m.concluidas
-                                  const metaTotal = m.totalTarefas
-                                  const progressoTarefas = metaTotal > 0 ? (metaConcluidas / metaTotal) * 100 : 0
                                   return (
                                     <div key={m.id} className="rounded-xl bg-muted/20 p-3 hover:bg-muted/30 transition-all">
                                       <div className="flex items-center justify-between gap-2 mb-2">
@@ -408,12 +342,6 @@ export function Apuracao() {
                                         <div>
                                           <p className="text-[9px] text-muted-foreground mb-0.5">Horas</p>
                                           <p className="text-sm font-bold text-foreground">{formatarHoras(m.horas)}</p>
-                                          <div className="w-full h-1 rounded-full bg-muted overflow-hidden mt-1">
-                                            <div
-                                              className="h-full rounded-full bg-violet-500/60 transition-all"
-                                              style={{ width: `${Math.min((m.horas / 8) * 100, 100)}%` }}
-                                            />
-                                          </div>
                                         </div>
 
                                         {/* Desempenho */}
@@ -432,28 +360,14 @@ export function Apuracao() {
                                               </div>
                                             </>
                                           ) : (
-                                            <div className="flex items-center gap-1">
-                                              <AlertCircle className="w-3 h-3 text-muted-foreground/40" />
-                                              <span className="text-[10px] text-muted-foreground/40">—</span>
-                                            </div>
+                                            <span className="text-sm text-muted-foreground/40">—</span>
                                           )}
                                         </div>
 
                                         {/* Tarefas */}
                                         <div>
                                           <p className="text-[9px] text-muted-foreground mb-0.5">Tarefas</p>
-                                          <p className="text-sm font-bold text-foreground flex items-center gap-1.5">
-                                            <CheckCircle2 className={`w-3.5 h-3.5 ${metaConcluidas === metaTotal && metaTotal > 0 ? 'text-green-400' : 'text-muted-foreground/40'}`} />
-                                            {metaConcluidas}/{metaTotal}
-                                          </p>
-                                          {metaTotal > 0 && (
-                                            <div className="w-full h-1 rounded-full bg-muted overflow-hidden mt-1">
-                                              <div
-                                                className={`h-full rounded-full transition-all ${progressoTarefas >= 100 ? 'bg-green-500' : 'bg-amber-500'}`}
-                                                style={{ width: `${progressoTarefas}%` }}
-                                              />
-                                            </div>
-                                          )}
+                                          <p className="text-sm font-bold text-foreground">{m.totalTarefas}</p>
                                         </div>
                                       </div>
                                     </div>
