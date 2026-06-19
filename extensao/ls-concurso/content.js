@@ -144,7 +144,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
 
       let desempenho = null;
       const desempenhoNum = parseInt(desempenhoRaw.replace(/\D/g, ""), 10);
-      if (!isNaN(desempenhoNum)) desempenho = desempenhoNum;
+      if (!isNaN(desempenhoNum) && desempenhoNum > 0) desempenho = desempenhoNum;
 
       if (!disciplina) return;
 
@@ -625,7 +625,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
 
       let desempenhoNum = null;
       const num = parseInt(desempenhoRaw.replace(/\D/g, ""), 10);
-      if (!isNaN(num)) desempenhoNum = num;
+      if (!isNaN(num) && num > 0) desempenhoNum = num;
 
       if (!disciplina) return;
 

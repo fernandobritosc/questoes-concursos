@@ -60,7 +60,7 @@ function formatarHoras(totalHoras: number): string {
 }
 
 function mediaDesempenho(tarefas: TarefaMeta[]): number | null {
-  const comNota = tarefas.filter(t => t.desempenho !== null)
+  const comNota = tarefas.filter(t => t.desempenho !== null && t.desempenho > 0)
   if (comNota.length === 0) return null
   return Math.round(comNota.reduce((acc, t) => acc + t.desempenho!, 0) / comNota.length)
 }
