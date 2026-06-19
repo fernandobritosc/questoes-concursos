@@ -16,6 +16,7 @@ const Simulados = lazy(() => import('./pages/Simulados').then(m => ({ default: m
 const MapaQuestoes = lazy(() => import('./pages/MapaQuestoes').then(m => ({ default: m.MapaQuestoes })))
 const MetasConcurso = lazy(() => import('./pages/MetasConcurso').then(m => ({ default: m.MetasConcurso })))
 const TarefaDetalhe = lazy(() => import('./pages/TarefaDetalhe').then(m => ({ default: m.TarefaDetalhe })))
+const Apuracao = lazy(() => import('./pages/Apuracao').then(m => ({ default: m.Apuracao })))
 const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })))
 
 function SuspenseRoute({ children }: { children: React.ReactNode }) {
@@ -43,6 +44,7 @@ function App() {
             <Route path="mapa" element={<SuspenseRoute><MapaQuestoes /></SuspenseRoute>} />
             <Route path="metas" element={<SuspenseRoute><MetasConcurso /></SuspenseRoute>} />
             <Route path="metas/tarefa/:id" element={<SuspenseRoute><TarefaDetalhe /></SuspenseRoute>} />
+            <Route path="apuracao" element={<SuspenseRoute><Apuracao /></SuspenseRoute>} />
           </Route>
 
           {/* Fallback temporário caso a pessoa estivesse acostumada com a rota antiga */}

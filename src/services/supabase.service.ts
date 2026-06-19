@@ -789,6 +789,38 @@ export async function deleteTarefaMeta(id: number): Promise<void> {
   if (error) throw error
 }
 
+export async function fetchTarefasComMetas(): Promise<(TarefaMeta & { meta_titulo: string; meta_semana: number; meta_data_inicio: string | null; meta_data_fim: string | null })[]> {
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) return []
+
+  const { data, error } = await supabase
+    .from('tarefas_meta')
+    .select(`
+      *,
+      metas_concurso!inner(
+        titulo,
+        semana_numero,
+        data_inicio,
+        data_fim
+      )
+    `)
+    .eq('metas_concurso.user_id', userId)
+
+  if (error) throw error
+
+  return ((data || []) as Array<Record<string, unknown>>).map((t: Record<string, unknown>) => {
+    const meta = t.metas_concurso as Record<string, unknown> || {}
+    return {
+      ...t,
+      meta_titulo: meta.titulo as string || '',
+      meta_semana: meta.semana_numero as number || 0,
+      meta_data_inicio: meta.data_inicio as string | null || null,
+      meta_data_fim: meta.data_fim as string | null || null,
+    } as TarefaMeta & { meta_titulo: string; meta_semana: number; meta_data_inicio: string | null; meta_data_fim: string | null }
+  })
+}
+
 export async function updateTarefaMetaStatus(id: number, status: TarefaMeta['status']): Promise<void> {
   const { error } = await supabase
     .from('tarefas_meta')

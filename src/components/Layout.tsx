@@ -9,6 +9,7 @@ import {
   Timer, 
   Map, 
   Target,
+  BarChart3,
   Menu, 
   X,
   LogOut,
@@ -51,6 +52,7 @@ export function Layout() {
     { name: 'Caderno de Erros', path: '/app/revisao', icon: BookOpen },
     { name: 'Banco de Questões', path: '/app/questoes', icon: Database },
     { name: 'Metas de Estudo', path: '/app/metas', icon: Target },
+    { name: 'Apuração', path: '/app/apuracao', icon: BarChart3 },
   ]
 
   const { session } = useAuth()
