@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { BarChart3, Clock, TrendingUp, BookOpen, ChevronDown, ChevronRight, Target } from 'lucide-react'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { fetchTarefasComMetas } from '../services/supabase.service'
@@ -260,7 +261,13 @@ export function Apuracao() {
                                   <div key={m.id} className="grid grid-cols-12 gap-2 items-center px-3 py-2 rounded-xl hover:bg-muted/30 transition-all">
                                     <div className="col-span-3 text-xs font-semibold text-foreground truncate flex items-center gap-2">
                                       <Clock className="w-3 h-3 text-muted-foreground shrink-0" />
-                                      {m.titulo}
+                                      <Link
+                                        to={`/app/metas?expandir=${m.id}`}
+                                        className="hover:text-violet-400 transition-colors truncate"
+                                        title="Abrir meta"
+                                      >
+                                        {m.titulo}
+                                      </Link>
                                     </div>
                                     <div className="col-span-2 text-center text-[10px] text-muted-foreground">
                                       {formatarData(m.dataInicio)} – {formatarData(m.dataFim)}

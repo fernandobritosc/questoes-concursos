@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   Target,
   Plus,
@@ -79,7 +80,10 @@ export function MetasConcurso() {
     atualizarTarefa, mudarStatusTarefa, excluirTarefa,
   } = useMetasConcurso()
 
-  const [metaExpandida, setMetaExpandida] = useState<number | null>(null)
+  const [searchParams] = useSearchParams()
+  const [metaExpandida, setMetaExpandida] = useState<number | null>(
+    searchParams.get('expandir') ? Number(searchParams.get('expandir')) : null
+  )
   const [tarefasMap, setTarefasMap] = useState<Record<number, TarefaMeta[]>>({})
   const [loadingTarefas, setLoadingTarefas] = useState<Record<number, boolean>>({})
 
