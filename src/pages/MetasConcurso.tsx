@@ -319,21 +319,57 @@ export function MetasConcurso() {
             if (todasTarefas.length === 0) return null
             const totalHoras = somarHoras(todasTarefas)
             const media = mediaDesempenho(todasTarefas)
+            const concluidas = todasTarefas.filter(t => t.status === 'concluída').length
+            const total = todasTarefas.length
+            const pct = total > 0 ? Math.round((concluidas / total) * 100) : 0
             return (
-              <div className="rounded-2xl border border-border bg-gradient-to-r from-violet-500/5 to-indigo-500/5 p-4 flex items-center gap-6">
-                <div>
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Total Horas</span>
-                  <p className="text-xl font-black text-foreground mt-0.5">{formatarHoras(totalHoras)}</p>
-                </div>
-                {media !== null && (
+              <div className="rounded-2xl border border-border bg-gradient-to-r from-violet-500/5 to-indigo-500/5 p-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {/* Horas */}
                   <div>
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Média Geral</span>
-                    <p className="text-xl font-black text-foreground mt-0.5">{media}%</p>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Total Horas</span>
+                    <p className="text-xl font-black text-foreground mt-0.5">{formatarHoras(totalHoras)}</p>
+                    <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden mt-2">
+                      <div
+                        className="h-full rounded-full bg-violet-500/60 transition-all"
+                        style={{ width: `${Math.min((totalHoras / 40) * 100, 100)}%` }}
+                      />
+                    </div>
                   </div>
-                )}
-                <div>
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Tarefas</span>
-                  <p className="text-xl font-black text-foreground mt-0.5">{todasTarefas.length}</p>
+                  {/* Média */}
+                  {media !== null ? (
+                    <div>
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Média Geral</span>
+                      <p className="text-xl font-black mt-0.5" style={{ color: media >= 70 ? '#4ade80' : media >= 40 ? '#fbbf24' : '#f87171' }}>{media}%</p>
+                      <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden mt-2">
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{ width: `${media}%`, backgroundColor: media >= 70 ? '#4ade80' : media >= 40 ? '#fbbf24' : '#f87171' }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Média Geral</span>
+                      <p className="text-xl font-black text-muted-foreground/40 mt-0.5">—</p>
+                    </div>
+                  )}
+                  {/* Tarefas */}
+                  <div>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Tarefas</span>
+                    <p className="text-xl font-black text-foreground mt-0.5">{total}</p>
+                  </div>
+                  {/* Concluídas */}
+                  <div>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Concluídas</span>
+                    <p className="text-xl font-black text-foreground mt-0.5">{concluidas}/{total} ({pct}%)</p>
+                    <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden mt-2">
+                      <div
+                        className={`h-full rounded-full transition-all ${pct >= 80 ? 'bg-green-500' : pct >= 50 ? 'bg-amber-500' : 'bg-violet-500'}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             )
