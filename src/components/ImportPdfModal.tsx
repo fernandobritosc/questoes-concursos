@@ -34,7 +34,7 @@ interface ImportPdfModalProps {
 }
 
 import { getQuestionValidation } from '../lib/validation'
-import { getGrupo } from '../lib/grupoUtils'
+import { getGrupo, backfillGrupos } from '../lib/grupoUtils'
 
 export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuestions }: ImportPdfModalProps) {
   const toast = useToast()
@@ -202,6 +202,8 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
       clearQuestoesCache()
       const updatedData = await fetchAllQuestoes()
       onImportSuccess(updatedData)
+
+      backfillGrupos().catch(() => {})
 
       setImportStatus({
         step: 'success',
