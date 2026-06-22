@@ -399,6 +399,18 @@
     "materia": "Informática",
     "grupo": "Segurança da Informação"
   },
+  "Conceitos e Especificações do IP": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "TCP e UDP": {
+    "materia": "Informática",
+    "grupo": "Redes de Computadores"
+  },
+  "Segurança em Correio Eletrônico": {
+    "materia": "Informática",
+    "grupo": "Segurança da Informação"
+  },
   "Direito Constitucional: Conceito e Fontes. Estado, Povo, Território, etc.": {
     "materia": "Direito Constitucional",
     "grupo": "Teoria do Direito Constitucional"
@@ -980,6 +992,10 @@
     "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
   },
   "... sobre Organização Político-Administrativa": {
+    "materia": "Direito Constitucional",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
+  },
+  "Jurisprudência dos Tribunais Superiores sobre Organização Político-Administrativa": {
     "materia": "Direito Constitucional",
     "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
   },
@@ -3103,6 +3119,10 @@
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",
     "grupo": "Agentes Públicos"
   },
+  "Do Regime Disciplinar (arts. 116 a 142 da Lei nº 8.112/1990)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Agentes Públicos"
+  },
   "Do Processo Administrativo Disciplinar (arts. 143 a 182)": {
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",
     "grupo": "Agentes Públicos"
@@ -3175,7 +3195,15 @@
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",
     "grupo": "Processo Administrativo (Lei 9.784/1999)"
   },
+  "Trâmite do Processo (arts. 5º a 10 e 29 a 50 da Lei nº 9.784/1999)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
   "Da Competência (arts. 11 a 17)": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Processo Administrativo (Lei 9.784/1999)"
+  },
+  "Da Competência (arts. 11 a 17 da Lei nº 9.784/1999)": {
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",
     "grupo": "Processo Administrativo (Lei 9.784/1999)"
   },
@@ -3420,6 +3448,10 @@
     "grupo": "Acesso à Informação (Lei nº 12.527/2011 - LAI)"
   },
   "Temas mapeados por julgados": {
+    "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Administrativa"
+  },
+  "Jurisprudência dos Tribunais Superiores sobre Processo Administrativo": {
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",
     "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Administrativa"
   },
