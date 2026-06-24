@@ -162,10 +162,10 @@ Este projeto usa o **ECC** (Enhanced Codebase Companion, [github.com/affaan-m/EC
 | Componente | Localização | Propósito |
 |---|---|---|
 | `opencode.json` | `.opencode/opencode.json` | Config principal — agents, commands, skills |
-| Bridge skill | `.opencode/skills/gsd-ecosystem-bridge/SKILL.md` | Ponte ECC ↔ GSD |
 | Agentes ECC | `opencode.json → agent` | planner, code-reviewer, architect, tdd-guide, build-error-resolver |
 | Agentes GSD | `~/.config/opencode/agents/` | 33 subagentes (gsd-planner, gsd-executor, etc.) |
-| Skills GSD | `~/.config/opencode/skills/` | 12 skills (gsd-plan-phase, gsd-execute-phase, etc.) |
+| Skills GSD (locais) | `.opencode/skills/` | 13 skills sincronizadas do runtime canônico |
+| Skills AAS (Awesome) | `.opencode/skills/` | 24 skills do Antigravity Awesome Skills (React, TS, testing, UI, PDF, Postgres, Supabase, etc.) |
 | Workflows GSD | `~/.config/opencode/get-shit-done/workflows/` | 89 workflows |
 | Agent Hermes | `.opencode/agents/hermes.md` | Mentor de estudos IA |
 
@@ -181,6 +181,7 @@ Este projeto usa o **ECC** (Enhanced Codebase Companion, [github.com/affaan-m/EC
 | `/architect` | `architect` | Decisões de arquitetura e design |
 | `/gsd-discuss` | `gsd-discuss` | Fase DISCUSS — extrai decisões de gray areas |
 | `/gsd-execute` | `gsd-execute` | Fase EXECUTE — executa planos em waves |
+| `/gsd-sync-skills` | `sync-skills` workflow | Sincroniza skills GSD do runtime canônico para o projeto |
 
 ### Fluxo de Trabalho Típico
 
@@ -214,7 +215,7 @@ opencode.json (config)
   ├── agent: gsd-orchestrator — orquestrador GSD (subagent)
   ├── agent: gsd-discuss — fase discuss (subagent)
   ├── agent: gsd-execute — fase execute (subagent)
-  └── skill: gsd-ecosystem-bridge — ponte ECC ↔ GSD
+  └── skills (locais): 13 skills GSD + 24 skills AAS (Antigravity Awesome Skills)
 
 Agentes GSD Globais (~/.config/opencode/agents/)
   ├── gsd-planner, gsd-executor, gsd-code-reviewer

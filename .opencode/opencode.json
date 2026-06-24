@@ -4,8 +4,7 @@
   "small_model": "deepseek/deepseek-v4-flash-free",
   "default_agent": "build",
   "instructions": [
-    "AGENTS.md",
-    "skills/gsd-ecosystem-bridge/SKILL.md"
+    "AGENTS.md"
   ],
   "skills": {
     "paths": [
