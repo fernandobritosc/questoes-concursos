@@ -4,6 +4,7 @@ import {
   fetchFilterOptions,
 } from '../services/supabase.service'
 import { trackEvent } from '../services/hermesTracker'
+import { backfillGrupos } from '../lib/grupoUtils'
 import { useQuestoesFilter } from './useQuestoesFilter'
 import { useQuestoesCaderno } from './useQuestoesCaderno'
 import { useQuestoesResolucao } from './useQuestoesResolucao'
@@ -99,6 +100,7 @@ export function useQuestoes() {
 
   // ── Paginação e Filtros Server-Side ──────────────────────────────────────────
   const abortControllerRef = useRef<AbortController | null>(null)
+  const backfillTriggeredRef = useRef(false)
 
   const PAGE_SIZE = 99_999
 
@@ -234,6 +236,12 @@ export function useQuestoes() {
         setTotalPages(result.totalPages)
         setTotalCount(result.total)
         setFilterOptions(opts)
+
+        // Backfill automático de grupos para questões da extensão
+        if (!backfillTriggeredRef.current) {
+          backfillTriggeredRef.current = true
+          backfillGrupos().catch(() => {})
+        }
       } catch (err: unknown) {
         console.error('[LOG useQuestoes] Erro na carga inicial:', err)
         if (!cancelled) {
@@ -281,6 +289,12 @@ export function useQuestoes() {
         caderno.setCurrentQuestaoIndex(0)
         caderno.setAlternativaSelecionada(null)
         caderno.setRevelado(false)
+
+        // Backfill automático de grupos (executa apenas uma vez por sessão)
+        if (!backfillTriggeredRef.current) {
+          backfillTriggeredRef.current = true
+          backfillGrupos().catch(() => {})
+        }
       } catch (err: unknown) {
         if ((err as Error)?.name === 'AbortError') return
         if (!controller.signal.aborted) {
