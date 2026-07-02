@@ -326,7 +326,7 @@ export function Questoes() {
               enunciados={ENUNCIADOS_OPCOES}
             />
 
-            {cadernoQuestoes.length === 0 ? (
+            {cadernoQuestoes.length === 0 || questoesExibidas.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-border rounded-xl shadow-sm">
                 {totalFiltrosAtivos > 0 ? (
                   <>
