@@ -167,7 +167,6 @@ Este projeto usa o **ECC** (Enhanced Codebase Companion, [github.com/affaan-m/EC
 | Skills GSD (locais) | `.opencode/skills/` | 13 skills sincronizadas do runtime canônico |
 | Skills AAS (Awesome) | `.opencode/skills/` | 24 skills do Antigravity Awesome Skills (React, TS, testing, UI, PDF, Postgres, Supabase, etc.) |
 | Workflows GSD | `~/.config/opencode/get-shit-done/workflows/` | 89 workflows |
-| Agent Hermes | `.opencode/agents/hermes.md` | Mentor de estudos IA |
 
 ### Comandos Disponíveis
 

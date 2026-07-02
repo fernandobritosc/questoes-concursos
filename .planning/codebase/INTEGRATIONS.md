@@ -69,14 +69,7 @@
 
 ## Monitoring & Observability
 
-**Event Tracking — Hermes Relay:**
-- **Service:** Custom Node.js HTTP relay (`scripts/hermes-relay.mjs`)
-- **Client:** `src/services/hermesTracker.ts` — sends POST events to `VITE_HERMES_RELAY_URL` (default `http://127.0.0.1:3333`)
-- **Events tracked:** Responding questions, importing PDF, generating explanations, creating simulado, finishing simulado, editing questions, toggling tasks, generating study plans
-- **Logfile:** `hermes_events.jsonl` (with daily rotation + gzip compression)
-- **Reliability:** Uses `keepalive: true`; silent fail if relay is offline
-- **Supabase sync:** `scripts/hermes_supabase.py` syncs events to Supabase periodically
-- **Auto-launch:** Hermes watcher (`scripts/watcher_hermes.py`) auto-restarts the relay on crash
+<!-- Event Tracking (Hermes Relay) removed -->
 
 ## CI/CD & Deployment
 
@@ -106,7 +99,7 @@
 - None detected
 
 **Outgoing:**
-- Hermes relay POST events to `VITE_HERMES_RELAY_URL` (optional, local analytics only)
+<!-- Hermes relay removed -->
 
 ## PDF Import Pipeline
 

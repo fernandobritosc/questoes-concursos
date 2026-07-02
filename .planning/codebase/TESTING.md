@@ -145,7 +145,7 @@ expect(Object.keys(result[0].alternativas)).toHaveLength(5)
 **What Needs Mocking (identified gaps in AGENTS.md):**
 - Supabase client calls (`fetchAllQuestoes`, `insertHistoricoResolucao`, etc.) for hook tests
 - `window.pdfjsLib` for PDF import tests
-- `fetch` for API calls (`/api/gemini`, hermes relay)
+- `fetch` for API calls (`/api/gemini`)
 
 **Expected Pattern (for future tests):**
 ```typescript

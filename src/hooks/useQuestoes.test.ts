@@ -155,10 +155,6 @@ vi.mock('../services/supabase.service', () => ({
   fetchFilterOptions: () => mockRef.fetchFilterOptions(),
 }))
 
-vi.mock('../services/hermesTracker', () => ({
-  trackEvent: (...args: unknown[]) => mockRef.trackEvent(...args),
-}))
-
 vi.mock('./useQuestoesFilter', () => ({
   useQuestoesFilter: () => mockRef.filterResult,
 }))

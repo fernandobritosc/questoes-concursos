@@ -3,7 +3,6 @@ import {
   fetchPaginatedQuestoes,
   fetchFilterOptions,
 } from '../services/supabase.service'
-import { trackEvent } from '../services/hermesTracker'
 import { backfillGrupos } from '../lib/grupoUtils'
 import { useQuestoesFilter } from './useQuestoesFilter'
 import { useQuestoesCaderno } from './useQuestoesCaderno'
@@ -353,15 +352,9 @@ export function useQuestoes() {
   // ─── Wrapper Actions ──────────────────────────────────────────────────────────
 
   const handleGerarCaderno = useCallback(() => {
-    const total = caderno.handleGerarCaderno()
-    if (total && total > 0) {
-      trackEvent('gerar_caderno', {
-        quantidade: total,
-        total_filtros: filter.totalFiltrosAtivos,
-      })
-    }
+    caderno.handleGerarCaderno()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caderno.handleGerarCaderno, filter.totalFiltrosAtivos])
+  }, [caderno.handleGerarCaderno])
 
   const handleConfirmarResposta = useCallback(async () => {
     if (questoesExibidas.length === 0 || !questoesExibidas[caderno.currentQuestaoIndex]) return

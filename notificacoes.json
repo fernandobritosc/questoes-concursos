@@ -1,0 +1,61 @@
+{
+  "atualizado_em": "2026-06-11T20:31:36.237087",
+  "notificacoes": [
+    {
+      "id": "pegadinha_Sem banca_Sem assunto",
+      "tipo": "pegadinha_repetida",
+      "severidade": "alta",
+      "titulo": "⚠️ Pegadinha da Sem banca em Sem assunto",
+      "mensagem": "Você errou 9 questões de Sem assunto da banca Sem banca (0% de acerto). Reveja esse tópico com atenção!"
+    },
+    {
+      "id": "critico_Sem matéria_Sem assunto",
+      "tipo": "assunto_critico",
+      "severidade": "urgente",
+      "titulo": "🔴 Sem assunto está crítico!",
+      "mensagem": "Você acertou apenas 0% das questões de Sem matéria — Sem assunto (9 tentativas). Priorize esse assunto hoje."
+    },
+    {
+      "id": "critico_Direito Processual do Trabalho_Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)",
+      "tipo": "assunto_critico",
+      "severidade": "urgente",
+      "titulo": "🔴 Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC) está crítico!",
+      "mensagem": "Você acertou apenas 38% das questões de Direito Processual do Trabalho — Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC) (45 tentativas). Priorize esse assunto hoje."
+    },
+    {
+      "id": "critico_Direito Processual do Trabalho_Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho",
+      "tipo": "assunto_critico",
+      "severidade": "urgente",
+      "titulo": "🔴 Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho está crítico!",
+      "mensagem": "Você acertou apenas 20% das questões de Direito Processual do Trabalho — Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho (5 tentativas). Priorize esse assunto hoje."
+    },
+    {
+      "id": "critico_Administração Geral e Pública_Estratégia e Vantagem Competitiva",
+      "tipo": "assunto_critico",
+      "severidade": "urgente",
+      "titulo": "🔴 Estratégia e Vantagem Competitiva está crítico!",
+      "mensagem": "Você acertou apenas 33% das questões de Administração Geral e Pública — Estratégia e Vantagem Competitiva (3 tentativas). Priorize esse assunto hoje."
+    },
+    {
+      "id": "repetida_3209406",
+      "tipo": "questao_repetida",
+      "severidade": "media",
+      "titulo": "🔄 Você já viu essa questão 4x",
+      "mensagem": "A questão ID 3209406 de Língua Portuguesa (Português) — Preposição você já respondeu 4 vezes e acertou apenas 25%. Revise o gabarito!"
+    },
+    {
+      "id": "repetida_2907013",
+      "tipo": "questao_repetida",
+      "severidade": "media",
+      "titulo": "🔄 Você já viu essa questão 4x",
+      "mensagem": "A questão ID 2907013 de Língua Portuguesa (Português) — Conjunção você já respondeu 4 vezes e acertou apenas 25%. Revise o gabarito!"
+    },
+    {
+      "id": "repetida_3023322",
+      "tipo": "questao_repetida",
+      "severidade": "media",
+      "titulo": "🔄 Você já viu essa questão 4x",
+      "mensagem": "A questão ID 3023322 de Língua Portuguesa (Português) — Conjunção você já respondeu 4 vezes e acertou apenas 25%. Revise o gabarito!"
+    }
+  ]
+}

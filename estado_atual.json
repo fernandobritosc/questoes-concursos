@@ -1,0 +1,1221 @@
+{
+  "atualizado_em": "2026-06-11T20:31:36.237087",
+  "total_eventos": 928,
+  "total_questoes_unicas": 787,
+  "total_respondidas": 915,
+  "total_acertos": 660,
+  "respondidas_hoje": 43,
+  "acertos_hoje": 32,
+  "taxa_geral": 72,
+  "streak": 1,
+  "assuntos": [
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Questões Mescladas de Remédios Constitucionais",
+      "total": 32,
+      "acertos": 21,
+      "taxa": 66,
+      "tempo_medio": 45,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Sem matéria",
+      "assunto": "Sem assunto",
+      "total": 9,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 0,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)",
+      "total": 45,
+      "acertos": 17,
+      "taxa": 38,
+      "tempo_medio": 32,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho",
+      "total": 5,
+      "acertos": 1,
+      "taxa": 20,
+      "tempo_medio": 5,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Emprego Doméstico (LC nº 150/2015)",
+      "total": 2,
+      "acertos": 2,
+      "taxa": 100,
+      "tempo_medio": 801,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Aprendizagem (CLT, Lei nº 10.097/2000 e Decreto nº 9.579/2018)",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 1668,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Trabalho Avulso (Lei nº 12.815/2013 e Lei nº 12.023/2009)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 2348,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Trabalho Rural (Lei nº 5.889/1973)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 2510,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Grupo Econômico (Responsabilidade Trabalhista)",
+      "total": 5,
+      "acertos": 4,
+      "taxa": 80,
+      "tempo_medio": 3026,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Sucessão Trabalhista",
+      "total": 6,
+      "acertos": 4,
+      "taxa": 67,
+      "tempo_medio": 3352,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Trabalho Temporário (Lei nº 6.019/1974)",
+      "total": 6,
+      "acertos": 6,
+      "taxa": 100,
+      "tempo_medio": 2750,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Protocolos de Redes",
+      "total": 91,
+      "acertos": 67,
+      "taxa": 74,
+      "tempo_medio": 671,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Internacional Público e Privado",
+      "assunto": "Migração e Condição Jurídica do Estrangeiro (Lei nº 13.445/2017)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 14,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Acentuação",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 32,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Engenharia Elétrica e Eletrônica",
+      "assunto": "Redes de Dados e Comunicação",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 21,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Preposição",
+      "total": 12,
+      "acertos": 5,
+      "taxa": 42,
+      "tempo_medio": 658,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Conjunção",
+      "total": 56,
+      "acertos": 36,
+      "taxa": 64,
+      "tempo_medio": 161,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Raciocínio Lógico",
+      "assunto": "Proposições: Definição, Reconhecimento, Princípios Lógicos",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 23,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Características (Direitos Fundamentais)",
+      "total": 3,
+      "acertos": 2,
+      "taxa": 67,
+      "tempo_medio": 17,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Dos Direitos e Deveres Individuais e Coletivos (art. 5º da CF/1988)",
+      "total": 33,
+      "acertos": 29,
+      "taxa": 88,
+      "tempo_medio": 60,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Civil",
+      "assunto": "Das Associações (arts. 53 a 61)",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 146,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direitos Humanos",
+      "assunto": "Convenção Interamericana contra o Racismo e Discriminação Racial (Decreto nº 10.932/2022)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 43,
+      "nivel": "bom"
+    },
+    {
+      "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+      "assunto": "Princípios Orçamentários",
+      "total": 47,
+      "acertos": 38,
+      "taxa": 81,
+      "tempo_medio": 98,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Jurisprudência dos Tribunais Superiores sobre Administração Indireta",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 79,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Administração Indireta",
+      "total": 44,
+      "acertos": 35,
+      "taxa": 80,
+      "tempo_medio": 84,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Tópicos Mesclados de Organização Administrativa da União",
+      "total": 2,
+      "acertos": 1,
+      "taxa": 50,
+      "tempo_medio": 466,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Administração Direta (Órgãos Públicos)",
+      "total": 5,
+      "acertos": 5,
+      "taxa": 100,
+      "tempo_medio": 55,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Disposições Gerais (Administração Pública - arts. 37 e 38 da CF/1988)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 132,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Desconcentração e Descentralização",
+      "total": 7,
+      "acertos": 4,
+      "taxa": 57,
+      "tempo_medio": 65,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Agências Reguladoras e Executivas",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 41,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Terceiro Setor (OSs, OSCIPs, Sistema S e Fundações de Apoio)",
+      "total": 33,
+      "acertos": 25,
+      "taxa": 76,
+      "tempo_medio": 44,
+      "nivel": "bom"
+    },
+    {
+      "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+      "assunto": "Créditos Adicionais",
+      "total": 56,
+      "acertos": 47,
+      "taxa": 84,
+      "tempo_medio": 87,
+      "nivel": "bom"
+    },
+    {
+      "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+      "assunto": "Vedações Constitucionais em Matéria Orçamentária (Art. 167 da CF/1988)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 111,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Auditoria Governamental e Controle",
+      "assunto": "Sem classificação",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 104,
+      "nivel": "bom"
+    },
+    {
+      "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+      "assunto": "LOA - Lei Orçamentária Anual (CF/1988 e Lei nº 4.320/1964)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 38,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Introdução ao Processo de Planejamento (Diretrizes, Princípios, Características, Etapas, Níveis)",
+      "total": 10,
+      "acertos": 6,
+      "taxa": 60,
+      "tempo_medio": 53,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Planejamento Estratégico",
+      "total": 39,
+      "acertos": 29,
+      "taxa": 74,
+      "tempo_medio": 73,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Planejamento Operacional",
+      "total": 6,
+      "acertos": 5,
+      "taxa": 83,
+      "tempo_medio": 29,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Planejamento e Estratégia no Setor Público",
+      "total": 4,
+      "acertos": 3,
+      "taxa": 75,
+      "tempo_medio": 41,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Planejamento Tático",
+      "total": 6,
+      "acertos": 6,
+      "taxa": 100,
+      "tempo_medio": 40,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Estratégia e Vantagem Competitiva",
+      "total": 3,
+      "acertos": 1,
+      "taxa": 33,
+      "tempo_medio": 122,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Desenho Organizacional (Conceitos, Tipos, Centralização e Descentralização)",
+      "total": 7,
+      "acertos": 4,
+      "taxa": 57,
+      "tempo_medio": 50,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Intenção Estratégica ou Desenvolvimento Institucional",
+      "total": 5,
+      "acertos": 4,
+      "taxa": 80,
+      "tempo_medio": 42,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Administração por Objetivos (APO)",
+      "total": 4,
+      "acertos": 4,
+      "taxa": 100,
+      "tempo_medio": 64,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Gestão por Resultados",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 200,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Diagnóstico de Ambiente Organizacional - Matriz SWOT",
+      "total": 19,
+      "acertos": 19,
+      "taxa": 100,
+      "tempo_medio": 31,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Conceitos de Internet",
+      "total": 7,
+      "acertos": 6,
+      "taxa": 86,
+      "tempo_medio": 19,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Firewall e Proxy",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 31,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Equipamentos, Meios de Transmissão e Conexão",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 15,
+      "nivel": "bom"
+    },
+    {
+      "materia": "TI - Redes de Computadores",
+      "assunto": "POP3 (Post Office Protocol v3)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 41,
+      "nivel": "bom"
+    },
+    {
+      "materia": "TI - Redes de Computadores",
+      "assunto": "Arquitetura TCP/IP",
+      "total": 11,
+      "acertos": 7,
+      "taxa": 64,
+      "tempo_medio": 21,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Natureza Jurídica, Requisitos, Características e Sujeitos da Relação de Trabalho. Relação de Emprego.",
+      "total": 11,
+      "acertos": 7,
+      "taxa": 64,
+      "tempo_medio": 82,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Contrato por Tempo Indeterminado",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 476,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Contrato por Tempo Determinado",
+      "total": 2,
+      "acertos": 1,
+      "taxa": 50,
+      "tempo_medio": 197,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Contrato de Experiência",
+      "total": 2,
+      "acertos": 1,
+      "taxa": 50,
+      "tempo_medio": 112,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Direito do Trabalho",
+      "assunto": "Contrato Intermitente",
+      "total": 14,
+      "acertos": 10,
+      "taxa": 71,
+      "tempo_medio": 71,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Dos Tribunais e Juízes do Trabalho (arts. 111 a 117 da CF/1988)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 85,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Direito Constitucional: Conceito e Fontes. Estado, Povo, Território, etc.",
+      "total": 2,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 9,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Organização da Justiça do Trabalho (arts. 111-113, 115-116 da CF; 643 a 673 e 681 a 721 da CLT)",
+      "total": 12,
+      "acertos": 10,
+      "taxa": 83,
+      "tempo_medio": 41,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Dissídios Coletivos (arts. 856 a 875 da CLT)",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 141,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Sites de Busca (Google, Bing, Yahoo, etc.)",
+      "total": 61,
+      "acertos": 48,
+      "taxa": 79,
+      "tempo_medio": 51,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Sanitário e Saúde",
+      "assunto": "Sem classificação",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 18,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Substantivo",
+      "total": 5,
+      "acertos": 3,
+      "taxa": 60,
+      "tempo_medio": 761,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Adjetivo",
+      "total": 16,
+      "acertos": 13,
+      "taxa": 81,
+      "tempo_medio": 71,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Advérbio",
+      "total": 11,
+      "acertos": 8,
+      "taxa": 73,
+      "tempo_medio": 46,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Ação Popular",
+      "total": 10,
+      "acertos": 8,
+      "taxa": 80,
+      "tempo_medio": 52,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Mandado de Segurança",
+      "total": 23,
+      "acertos": 18,
+      "taxa": 78,
+      "tempo_medio": 66,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Jurisprudência dos Tribunais Superiores sobre Remédios Constitucionais",
+      "total": 7,
+      "acertos": 5,
+      "taxa": 71,
+      "tempo_medio": 217,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Habeas Corpus",
+      "total": 7,
+      "acertos": 6,
+      "taxa": 86,
+      "tempo_medio": 36,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Habeas Data",
+      "total": 7,
+      "acertos": 7,
+      "taxa": 100,
+      "tempo_medio": 56,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Administração Geral e Pública",
+      "assunto": "Processos Participativos de Gestão Pública",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 376,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Legislação Civil e Processual Civil Especial",
+      "assunto": "Do Mandado de Segurança (Lei nº 12.016/2009 e CF/1988)",
+      "total": 2,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 55,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Controle Jurisdicional",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 77,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Mandado de Injunção",
+      "total": 17,
+      "acertos": 11,
+      "taxa": 65,
+      "tempo_medio": 62,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "AFO, Direito Financeiro e Contabilidade Pública",
+      "assunto": "Tópicos Mesclados de PPA, LDO e LOA",
+      "total": 2,
+      "acertos": 2,
+      "taxa": 100,
+      "tempo_medio": 1520,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Digital",
+      "assunto": "Disposições Preliminares (arts. 1º a 6º da Lei nº 13.709/2018 - LGPD)",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 22,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Artigo",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 79,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Windows 11",
+      "total": 2,
+      "acertos": 2,
+      "taxa": 100,
+      "tempo_medio": 146,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Conceitos e Tipos de Computação em Nuvem (Cloud Computing)",
+      "total": 18,
+      "acertos": 13,
+      "taxa": 72,
+      "tempo_medio": 34,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Nuvens Microsoft (OneDrive e Azure)",
+      "total": 9,
+      "acertos": 4,
+      "taxa": 44,
+      "tempo_medio": 40,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Questões Mescladas de Suítes de Escritório",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 56,
+      "nivel": "bom"
+    },
+    {
+      "materia": "TI - Redes de Computadores",
+      "assunto": "Cloud Computing (Computação em Nuvem)",
+      "total": 18,
+      "acertos": 15,
+      "taxa": 83,
+      "tempo_medio": 18,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Google Drive",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 9,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Microsoft Teams",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 62,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Raciocínio Lógico",
+      "assunto": "Diagramas Lógicos, Proposições Categóricas, Negação de Quantificadores",
+      "total": 4,
+      "acertos": 3,
+      "taxa": 75,
+      "tempo_medio": 17,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Direito Administrativo (Doutrina e Leis Federais)",
+      "assunto": "Tópicos Mesclados de Atos Administrativos",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 61,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Legislação Civil e Processual Civil Especial",
+      "assunto": "Lei nº 13.300/2016 - Mandado de Injunção",
+      "total": 1,
+      "acertos": 1,
+      "taxa": 100,
+      "tempo_medio": 76,
+      "nivel": "bom"
+    },
+    {
+      "materia": "Legislação Civil e Processual Civil Especial",
+      "assunto": "Da Ação Popular (Lei nº 4.717/1965 e CF/1988)",
+      "total": 1,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 74,
+      "nivel": "critico"
+    }
+  ],
+  "bancas": [
+    {
+      "banca": "Sem banca",
+      "total": 9,
+      "acertos": 0,
+      "taxa": 0
+    },
+    {
+      "banca": "NOSSO RUMO",
+      "total": 2,
+      "acertos": 0,
+      "taxa": 0
+    },
+    {
+      "banca": "OBJETIVA CONCURSOS",
+      "total": 3,
+      "acertos": 1,
+      "taxa": 33
+    },
+    {
+      "banca": "GAMA",
+      "total": 3,
+      "acertos": 1,
+      "taxa": 33
+    },
+    {
+      "banca": "CONSULPLAN",
+      "total": 3,
+      "acertos": 1,
+      "taxa": 33
+    }
+  ],
+  "padroes": [
+    {
+      "banca": "Sem banca",
+      "assunto": "Sem assunto",
+      "total": 9,
+      "taxa": 0
+    },
+    {
+      "banca": "IADES",
+      "assunto": "Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)",
+      "total": 2,
+      "taxa": 50
+    },
+    {
+      "banca": "FCC",
+      "assunto": "Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho",
+      "total": 2,
+      "taxa": 0
+    },
+    {
+      "banca": "FGV",
+      "assunto": "Protocolos de Redes",
+      "total": 12,
+      "taxa": 42
+    },
+    {
+      "banca": "IDECAN",
+      "assunto": "Protocolos de Redes",
+      "total": 4,
+      "taxa": 50
+    },
+    {
+      "banca": "IBAM",
+      "assunto": "Protocolos de Redes",
+      "total": 2,
+      "taxa": 50
+    },
+    {
+      "banca": "GAMA",
+      "assunto": "Protocolos de Redes",
+      "total": 3,
+      "taxa": 33
+    },
+    {
+      "banca": "FCC",
+      "assunto": "Preposição",
+      "total": 4,
+      "taxa": 50
+    },
+    {
+      "banca": "FGV",
+      "assunto": "Preposição",
+      "total": 4,
+      "taxa": 50
+    },
+    {
+      "banca": "VUNESP",
+      "assunto": "Preposição",
+      "total": 4,
+      "taxa": 25
+    }
+  ],
+  "repeticoes": [
+    {
+      "questao_tec_id": 2869906,
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Preposição",
+      "vezes": 4,
+      "acertos": 2,
+      "taxa": 50
+    },
+    {
+      "questao_tec_id": 2936937,
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Preposição",
+      "vezes": 4,
+      "acertos": 2,
+      "taxa": 50
+    },
+    {
+      "questao_tec_id": 3209406,
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Preposição",
+      "vezes": 4,
+      "acertos": 1,
+      "taxa": 25
+    },
+    {
+      "questao_tec_id": 2907013,
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Conjunção",
+      "vezes": 4,
+      "acertos": 1,
+      "taxa": 25
+    },
+    {
+      "questao_tec_id": 3023322,
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Conjunção",
+      "vezes": 4,
+      "acertos": 1,
+      "taxa": 25
+    }
+  ],
+  "ultimas_acoes": [
+    {
+      "tipo": "responder_questao",
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Dos Direitos e Deveres Individuais e Coletivos (art. 5º da CF/1988)",
+      "acertou": true,
+      "tempo": 10,
+      "timestamp": "2026-06-11T21:25:54.265+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Dos Direitos e Deveres Individuais e Coletivos (art. 5º da CF/1988)",
+      "acertou": true,
+      "tempo": 42,
+      "timestamp": "2026-06-11T21:23:25.815+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Dos Direitos e Deveres Individuais e Coletivos (art. 5º da CF/1988)",
+      "acertou": true,
+      "tempo": 114,
+      "timestamp": "2026-06-11T21:21:13.592+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Mandado de Segurança",
+      "acertou": true,
+      "tempo": 14,
+      "timestamp": "2026-06-11T21:19:03.577+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Mandado de Injunção",
+      "acertou": true,
+      "tempo": 18,
+      "timestamp": "2026-06-11T21:18:08.901+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Legislação Civil e Processual Civil Especial",
+      "assunto": "Do Mandado de Segurança (Lei nº 12.016/2009 e CF/1988)",
+      "acertou": false,
+      "tempo": 46,
+      "timestamp": "2026-06-11T21:16:29.758+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Legislação Civil e Processual Civil Especial",
+      "assunto": "Da Ação Popular (Lei nº 4.717/1965 e CF/1988)",
+      "acertou": false,
+      "tempo": 74,
+      "timestamp": "2026-06-11T21:15:00.23+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Questões Mescladas de Remédios Constitucionais",
+      "acertou": false,
+      "tempo": 33,
+      "timestamp": "2026-06-11T21:12:15.455+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Legislação Civil e Processual Civil Especial",
+      "assunto": "Lei nº 13.300/2016 - Mandado de Injunção",
+      "acertou": true,
+      "tempo": 76,
+      "timestamp": "2026-06-11T21:11:15.003+00:00"
+    },
+    {
+      "tipo": "responder_questao",
+      "materia": "Direito Constitucional (CF/1988 e Doutrina)",
+      "assunto": "Habeas Data",
+      "acertou": true,
+      "tempo": 139,
+      "timestamp": "2026-06-11T21:09:06.803+00:00"
+    }
+  ],
+  "pendentes_revisao_total": 170,
+  "pendentes_revisao_por_materia": {
+    "Informática": 38,
+    "Direito Processual do Trabalho": 33,
+    "Direito Constitucional (CF/1988 e Doutrina)": 23,
+    "Direito Administrativo (Doutrina e Leis Federais)": 20,
+    "AFO, Direito Financeiro e Contabilidade Pública": 15,
+    "Direito do Trabalho": 14,
+    "Língua Portuguesa (Português)": 11,
+    "Administração Geral e Pública": 6,
+    "TI - Redes de Computadores": 4,
+    "Legislação Civil e Processual Civil Especial": 3,
+    "Raciocínio Lógico": 2,
+    "Direito Civil": 1
+  },
+  "pendentes_antigas": [
+    {
+      "primeiro_erro_em": "2026-05-21T20:30:17.181+00:00",
+      "tentativas": 1,
+      "questao_id": 203,
+      "questao_tec_id": 3364889,
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)",
+      "banca_texto": "IADES",
+      "gabarito": "A",
+      "ultima_tentativa_em": "2026-05-21T20:30:17.181+00:00",
+      "ultima_marcou": "B"
+    },
+    {
+      "primeiro_erro_em": "2026-05-21T22:23:53.474+00:00",
+      "tentativas": 1,
+      "questao_id": 223,
+      "questao_tec_id": 3571710,
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho",
+      "banca_texto": "FCC",
+      "gabarito": "E",
+      "ultima_tentativa_em": "2026-05-21T22:23:53.474+00:00",
+      "ultima_marcou": "B"
+    },
+    {
+      "primeiro_erro_em": "2026-05-21T23:27:40.396+00:00",
+      "tentativas": 1,
+      "questao_id": 187,
+      "questao_tec_id": 3226968,
+      "materia": "Direito do Trabalho",
+      "assunto": "Aprendizagem (CLT, Lei nº 10.097/2000 e Decreto nº 9.579/2018)",
+      "banca_texto": "FCC",
+      "gabarito": "E",
+      "ultima_tentativa_em": "2026-05-21T23:27:40.396+00:00",
+      "ultima_marcou": "D"
+    },
+    {
+      "primeiro_erro_em": "2026-05-21T23:46:27.568+00:00",
+      "tentativas": 1,
+      "questao_id": 116,
+      "questao_tec_id": 2850386,
+      "materia": "Direito do Trabalho",
+      "assunto": "Grupo Econômico (Responsabilidade Trabalhista)",
+      "banca_texto": "FCC",
+      "gabarito": "C",
+      "ultima_tentativa_em": "2026-05-21T23:46:27.568+00:00",
+      "ultima_marcou": "A"
+    },
+    {
+      "primeiro_erro_em": "2026-05-22T00:06:14.586+00:00",
+      "tentativas": 1,
+      "questao_id": 35,
+      "questao_tec_id": 2114078,
+      "materia": "Direito do Trabalho",
+      "assunto": "Sucessão Trabalhista",
+      "banca_texto": "FCC",
+      "gabarito": "C",
+      "ultima_tentativa_em": "2026-05-22T00:06:14.586+00:00",
+      "ultima_marcou": "B"
+    },
+    {
+      "primeiro_erro_em": "2026-05-22T02:04:40.012+00:00",
+      "tentativas": 1,
+      "questao_id": 103,
+      "questao_tec_id": 2788674,
+      "materia": "Informática",
+      "assunto": "Protocolos de Redes",
+      "banca_texto": "FGV",
+      "gabarito": "C",
+      "ultima_tentativa_em": "2026-05-22T02:04:40.012+00:00",
+      "ultima_marcou": "E"
+    },
+    {
+      "primeiro_erro_em": "2026-05-22T02:20:59.182+00:00",
+      "tentativas": 1,
+      "questao_id": 135,
+      "questao_tec_id": 2882217,
+      "materia": "Informática",
+      "assunto": "Protocolos de Redes",
+      "banca_texto": "FGV",
+      "gabarito": "E",
+      "ultima_tentativa_em": "2026-05-22T02:20:59.182+00:00",
+      "ultima_marcou": "C"
+    },
+    {
+      "primeiro_erro_em": "2026-05-22T02:21:54.083+00:00",
+      "tentativas": 1,
+      "questao_id": 136,
+      "questao_tec_id": 2882257,
+      "materia": "Informática",
+      "assunto": "Protocolos de Redes",
+      "banca_texto": "FGV",
+      "gabarito": "A",
+      "ultima_tentativa_em": "2026-05-22T02:21:54.083+00:00",
+      "ultima_marcou": "B"
+    },
+    {
+      "primeiro_erro_em": "2026-05-22T02:27:50.675+00:00",
+      "tentativas": 1,
+      "questao_id": 141,
+      "questao_tec_id": 2892705,
+      "materia": "Informática",
+      "assunto": "Protocolos de Redes",
+      "banca_texto": "FGV",
+      "gabarito": "E",
+      "ultima_tentativa_em": "2026-05-22T02:27:50.675+00:00",
+      "ultima_marcou": "B"
+    },
+    {
+      "primeiro_erro_em": "2026-05-22T02:29:47.422+00:00",
+      "tentativas": 1,
+      "questao_id": 144,
+      "questao_tec_id": 2897248,
+      "materia": "Informática",
+      "assunto": "Protocolos de Redes",
+      "banca_texto": "IDECAN",
+      "gabarito": "B",
+      "ultima_tentativa_em": "2026-05-22T02:29:47.422+00:00",
+      "ultima_marcou": "A"
+    }
+  ],
+  "resolvidos_24h": 2,
+  "fracos_relevantes": [
+    {
+      "materia": "Sem matéria",
+      "assunto": "Sem assunto",
+      "total": 9,
+      "acertos": 0,
+      "taxa": 0,
+      "tempo_medio": 0,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Jurisprudência dos Tribunais Superiores sobre Jurisdição e Competência da Justiça do Trabalho",
+      "total": 5,
+      "acertos": 1,
+      "taxa": 20,
+      "tempo_medio": 5,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Direito Processual do Trabalho",
+      "assunto": "Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)",
+      "total": 45,
+      "acertos": 17,
+      "taxa": 38,
+      "tempo_medio": 32,
+      "nivel": "critico"
+    },
+    {
+      "materia": "Língua Portuguesa (Português)",
+      "assunto": "Preposição",
+      "total": 12,
+      "acertos": 5,
+      "taxa": 42,
+      "tempo_medio": 658,
+      "nivel": "alerta"
+    },
+    {
+      "materia": "Informática",
+      "assunto": "Nuvens Microsoft (OneDrive e Azure)",
+      "total": 9,
+      "acertos": 4,
+      "taxa": 44,
+      "tempo_medio": 40,
+      "nivel": "alerta"
+    }
+  ],
+  "recomendacao": {
+    "tipo": "pendentes_revisao",
+    "materia": "Direito Processual do Trabalho",
+    "assunto": "Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)",
+    "pendentes": 27,
+    "total_pendentes": 170,
+    "acoes": [
+      "Revisar 5 das 27 pendentes em Direito Processual do Trabalho → Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC)",
+      "Use a aba \"Revisão\" do app e filtre por este assunto"
+    ],
+    "urgente": "10 pendente(s) há mais de 7 dias — a mais antiga: Direito Processual do Trabalho → Jurisdição e Competência da Justiça do Trabalho (114/CF; 674 a 680 e 803 a 812/CLT; 16 a 69/NCPC) (desde 2026-05-21)"
+  },
+  "janela_recomendacao_dias": 7
+}

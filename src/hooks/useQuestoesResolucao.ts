@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react'
 import { updateResolucaoProfessor } from '../services/supabase.service'
 import { gerarResolucaoProfessor } from '../services/gemini.service'
-import { trackEvent } from '../services/hermesTracker'
 import type { ResolucaoView } from '../types/database'
 
 // Alias de compatibilidade local
@@ -57,12 +56,6 @@ export function useQuestoesResolucao(options?: UseQuestoesResolucaoOptions) {
 
       // Sincroniza com o orquestrador via callback
       options?.onQuestoesUpdated?.(targetId, { resolucao_professor: texto })
-
-      trackEvent('gerar_explicacao_ia', {
-        questao_id: targetId,
-        materia: questao.materia,
-        assunto: questao.assunto,
-      })
     } catch (err: unknown) {
       console.error(err)
       setExplicacoes(prev => ({

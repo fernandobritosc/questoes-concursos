@@ -11,7 +11,6 @@ const mockFetchQuestaoIds = vi.fn()
 const mockInsertQuestoesBatch = vi.fn()
 const mockFetchAllQuestoes = vi.fn()
 const mockClearQuestoesCache = vi.fn()
-const mockTrackEvent = vi.fn()
 
 vi.mock('../lib/pdfParser', () => ({
   loadPdfJs: () => mockLoadPdfJs(),
@@ -24,10 +23,6 @@ vi.mock('../services/supabase.service', () => ({
   insertQuestoesBatch: (...args: unknown[]) => mockInsertQuestoesBatch(...args),
   fetchAllQuestoes: () => mockFetchAllQuestoes(),
   clearQuestoesCache: () => mockClearQuestoesCache(),
-}))
-
-vi.mock('../services/hermesTracker', () => ({
-  trackEvent: (...args: unknown[]) => mockTrackEvent(...args),
 }))
 
 function makeParsedQuestao(overrides: Partial<ResolucaoView> & { questao_tec_id: number }): ResolucaoView {
@@ -155,7 +150,6 @@ describe('ImportPdfModal', () => {
       expect(mockClearQuestoesCache).toHaveBeenCalled()
       expect(mockFetchAllQuestoes).toHaveBeenCalled()
       expect(onImportSuccess).toHaveBeenCalled()
-      expect(mockTrackEvent).toHaveBeenCalledWith('importar_pdf', { questoes: 2 })
     })
 
     expect(screen.getByText('Importação concluída com sucesso!')).toBeInTheDocument()

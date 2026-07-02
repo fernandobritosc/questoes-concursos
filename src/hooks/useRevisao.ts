@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchAllResolucoes, insertHistoricoResolucao, updateResolucaoProfessor } from '../services/supabase.service'
 import { gerarExplicacaoErro } from '../services/gemini.service'
-import { trackEvent } from '../services/hermesTracker'
 import type { ResolucaoView } from '../types/database'
 
 /**
@@ -102,17 +101,6 @@ export function useRevisao() {
         tempo_segundos: tempoSegundos,
       })
 
-      trackEvent('revisar_questao', {
-        questao_id: questaoAtual.questao_id || questaoAtual.id,
-        questao_tec_id: questaoAtual.questao_tec_id,
-        materia: questaoAtual.materia,
-        assunto: questaoAtual.assunto,
-        banca_texto: questaoAtual.banca_texto,
-        gabarito: questaoAtual.gabarito,
-        alternativa_selecionada: alternativaSelecionada,
-        acertou,
-        tempo_segundos: tempoSegundos,
-      })
     } catch (err: unknown) {
       console.error('Erro ao salvar resposta:', err)
     } finally {
@@ -175,8 +163,6 @@ export function useRevisao() {
     }
     localStorage.setItem('concursos_spaced_repetition', JSON.stringify(schedule))
 
-    trackEvent('classificar_revisao', { questao_id: questaoId, grade })
-
     // Remove a questão da fila ativa localmente
     setErros(prev => prev.filter((_, idx) => idx !== questaoAtualIndex))
 
@@ -238,11 +224,6 @@ export function useRevisao() {
         (q.questao_id || q.id) === targetId ? { ...q, resolucao_professor: texto } : q
       ))
 
-      trackEvent('gerar_explicacao_ia', {
-        questao_id: targetId,
-        materia: questaoAtual.materia,
-        assunto: questaoAtual.assunto,
-      })
     } catch (err: unknown) {
       console.error('Erro na IA:', err)
       setExplicacoes(prev => ({

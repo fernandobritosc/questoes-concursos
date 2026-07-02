@@ -43,8 +43,6 @@ const mockFetchQuestaoIds = vi.fn()
 const mockInsertQuestoesBatch = vi.fn()
 const mockFetchAllQuestoes = vi.fn()
 const mockClearQuestoesCache = vi.fn()
-const mockTrackEvent = vi.fn()
-
 vi.mock('../../lib/pdfParser', () => ({
   loadPdfJs: () => mockLoadPdfJs(),
   extractPdfText: (...args: unknown[]) => mockExtractPdfText(...args),
@@ -58,10 +56,6 @@ vi.mock('../../services/supabase.service', () => ({
   clearQuestoesCache: () => mockClearQuestoesCache(),
   updateResolucaoProfessor: vi.fn(),
   updateQuestao: vi.fn(),
-}))
-
-vi.mock('../../services/hermesTracker', () => ({
-  trackEvent: (...args: unknown[]) => mockTrackEvent(...args),
 }))
 
 const mockQuestoesExistentes: ResolucaoView[] = []

@@ -103,11 +103,9 @@ findings:
 ### Info
 
 **IN-001 — Console.warn for expected fallback behavior**
-- **File:** `src/lib/supabase.ts:7`, `src/services/studyMaterial.service.ts:78,281`, `src/services/hermesTracker.ts:47`
+- **File:** `src/lib/supabase.ts:7`, `src/services/studyMaterial.service.ts:78,281`
 - **Detail:** These log warnings for expected conditions (env vars missing, Supabase table unavailable). Consider `.info()` or removing in production.
 
-**IN-002 — hermesTracker.ts untyped .catch callback**
-- **File:** `src/services/hermesTracker.ts:47`
 - **Detail:** `.catch(() => {})` silently swallows all errors. Add error logging or typed error handling.
 
 **IN-003 — Recharts library (~2MB) used for simple bar charts**

@@ -199,6 +199,12 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
         case "h6":
           return `\n\n#### ${childrenMarkdown}\n\n`;
           
+        case "img": {
+          const src = node.getAttribute("src") || "";
+          const alt = node.getAttribute("alt") || "";
+          if (!src) return "";
+          return `![${alt}](${src})`;
+        }
         default:
           return childrenMarkdown;
       }

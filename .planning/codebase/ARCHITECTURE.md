@@ -20,7 +20,7 @@
 ├──────────────────────────────────────────────────────────────────────────┤
 │                         Service Layer                                    │
 │  supabase.service.ts │ gemini.service.ts │ studyMaterial.service.ts      │
-│  hermesTracker.ts                                                        │
+
 │                        `src/services/`                                   │
 ├──────────────────────┬───────────────────────────────────────────────────┤
 │   Supabase (BaaS)    │   Backend (Vercel Serverless) + Groq AI           │
@@ -30,7 +30,7 @@
 ├──────────────────────┴───────────────────────────────────────────────────┤
 │                         External Integrations                             │
 │  Chrome Extension: `extensao/content.js` → Scrapes TEC Concursos         │
-│  Hermes Relay: event tracking to local Python server                     │
+
 │  PDF.js (CDN): client-side PDF parsing                                   │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
@@ -89,7 +89,7 @@
 ### Service Layer
 - Purpose: Database access, external API calls, analytics
 - Location: `src/services/`
-- Contains: `supabase.service.ts`, `gemini.service.ts`, `studyMaterial.service.ts`, `hermesTracker.ts`
+- Contains: `supabase.service.ts`, `gemini.service.ts`, `studyMaterial.service.ts`
 - Depends on: `src/lib/supabase.ts` (Supabase client singleton)
 - Used by: Hook layer
 
@@ -120,7 +120,7 @@
 3. `insertHistoricoResolucao()` POSTs to Supabase `historico_resolucoes` table
 4. Local state is updated optimistically (cadernoQuestoes + resolucoes)
 5. `revelado` is set to `true` → UI shows correct/wrong feedback
-6. Event tracked via `trackEvent('responder_questao', ...)` to Hermes relay
+
 
 ### AI Explanation Flow
 
@@ -250,7 +250,7 @@ Protected via `ProtectedRoute` component (`src/components/ProtectedRoute.tsx`): 
 
 **Authentication:** Supabase JWT session. All `/api/gemini` calls include Bearer token. Extension syncs token via chrome.storage.
 
-**Event Tracking:** `hermesTracker.ts` sends POST to local Hermes relay at `VITE_HERMES_RELAY_URL` (default `http://127.0.0.1:3333`). Silent fail on connection error. Used for: question answers, PDF imports, simulado results, AI generations.
+
 
 ---
 

@@ -416,17 +416,7 @@ if (car === 'Policial') return concUpper.includes('POLICIA') || orgUpper.include
 
 ## Reliability
 
-### 1. Silent Failure on Hermes Relay
-
-**Severity: LOW**
-
-`src/services/hermesTracker.ts` line 47:
-
-```typescript
-fetch(`${RELAY_URL}/event`, { ... })
-  .catch(() => {
-    /* relay offline — silent fail */
-  })
+<!-- Silent Failure on Hermes Relay — removed -->
 ```
 
 **Impact:** Events silently lost when the relay is unavailable. No retry, no queue, no user feedback.

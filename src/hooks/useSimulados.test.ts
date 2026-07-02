@@ -43,7 +43,6 @@ const mockRef = vi.hoisted(() => ({
   fetchAllQuestoes: vi.fn(),
   insertHistoricoResolucao: vi.fn(),
   gerarFeedbackSimulado: vi.fn(),
-  trackEvent: vi.fn(),
 }))
 
 vi.mock('../services/supabase.service', () => ({
@@ -53,10 +52,6 @@ vi.mock('../services/supabase.service', () => ({
 
 vi.mock('../services/gemini.service', () => ({
   gerarFeedbackSimulado: () => mockRef.gerarFeedbackSimulado(),
-}))
-
-vi.mock('../services/hermesTracker', () => ({
-  trackEvent: (...args: unknown[]) => mockRef.trackEvent(...args),
 }))
 
 import { useSimulados } from './useSimulados'

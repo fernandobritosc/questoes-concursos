@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { fetchAllQuestoes, insertHistoricoResolucao } from '../services/supabase.service'
 import { gerarFeedbackSimulado } from '../services/gemini.service'
-import { trackEvent } from '../services/hermesTracker'
 import type { ResolucaoView } from '../types/database'
 
 export type SimuladoEtapa = 'setup' | 'active' | 'submitting' | 'results'
@@ -134,8 +133,6 @@ export function useSimulados() {
 
     const taxa = total > 0 ? Math.round((acertos / total) * 100) : 0
     setPontuacao({ acertos, total, taxa })
-
-    trackEvent('finalizar_simulado', { acertos, total, taxa })
 
     // Busca feedback tático no Gemini
     setLoadingFeedback(true)
@@ -310,8 +307,6 @@ export function useSimulados() {
     const selecionadas = shuffleArray(pool).slice(0, qtd)
     setQuestoesSelected(selecionadas)
     setEtapa('active')
-
-    trackEvent('iniciar_simulado', { qtd_questoes: qtd, tempo_minutos: tempoMin })
   }
 
   /**

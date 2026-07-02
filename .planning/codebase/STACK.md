@@ -105,7 +105,7 @@
 - Node.js (version determined by Vite 8.0 requirements)
 - npm
 - `.env.local` file with Supabase credentials
-- Hermes relay (optional, `scripts/hermes-relay.mjs` for local event tracking)
+<!-- Hermes relay removed -->
 
 **Production:**
 - Hosted on Vercel (serverless)

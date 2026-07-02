@@ -1,6 +1,5 @@
 ﻿import { useState } from 'react'
 import { fetchQuestaoIds, insertQuestoesBatch, fetchAllQuestoes, clearQuestoesCache } from '../services/supabase.service'
-import { trackEvent } from '../services/hermesTracker'
 import type { Questao, ResolucaoView } from '../types/database'
 import { useToast } from '../contexts/ToastContext'
 
@@ -212,7 +211,6 @@ export function ImportPdfModal({ isOpen, onClose, onImportSuccess, existingQuest
         importedCount: successCount,
       })
 
-      trackEvent('importar_pdf', { questoes: successCount })
     } catch (err: unknown) {
       console.error(err)
       setImportStatus({

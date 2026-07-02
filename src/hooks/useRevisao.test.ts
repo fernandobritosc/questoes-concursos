@@ -7,7 +7,6 @@ const mockFetchAllResolucoes = vi.fn()
 const mockInsertHistoricoResolucao = vi.fn()
 const mockUpdateResolucaoProfessor = vi.fn()
 const mockGerarExplicacaoErro = vi.fn()
-const mockTrackEvent = vi.fn()
 
 vi.mock('../services/supabase.service', () => ({
   fetchAllResolucoes: () => mockFetchAllResolucoes(),
@@ -17,10 +16,6 @@ vi.mock('../services/supabase.service', () => ({
 
 vi.mock('../services/gemini.service', () => ({
   gerarExplicacaoErro: (...args: unknown[]) => mockGerarExplicacaoErro(...args),
-}))
-
-vi.mock('../services/hermesTracker', () => ({
-  trackEvent: (...args: unknown[]) => mockTrackEvent(...args),
 }))
 
 function makeResolucao(overrides: Partial<ResolucaoView> & { questao_tec_id: number }): ResolucaoView {
@@ -142,8 +137,7 @@ describe('useRevisao', () => {
         })
       )
     })
-    expect(mockTrackEvent).toHaveBeenCalledWith('revisar_questao', expect.any(Object))
-  })
+    })
 
   it('handleExplicacaoIA generates explanation', async () => {
     const questoes = [

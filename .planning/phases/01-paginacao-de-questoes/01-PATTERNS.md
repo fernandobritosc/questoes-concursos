@@ -128,7 +128,7 @@ import {
   updateQuestao
 } from '../services/supabase.service'
 import { gerarResolucaoProfessor } from '../services/gemini.service'
-import { trackEvent } from '../services/hermesTracker'
+<!-- import { trackEvent } from '../services/hermesTracker' removed -->
 import type { ResolucaoView, HistoricoResolucao } from '../types/database'
 ```
 

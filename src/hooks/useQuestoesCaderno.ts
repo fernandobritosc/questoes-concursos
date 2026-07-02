@@ -4,7 +4,6 @@ import {
   fetchHistoricoByQuestao,
   updateQuestao,
 } from '../services/supabase.service'
-import { trackEvent } from '../services/hermesTracker'
 import type { ResolucaoView, HistoricoResolucao } from '../types/database'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -91,18 +90,6 @@ export function useQuestoesCaderno(params: UseQuestoesCadernoParams) {
 
       setRevelado(true)
 
-      trackEvent('responder_questao', {
-        questao_id: targetId,
-        questao_tec_id: questao.questao_tec_id,
-        materia: questao.materia,
-        assunto: questao.assunto,
-        banca_texto: questao.banca_texto,
-        gabarito: questao.gabarito,
-        alternativa_selecionada: alternativaSelecionada,
-        acertou,
-        tempo_segundos: tempoSegundos,
-      })
-
       // Recarrega o histórico específico desta questão
       await loadHistoricoDaQuestao(targetId)
     } catch (err: unknown) {
@@ -142,11 +129,6 @@ export function useQuestoesCaderno(params: UseQuestoesCadernoParams) {
 
       setCadernoQuestoes(prev => prev.map(updateLocal))
       params.setResolucoes(prev => prev.map(updateLocal))
-
-      trackEvent('editar_questao', {
-        questao_id: targetId,
-        campos: Object.keys(payload),
-      })
 
       return true
     } catch (err: unknown) {

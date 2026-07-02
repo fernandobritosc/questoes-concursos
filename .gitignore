@@ -15,11 +15,6 @@ dist-ssr
 .env.*
 !.env.example
 
-# Hermes runtime data
-hermes_events.jsonl
-estado_atual.json
-notificacoes.json
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

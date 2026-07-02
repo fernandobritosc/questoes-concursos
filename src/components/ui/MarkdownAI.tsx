@@ -258,7 +258,7 @@ function parseFormatting(text: string): React.ReactNode {
   if (!text) return ''
 
   // Split by bold (**text**), inline code (`code`), italics (*text* or _text_), or strikethrough (~~text~~)
-  const regex = /(\*\*.*?\*\*|`.*?`|\*.*?\*|_.*?_|~~.*?~~)/g
+  const regex = /(\*\*.*?\*\*|`.*?`|\*.*?\*|_.*?_|~~.*?~~|!\[.*?\]\(.*?\))/g
   const parts = text.split(regex)
 
   return parts.map((part, i) => {
@@ -274,6 +274,14 @@ function parseFormatting(text: string): React.ReactNode {
         <span key={i} className="line-through text-muted-foreground/75 decoration-red-500/50 print:decoration-red-650">
           {part.slice(2, -2)}
         </span>
+      )
+    }
+    if (part.startsWith('![') && part.includes('](') && part.endsWith(')')) {
+      const altEnd = part.indexOf('](')
+      const alt = part.slice(2, altEnd)
+      const src = part.slice(altEnd + 2, -1)
+      return (
+        <img key={i} src={src} alt={alt} className="max-w-full h-auto rounded-lg my-2 border border-border/40" loading="lazy" />
       )
     }
     if (part.startsWith('`') && part.endsWith('`')) {

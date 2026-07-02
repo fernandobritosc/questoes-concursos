@@ -52,7 +52,7 @@ questoes-concursos/
 |-----------|---------|-------------|
 | `api/` | Vercel serverless function — proxies Gemini AI calls via Groq SDK (1 file) | `gemini.ts` |
 | `extensao/` | Chrome Extension (Manifest V3) for scraping TEC Concursos resolutions | `content.js` (782 lines), `manifest.json` |
-| `scripts/` | Python automation (Hermes relay, study agents, data loading, report generation) | `hermes-relay.mjs`, `agente_*.py`, `hermes_supabase.py` |
+| `scripts/` | Python automation (study agents, data loading, report generation) | `agente_*.py` |
 | `tools/` | Refactoring & DB inspection helper scripts | `refactor-questoes.cjs`, `queryDb.cjs`, `testDb.cjs` |
 | `src/` | Main application source code | 46 `.ts`/`.tsx` files |
 | `estudos/` | Study PDF materials organized by subject | Subdirectories per subject |
@@ -67,7 +67,7 @@ questoes-concursos/
 | `src/components/` | 16 | Shared and feature-specific components. 11 are Questoes sub-components extracted during refactor |
 | `src/components/ui/` | 5 | Generic UI primitives (Button, Card, LoadingSpinner, MarkdownAI, barrel index) |
 | `src/hooks/` | 5 | Custom hooks — one per page: useQuestoes, useRevisao, useDashboard, useSimulados, useMentor |
-| `src/services/` | 4 | Data service layer: supabase.service, gemini.service, studyMaterial.service, hermesTracker |
+| `src/services/` | 3 | Data service layer: supabase.service, gemini.service, studyMaterial.service |
 | `src/lib/` | 5 | Utilities: supabase client, pdfParser, cleanHtml, plus 3 test files |
 | `src/types/` | 1 | TypeScript interfaces: Questao, HistoricoResolucao, ResolucaoView |
 | `src/contexts/` | 1 | AuthContext — Supabase session provider |
@@ -199,7 +199,7 @@ questoes-concursos/
 - Loaded unpacked in Chrome
 
 **`scripts/`:**
-- Purpose: Python automation scripts (Hermes relay, data loading, study agents)
+- Purpose: Python automation scripts (data loading, study agents)
 - Generated: No
 - Committed: Yes
 
