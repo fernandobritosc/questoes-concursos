@@ -182,6 +182,15 @@ export function useQuestoes() {
     return base.filter(q => filteredSet.has(q.questao_id))
   }, [caderno.cadernoQuestoes, filter.filtros, filter.filteredQuestions])
 
+  // Reset currentQuestaoIndex when it goes out of bounds (ex: after ID TEC filter)
+  useEffect(() => {
+    if (questoesExibidas.length === 0) {
+      caderno.setCurrentQuestaoIndex(0)
+    } else if (caderno.currentQuestaoIndex >= questoesExibidas.length) {
+      caderno.setCurrentQuestaoIndex(Math.max(0, questoesExibidas.length - 1))
+    }
+  }, [questoesExibidas.length, caderno.currentQuestaoIndex, caderno.setCurrentQuestaoIndex])
+
   // ─── Effects de Coordenação ──────────────────────────────────────────────────
 
   // Sync resolucaoText + cancel editing ao navegar entre questões
