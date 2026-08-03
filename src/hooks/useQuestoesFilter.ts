@@ -217,7 +217,9 @@ export function useQuestoesFilter(
       const hasAssuntoFilter = selectedAssuntos.length > 0
 
       let matchesMateria = true
-      if (hasMateriaFilter) {
+      if (hasAssuntoFilter && !hasMateriaFilter) {
+        matchesMateria = selectedAssuntos.includes(q.assunto || '')
+      } else if (hasMateriaFilter) {
         if (hasAssuntoFilter) {
           matchesMateria = selectedAssuntos.includes(q.assunto || '') ||
             (selectedMaterias.includes(q.materia || '') && !q.assunto)
