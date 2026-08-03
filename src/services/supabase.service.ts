@@ -449,6 +449,24 @@ export async function fetchPaginatedQuestoes(
 
 // ─── Filtros (cache, fetch-once) ──────────────────────────────────────────────
 
+const FILTER_PAGE_SIZE = 1_000
+
+async function fetchFilterColRows(select: string, where: (qb: ReturnType<typeof supabase.from>) => ReturnType<typeof supabase.from>): Promise<Record<string, unknown>[]> {
+  const rows: Record<string, unknown>[] = []
+  let from = 0
+  while (true) {
+    let qb = supabase.from('questoes').select(select)
+    qb = where(qb)
+    const { data, error } = await qb.range(from, from + FILTER_PAGE_SIZE - 1)
+    if (error) throw error
+    if (!data || data.length === 0) break
+    rows.push(...data as Record<string, unknown>[])
+    if (data.length < FILTER_PAGE_SIZE) break
+    from += FILTER_PAGE_SIZE
+  }
+  return rows
+}
+
 export async function fetchFilterOptions(): Promise<FilterOptions> {
   const cached = useQuestaoStore.getState().getFilterOptionsCache()
   if (cached) return cached
@@ -461,24 +479,17 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
 
   useQuestaoStore.getState().setFilterOptionsPromise(true)
   try {
-    const [materiasRes, bancasRes, anosRes, orgaosRes, concursosRes, materiaAssuntoRes] = await Promise.all([
-      supabase.from('questoes').select('materia').not('materia', 'is', null),
-      supabase.from('questoes').select('banca_texto').not('banca_texto', 'is', null),
-      supabase.from('questoes').select('ano').not('ano', 'is', null),
-      supabase.from('questoes').select('orgao').not('orgao', 'is', null),
-      supabase.from('questoes').select('concurso').not('concurso', 'is', null),
-      supabase.from('questoes').select('materia, assunto').not('assunto', 'is', null),
+    const [materiasRows, bancasRows, anosRows, orgaosRows, concursosRows, materiaAssuntoRows] = await Promise.all([
+      fetchFilterColRows('materia', qb => qb.not('materia', 'is', null)),
+      fetchFilterColRows('banca_texto', qb => qb.not('banca_texto', 'is', null)),
+      fetchFilterColRows('ano', qb => qb.not('ano', 'is', null)),
+      fetchFilterColRows('orgao', qb => qb.not('orgao', 'is', null)),
+      fetchFilterColRows('concurso', qb => qb.not('concurso', 'is', null)),
+      fetchFilterColRows('materia, assunto', qb => qb.not('assunto', 'is', null)),
     ])
 
-    if (materiasRes.error) throw materiasRes.error
-    if (bancasRes.error) throw bancasRes.error
-    if (anosRes.error) throw anosRes.error
-    if (orgaosRes.error) throw orgaosRes.error
-    if (concursosRes.error) throw concursosRes.error
-    if (materiaAssuntoRes.error) throw materiaAssuntoRes.error
-
     const assuntosPorMateria: Record<string, string[]> = {}
-    for (const row of (materiaAssuntoRes.data || []) as { materia: string; assunto: string }[]) {
+    for (const row of materiaAssuntoRows as { materia: string; assunto: string }[]) {
       if (!row.materia || !row.assunto) continue
       if (!assuntosPorMateria[row.materia]) assuntosPorMateria[row.materia] = []
       if (!assuntosPorMateria[row.materia].includes(row.assunto)) assuntosPorMateria[row.materia].push(row.assunto)
@@ -486,11 +497,11 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
     Object.keys(assuntosPorMateria).forEach(m => assuntosPorMateria[m].sort())
 
     const options: FilterOptions = {
-      materias: Array.from(new Set((materiasRes.data || []).map((r: { materia: string }) => r.materia).filter(Boolean))).sort() as string[],
-      bancas: Array.from(new Set((bancasRes.data || []).map((r: { banca_texto: string }) => r.banca_texto).filter(Boolean))).sort() as string[],
-      anos: Array.from(new Set((anosRes.data || []).map((r: { ano: number }) => r.ano).filter(Boolean))).sort((a, b) => (b as number) - (a as number)) as number[],
-      orgaos: Array.from(new Set((orgaosRes.data || []).map((r: { orgao: string }) => r.orgao).filter(Boolean))).sort() as string[],
-      concursos: Array.from(new Set((concursosRes.data || []).map((r: { concurso: string }) => r.concurso).filter(Boolean))).sort() as string[],
+      materias: Array.from(new Set(materiasRows.map(r => r.materia as string).filter(Boolean))).sort(),
+      bancas: Array.from(new Set(bancasRows.map(r => r.banca_texto as string).filter(Boolean))).sort(),
+      anos: Array.from(new Set(anosRows.map(r => r.ano as number).filter(Boolean))).sort((a, b) => (b as number) - (a as number)) as number[],
+      orgaos: Array.from(new Set(orgaosRows.map(r => r.orgao as string).filter(Boolean))).sort(),
+      concursos: Array.from(new Set(concursosRows.map(r => r.concurso as string).filter(Boolean))).sort(),
       assuntosPorMateria,
     }
 
