@@ -6,6 +6,16 @@ interface QuestaoCacheState {
   questoesCache: ResolucaoView[] | null
   questoesCacheTimestamp: number
 
+  // fetchAllQuestoesLeves cache
+  questoesLevesCache: ResolucaoView[] | null
+  questoesLevesCacheTimestamp: number
+
+  // fetchAllResolucoes cache (completo e leve)
+  resolucoesCache: ResolucaoView[] | null
+  resolucoesCacheTimestamp: number
+  resolucoesLevesCache: ResolucaoView[] | null
+  resolucoesLevesCacheTimestamp: number
+
   // fetchPaginatedQuestoes progressive cache
   progressiveCache: ResolucaoView[]
   progressiveCachedPages: string[]
@@ -23,11 +33,20 @@ interface QuestaoCacheState {
 
   // promise dedup flags
   questoesCachePromise: boolean
+  questoesLevesCachePromise: boolean
+  resolucoesCachePromise: boolean
+  resolucoesLevesCachePromise: boolean
 
   // Actions
   setQuestoesCache: (data: ResolucaoView[]) => void
   invalidateQuestoesCache: () => void
   isQuestoesCacheValid: (ttlMs: number) => boolean
+  setQuestoesLevesCache: (data: ResolucaoView[]) => void
+  isQuestoesLevesCacheValid: (ttlMs: number) => boolean
+  setResolucoesCache: (data: ResolucaoView[]) => void
+  isResolucoesCacheValid: (ttlMs: number) => boolean
+  setResolucoesLevesCache: (data: ResolucaoView[]) => void
+  isResolucoesLevesCacheValid: (ttlMs: number) => boolean
 
   setProgressivePage: (hash: string, page: string, data: ResolucaoView[], totalCount: number, totalPages: number) => void
   getProgressivePage: (hash: string, page: string) => { data: ResolucaoView[]; totalCount: number; totalPages: number } | null
@@ -42,6 +61,9 @@ interface QuestaoCacheState {
   setFilterOptionsPromise: (v: boolean) => void
 
   setQuestoesCachePromise: (v: boolean) => void
+  setQuestoesLevesCachePromise: (v: boolean) => void
+  setResolucoesCachePromise: (v: boolean) => void
+  setResolucoesLevesCachePromise: (v: boolean) => void
 }
 
 const CACHE_TTL_MS = 60000
@@ -50,6 +72,12 @@ export const useQuestaoStore = create<QuestaoCacheState>((set, get) => ({
   // State
   questoesCache: null,
   questoesCacheTimestamp: 0,
+  questoesLevesCache: null,
+  questoesLevesCacheTimestamp: 0,
+  resolucoesCache: null,
+  resolucoesCacheTimestamp: 0,
+  resolucoesLevesCache: null,
+  resolucoesLevesCacheTimestamp: 0,
   progressiveCache: [],
   progressiveCachedPages: [],
   progressiveFilterHash: null,
@@ -60,6 +88,9 @@ export const useQuestaoStore = create<QuestaoCacheState>((set, get) => ({
   filterOptionsCache: null,
   filterOptionsPromise: false,
   questoesCachePromise: false,
+  questoesLevesCachePromise: false,
+  resolucoesCachePromise: false,
+  resolucoesLevesCachePromise: false,
 
   // Actions - fetchAllQuestoes
   setQuestoesCache: (data) => set({
@@ -68,10 +99,37 @@ export const useQuestaoStore = create<QuestaoCacheState>((set, get) => ({
     questoesCachePromise: false,
   }),
 
+  setQuestoesLevesCache: (data) => set({
+    questoesLevesCache: data,
+    questoesLevesCacheTimestamp: Date.now(),
+    questoesLevesCachePromise: false,
+  }),
+
+  setResolucoesCache: (data) => set({
+    resolucoesCache: data,
+    resolucoesCacheTimestamp: Date.now(),
+    resolucoesCachePromise: false,
+  }),
+
+  setResolucoesLevesCache: (data) => set({
+    resolucoesLevesCache: data,
+    resolucoesLevesCacheTimestamp: Date.now(),
+    resolucoesLevesCachePromise: false,
+  }),
+
   invalidateQuestoesCache: () => set({
     questoesCache: null,
     questoesCacheTimestamp: 0,
     questoesCachePromise: false,
+    questoesLevesCache: null,
+    questoesLevesCacheTimestamp: 0,
+    questoesLevesCachePromise: false,
+    resolucoesCache: null,
+    resolucoesCacheTimestamp: 0,
+    resolucoesCachePromise: false,
+    resolucoesLevesCache: null,
+    resolucoesLevesCacheTimestamp: 0,
+    resolucoesLevesCachePromise: false,
     progressiveCache: [],
     progressiveCachedPages: [],
     progressiveFilterHash: null,
@@ -84,6 +142,21 @@ export const useQuestaoStore = create<QuestaoCacheState>((set, get) => ({
   isQuestoesCacheValid: (ttlMs = CACHE_TTL_MS) => {
     const state = get()
     return state.questoesCache !== null && Date.now() - state.questoesCacheTimestamp < ttlMs
+  },
+
+  isQuestoesLevesCacheValid: (ttlMs = CACHE_TTL_MS) => {
+    const state = get()
+    return state.questoesLevesCache !== null && Date.now() - state.questoesLevesCacheTimestamp < ttlMs
+  },
+
+  isResolucoesCacheValid: (ttlMs = CACHE_TTL_MS) => {
+    const state = get()
+    return state.resolucoesCache !== null && Date.now() - state.resolucoesCacheTimestamp < ttlMs
+  },
+
+  isResolucoesLevesCacheValid: (ttlMs = CACHE_TTL_MS) => {
+    const state = get()
+    return state.resolucoesLevesCache !== null && Date.now() - state.resolucoesLevesCacheTimestamp < ttlMs
   },
 
   // Actions - progressive cache
@@ -135,4 +208,7 @@ export const useQuestaoStore = create<QuestaoCacheState>((set, get) => ({
   setFilterOptionsPromise: (v) => set({ filterOptionsPromise: v }),
 
   setQuestoesCachePromise: (v) => set({ questoesCachePromise: v }),
+  setQuestoesLevesCachePromise: (v) => set({ questoesLevesCachePromise: v }),
+  setResolucoesCachePromise: (v) => set({ resolucoesCachePromise: v }),
+  setResolucoesLevesCachePromise: (v) => set({ resolucoesLevesCachePromise: v }),
 }))

@@ -112,32 +112,49 @@ export async function updateQuestao(
  * Ordena pela tentativa mais recente.
  */
 export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
-  return fetchResolucoesPaginado(`
-    id,
-    questao_id,
-    questao_tec_id,
-    alternativa,
-    acertou,
-    tempo_segundos,
-    data_resolucao,
-    questao:questoes!historico_resolucoes_questao_id_fkey (
+  const TTL_MS = 600_000
+  const store = useQuestaoStore.getState()
+  if (store.isResolucoesCacheValid(TTL_MS)) return store.resolucoesCache as ResolucaoView[]
+  if (store.resolucoesCachePromise) {
+    while (useQuestaoStore.getState().resolucoesCachePromise) {
+      await new Promise(r => setTimeout(r, 50))
+    }
+    return useQuestaoStore.getState().resolucoesCache as ResolucaoView[]
+  }
+  store.setResolucoesCachePromise(true)
+  try {
+    const data = await fetchResolucoesPaginado(`
       id,
+      questao_id,
       questao_tec_id,
-      materia,
-      assunto,
-      grupo,
-      banca_texto,
-      orgao,
-      concurso,
-      prova,
-      ano,
-      caderno_nome,
-      enunciado,
-      gabarito,
-      alternativas,
-      resolucao_professor
-    )
-  `)
+      alternativa,
+      acertou,
+      tempo_segundos,
+      data_resolucao,
+      questao:questoes!historico_resolucoes_questao_id_fkey (
+        id,
+        questao_tec_id,
+        materia,
+        assunto,
+        grupo,
+        banca_texto,
+        orgao,
+        concurso,
+        prova,
+        ano,
+        caderno_nome,
+        enunciado,
+        gabarito,
+        alternativas,
+        resolucao_professor
+      )
+    `)
+    useQuestaoStore.getState().setResolucoesCache(data)
+    return data
+  } catch (e) {
+    useQuestaoStore.getState().setResolucoesCachePromise(false)
+    throw e
+  }
 }
 
 /**
@@ -145,26 +162,43 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
  * (sem enunciado/gabarito/alternativas/resolução) — para estatísticas.
  */
 export async function fetchAllResolucoesLeves(): Promise<ResolucaoView[]> {
-  return fetchResolucoesPaginado(`
-    id,
-    questao_id,
-    questao_tec_id,
-    alternativa,
-    acertou,
-    tempo_segundos,
-    data_resolucao,
-    questao:questoes!historico_resolucoes_questao_id_fkey (
+  const TTL_MS = 600_000
+  const store = useQuestaoStore.getState()
+  if (store.isResolucoesLevesCacheValid(TTL_MS)) return store.resolucoesLevesCache as ResolucaoView[]
+  if (store.resolucoesLevesCachePromise) {
+    while (useQuestaoStore.getState().resolucoesLevesCachePromise) {
+      await new Promise(r => setTimeout(r, 50))
+    }
+    return useQuestaoStore.getState().resolucoesLevesCache as ResolucaoView[]
+  }
+  store.setResolucoesLevesCachePromise(true)
+  try {
+    const data = await fetchResolucoesPaginado(`
       id,
-      materia,
-      assunto,
-      grupo,
-      banca_texto,
-      orgao,
-      concurso,
-      prova,
-      ano
-    )
-  `)
+      questao_id,
+      questao_tec_id,
+      alternativa,
+      acertou,
+      tempo_segundos,
+      data_resolucao,
+      questao:questoes!historico_resolucoes_questao_id_fkey (
+        id,
+        materia,
+        assunto,
+        grupo,
+        banca_texto,
+        orgao,
+        concurso,
+        prova,
+        ano
+      )
+    `)
+    useQuestaoStore.getState().setResolucoesLevesCache(data)
+    return data
+  } catch (e) {
+    useQuestaoStore.getState().setResolucoesLevesCachePromise(false)
+    throw e
+  }
 }
 
 async function fetchResolucoesPaginado(selectStr: string): Promise<ResolucaoView[]> {
@@ -462,38 +496,85 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
  * Evita N chamadas concorrentes quando múltiplas páginas montam em paralelo.
  */
 export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
+  return fetchAllQuestoesInternal({
+    leves: false,
+    cacheValid: () => useQuestaoStore.getState().isQuestoesCacheValid(600000),
+    cachePromise: () => useQuestaoStore.getState().questoesCachePromise,
+    setCachePromise: v => useQuestaoStore.getState().setQuestoesCachePromise(v),
+    getCache: () => useQuestaoStore.getState().questoesCache,
+    setCache: data => useQuestaoStore.getState().setQuestoesCache(data),
+    log: '[LOG fetchAllQuestoes]',
+  })
+}
+
+/**
+ * Busca todas as questões em versão leve (sem enunciado/gabarito/alternativas/
+ * resolução do professor) — para páginas que só usam estatísticas/índice.
+ */
+export async function fetchAllQuestoesLeves(): Promise<ResolucaoView[]> {
+  return fetchAllQuestoesInternal({
+    leves: true,
+    cacheValid: () => useQuestaoStore.getState().isQuestoesLevesCacheValid(600000),
+    cachePromise: () => useQuestaoStore.getState().questoesLevesCachePromise,
+    setCachePromise: v => useQuestaoStore.getState().setQuestoesLevesCachePromise(v),
+    getCache: () => useQuestaoStore.getState().questoesLevesCache,
+    setCache: data => useQuestaoStore.getState().setQuestoesLevesCache(data),
+    log: '[LOG fetchAllQuestoesLeves]',
+  })
+}
+
+interface FetchAllQuestoesOptions {
+  leves: boolean
+  cacheValid: () => boolean
+  cachePromise: () => boolean
+  setCachePromise: (v: boolean) => void
+  getCache: () => ResolucaoView[] | null
+  setCache: (data: ResolucaoView[]) => void
+  log: string
+}
+
+async function fetchAllQuestoesInternal(opts: FetchAllQuestoesOptions): Promise<ResolucaoView[]> {
+  const { leves, cacheValid, cachePromise, setCachePromise, getCache, setCache, log } = opts
+
   // Retorna cache se ainda válido
-  if (useQuestaoStore.getState().isQuestoesCacheValid(60000)) {
-    console.log('[LOG fetchAllQuestoes] Cache hit!')
-    return useQuestaoStore.getState().questoesCache!
+  if (cacheValid()) {
+    console.log(`${log} Cache hit!`)
+    return getCache()!
   }
 
   // Deduplica chamadas concorrentes (Promise cache)
-  if (useQuestaoStore.getState().questoesCachePromise) {
-    console.log('[LOG fetchAllQuestoes] Aguardando chamada concorrente...')
-    while (useQuestaoStore.getState().questoesCachePromise) {
+  if (cachePromise()) {
+    console.log(`${log} Aguardando chamada concorrente...`)
+    while (cachePromise()) {
       await new Promise(r => setTimeout(r, 50))
     }
-    return useQuestaoStore.getState().questoesCache!
+    return getCache()!
   }
 
-  console.log('[LOG fetchAllQuestoes] Iniciando busca de questões...')
-  useQuestaoStore.getState().setQuestoesCachePromise(true)
+  console.log(`${log} Iniciando busca de questões...`)
+  setCachePromise(true)
   try {
     const t0 = performance.now()
     const MAX_PER_REQUEST = 1_000
     const questoesData: Questao[] = []
     let fetchFromQuestoes = 0
 
+    const selectCols = leves
+      ? `
+        id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
+        concurso, prova, ano, caderno_nome, created_at
+      `
+      : `
+        id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
+        concurso, prova, ano, caderno_nome, enunciado, gabarito,
+        alternativas, resolucao_professor, created_at
+      `
+
     while (true) {
       const fetchTo = fetchFromQuestoes + MAX_PER_REQUEST - 1
       const { data: chunk, error: qErr } = await supabase
         .from('questoes')
-        .select(`
-          id, questao_tec_id, materia, assunto, grupo, banca_texto, orgao,
-          concurso, prova, ano, caderno_nome, enunciado, gabarito,
-          alternativas, resolucao_professor, created_at
-        `)
+        .select(selectCols)
         .order('id', { ascending: false })
         .range(fetchFromQuestoes, fetchTo)
 
@@ -505,12 +586,12 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     }
 
     const t1 = performance.now()
-    console.log(`[LOG fetchAllQuestoes] Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData.length}`)
+    console.log(`${log} Query questoes: ${(t1 - t0).toFixed(0)}ms | qtd=${questoesData.length}`)
 
     const { data: { session: histSession } } = await supabase.auth.getSession()
     const histUserId = histSession?.user?.id
 
-    console.log('[LOG fetchAllQuestoes] Iniciando busca do histórico...')
+    console.log(`${log} Iniciando busca do histórico...`)
     const historico: HistoricoResolucao[] = []
     let fetchFromHist = 0
 
@@ -536,9 +617,9 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
     }
 
     const t2 = performance.now()
-    console.log(`[LOG fetchAllQuestoes] Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico.length}`)
+    console.log(`${log} Query historico: ${(t2 - t1).toFixed(0)}ms | qtd=${historico.length}`)
 
-    console.log('[LOG fetchAllQuestoes] Mesclando dados...')
+    console.log(`${log} Mesclando dados...`)
     const historicoMap = new Map<number, HistoricoResolucao>()
     for (const h of (historico || [])) {
       if (!historicoMap.has(h.questao_id)) {
@@ -565,20 +646,20 @@ export async function fetchAllQuestoes(): Promise<ResolucaoView[]> {
         prova: q.prova,
         ano: q.ano,
         caderno_nome: q.caderno_nome,
-        enunciado: q.enunciado,
-        gabarito: q.gabarito,
-        alternativas: q.alternativas ?? {},
-        resolucao_professor: q.resolucao_professor ?? null,
+        enunciado: leves ? null : q.enunciado,
+        gabarito: leves ? null : q.gabarito,
+        alternativas: leves ? {} : (q.alternativas ?? {}),
+        resolucao_professor: leves ? null : (q.resolucao_professor ?? null),
       }
     })
 
     const t3 = performance.now()
-    console.log(`[LOG fetchAllQuestoes] Mesclagem concluída: ${(t3 - t2).toFixed(0)}ms | total=${result.length}`)
+    console.log(`${log} Mesclagem concluída: ${(t3 - t2).toFixed(0)}ms | total=${result.length}`)
 
-    useQuestaoStore.getState().setQuestoesCache(result)
+    setCache(result)
     return result
   } catch (e) {
-    useQuestaoStore.getState().setQuestoesCachePromise(false)
+    setCachePromise(false)
     throw e
   }
 }

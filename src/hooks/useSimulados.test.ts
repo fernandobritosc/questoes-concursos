@@ -41,12 +41,14 @@ const mockQuestoesValidas = mockQuestoes.map(q => ({
 
 const mockRef = vi.hoisted(() => ({
   fetchAllQuestoes: vi.fn(),
+  fetchAllQuestoesLeves: vi.fn(),
   insertHistoricoResolucao: vi.fn(),
   gerarFeedbackSimulado: vi.fn(),
 }))
 
 vi.mock('../services/supabase.service', () => ({
   fetchAllQuestoes: () => mockRef.fetchAllQuestoes(),
+  fetchAllQuestoesLeves: () => mockRef.fetchAllQuestoesLeves(),
   insertHistoricoResolucao: (payload: unknown) => mockRef.insertHistoricoResolucao(payload),
 }))
 
@@ -59,6 +61,7 @@ import { useSimulados } from './useSimulados'
 beforeEach(() => {
   vi.useFakeTimers()
   localStorage.clear()
+  mockRef.fetchAllQuestoesLeves.mockResolvedValue(mockQuestoes)
   mockRef.fetchAllQuestoes.mockResolvedValue(mockQuestoesValidas)
   mockRef.insertHistoricoResolucao.mockResolvedValue({})
   mockRef.gerarFeedbackSimulado.mockResolvedValue('# Diagnóstico OK')
@@ -81,7 +84,7 @@ describe('useSimulados', () => {
   })
 
   it('sets error when fetch fails', async () => {
-    mockRef.fetchAllQuestoes.mockRejectedValue(new Error('Falha na rede'))
+    mockRef.fetchAllQuestoesLeves.mockRejectedValue(new Error('Falha na rede'))
     const { result } = renderHook(() => useSimulados())
     await vi.waitFor(() => expect(result.current.loading).toBe(false))
     expect(result.current.error).toBe('Falha na rede')

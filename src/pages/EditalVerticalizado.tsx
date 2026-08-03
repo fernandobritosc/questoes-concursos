@@ -8,7 +8,7 @@ import {
   FileText,
   Settings2,
 } from 'lucide-react'
-import { fetchAllQuestoes } from '../services/supabase.service'
+import { fetchAllQuestoesLeves } from '../services/supabase.service'
 import type { ResolucaoView } from '../types/database'
 import { EditalSidebar } from '../components/EditalSidebar'
 import { EditalMateriaDetalhes } from '../components/EditalMateriaDetalhes'
@@ -76,7 +76,7 @@ export function EditalVerticalizado() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchAllQuestoes()
+        const data = await fetchAllQuestoesLeves()
         setResolucoes(data)
       } catch (err: unknown) {
         console.error('Erro ao carregar matérias do banco:', err)

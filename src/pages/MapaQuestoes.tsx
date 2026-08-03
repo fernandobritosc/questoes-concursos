@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchAllQuestoes, fetchAllResolucoesLeves } from '../services/supabase.service'
+import { fetchAllQuestoesLeves, fetchAllResolucoesLeves } from '../services/supabase.service'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { 
   saveStudyMaterial,
@@ -81,7 +81,7 @@ export function MapaQuestoes() {
     async function loadData() {
       try {
         const [questoes, historico] = await Promise.all([
-          fetchAllQuestoes(),
+          fetchAllQuestoesLeves(),
           fetchAllResolucoesLeves()
         ])
 

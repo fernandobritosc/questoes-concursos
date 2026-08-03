@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { fetchAllQuestoes, insertHistoricoResolucao } from '../services/supabase.service'
+import { fetchAllQuestoes, fetchAllQuestoesLeves, insertHistoricoResolucao } from '../services/supabase.service'
 import { gerarFeedbackSimulado } from '../services/gemini.service'
 import type { ResolucaoView } from '../types/database'
 
@@ -68,20 +68,32 @@ export function useSimulados() {
     }
   }, [etapa])
 
-  // Carrega as questões no início para analisar o perfil do usuário
+  // Carrega as questões no início para analisar o perfil do usuário.
+  // Carrega primeiro a versão leve (rápida) para o setup renderizar imediatamente
+  // e dispara o fetch completo em background (necessário para montar o simulado).
   useEffect(() => {
+    let cancelled = false
     async function load() {
       try {
-        const data = await fetchAllQuestoes()
-        setAllQuestoes(data)
+        const leves = await fetchAllQuestoesLeves()
+        if (cancelled) return
+        setAllQuestoes(leves)
       } catch (err: unknown) {
-        console.error('Erro ao carregar questões para simulado:', err)
-        setError(err instanceof Error ? err.message : 'Erro ao carregar banco de dados.')
+        console.error('Erro ao carregar questões leves para simulado:', err)
+        if (!cancelled) setError(err instanceof Error ? err.message : 'Erro ao carregar banco de dados.')
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
+      }
+      if (cancelled) return
+      try {
+        const completas = await fetchAllQuestoes()
+        if (!cancelled) setAllQuestoes(completas)
+      } catch (err: unknown) {
+        console.error('Erro ao carregar questões completas para simulado:', err)
       }
     }
     load()
+    return () => { cancelled = true }
   }, [])
 
   /**
@@ -199,12 +211,12 @@ export function useSimulados() {
   /**
    * Identifica os assuntos ou matérias com aproveitamento abaixo de 70%
    */
-  const obterTopicosFracos = () => {
+  const obterTopicosFracos = (questoes = allQuestoes) => {
     const weakAssuntos = new Set<string>()
     const weakMaterias = new Set<string>()
 
     // Pega questões resolvidas recentemente para calcular estatísticas
-    const respondidas = allQuestoes.filter(q => q.alternativa && q.alternativa !== '')
+    const respondidas = questoes.filter(q => q.alternativa && q.alternativa !== '')
 
     const statsAssunto: Record<string, { total: number; acertos: number }> = {}
     const statsMateria: Record<string, { total: number; acertos: number }> = {}
@@ -238,7 +250,7 @@ export function useSimulados() {
   /**
    * Inicializa o simulado ativo
    */
-  const handleIniciarSimulado = (qtd: number, tempoMin: number) => {
+  const handleIniciarSimulado = async (qtd: number, tempoMin: number) => {
     setConfig({ qtdQuestoes: qtd, tempoMinutos: tempoMin })
     setRespostasMarcadas({})
     setQuestaoAtualIndex(0)
@@ -247,11 +259,22 @@ export function useSimulados() {
     setDiagnosticoIA(null)
     setPontuacao(null)
 
+    // Garante que as questões completas (com alternativas) estejam carregadas
+    const temAlternativas = allQuestoes.some(q => q.alternativas && Object.keys(q.alternativas).length >= 2)
+    let questoes = allQuestoes
+    if (!temAlternativas) {
+      try {
+        questoes = await fetchAllQuestoes()
+      } catch (err: unknown) {
+        console.error('Erro ao carregar questões completas para iniciar simulado:', err)
+      }
+    }
+
     // Filtra questões do banco baseadas nas fraquezas
-    const { weakAssuntos, weakMaterias } = obterTopicosFracos()
+    const { weakAssuntos, weakMaterias } = obterTopicosFracos(questoes)
 
     // Filtra apenas as questões válidas do banco que contêm pelo menos 2 alternativas (ignora lixo do PDF)
-    const questoesValidas = allQuestoes.filter(
+    const questoesValidas = questoes.filter(
       q => q.alternativas && Object.keys(q.alternativas).length >= 2
     )
 
