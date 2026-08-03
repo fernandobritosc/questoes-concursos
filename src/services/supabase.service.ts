@@ -461,12 +461,13 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
 
   useQuestaoStore.getState().setFilterOptionsPromise(true)
   try {
-    const [materiasRes, bancasRes, anosRes, orgaosRes, concursosRes] = await Promise.all([
+    const [materiasRes, bancasRes, anosRes, orgaosRes, concursosRes, materiaAssuntoRes] = await Promise.all([
       supabase.from('questoes').select('materia').not('materia', 'is', null),
       supabase.from('questoes').select('banca_texto').not('banca_texto', 'is', null),
       supabase.from('questoes').select('ano').not('ano', 'is', null),
       supabase.from('questoes').select('orgao').not('orgao', 'is', null),
       supabase.from('questoes').select('concurso').not('concurso', 'is', null),
+      supabase.from('questoes').select('materia, assunto').not('assunto', 'is', null),
     ])
 
     if (materiasRes.error) throw materiasRes.error
@@ -474,6 +475,15 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
     if (anosRes.error) throw anosRes.error
     if (orgaosRes.error) throw orgaosRes.error
     if (concursosRes.error) throw concursosRes.error
+    if (materiaAssuntoRes.error) throw materiaAssuntoRes.error
+
+    const assuntosPorMateria: Record<string, string[]> = {}
+    for (const row of (materiaAssuntoRes.data || []) as { materia: string; assunto: string }[]) {
+      if (!row.materia || !row.assunto) continue
+      if (!assuntosPorMateria[row.materia]) assuntosPorMateria[row.materia] = []
+      if (!assuntosPorMateria[row.materia].includes(row.assunto)) assuntosPorMateria[row.materia].push(row.assunto)
+    }
+    Object.keys(assuntosPorMateria).forEach(m => assuntosPorMateria[m].sort())
 
     const options: FilterOptions = {
       materias: Array.from(new Set((materiasRes.data || []).map((r: { materia: string }) => r.materia).filter(Boolean))).sort() as string[],
@@ -481,6 +491,7 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
       anos: Array.from(new Set((anosRes.data || []).map((r: { ano: number }) => r.ano).filter(Boolean))).sort((a, b) => (b as number) - (a as number)) as number[],
       orgaos: Array.from(new Set((orgaosRes.data || []).map((r: { orgao: string }) => r.orgao).filter(Boolean))).sort() as string[],
       concursos: Array.from(new Set((concursosRes.data || []).map((r: { concurso: string }) => r.concurso).filter(Boolean))).sort() as string[],
+      assuntosPorMateria,
     }
 
     useQuestaoStore.getState().setFilterOptionsCache(options)

@@ -85,6 +85,7 @@ export interface FilterOptions {
   anos: number[]
   orgaos: string[]
   concursos: string[]
+  assuntosPorMateria: Record<string, string[]>
 }
 
 // ─── Edital (estrutura genérica de editais de concursos) ───────────────────────

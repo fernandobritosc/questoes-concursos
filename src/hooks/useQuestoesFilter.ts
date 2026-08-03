@@ -59,6 +59,7 @@ export function useQuestoesFilter(
     anos: number[]
     orgaos: string[]
     concursos: string[]
+    assuntosPorMateria?: Record<string, string[]>
   } | null,
 ) {
   // ── Filter State (persistido em localStorage) ─────────────────────────────────
@@ -122,15 +123,22 @@ export function useQuestoesFilter(
 
   // ── Derived Data (Filtros dinâmicos) — memoizados ─────────────────────────────
 
-  const materiasComAssuntos = useMemo(() =>
-    resolucoes.reduce((acc, curr) => {
-      if (!curr.materia) return acc
-      if (!acc[curr.materia]) acc[curr.materia] = new Set<string>()
-      if (curr.assunto) acc[curr.materia].add(curr.assunto)
-      return acc
-    }, {} as Record<string, Set<string>>),
-    [resolucoes]
-  )
+  const materiasComAssuntos: Record<string, Set<string>> = (() => {
+    if (filterOptions?.assuntosPorMateria) {
+      const map: Record<string, Set<string>> = {}
+      for (const [materia, assuntos] of Object.entries(filterOptions.assuntosPorMateria)) {
+        map[materia] = new Set(assuntos)
+      }
+      return map
+    }
+    const map: Record<string, Set<string>> = {}
+    for (const curr of resolucoes) {
+      if (!curr.materia) continue
+      if (!map[curr.materia]) map[curr.materia] = new Set<string>()
+      if (curr.assunto) map[curr.materia].add(curr.assunto)
+    }
+    return map
+  })()
 
   const materiasUnicas = useMemo(
     () => filterOptions?.materias ?? Array.from(new Set(resolucoes.map(r => r.materia).filter(Boolean))) as string[],

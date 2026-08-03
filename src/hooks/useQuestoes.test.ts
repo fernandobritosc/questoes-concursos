@@ -37,6 +37,7 @@ const filterOptions = {
   anos: [2023],
   orgaos: ['STF'],
   concursos: ['STF'],
+  assuntosPorMateria: { 'Direito': ['Garantias', 'Organização'] },
 }
 
 // Shared mutable refs for sub-hook mocks

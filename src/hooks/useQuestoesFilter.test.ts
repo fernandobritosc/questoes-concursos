@@ -66,4 +66,38 @@ describe('useQuestoesFilter', () => {
     const { result } = renderHook(() => useQuestoesFilter(resolucoes, null))
     expect(result.current.filteredQuestions).toHaveLength(3)
   })
+
+  it('mantém assuntos de todas as matérias quando resolucoes está filtrada no servidor', () => {
+    const filterOptions = {
+      materias: ['Direito Constitucional', 'Direito Administrativo'],
+      bancas: ['CESPE'],
+      anos: [2023],
+      orgaos: ['STF'],
+      concursos: ['STF'],
+      assuntosPorMateria: {
+        'Direito Constitucional': ['Direitos e Garantias', 'Organização do Estado'],
+        'Direito Administrativo': ['Atos Administrativos'],
+      },
+    }
+    // Simula servidor já filtrado por Direito Constitucional
+    const resolucoesFiltradas = resolucoes.filter(q => q.materia === 'Direito Constitucional')
+
+    const { result } = renderHook(() => useQuestoesFilter(resolucoesFiltradas, filterOptions))
+
+    expect(result.current.materiasComAssuntos['Direito Administrativo']).toBeDefined()
+    expect(Array.from(result.current.materiasComAssuntos['Direito Administrativo'])).toContain('Atos Administrativos')
+    expect(result.current.materiasComAssuntos['Direito Constitucional']).toBeDefined()
+  })
+
+  it('usa fallback de resolucoes quando filterOptions sem assuntosPorMateria', () => {
+    const filterOptions = {
+      materias: ['Direito Constitucional'],
+      bancas: ['CESPE'],
+      anos: [2023],
+      orgaos: ['STF'],
+      concursos: ['STF'],
+    }
+    const { result } = renderHook(() => useQuestoesFilter(resolucoes, filterOptions))
+    expect(Array.from(result.current.materiasComAssuntos['Direito Constitucional'])).toContain('Direitos e Garantias')
+  })
 })
