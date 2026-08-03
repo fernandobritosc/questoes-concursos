@@ -16,6 +16,13 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 
 ### ✅ Concluído
 
+#### Importação de dados reais (Supabase → Postgres VM)
+- **Dados exportados** para `export/`: `users.json` (2 usuários), `questoes_rows.csv` (2354), `historico_resolucoes_rows.csv` (2328), `metas_concurso_rows.csv` (12), `tarefas_meta_rows.csv` (120)
+- **Importador** `backend/src/importarSupabase.mjs`: parser CSV RFC-4180 próprio, batches multi-row (500), preserva ids originais, senha provisória bcrypt `mudar123`, `ON CONFLICT DO NOTHING`, ajuste de sequences. Modo `--dry-run`
+- **Órfãos**: 129 históricos sem `user_id` atribuídos ao fernandobritosc (usuário padrão)
+- **Correções de integridade aplicadas**: seed antigo ocupava `questoes.id=1` (tec 999002) e bloqueou a questão real (tec 1140425) — corrigido com UPDATE (DELETE dispararia CASCADE no histórico); históricos `id=1,3,4` colididos pelo seed foram reinseridos; usuário `teste@teste.com` + 3 históricos removidos
+- **Validação final**: 2 users, 2354 questões (0 conflitos id/tec_id), 2328 históricos (0 faltando/0 extras, 0 órfãos FK), 12 metas, 120 tarefas — tudo conferido vs CSV
+
 #### Refactor de componentes
 | O quê | De → Para |
 |---|---|
@@ -138,19 +145,45 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 - **Nav**: "Metas de Estudo" (ícone Target) em `src/components/Layout.tsx`
 - **Extensão LS Concurso** (`extensao/ls-concurso/`): extrai metas semanais de `aluno.lsensino.com.br/#/app/metaAtual` — parseia `.v3-meta-titulo-pagina`, datas, tabela `.v3-table` com disciplinas/formato/descrição, e salva no Supabase via REST API
 
+#### Migração Supabase → Backend Próprio (Fastify + Postgres na Oracle VM)
+- **Backend CRUD compatível com PostgREST** (`backend/src/routes/crud.js`): registra rotas em `/:tabela` e `/rest/v1/:tabela`; filtros `eq/neq/in/gt/gte/lt/lte/like/ilike/is/not.is`, `order`, `offset`, `limit`, `count=true`, `select` com JOIN aninhado (`filha!nome_da_fk(cols)`), POST com `return=representation`, PATCH/DELETE por filtro, upsert com `on_conflict`
+- **JOIN aninhado** (`historico_resolucoes!historico_resolucoes_questao_id_fkey(...)`): busca filhos agrupados por `ANY($1)`; escopado por `user_id` do usuário autenticado para não vazar histórico de terceiros
+- **Storage** (`backend/src/routes/storage.js`): upload (multipart) / download / delete / public-url em disco (`./data/storage/<bucket>/<path>`), com sanitização de path traversal e auth obrigatória
+- **IA (Groq)** (`backend/src/routes/gemini.js`): rota `/gemini` substitui a função serverless — valida JWT do backend e chama a API Groq via fetch (sem `groq-sdk` no backend)
+- **Shim `src/lib/supabase.ts`**: substitui `@supabase/supabase-js` por fetch ao backend mantendo a API fluente (`from().select().eq().order().range().single().insert().update().delete().upsert()` + `auth.*` + `storage.*`) — **zero mudanças nos 58 pontos de uso** (supabase.service, grupoUtils, gemini.service, studyMaterial, AuthContext, Login, Layout)
+- **Sessão**: JWT persistido em `localStorage` sob `monitorpro_session` (mesma chave lida pelas extensões); `/auth/login` e `/auth/register` emitem `SIGNED_IN`
+- **Extensões adaptadas** (`extensao/content.js` + `extensao/ls-concurso/content.js`): `SUPABASE_URL`→`BACKEND_URL` (`http://204.216.111.13:3000`, interino), removida chave anon, storage keys `supabase_*`→`monitorpro_*`, sessão lida de `monitorpro_session`, manifests atualizados
+- **Vite proxy** (`vite.config.ts`): `/api` → `http://127.0.0.1:3000` com rewrite (emulador local de `/api/gemini` continua funcionando — roda antes do proxy)
+- **Validado E2E**: 6 testes temporários contra backend real (login, select aninhado, count+range, insert/update/delete, `not is null`, getSession) — todos passaram; removidos após a verificação
+- **Correções de bugs reais encontrados**: GET enviava `body:null` no shim; `buildOrder` do backend tinha `.replace(/^/,...)` que nunca prefixava `ORDER BY`
+
+#### Deploy Frontend no Vercel (proxy `/api` → VM)
+- **`vercel.json`**: rewrite `/api/:path*` → `http://204.216.111.13:3000/:path*` (proxy server-side evita mixed content do backend http) + fallback SPA `/(.*)` → `/index.html`
+- **`.vercelignore`**: exclui `api/` — a função serverless `api/gemini.ts` foi consolidada no backend da VM (`/gemini`); todo `/api/*` (rest, auth, storage, gemini) agora vai para a VM via rewrite
+- **`VITE_API_URL=/api`** (default no shim `supabase.ts:30`) — sem mudanças no código do frontend
+- Build/tsc/lint validados localmente
+
 ### 🔄 Pendente
+- **Deploy na VM**: copiar `backend/` via scp, `npm install`, subir com pm2/systemd, Nginx (proxy `/api` → `127.0.0.1:3000`, servir build dos 2 frontends, TLS para extensões)
+- **Deploy Vercel**: fazer commit/push para disparar o deploy, configurar `VITE_API_URL=/api` (não é estritamente necessário, é o default) e confirmar que o backend da VM está acessível publicamente em `http://204.216.111.13:3000`
+- **Importar dados reais do Monitor Pro**: exportar do Supabase (CSV/SQL) e importar no banco `concursos` da VM (study_materials, notifications, flashcards, registros_estudos, editais_materias, gabaritos_salvos, discursivas, news_feed, ranking_geral)
+- **Monitor Pro** (`C:\Users\uniao\OneDrive\Desktop\Projetos`): adaptar `src/lib/supabase.ts` + `src/services/queries/*` para o mesmo backend (mesmo padrão do shim)
 - **Modo claro**: ajuste das variáveis CSS `html.light` no `index.css` — usuário achou muito claro, dói a vista. Pendente de nova tentativa com paleta mais suave
+- **HTTPS + domínio**: necessário para a extensão funcionar no TEC Concursos (página https → fetch http é bloqueado como mixed content)
 - Features novas (estatísticas avançadas, modo offline, exportar dados, integração IA)
 - Bundle analysis periódica (`VITE_ANALYZE=true` com `rollup-plugin-visualizer` — opcional)
 - E2E com Playwright
 - Segurança da extensão Chrome
 - **Validação da extensão LS Concurso**: testar extração com dados reais da LS
+- Remover `@supabase/supabase-js` de `package.json` quando `tools/importPdfToDb.js` e `tools/testDb.js` forem substituídos
 
 ## Key Decisions
 - `ReactMarkdown` custom renderers usam `any` com eslint-disable porque o tipo `Components` é complexo — aceito como dívida técnica
 - `set-state-in-effect` suprimido com eslint-disable onde o padrão é intencional (resetar estado ao navegar entre questões) — alternativa seria usar `key` prop (refactor maior)
 - `supabase.service.ts` teve todos os 5 `eslint-disable no-explicit-any` substituídos por tipos concretos — `HistoricoResolucao`, inline types, e `unknown` para JSONB
 - Efeito de carregar histórico (useQuestoes.ts:318) depende APENAS de `currentQuestaoIndex` — funções de callback NÃO entram nas deps para evitar loop de render por nova referência
+- **Shim de compatibilidade escolhido em vez de reescrever a camada de dados**: `src/lib/supabase.ts` replica a API fluente do supabase-js (query builder + auth + storage) → mantém os 58 pontos de uso e os 244 testes intactos; `any` no `PostgrestResponse.data` é dívida técnica (shim é inerentemente dinâmico)
+- **`/api` same-origin via Nginx/Vite proxy** para os frontends (evita CORS/mixed content); extensões chamam o backend direto (`BACKEND_URL`) com CORS habilitado
 
 ## ECC ↔ GSD Integration
 

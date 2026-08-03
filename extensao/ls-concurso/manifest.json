@@ -8,7 +8,7 @@
   ],
   "host_permissions": [
     "https://aluno.lsensino.com.br/*",
-    "https://dyxtalcvjcprmhuktyfd.supabase.co/*",
+    "http://204.216.111.13/*",
     "http://localhost/*",
     "http://127.0.0.1/*",
     "https://*.vercel.app/*"
@@ -17,6 +17,7 @@
     {
       "matches": [
         "https://aluno.lsensino.com.br/*",
+        "http://204.216.111.13/*",
         "http://localhost/*",
         "http://127.0.0.1/*",
         "https://*.vercel.app/*"

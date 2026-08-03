@@ -1,0 +1,3 @@
+# A função serverless /api/gemini foi consolidada no backend da VM.
+# Todo o tráfego /api/* é proxeado pelo vercel.json para http://204.216.111.13:3000.
+api/

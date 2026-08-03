@@ -411,11 +411,11 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
     if (concursosRes.error) throw concursosRes.error
 
     const options: FilterOptions = {
-      materias: Array.from(new Set((materiasRes.data || []).map(r => r.materia).filter(Boolean))).sort() as string[],
-      bancas: Array.from(new Set((bancasRes.data || []).map(r => r.banca_texto).filter(Boolean))).sort() as string[],
-      anos: Array.from(new Set((anosRes.data || []).map(r => r.ano).filter(Boolean))).sort((a, b) => (b as number) - (a as number)) as number[],
-      orgaos: Array.from(new Set((orgaosRes.data || []).map(r => r.orgao).filter(Boolean))).sort() as string[],
-      concursos: Array.from(new Set((concursosRes.data || []).map(r => r.concurso).filter(Boolean))).sort() as string[],
+      materias: Array.from(new Set((materiasRes.data || []).map((r: { materia: string }) => r.materia).filter(Boolean))).sort() as string[],
+      bancas: Array.from(new Set((bancasRes.data || []).map((r: { banca_texto: string }) => r.banca_texto).filter(Boolean))).sort() as string[],
+      anos: Array.from(new Set((anosRes.data || []).map((r: { ano: number }) => r.ano).filter(Boolean))).sort((a, b) => (b as number) - (a as number)) as number[],
+      orgaos: Array.from(new Set((orgaosRes.data || []).map((r: { orgao: string }) => r.orgao).filter(Boolean))).sort() as string[],
+      concursos: Array.from(new Set((concursosRes.data || []).map((r: { concurso: string }) => r.concurso).filter(Boolean))).sort() as string[],
     }
 
     useQuestaoStore.getState().setFilterOptionsCache(options)

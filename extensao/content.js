@@ -6,8 +6,9 @@
  * 2. Módulo de Extração: Roda no site do TEC Concursos para capturar reativamente a resolução de questões.
  */
 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5eHRhbGN2amNwcm1odWt0eWZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1MzI1MjcsImV4cCI6MjA4NDEwODUyN30.BPMR3SBmTrf_3icEyYjWUmiC5ZsoCseEXB3LF6c14L8";
-const SUPABASE_URL = "https://dyxtalcvjcprmhuktyfd.supabase.co";
+// Backend próprio (Fastify + Postgres na Oracle VM) — substitui o Supabase.
+// INTERINO: IP:porta do backend. Em produção será o domínio HTTPS (ex: https://fernandoestudos.com/api).
+const BACKEND_URL = "http://204.216.111.13:3000";
 
 // Helper para detectar se o contexto da extensão foi invalidado (ex: após reload ou reinício)
 function isContextInvalidated() {
@@ -27,7 +28,7 @@ function isContextInvalidated() {
 // ============================================================================
 
 const hostname = window.location.hostname;
-const isReactApp = hostname.includes("localhost") || hostname.includes("127.0.0.1") || hostname.includes("vercel.app");
+const isReactApp = hostname.includes("localhost") || hostname.includes("127.0.0.1") || hostname.includes("vercel.app") || hostname.includes("204.216.111.13");
 
 if (isReactApp) {
   console.log("content.js:3 MonitorPro v3.0: Olho invisível ativado!");
@@ -36,21 +37,29 @@ if (isReactApp) {
   function sincronizarSessao() {
     if (isContextInvalidated()) return;
     try {
-      const storageKey = "sb-dyxtalcvjcprmhuktyfd-auth-token";
-      const sessionStr = localStorage.getItem(storageKey);
+      // Novo formato: sessão do backend próprio
+      let sessionStr = localStorage.getItem("monitorpro_session");
+      let session = sessionStr ? JSON.parse(sessionStr) : null;
+      // Fallback legado (Supabase)
+      if (!session || !session.token) {
+        const legacyStr = localStorage.getItem("sb-dyxtalcvjcprmhuktyfd-auth-token");
+        if (legacyStr) {
+          const legacy = JSON.parse(legacyStr);
+          session = { token: legacy.access_token, userId: legacy.user?.id };
+        }
+      }
 
-      if (sessionStr) {
-        const session = JSON.parse(sessionStr);
-        const token = session.access_token;
-        const userId = session.user?.id;
+      if (session && session.token) {
+        const token = session.token;
+        const userId = session.userId;
 
         if (token && userId) {
-          chrome.storage.local.get(["supabase_token", "supabase_user_id"], (stored) => {
+          chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], (stored) => {
             if (isContextInvalidated()) return;
-            if (stored.supabase_token !== token || stored.supabase_user_id !== userId) {
+            if (stored.monitorpro_token !== token || stored.monitorpro_user_id !== userId) {
               chrome.storage.local.set({
-                supabase_token: token,
-                supabase_user_id: userId
+                monitorpro_token: token,
+                monitorpro_user_id: userId
               }, () => {
                 if (isContextInvalidated()) return;
                 console.log(`content.js:38 ⚡ MonitorPro: Sessão sincronizada com sucesso via DOM! UserID: ${userId}`);
@@ -60,10 +69,10 @@ if (isReactApp) {
         }
       } else {
         // Sem token no localStorage -> Usuário deslogou do App
-        chrome.storage.local.get(["supabase_token"], (stored) => {
+        chrome.storage.local.get(["monitorpro_token"], (stored) => {
           if (isContextInvalidated()) return;
-          if (stored.supabase_token) {
-            chrome.storage.local.remove(["supabase_token", "supabase_user_id"], () => {
+          if (stored.monitorpro_token) {
+            chrome.storage.local.remove(["monitorpro_token", "monitorpro_user_id"], () => {
               if (isContextInvalidated()) return;
               console.log("content.js:48 ⚡ MonitorPro: Sessão limpa (usuário deslogado do aplicativo).");
             });
@@ -561,14 +570,13 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       pendingRequests.delete(questaoPayload.questao_tec_id);
       return;
     }
-    chrome.storage.local.get(["supabase_token", "supabase_user_id"], async (stored) => {
+    chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], async (stored) => {
       if (isContextInvalidated()) return;
-      const token = stored.supabase_token;
-      const userId = stored.supabase_user_id;
+      const token = stored.monitorpro_token;
+      const userId = stored.monitorpro_user_id;
 
       // Define os headers de rede
       const headers = {
-        "apikey": SUPABASE_ANON_KEY,
         "Content-Type": "application/json"
       };
 
@@ -576,15 +584,14 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
         headers["Authorization"] = `Bearer ${token}`;
         console.log(`[MonitorPro] Usando sessão autenticada do usuário: ${userId}`);
       } else {
-        headers["Authorization"] = `Bearer ${SUPABASE_ANON_KEY}`;
-        console.warn("[MonitorPro] Sessão do usuário não encontrada. Usando chave pública (anon).");
+        console.warn("[MonitorPro] Sessão do usuário não encontrada. Tentando salvar como registro público.");
       }
 
       try {
         if (isContextInvalidated()) return;
 
         // Passo A: Verifica se a questão já está cadastrada na tabela 'questoes' e busca tentativas existentes
-        const searchUrl = `${SUPABASE_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,enunciado,alternativas,gabarito,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`;
+        const searchUrl = `${BACKEND_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,enunciado,alternativas,gabarito,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`;
         const searchRes = await fetch(searchUrl, {
           method: "GET",
           headers
@@ -618,7 +625,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
         // Passo B: Se a questão não existir no banco, faz o cadastro dela
         if (!dbQuestaoId) {
           console.log(`[MonitorPro] Questão #${questaoPayload.questao_tec_id} inédita. Cadastrando na tabela 'questoes'...`);
-          const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes`, {
+          const insertRes = await fetch(`${BACKEND_URL}/rest/v1/questoes`, {
             method: "POST",
             headers: {
               ...headers,
@@ -645,7 +652,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
             if (errText.includes("23505") || errText.includes("duplicate key")) {
               console.warn(`[MonitorPro] Conflito de chave duplicada detectado para a Questão #${questaoPayload.questao_tec_id}. Recuperando registro existente...`);
               if (isContextInvalidated()) return;
-              const recoveryRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`, {
+              const recoveryRes = await fetch(`${BACKEND_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`, {
                 method: "GET",
                 headers
               });
@@ -683,7 +690,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
                   if (Object.keys(updatePayload).length > 0) {
                     console.log(`[MonitorPro] Atualizando metadados pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`, updatePayload, `ano=${questaoPayload.ano}`);
                     if (isContextInvalidated()) return;
-                    const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
+                    const updateRes = await fetch(`${BACKEND_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
                       method: "PATCH",
                       headers,
                       body: JSON.stringify(updatePayload)
@@ -727,7 +734,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
           }
           if (Object.keys(updatePayload).length > 0) {
             console.log(`[MonitorPro] Atualizando metadados da Questão #${questaoPayload.questao_tec_id}...`, updatePayload, `ano=${questaoPayload.ano}`);
-            const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
+            const updateRes = await fetch(`${BACKEND_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
               method: "PATCH",
               headers,
               body: JSON.stringify(updatePayload)
@@ -759,7 +766,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
           };
 
           console.log(`[MonitorPro] Gravando tentativa na tabela 'historico_resolucoes'...`, finalTentativa);
-          const historyRes = await fetch(`${SUPABASE_URL}/rest/v1/historico_resolucoes`, {
+          const historyRes = await fetch(`${BACKEND_URL}/rest/v1/historico_resolucoes`, {
             method: "POST",
             headers: {
               ...headers,

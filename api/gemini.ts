@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { createClient } from '@supabase/supabase-js'
+import jwt from 'jsonwebtoken'
 import Groq from 'groq-sdk'
 
 const apiKey = process.env.GROQ_API_KEY
@@ -8,19 +8,8 @@ if (!apiKey) {
   throw new Error('GROQ_API_KEY não configurada no ambiente do servidor.')
 }
 
-const supabaseUrl = process.env.SUPABASE_URL
-
-if (!supabaseUrl) {
-  throw new Error('SUPABASE_URL não configurada no ambiente do servidor.')
-}
-
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-if (!supabaseServiceKey) {
-  throw new Error('SUPABASE_SERVICE_ROLE_KEY não configurada no ambiente do servidor.')
-}
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+// Secret do backend próprio (Fastify). Em produção, defina via variável de ambiente.
+const jwtSecret = process.env.JWT_SECRET || 'troque-este-secret-na-producao-2026'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Content-Type', 'application/json')
@@ -36,9 +25,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-
-    if (authError || !user) {
+    let payload: jwt.JwtPayload | string | null = null
+    try {
+      payload = jwt.verify(token, jwtSecret)
+    } catch {
+      return res.status(401).json({ error: 'Sessão inválida ou expirada. Faça login novamente.' })
+    }
+    if (!payload || typeof payload === 'string' || !payload.sub) {
       return res.status(401).json({ error: 'Sessão inválida ou expirada. Faça login novamente.' })
     }
 

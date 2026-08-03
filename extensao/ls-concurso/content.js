@@ -5,8 +5,9 @@
  * e salva no Supabase (tabelas metas_concurso + tarefas_meta).
  */
 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5eHRhbGN2amNwcm1odWt0eWZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1MzI1MjcsImV4cCI6MjA4NDEwODUyN30.BPMR3SBmTrf_3icEyYjWUmiC5ZsoCseEXB3LF6c14L8";
-const SUPABASE_URL = "https://dyxtalcvjcprmhuktyfd.supabase.co";
+// Backend próprio (Fastify + Postgres na Oracle VM) — substitui o Supabase.
+// INTERINO: IP:porta do backend. Em produção será o domínio HTTPS (ex: https://fernandoestudos.com/api).
+const BACKEND_URL = "http://204.216.111.13:3000";
 
 let sentMetas = new Set();
 
@@ -19,23 +20,29 @@ function isContextInvalidated() {
 // ─── Sincronização de sessão com App React ──────────────────
 
 const hostname = window.location.hostname;
-const isReactApp = hostname.includes("localhost") || hostname.includes("127.0.0.1") || hostname.includes("vercel.app");
+const isReactApp = hostname.includes("localhost") || hostname.includes("127.0.0.1") || hostname.includes("vercel.app") || hostname.includes("204.216.111.13");
 
 if (isReactApp) {
   function sincronizarSessao() {
     if (isContextInvalidated()) return;
     try {
-      const storageKey = "sb-dyxtalcvjcprmhuktyfd-auth-token";
-      const sessionStr = localStorage.getItem(storageKey);
-      if (sessionStr) {
-        const session = JSON.parse(sessionStr);
-        const token = session.access_token;
-        const userId = session.user?.id;
+      let sessionStr = localStorage.getItem("monitorpro_session");
+      let session = sessionStr ? JSON.parse(sessionStr) : null;
+      if (!session || !session.token) {
+        const legacyStr = localStorage.getItem("sb-dyxtalcvjcprmhuktyfd-auth-token");
+        if (legacyStr) {
+          const legacy = JSON.parse(legacyStr);
+          session = { token: legacy.access_token, userId: legacy.user?.id };
+        }
+      }
+      if (session && session.token) {
+        const token = session.token;
+        const userId = session.userId;
         if (token && userId) {
-          chrome.storage.local.get(["supabase_token", "supabase_user_id"], (stored) => {
+          chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], (stored) => {
             if (isContextInvalidated()) return;
-            if (stored.supabase_token !== token || stored.supabase_user_id !== userId) {
-              chrome.storage.local.set({ supabase_token: token, supabase_user_id: userId }, () => {
+            if (stored.monitorpro_token !== token || stored.monitorpro_user_id !== userId) {
+              chrome.storage.local.set({ monitorpro_token: token, monitorpro_user_id: userId }, () => {
                 if (isContextInvalidated()) return;
                 console.log("[LS-Metas] Sessão sincronizada:", userId);
               });
@@ -43,10 +50,10 @@ if (isReactApp) {
           });
         }
       } else {
-        chrome.storage.local.get(["supabase_token"], (stored) => {
+        chrome.storage.local.get(["monitorpro_token"], (stored) => {
           if (isContextInvalidated()) return;
-          if (stored.supabase_token) {
-            chrome.storage.local.remove(["supabase_token", "supabase_user_id"]);
+          if (stored.monitorpro_token) {
+            chrome.storage.local.remove(["monitorpro_token", "monitorpro_user_id"]);
           }
         });
       }
@@ -186,11 +193,9 @@ if (window.location.hostname.includes("lsensino.com.br")) {
 
   function montarHeaders(token) {
     const headers = {
-      "apikey": SUPABASE_ANON_KEY,
       "Content-Type": "application/json"
     };
     if (token) headers["Authorization"] = `Bearer ${token}`;
-    else headers["Authorization"] = `Bearer ${SUPABASE_ANON_KEY}`;
     return headers;
   }
 
@@ -199,7 +204,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
   }
 
   function limparTokenExpirado() {
-    chrome.storage.local.remove(["supabase_token", "supabase_user_id"], () => {
+    chrome.storage.local.remove(["monitorpro_token", "monitorpro_user_id"], () => {
       console.warn("[LS-Metas] Token removido. Abra o app questoes-concursos (localhost:5173 ou vercel) para renovar a sessão.");
     });
   }
@@ -217,17 +222,17 @@ if (window.location.hostname.includes("lsensino.com.br")) {
 
   function salvarMeta(semanaNumero, tituloTexto, dataInicio, dataFim, totalTarefas, tarefas) {
     if (isContextInvalidated()) return;
-    chrome.storage.local.get(["supabase_token", "supabase_user_id"], async (stored) => {
+    chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], async (stored) => {
       if (isContextInvalidated()) return;
-      const token = stored.supabase_token;
-      const userId = stored.supabase_user_id;
+      const token = stored.monitorpro_token;
+      const userId = stored.monitorpro_user_id;
       const headers = montarHeaders(token);
 
       try {
         if (isContextInvalidated()) return;
 
         // Verifica se a meta já existe
-        const searchUrl = `${SUPABASE_URL}/rest/v1/metas_concurso?semana_numero=eq.${semanaNumero}&select=id`;
+        const searchUrl = `${BACKEND_URL}/rest/v1/metas_concurso?semana_numero=eq.${semanaNumero}&select=id`;
         const searchRes = await reqJson(searchUrl, { method: "GET", headers });
         const rows = await searchRes.json();
         let metaId = null;
@@ -240,7 +245,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
             if (dataInicio) patch.data_inicio = dataInicio;
             if (dataFim) patch.data_fim = dataFim;
             await reqJson(
-              `${SUPABASE_URL}/rest/v1/metas_concurso?id=eq.${metaId}`,
+              `${BACKEND_URL}/rest/v1/metas_concurso?id=eq.${metaId}`,
               { method: "PATCH", headers, body: JSON.stringify(patch) }
             );
           }
@@ -254,7 +259,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
             if (tarefa.tempo_estimado) patchFields.tempo_estimado = tarefa.tempo_estimado;
             if (Object.keys(patchFields).length === 0) continue;
             await reqJson(
-              `${SUPABASE_URL}/rest/v1/tarefas_meta?meta_id=eq.${metaId}&ordem=eq.${tarefa.ordem}`,
+              `${BACKEND_URL}/rest/v1/tarefas_meta?meta_id=eq.${metaId}&ordem=eq.${tarefa.ordem}`,
               { method: "PATCH", headers, body: JSON.stringify(patchFields) }
             );
           }
@@ -276,7 +281,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
         };
 
         const insertRes = await reqJson(
-          `${SUPABASE_URL}/rest/v1/metas_concurso`,
+          `${BACKEND_URL}/rest/v1/metas_concurso`,
           {
             method: "POST",
             headers: { ...headers, "Prefer": "return=representation" },
@@ -298,7 +303,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
         }));
 
         await reqJson(
-          `${SUPABASE_URL}/rest/v1/tarefas_meta`,
+          `${BACKEND_URL}/rest/v1/tarefas_meta`,
           {
             method: "POST",
             headers: { ...headers, "Prefer": "return=representation" },
@@ -477,9 +482,9 @@ if (window.location.hostname.includes("lsensino.com.br")) {
     if (isContextInvalidated()) return;
     if (!tarefaDetalheAtual) return;
 
-    chrome.storage.local.get(["supabase_token", "supabase_user_id"], async (stored) => {
+    chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], async (stored) => {
       if (isContextInvalidated()) return;
-      const token = stored.supabase_token;
+      const token = stored.monitorpro_token;
       const headers = montarHeaders(token);
 
       // Usa .v3-meta-titulo-pagina (histórico) OU fallback no body text (metaAtual)
@@ -490,7 +495,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
       const semanaNumero = parseInt(tituloMatch[1], 10);
 
       try {
-        const searchUrl = `${SUPABASE_URL}/rest/v1/metas_concurso?semana_numero=eq.${semanaNumero}&select=id`;
+        const searchUrl = `${BACKEND_URL}/rest/v1/metas_concurso?semana_numero=eq.${semanaNumero}&select=id`;
         const searchRes = await reqJson(searchUrl, { method: "GET", headers });
         const metas = await searchRes.json();
         if (!metas || metas.length === 0) return;
@@ -506,7 +511,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
 
         // PATCH todas as tarefas com este meta_id+ordem (evita duplicatas)
         await reqJson(
-          `${SUPABASE_URL}/rest/v1/tarefas_meta?meta_id=eq.${metaId}&ordem=eq.${tarefaOrdem}`,
+          `${BACKEND_URL}/rest/v1/tarefas_meta?meta_id=eq.${metaId}&ordem=eq.${tarefaOrdem}`,
           { method: "PATCH", headers, body: JSON.stringify(patchPayload) }
         );
         console.log(`[LS-Metas] Detalhes salvos para tarefa #${tarefaOrdem} da meta #${semanaNumero}`);
