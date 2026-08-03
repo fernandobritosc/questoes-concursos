@@ -112,6 +112,62 @@ export async function updateQuestao(
  * Ordena pela tentativa mais recente.
  */
 export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
+  return fetchResolucoesPaginado(`
+    id,
+    questao_id,
+    questao_tec_id,
+    alternativa,
+    acertou,
+    tempo_segundos,
+    data_resolucao,
+    questao:questoes!historico_resolucoes_questao_id_fkey (
+      id,
+      questao_tec_id,
+      materia,
+      assunto,
+      grupo,
+      banca_texto,
+      orgao,
+      concurso,
+      prova,
+      ano,
+      caderno_nome,
+      enunciado,
+      gabarito,
+      alternativas,
+      resolucao_professor
+    )
+  `)
+}
+
+/**
+ * Busca todas as tentativas com JOIN limitado a campos leves
+ * (sem enunciado/gabarito/alternativas/resolução) — para estatísticas.
+ */
+export async function fetchAllResolucoesLeves(): Promise<ResolucaoView[]> {
+  return fetchResolucoesPaginado(`
+    id,
+    questao_id,
+    questao_tec_id,
+    alternativa,
+    acertou,
+    tempo_segundos,
+    data_resolucao,
+    questao:questoes!historico_resolucoes_questao_id_fkey (
+      id,
+      materia,
+      assunto,
+      grupo,
+      banca_texto,
+      orgao,
+      concurso,
+      prova,
+      ano
+    )
+  `)
+}
+
+async function fetchResolucoesPaginado(selectStr: string): Promise<ResolucaoView[]> {
   const { data: { session } } = await supabase.auth.getSession()
   const userId = session?.user?.id
   if (!userId) return []
@@ -125,32 +181,7 @@ export async function fetchAllResolucoes(): Promise<ResolucaoView[]> {
 
     const { data: chunk, error } = await supabase
       .from('historico_resolucoes')
-      .select(`
-        id,
-        questao_id,
-        questao_tec_id,
-        alternativa,
-        acertou,
-        tempo_segundos,
-        data_resolucao,
-        questao:questoes!historico_resolucoes_questao_id_fkey (
-          id,
-          questao_tec_id,
-          materia,
-          assunto,
-          grupo,
-          banca_texto,
-          orgao,
-          concurso,
-          prova,
-          ano,
-          caderno_nome,
-          enunciado,
-          gabarito,
-          alternativas,
-          resolucao_professor
-        )
-      `)
+      .select(selectStr)
       .eq('user_id', userId)
       .order('data_resolucao', { ascending: false })
       .range(fetchFrom, fetchTo)

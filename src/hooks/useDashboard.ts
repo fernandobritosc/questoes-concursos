@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { fetchAllResolucoes, clearQuestoesCache } from '../services/supabase.service'
+import { fetchAllResolucoesLeves, clearQuestoesCache } from '../services/supabase.service'
 import type { ResolucaoView } from '../types/database'
 
 // O Dashboard consome o histórico de tentativas (historico_resolucoes com JOIN)
@@ -501,7 +501,7 @@ export function useDashboard() {
   const refetch = useCallback(async () => {
     try {
       clearQuestoesCache()
-      const data = await fetchAllResolucoes()
+        const data = await fetchAllResolucoesLeves()
       if (mountedRef.current) {
         setResolucoes(data)
         setLastUpdated(new Date())
@@ -520,7 +520,7 @@ export function useDashboard() {
 
     async function load() {
       try {
-        const data = await fetchAllResolucoes()
+        const data = await fetchAllResolucoesLeves()
         if (mountedRef.current) {
           setResolucoes(data)
           setLastUpdated(new Date())

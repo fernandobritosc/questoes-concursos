@@ -3,10 +3,10 @@ import { renderHook, waitFor } from '@testing-library/react'
 import { useDashboard, formatarTempo } from './useDashboard'
 import type { ResolucaoView } from '../types/database'
 
-const mockFetchAllResolucoes = vi.fn()
+const mockFetchAllResolucoesLeves = vi.fn()
 
 vi.mock('../services/supabase.service', () => ({
-  fetchAllResolucoes: () => mockFetchAllResolucoes(),
+  fetchAllResolucoesLeves: () => mockFetchAllResolucoesLeves(),
 }))
 
 function makeResolucao(overrides: Partial<ResolucaoView> & { questao_tec_id: number }): ResolucaoView {
@@ -45,7 +45,7 @@ describe('formatarTempo', () => {
 describe('useDashboard', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockFetchAllResolucoes.mockResolvedValue([])
+    mockFetchAllResolucoesLeves.mockResolvedValue([])
   })
 
   it('starts with loading true, then loads stats', async () => {
@@ -70,7 +70,7 @@ describe('useDashboard', () => {
       makeResolucao({ questao_tec_id: 102, alternativa: 'B', acertou: false, tempo_segundos: 45, data_resolucao: now.toISOString() }),
       makeResolucao({ questao_tec_id: 103, alternativa: 'C', acertou: true, tempo_segundos: 60, data_resolucao: now.toISOString() }),
     ]
-    mockFetchAllResolucoes.mockResolvedValue(questoes)
+    mockFetchAllResolucoesLeves.mockResolvedValue(questoes)
 
     const { result } = renderHook(() => useDashboard())
 
@@ -91,7 +91,7 @@ describe('useDashboard', () => {
       makeResolucao({ questao_tec_id: 102, materia: 'Dir. Constitucional', alternativa: 'B', acertou: false, data_resolucao: now.toISOString() }),
       makeResolucao({ questao_tec_id: 103, materia: 'Dir. Administrativo', alternativa: 'A', acertou: true, data_resolucao: now.toISOString() }),
     ]
-    mockFetchAllResolucoes.mockResolvedValue(questoes)
+    mockFetchAllResolucoesLeves.mockResolvedValue(questoes)
 
     const { result } = renderHook(() => useDashboard())
 
@@ -108,7 +108,7 @@ describe('useDashboard', () => {
   })
 
   it('sets error when fetch fails', async () => {
-    mockFetchAllResolucoes.mockRejectedValue(new Error('Erro de rede'))
+    mockFetchAllResolucoesLeves.mockRejectedValue(new Error('Erro de rede'))
 
     const { result } = renderHook(() => useDashboard())
 
