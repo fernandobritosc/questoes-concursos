@@ -16,6 +16,29 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 
 ### ✅ Concluído
 
+#### Troca de senha do usuário (endpoint no backend + UI no Monitor Pro)
+- **Backend** (`backend/src/auth.js + index.js`): nova função `changePassword(userId, {currentPassword, newPassword})` — exige usuário autenticado, valida senha atual via bcrypt, exige nova senha ≥ 6 chars, atualiza o hash; rota `POST /auth/change-password` (usa `request.authUser`). Deploy na VM (`scp` de `auth.js`/`index.js` + `sudo systemctl restart concursos-backend`)
+- **Frontend (Monitor Pro, repo `C:\Users\uniao\OneDrive\Desktop\Projetos`)**:
+  - Shim `src/lib/supabase.ts`: `auth.changePassword(currentPassword, newPassword)` chamando `/auth/change-password` com retorno `{error}`
+  - Novo `src/components/features/configurar/ChangePasswordPanel.tsx`: formulário senha atual/nova/confirmação + validações (vazio, ≥6, confirmação) + mostrar/ocultar (EyeOff) + mensagens de erro/sucesso
+  - Aba **Sistema & API** em `Configurar.tsx` renderiza o `ChangePasswordPanel`
+- **Validação em produção (rest direto na porta 3000)**: senha atual errada→`Senha atual incorreta`; troca correta→`Senha alterada com sucesso`; login com a nova senha OK. Senha provisória `mudar123` restaurada após o teste
+- **Deploy frontend**: `vercel --prod --yes` → `monitor-pro-java.vercel.app` (main bundle `index-DZwd0cyY.js` contém `change-password`)
+- **Uso**: Configurar → Sistema & API → Alterar Senha (PWA: limpar service worker na 1ª vez para pegar bundle novo)
+
+#### Fix: sessão da extensão não persistia (corrida de storage no sincronizador)
+- **Sintoma**: `chrome.storage.local.get(['monitorpro_token',...])` retornava `{}` no service worker; o TEC sempre salvava como "registro público" (`user_id` vazio) mesmo com o app logado; `Sessão sincronizada com sucesso via DOM!` aparecia e depois sumia
+- **Causa raiz**: o `else` do sincronizador apagava o token a cada 3s sempre que qualquer aba rodando o content script não tivesse `monitorpro_session` no localStorage — incluindo outras abas `*.vercel.app`, `localhost` ou o app antes de logar. Corrida: o app logado gravava, outra aba sem sessão apagava
+- **Correção** (`extensao/content.js`): flag `jaSincronizouNestaPagina` — o token só é apagado se a **própria aba** já tiver sincronizado uma sessão antes (só apaga no logout real daquela aba)
+- **Validação**: log do TEC mostra `storage.local lido ao salvar: {token: 'SIM', userId: '35e75e58-...', extId: 'fkmiljjf...'}` + `Usando sessão autenticada do usuário: 35e75e58-...` (questão #3348399 gravada com user_id correto) — funciona sem exigir TEC e app no mesmo navegador
+
+#### Fix: filtros por matéria retornavam 0 questões (backend `buildFilters`)
+- **Sintoma**: qualquer filtro `.in()` (ex.: matéria) retornava `{"data":[],"count":0}`; sem filtro, 2354 questões funcionavam
+- **Causa raiz** (`backend/src/routes/crud.js`): (1) o operador PostgREST `in.(...)` não tinha os parênteses removidos — o valor virava literal `'(Materia)'` e nunca casava; (2) double-encoding do shim (`src/lib/supabase.ts:173`): `encodeURIComponent` + `URLSearchParams` (que re-codifica `%`→`%25`) + Fastify decodifica só uma vez → o backend recebia `Direito%20do%20Trabalho` (com `%20` literal), que não casava em `eq/like/ilike` nem `in`
+- **Correção**: helper `safeDecode()` (decodifica `%xx` com try/catch) aplicado a `eq/neq/like/ilike/is`; no `in`, remove `( )` antes de dividir por vírgula e decodifica cada item — vírgulas internas de valores como `AFO, Direito Financeiro...` são preservadas (ficam `%2C` no double-encoding e só se dividem na vírgula separadora crua)
+- **Validação em produção** (após deploy): `Direito do Trabalho`→111, `Informática`→274, `Língua Portuguesa (Português)`→103, `AFO, Direito Financeiro e Contabilidade Pública`→242, 2 matérias juntas→377
+- **Deploy**: scp do `crud.js` corrigido + reinício do processo (na época ainda manual; depois migrado para systemd — ver seção de deploy)
+
 #### Importação de dados reais (Supabase → Postgres VM)
 - **Dados exportados** para `export/`: `users.json` (2 usuários), `questoes_rows.csv` (2354), `historico_resolucoes_rows.csv` (2328), `metas_concurso_rows.csv` (12), `tarefas_meta_rows.csv` (120)
 - **Importador** `backend/src/importarSupabase.mjs`: parser CSV RFC-4180 próprio, batches multi-row (500), preserva ids originais, senha provisória bcrypt `mudar123`, `ON CONFLICT DO NOTHING`, ajuste de sequences. Modo `--dry-run`
@@ -48,6 +71,31 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 - **Conversão HTML para Markdown**: Criado um parser robusto em JS na extensão que preserva negritos, itálicos, listas, citações e textos riscados, salvando de forma limpa no campo `resolucao_professor` da tabela `questoes` no Supabase.
 - **Sincronização Reativa**: Modificado o controle de envios para dar `PATCH` no comentário da questão caso ela já exista no banco, viabilizando o carregamento assíncrono das abas de comentários no TEC Concursos.
 - **Suporte a Riscos (Strikethrough)**: Adicionado suporte à formatação `~~texto~~` em `MarkdownAI.tsx` com estilo line-through vermelho para simular a rasura de alternativas incorretas no site original.
+
+#### Extensões — Background Service Worker (fix mixed content)
+- **Sintoma**: após migração para o backend próprio (http), as extensões falhavam com `TypeError: Failed to fetch` no TEC — a página https do TEC não permite fetch de content script para `http://204.216.111.13:3000` (mixed content)
+- **Solução**: os fetch foram movidos para um background service worker (MV3), que não sofre restrição de mixed content (tem `host_permissions` para o backend)
+- **`background.js`** (criado em `extensao/` e `extensao/ls-concurso/`): listener `chrome.runtime.onMessage` para `{type:"monitorpro_fetch", url, method, headers?, body?}` → faz o fetch ao backend → responde `{ok, status, statusText, bodyText}`; trata erros de rede como `status:0`
+- **Manifests**: adicionada chave `"background": {"service_worker": "background.js"}` em ambos
+- **Content scripts**: helper `backendFetch(url, options)` (Response-like com `.json()`/`.text()`) envia o pedido via `chrome.runtime.sendMessage`; substituiu os 6 `fetch` do `content.js` (busca, insert, recovery, 2 updates, histórico) e o `fetch` único central do `reqJson` do `ls-concurso/content.js`
+- **Para testar**: recarregar as extensões em `chrome://extensions` e responder uma questão no TEC / abrir metas no LS
+
+#### Fix: histórico "registro público" sem sessão (401)
+- **Sintoma**: após o background worker resolver o mixed content, o POST em `historico_resolucoes` retornava `{"message":"Autenticação necessária"}` quando a extensão não tinha sessão (salvando como registro público com `user_id: null`)
+- **Causa raiz (dupla)**:
+  1. `backend/src/routes/crud.js`: `isPublicWrite` só liberava `questoes` — `historico_resolucoes` exigia auth
+  2. `backend/schema.sql`: `historico_resolucoes.user_id` era `UUID NOT NULL` — nem o insert anônimo passaria (constraint violation)
+- **Correção**:
+  - `crud.js`: criado `isPublicInsert()` (libera `questoes` + `historico_resolucoes`) usado no POST e no `/upsert`; guard `if (user && ...)` impede crash de `user.id` quando anônimo
+  - Schema: `user_id` agora `UUID REFERENCES users(id) ON DELETE CASCADE` (nullable) — aplicado na VM via `ALTER TABLE ... DROP NOT NULL` (dono é `postgres`, via `sudo -u postgres psql`)
+- **Validação em produção**: POST anônimo com `user_id:null` → 201 com `user_id:null`; registro de teste (id=2742) removido
+- **Deploy**: scp do `crud.js` + `schema.sql` → `/opt/concursos-backend/` + `sudo systemctl restart concursos-backend`
+
+#### Fix: sessão nunca sincronizava na extensão (chave errada)
+- **Sintoma**: tentativas só iam como "registro público" (`user_id: null`) e não apareciam no app logado, mesmo com o usuário autenticado no frontend
+- **Causa raiz** (`extensao/content.js` e `extensao/ls-concurso/content.js`): o módulo de sincronização lia `session.token`/`session.userId`, mas o app grava `monitorpro_session` como `{ access_token, user: { id, ... } }` (ver `setStoredSession` em `src/lib/supabase.ts`) — condição `if (token && userId)` nunca satisfeita
+- **Correção**: leitura passou a usar `session?.access_token || session?.token` e `session?.user?.id || session?.userId`, mantendo o fallback legado do Supabase
+- **Para testar**: recarregar as extensões, abrir o app logado e ver no console "Sessão sincronizada com sucesso via DOM! UserID: ..."; depois responder no TEC
 
 #### Correções de ESLint (54 → 0 erros, 26 `eslint-disable` → 0)
 | Arquivo | Correções |
@@ -163,11 +211,40 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 - **`VITE_API_URL=/api`** (default no shim `supabase.ts:30`) — sem mudanças no código do frontend
 - Build/tsc/lint validados localmente
 
+#### Deploy do Backend na VM (Oracle Cloud) + systemd
+- **VM**: `204.216.111.13`, usuário `ubuntu` (chave privada SSH em `C:\Users\uniao\Downloads\ssh-key-2026-08-02.key` — a chave pública versionada é `ssh-key-2026-08-02.key.pub`; a privada NÃO vai para o git)
+- **Diretório do backend**: `/opt/concursos-backend` (código em `backend/` deste repo) — `src/`, `.env`, `node_modules`, `schema.sql`
+- **Sistema de serviço**: roda como systemd `concursos-backend.service` (unit também salvo em `/etc/systemd/system/`)
+- **Comandos**: `sudo systemctl status/restart concursos-backend` · `sudo journalctl -u concursos-backend -f`
+- **Rotina de deploy**: scp do `backend/src/**` → `/opt/concursos-backend/src/` + `sudo systemctl restart concursos-backend`
+  ```bash
+  # Exemplo (Windows PowerShell):
+  scp -i "C:\Users\uniao\Downloads\ssh-key-2026-08-02.key" "backend\src\routes\crud.js" "ubuntu@204.216.111.13:/opt/concursos-backend/src/routes/crud.js"
+  ssh -i "...key" ubuntu@204.216.111.13 "sudo systemctl restart concursos-backend"
+  ```
+- **Frontend produzido** servido de `/var/www/concursos` (build do Vercel)
+- **Antes (órfão)**: processo `node src/index.js` era iniciado manualmente e morria no reboot — agora o unit systemd tem `Restart=always` e `WantedBy=multi-user.target`
+
+### ✅ Concluído
+#### Importação de dados do Monitor Pro (Supabase → Postgres VM)
+- **CSVs exportados** para `export_monitorpro/`: `profiles.csv` (4), `registros_estudos.csv` (491), `flashcards.csv` (1481), `editais_materias.csv` (75), `discursivas.csv` (12), `news_feed.csv` (159), `ranking_geral.csv` (2). (`gabaritos_salvos`, `notifications` e `missoes_concursos` descartados por decisão do usuário)
+- **Schema alinhado na VM** (scripts `monitorpro_align.sql`/`monitorpro_align2.sql`): `registros_estudos.id TEXT` (dump antigo tinha ids numéricos e o app gera UUID), `editais_materias.id TEXT` + extras (`usuario, meta_horas, meta_questoes, is_template, template_criador_id, template_nome, template_descricao, template_clones`), `profiles +username/+chat_id`, `news_feed +image_url/+created_at`, `ranking_geral +email`; RPC `get_ranking_by_period` reescrita para agregar `registros_estudos`
+- **`importarMonitorPro.mjs`**: importador CSV dedicado — cria users órfãos de **todas** as referências (profiles + qualquer `user_id` em qualquer tabela, com email sintético `<id>@imported.local` e senha `mudar123`) para não violar FKs
+- **Bugs reais corrigidos**: driver `pg` não serializa objeto/array para jsonb → `json()` retorna `JSON.stringify(JSON.parse(s))`; FK `registros_estudos_user_id_fkey` (1 user `831d9667` referenciado mas sem cadastro)
+- **Validação final na VM**: users 6, profiles 4, registros 491, flashcards 1481, editais 75, discursivas 12, news_feed 159, ranking 2 — zero órfãos FK; login `fernandobritosc@gmail.com`/`mudar123` e todas as rotas `/rest/v1/*` respondendo 200 com dados reais
+
+#### Monitor Pro migrado para o backend próprio
+- **Repo**: `C:\Users\uniao\OneDrive\Desktop\Projetos` (github.com/fernandobritosc/monitor-PRO-JAVA, branch `main`)
+- **Shim** `src/lib/supabase.ts` (722 linhas): aponta para `VITE_API_URL` (default `/api`) → proxy do Vite → `VITE_BACKEND_URL` (`http://204.216.111.13:3000`); sessão em `localStorage` sob `monitorpro_session`
+- **`src/services/supabase/index.ts`**: `isConfigured()` sempre true; `saveAppConfig`/`resetAppConfig` ignoram URL/anon key do Supabase (mantêm só chaves de IA)
+- **`vite.config.ts`**: proxy `/api` → `VITE_BACKEND_URL`; removido cache do workbox para `*.supabase.co`
+- **Validado**: `tsc --noEmit` limpo, `npm run build` OK, login + queries (`registros_estudos`, `ranking_geral`, `editais_materias`, `flashcards`) retornam 200 com dados reais via proxy
+- **Publicado**: commit `de4ce513` + push `main` (deploy Vercel disparado)
+
 ### 🔄 Pendente
-- **Deploy na VM**: copiar `backend/` via scp, `npm install`, subir com pm2/systemd, Nginx (proxy `/api` → `127.0.0.1:3000`, servir build dos 2 frontends, TLS para extensões)
-- **Deploy Vercel**: fazer commit/push para disparar o deploy, configurar `VITE_API_URL=/api` (não é estritamente necessário, é o default) e confirmar que o backend da VM está acessível publicamente em `http://204.216.111.13:3000`
-- **Importar dados reais do Monitor Pro**: exportar do Supabase (CSV/SQL) e importar no banco `concursos` da VM (study_materials, notifications, flashcards, registros_estudos, editais_materias, gabaritos_salvos, discursivas, news_feed, ranking_geral)
-- **Monitor Pro** (`C:\Users\uniao\OneDrive\Desktop\Projetos`): adaptar `src/lib/supabase.ts` + `src/services/queries/*` para o mesmo backend (mesmo padrão do shim)
+- **Nginx**: proxy `/api` → `127.0.0.1:3000` (o backend ainda é exposto direto na porta 3000), TLS para extensões
+- **Deploy Vercel (questoes-concursos)**: fazer commit/push para disparar o deploy, confirmar que o backend da VM está acessível publicamente em `http://204.216.111.13:3000`
+- **Confirmar deploy do Monitor Pro**: o push `de4ce513` disparou o Vercel; verificar que a versão publicada não exibe mais o erro `exceed_egress_quota` (erro era de bundle antigo em cache/PWA)
 - **Modo claro**: ajuste das variáveis CSS `html.light` no `index.css` — usuário achou muito claro, dói a vista. Pendente de nova tentativa com paleta mais suave
 - **HTTPS + domínio**: necessário para a extensão funcionar no TEC Concursos (página https → fetch http é bloqueado como mixed content)
 - Features novas (estatísticas avançadas, modo offline, exportar dados, integração IA)
