@@ -1,4 +1,10 @@
-import 'dotenv/config' // noop se ausente — ver abaixo
+import 'dotenv/config'
+
+const isProd = process.env.NODE_ENV === 'production'
+
+if (isProd && (!process.env.DATABASE_URL || !process.env.JWT_SECRET)) {
+  throw new Error('DATABASE_URL e JWT_SECRET são obrigatórios em produção.')
+}
 
 export const config = {
   port: Number(process.env.PORT || 3000),
