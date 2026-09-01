@@ -15,6 +15,11 @@ dist-ssr
 .env.*
 !.env.example
 
+# Dados de export/migração (sensíveis e grandes)
+export/
+export_monitorpro/
+tarefas_meta.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
