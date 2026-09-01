@@ -6,6 +6,7 @@ if (isProd && (!process.env.DATABASE_URL || !process.env.JWT_SECRET)) {
   throw new Error('DATABASE_URL e JWT_SECRET são obrigatórios em produção.')
 }
 
+/** @type {Readonly<{ port: number; host: string; databaseUrl: string; jwtSecret: string; jwtExpiresIn: string }>} */
 export const config = {
   port: Number(process.env.PORT || 3000),
   host: process.env.HOST || '0.0.0.0',

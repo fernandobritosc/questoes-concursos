@@ -30,3 +30,28 @@ jobs:
 
       - name: Testes (vitest)
         run: npm test
+
+  backend:
+    name: Backend (typecheck + test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+        working-directory: backend
+
+      - name: TypeScript (tsc --noEmit)
+        run: npx tsc --noEmit
+        working-directory: backend
+
+      - name: Testes (vitest)
+        run: npm test
+        working-directory: backend
