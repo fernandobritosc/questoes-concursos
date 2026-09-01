@@ -12,7 +12,6 @@ const Questoes = lazy(() => import('./pages/Questoes').then(m => ({ default: m.Q
 const EditalVerticalizado = lazy(() => import('./pages/EditalVerticalizado').then(m => ({ default: m.EditalVerticalizado })))
 const EditaisManager = lazy(() => import('./pages/EditaisManager').then(m => ({ default: m.EditaisManager })))
 const Landing = lazy(() => import('./pages/Landing').then(m => ({ default: m.Landing })))
-const Simulados = lazy(() => import('./pages/Simulados').then(m => ({ default: m.Simulados })))
 const MapaQuestoes = lazy(() => import('./pages/MapaQuestoes').then(m => ({ default: m.MapaQuestoes })))
 const MetasConcurso = lazy(() => import('./pages/MetasConcurso').then(m => ({ default: m.MetasConcurso })))
 const TarefaDetalhe = lazy(() => import('./pages/TarefaDetalhe').then(m => ({ default: m.TarefaDetalhe })))
@@ -37,7 +36,6 @@ function App() {
             <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard" element={<SuspenseRoute><Dashboard /></SuspenseRoute>} />
             <Route path="revisao" element={<SuspenseRoute><Revisao /></SuspenseRoute>} />
-            <Route path="simulados" element={<SuspenseRoute><Simulados /></SuspenseRoute>} />
             <Route path="questoes" element={<SuspenseRoute><Questoes /></SuspenseRoute>} />
             <Route path="edital" element={<SuspenseRoute><EditalVerticalizado /></SuspenseRoute>} />
             <Route path="edital/gerenciar" element={<SuspenseRoute><EditaisManager /></SuspenseRoute>} />

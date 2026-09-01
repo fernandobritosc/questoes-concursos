@@ -6,7 +6,6 @@ import {
   BrainCircuit, 
   Database, 
   ClipboardList, 
-  Timer, 
   Map, 
   Target,
   BarChart3,
@@ -47,7 +46,6 @@ export function Layout() {
   const navItems = [
     { name: 'Dashboard', path: '/app/dashboard', icon: LayoutDashboard },
     { name: 'Editais', path: '/app/edital', icon: ClipboardList },
-    { name: 'Simulados IA', path: '/app/simulados', icon: Timer },
     { name: 'Mapa de Questões', path: '/app/mapa', icon: Map },
     { name: 'Caderno de Erros', path: '/app/revisao', icon: BookOpen },
     { name: 'Banco de Questões', path: '/app/questoes', icon: Database },
