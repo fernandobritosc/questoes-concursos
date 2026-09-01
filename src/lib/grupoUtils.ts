@@ -15,6 +15,7 @@ const MATERIA_ALIAS: Record<string, string> = {
   'Direito Constitucional (CF/1988 e Doutrina)': 'Direito Constitucional',
   'Direito Administrativo (Doutrina e Leis Federais)': 'Direito Administrativo',
   'Direito do Trabalho para Concursos': 'Direito do Trabalho',
+  'AFO': 'AFO, Direito Financeiro e Contabilidade Pública',
 }
 
 function normalizeText(s: string): string {
@@ -60,6 +61,8 @@ const MATERIA_FALLBACK: Record<string, string> = {
   'Direito Internacional Público e Privado': 'Migração e Condição Jurídica do Estrangeiro (Lei n° 13.445/2017)',
   'Outras Matérias': 'Sem classificação',
   'Engenharia Elétrica e Eletrônica': 'Redes de Dados e Comunicação',
+  'Gestão de Projetos': 'Gestão de Projetos',
+  'Biblioteconomia': 'Biblioteconomia',
 }
 
 export function getGrupo(materia: string | null, assunto: string | null): string | null {
@@ -78,12 +81,23 @@ export function getGrupo(materia: string | null, assunto: string | null): string
     return normEntry.grupo
   }
 
-  // 3. Fallback por matéria
+  // 3. Fallback por matéria — busca o grupo padrão da matéria
   const materiaNorm = materiaKey(materia)
-  const fallbackAssunto = MATERIA_FALLBACK[materiaNorm]
-  if (fallbackAssunto) {
-    const fbEntry = GRUPOS[fallbackAssunto]
-    if (fbEntry) return fbEntry.grupo
+  const fallbackGrupo = MATERIA_FALLBACK[materiaNorm]
+  if (fallbackGrupo) {
+    // Procura qualquer assunto da matéria que pertença ao grupo fallback
+    for (const entry of Object.values(GRUPOS)) {
+      if (materiaKey(entry.materia) === materiaNorm && entry.grupo === fallbackGrupo) {
+        return entry.grupo
+      }
+    }
+    // Fallback normalizado (ignora acentos/parênteses na comparação)
+    const fbNorm = normalizeText(fallbackGrupo)
+    for (const entry of Object.values(GRUPOS)) {
+      if (materiaKey(entry.materia) === materiaNorm && entry.grupo && normalizeText(entry.grupo) === fbNorm) {
+        return entry.grupo
+      }
+    }
   }
 
   return null

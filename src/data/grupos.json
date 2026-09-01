@@ -396,8 +396,8 @@
     "grupo": "Segurança da Informação"
   },
   "Sem Classificação de Assunto": {
-    "materia": "Informática",
-    "grupo": "Segurança da Informação"
+    "materia": "Administração Geral e Pública",
+    "grupo": "Gestão da Inovação e Empreendedorismo"
   },
   "Conceitos e Especificações do IP": {
     "materia": "Informática",
@@ -1088,10 +1088,6 @@
     "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
   },
   "... sobre Atos das Disposições Constitucionais Transitórias": {
-    "materia": "Direito Constitucional",
-    "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
-  },
-  "... sobre Controle de Constitucionalidade": {
     "materia": "Direito Constitucional",
     "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Constitucional"
   },
@@ -2083,10 +2079,6 @@
     "materia": "Língua Portuguesa",
     "grupo": "Linguagem"
   },
-  "Sem Classificação de Assunto": {
-    "materia": "Língua Portuguesa",
-    "grupo": "Linguagem"
-  },
   "Organização (Introdução à Administração)": {
     "materia": "Administração Geral e Pública",
     "grupo": "Introdução à Administração"
@@ -2560,8 +2552,8 @@
     "grupo": "Gestão de Pessoas"
   },
   "Terceirização": {
-    "materia": "Administração Geral e Pública",
-    "grupo": "Gestão de Pessoas"
+    "materia": "Direito do Trabalho para Concursos",
+    "grupo": "Responsabilidade Trabalhista"
   },
   "Subsistemas de Gestão de Pessoas": {
     "materia": "Administração Geral e Pública",
@@ -2696,10 +2688,6 @@
     "grupo": "Gestão da Inovação e Empreendedorismo"
   },
   "Novas Tecnologias e Tendências na Administração": {
-    "materia": "Administração Geral e Pública",
-    "grupo": "Gestão da Inovação e Empreendedorismo"
-  },
-  "Sem Classificação de Assunto": {
     "materia": "Administração Geral e Pública",
     "grupo": "Gestão da Inovação e Empreendedorismo"
   },
@@ -3691,10 +3679,6 @@
     "materia": "Direito do Trabalho para Concursos",
     "grupo": "Responsabilidade Trabalhista"
   },
-  "Terceirização": {
-    "materia": "Direito do Trabalho para Concursos",
-    "grupo": "Responsabilidade Trabalhista"
-  },
   "Prescrição e Decadência (Direito do Trabalho)": {
     "materia": "Direito do Trabalho para Concursos",
     "grupo": "Prescrição e Decadência (Direito do Trabalho)"
@@ -4042,5 +4026,13 @@
   "Jurisprudência dos Tribunais Superiores sobre Poderes da Administração": {
     "materia": "Direito Administrativo (Doutrina e Leis Federais)",
     "grupo": "Jurisprudência dos Tribunais Superiores em Matéria Administrativa"
+  },
+  "Estrutura Organizacional na Gestão de Projetos": {
+    "materia": "Gestão de Projetos",
+    "grupo": "Gestão de Projetos"
+  },
+  "Conceitos de Biblioteconomia": {
+    "materia": "Biblioteconomia",
+    "grupo": "Biblioteconomia"
   }
 }

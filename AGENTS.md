@@ -26,6 +26,17 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 - **Deploy frontend**: `vercel --prod --yes` → `monitor-pro-java.vercel.app` (main bundle `index-DZwd0cyY.js` contém `change-password`)
 - **Uso**: Configurar → Sistema & API → Alterar Senha (PWA: limpar service worker na 1ª vez para pegar bundle novo)
 
+#### Fix: índice exibia "(sem grupo)" em cada matéria (fallback quebrado + 10 questões órfãs)
+- **Sintoma**: no índice (Ordem de Estudo), cada matéria tinha um assunto "(sem grupo)" agrupando questões sem `grupo` no banco
+- **Causa raiz (dupla)**:
+  1. `getGrupo` em `grupoUtils.ts` — fallback usava `GRUPOS[fallbackAssunto]` (exigia chave exata de *assunto*), mas vários valores apontavam para nomes de *grupo* que não existem como chave → fallback retornava `null` silenciosamente
+  2. Matéria `AFO` (curta, sem `(Direito Financeiro...)`) não tinha alias em `MATERIA_ALIAS` nem entrada em `MATERIA_FALLBACK` → `getGrupo` retornava `null` para 6 questões
+- **Correção** (`src/lib/grupoUtils.ts`): fallback reescrito para buscar por nome do grupo (itera `Object.values(GRUPOS)`), com fallback normalizado (acentos/º/°); adicionado alias `'AFO' → 'AFO, Direito Financeiro e Contabilidade Pública'`
+- **Novas matérias** em `src/data/grupos.json`: `Gestão de Projetos (PMBOK)` (4 questões) e `Biblioteconomia` (1 questão) — adicionadas com grupos próprios + fallbacks
+- **Backfill no banco** (VM): script `backfill_grupos.mjs` atualizou as 10 questões sem grupo → **0 restantes**
+- **Testes**: 10 testes unitários para `getGrupo` (casos AFO, fallback por grupo, matérias novas, inexistente)
+- **Validação**: tsc 0 erros, ESLint 0 erros, 261/261 testes passando (29 arquivos)
+
 #### Fix: sessão da extensão não persistia (corrida de storage no sincronizador)
 - **Sintoma**: `chrome.storage.local.get(['monitorpro_token',...])` retornava `{}` no service worker; o TEC sempre salvava como "registro público" (`user_id` vazio) mesmo com o app logado; `Sessão sincronizada com sucesso via DOM!` aparecia e depois sumia
 - **Causa raiz**: o `else` do sincronizador apagava o token a cada 3s sempre que qualquer aba rodando o content script não tivesse `monitorpro_session` no localStorage — incluindo outras abas `*.vercel.app`, `localhost` ou o app antes de logar. Corrida: o app logado gravava, outra aba sem sessão apagava
