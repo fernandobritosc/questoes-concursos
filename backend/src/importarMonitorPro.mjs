@@ -20,6 +20,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import pg from 'pg'
 import bcrypt from 'bcryptjs'
+import { logger } from './logger.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const EXPORT_DIR = path.resolve(__dirname, '../../export_monitorpro')
@@ -34,7 +35,7 @@ const BATCH = 500
 const SENDO_DRY_RUN = process.argv.includes('--dry-run')
 
 function log(msg) {
-  console.log(msg)
+  logger.info(msg)
 }
 
 /** Parser CSV simples com suporte a aspas duplas (RFC 4180). */
@@ -425,6 +426,6 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('\nERRO:', err.message)
+  logger.error(err, 'Erro na importação')
   process.exit(1)
 })

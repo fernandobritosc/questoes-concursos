@@ -6,6 +6,7 @@ import { queryRows, queryOne } from './db.js'
 import { registerUser, loginUser, getAuthUser, ensureProfile, changePassword } from './auth.js'
 import { registerCrud } from './routes/crud.js'
 import { registerStorage } from './routes/storage.js'
+import { logger } from './logger.js'
 
 const app = Fastify({ logger: { level: 'info' } })
 
@@ -170,7 +171,8 @@ app.get('/health', async (_request, reply) => {
 
 app.listen({ port: config.port, host: config.host }, (err) => {
   if (err) {
-    app.log.error(err)
+    logger.error(err, 'Falha ao iniciar servidor')
     process.exit(1)
   }
+  logger.info({ port: config.port }, 'Servidor iniciado')
 })
