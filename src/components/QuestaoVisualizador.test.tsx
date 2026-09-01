@@ -35,8 +35,6 @@ const defaultProps = {
   revelado: false,
   onReset: vi.fn(),
   onConfirmarResposta: vi.fn(),
-  onExplicacaoIA: vi.fn(),
-  loadingExplicacao: null,
   copiedId: null,
   onCopyId: vi.fn(),
   tempoSegundos: 30,
@@ -138,18 +136,6 @@ describe('QuestaoVisualizador', () => {
     )
     await userEvent.click(screen.getByText('Tentar Mais uma vez'))
     expect(onReset).toHaveBeenCalledOnce()
-  })
-
-  it('calls onExplicacaoIA when IA button clicked', async () => {
-    const onExplicacaoIA = vi.fn()
-    render(<QuestaoVisualizador {...defaultProps} onExplicacaoIA={onExplicacaoIA} />)
-    await userEvent.click(screen.getByText('Minha Explicação (IA)'))
-    expect(onExplicacaoIA).toHaveBeenCalledWith(mockQuestao)
-  })
-
-  it('shows loading on IA button when loadingExplicacao matches', () => {
-    render(<QuestaoVisualizador {...defaultProps} loadingExplicacao={1} />)
-    expect(screen.getByText('Minha Explicação (IA)').closest('button')).toBeDisabled()
   })
 
   it('disables confirm button when no alternativa selecionada', () => {

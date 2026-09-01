@@ -136,8 +136,6 @@ const mockRef = vi.hoisted(() => ({
     handleCopy: vi.fn(),
   },
   resolucaoResult: {
-    explicacoes: {} as Record<number, string>,
-    loadingExplicacao: null as number | null,
     copiedId: null as number | null,
     editingResolucao: false,
     setEditingResolucao: vi.fn(),
@@ -146,7 +144,6 @@ const mockRef = vi.hoisted(() => ({
     resolucaoExpanded: false,
     setResolucaoExpanded: vi.fn(),
     savingResolucao: false,
-    handleExplicacaoIA: vi.fn(),
     handleSaveResolucao: vi.fn(),
   },
 }))

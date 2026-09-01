@@ -26,6 +26,16 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 - **Deploy frontend**: `vercel --prod --yes` → `monitor-pro-java.vercel.app` (main bundle `index-DZwd0cyY.js` contém `change-password`)
 - **Uso**: Configurar → Sistema & API → Alterar Senha (PWA: limpar service worker na 1ª vez para pegar bundle novo)
 
+#### Remoção completa da IA (Gemini/Groq) e da página Simulados
+- **Motivo**: usuário não tem mais chave de API de IA; rota `/gemini` do backend e frontend não são usados
+- **Backend**: `gemini.js` deletado + `registerGemini` removido de `index.js` (rota `/gemini` e `/api/gemini` não existem mais)
+- **Página Simulados deletada inteira**: `Simulados.tsx`, `useSimulados.ts`, `SimuladoSetup/Historico/ExamView/Resultados.tsx` + testes (a aba já havia sido removida do menu e rota)
+- **Frontend**: `gemini.service.ts` deletado; remoção de `handleExplicacaoIA`/`explicacoes`/`loadingExplicacao` em `useRevisao`, `useQuestoesResolucao`, `useQuestoes`, `Questoes.tsx`, `QuestaoVisualizador`, `QuestaoGabarito`, `QuestaoPrintView`, `RevisaoFocusView`
+- **Deps removidas** do `package.json`: `groq-sdk`, `@google/generative-ai` (mantidas `@supabase/supabase-js` e `@tailwindcss/typography` por ainda serem usadas em tools/ e index.css)
+- **Chaves removidas** de `.env.local`/`.env.example`: `GROQ_API_KEY`, `VITE_GROQ_API_KEY`, `VITE_GEMINI_API_KEY`
+- **Testes**: removidos os testes de IA (Simulados, handleExplicacaoIA, explicacaoIA) — **241/241 passando** (27 arquivos); tsc 0 erros, ESLint 0 erros
+- **Resolução do professor**: mantida como funcionalidade independente (é editável manualmente e vem do TEC Concursos, não depende de IA)
+
 #### Fix: índice exibia "(sem grupo)" em cada matéria (fallback quebrado + 10 questões órfãs)
 - **Sintoma**: no índice (Ordem de Estudo), cada matéria tinha um assunto "(sem grupo)" agrupando questões sem `grupo` no banco
 - **Causa raiz (dupla)**:

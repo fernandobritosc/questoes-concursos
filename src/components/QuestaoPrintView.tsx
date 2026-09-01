@@ -5,16 +5,12 @@ import type { ResolucaoView } from '../types/database'
 interface QuestaoPrintViewProps {
   questao: ResolucaoView
   alternativaSelecionada: string | null
-  explicacoes: Record<number, string>
 }
 
-export function QuestaoPrintView({ questao, alternativaSelecionada, explicacoes }: QuestaoPrintViewProps) {
+export function QuestaoPrintView({ questao, alternativaSelecionada }: QuestaoPrintViewProps) {
   if (!questao) return null
 
-  const explicacaoText = explicacoes[questao.id!]
   const hasProf = !!questao.resolucao_professor
-  const hasIA = !!explicacaoText
-  const isIdentical = hasProf && hasIA && questao.resolucao_professor!.trim() === explicacaoText.trim()
 
   return (
     <div className="hidden print:block w-full max-w-4xl mx-auto p-8 bg-white text-black text-sm leading-relaxed space-y-6">
@@ -103,29 +99,16 @@ export function QuestaoPrintView({ questao, alternativaSelecionada, explicacoes 
         </div>
       )}
 
-      {(hasProf || hasIA) && (
+      {hasProf && (
         <div className="border-t-2 border-black pt-6 space-y-6">
-          {hasProf && (
-            <div className="space-y-2 print:break-inside-avoid">
-              <h3 className="text-xs font-extrabold uppercase tracking-widest text-amber-800 flex items-center gap-1">
-                Comentário do Professor:
-              </h3>
-              <div className="text-neutral-800 text-xs bg-amber-50/20 p-4 rounded border border-amber-200">
-                <MarkdownAI text={questao.resolucao_professor!} />
-              </div>
+          <div className="space-y-2 print:break-inside-avoid">
+            <h3 className="text-xs font-extrabold uppercase tracking-widest text-amber-800 flex items-center gap-1">
+              Comentário do Professor:
+            </h3>
+            <div className="text-neutral-800 text-xs bg-amber-50/20 p-4 rounded border border-amber-200">
+              <MarkdownAI text={questao.resolucao_professor!} />
             </div>
-          )}
-
-          {hasIA && !isIdentical && (
-            <div className="space-y-2 print:break-inside-avoid">
-              <h3 className="text-xs font-extrabold uppercase tracking-widest text-primary flex items-center gap-1">
-                Explicação Detalhada do Mentor IA:
-              </h3>
-              <div className="text-neutral-800 text-xs bg-blue-50/20 p-4 rounded border border-blue-100">
-                <MarkdownAI text={explicacaoText} />
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       )}
 

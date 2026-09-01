@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchAllResolucoes, insertHistoricoResolucao, updateResolucaoProfessor } from '../services/supabase.service'
-import { gerarExplicacaoErro } from '../services/gemini.service'
+import { fetchAllResolucoes, insertHistoricoResolucao } from '../services/supabase.service'
 import type { ResolucaoView } from '../types/database'
 
 /**
@@ -20,10 +19,6 @@ export function useRevisao() {
   const [alternativaSelecionada, setAlternativaSelecionada] = useState<string | null>(null)
   const [revelado, setRevelado] = useState(false)
   const [salvandoResposta, setSalvandoResposta] = useState(false)
-
-  // Explicações por ID de questão
-  const [explicacoes, setExplicacoes] = useState<Record<string, string>>({})
-  const [loadingExplicacao, setLoadingExplicacao] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -202,43 +197,6 @@ export function useRevisao() {
     }
   }
 
-  const handleExplicacaoIA = async () => {
-    if (!questaoAtual || !alternativaSelecionada || loadingExplicacao) return
-
-    const targetId = questaoAtual.questao_id || questaoAtual.id
-    if (!targetId) return
-
-    const key = String(targetId)
-    if (explicacoes[key]) return // já gerada
-
-    setLoadingExplicacao(true)
-    try {
-      const texto = await gerarExplicacaoErro(questaoAtual, alternativaSelecionada)
-      setExplicacoes(prev => ({ ...prev, [key]: texto }))
-      
-      // Salva automaticamente no banco de dados para evitar re-gerações futuras
-      await updateResolucaoProfessor(targetId, texto)
-      
-      // Atualiza o estado local reativamente
-      setErros(prev => prev.map(q => 
-        (q.questao_id || q.id) === targetId ? { ...q, resolucao_professor: texto } : q
-      ))
-
-    } catch (err: unknown) {
-      console.error('Erro na IA:', err)
-      setExplicacoes(prev => ({
-        ...prev,
-        [key]: 'Desculpe, ocorreu um erro ao gerar a explicação. Verifique sua chave de API.',
-      }))
-    } finally {
-      setLoadingExplicacao(false)
-    }
-  }
-
-  const explicacaoAtual = questaoAtual
-    ? explicacoes[String(questaoAtual.questao_id || questaoAtual.id)] ?? null
-    : null
-
   return {
     erros,
     loading,
@@ -251,12 +209,9 @@ export function useRevisao() {
     setAlternativaSelecionada,
     revelado,
     salvandoResposta,
-    explicacaoAtual,
-    loadingExplicacao,
     handleResponder,
     handleConfirmarResposta,
     handleProxima,
-    handleExplicacaoIA,
     handleClassificar,
     obterPrazosEstimados,
   }

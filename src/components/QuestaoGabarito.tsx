@@ -4,12 +4,11 @@ import type { ResolucaoView } from '../types/database'
 
 interface QuestaoGabaritoProps {
   questao: ResolucaoView
-  explicacaoIA: string | undefined
   totalQuestoes: number
   onVoltar: () => void
 }
 
-export function QuestaoGabarito({ questao, explicacaoIA, totalQuestoes, onVoltar }: QuestaoGabaritoProps) {
+export function QuestaoGabarito({ questao, totalQuestoes, onVoltar }: QuestaoGabaritoProps) {
   if (totalQuestoes === 0) {
     return (
       <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
@@ -57,29 +56,18 @@ export function QuestaoGabarito({ questao, explicacaoIA, totalQuestoes, onVoltar
           </div>
         </div>
 
-        {(questao?.resolucao_professor || explicacaoIA) && (
+        {questao?.resolucao_professor && (
           <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden p-6 space-y-4">
             <h3 className="text-xs font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
               <GraduationCap className="w-4.5 h-4.5 text-primary" /> Explicação e Resolução
             </h3>
             
-            {questao?.resolucao_professor && (
-              <div className="space-y-1">
-                <h4 className="text-xxs font-black uppercase text-amber-600">Comentário do Professor</h4>
-                <div className="text-xs text-foreground leading-relaxed mt-2">
-                  <MarkdownAI text={questao?.resolucao_professor} />
-                </div>
+            <div className="space-y-1">
+              <h4 className="text-xxs font-black uppercase text-amber-600">Comentário do Professor</h4>
+              <div className="text-xs text-foreground leading-relaxed mt-2">
+                <MarkdownAI text={questao?.resolucao_professor} />
               </div>
-            )}
-
-            {explicacaoIA && (
-              <div className="space-y-1 pt-3 border-t border-border/60">
-                <h4 className="text-xxs font-black uppercase text-primary">Comentário do Mentor IA</h4>
-                <div className="text-xs text-foreground leading-relaxed mt-2">
-                  <MarkdownAI text={explicacaoIA} />
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         )}
       </div>

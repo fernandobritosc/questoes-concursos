@@ -14,7 +14,6 @@ import { QuestaoNavegacao } from '../components/QuestaoNavegacao'
 import { QuestaoPrintView } from '../components/QuestaoPrintView'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { QuestaoSkeleton } from '../components/ui/QuestaoSkeleton'
-import { MarkdownAI } from '../components/ui/MarkdownAI'
 import { QuestaoFilterPanel } from '../components/QuestaoFilterPanel'
 import {
   CARREIRAS_DISPONIVEIS,
@@ -24,7 +23,7 @@ import {
   FAVORITAS_OPCOES,
   ENUNCIADOS_OPCOES,
 } from '../hooks/useQuestoesFilter'
-import { AlertCircle, RefreshCw, BrainCircuit, Layers, Upload, Filter, X } from 'lucide-react'
+import { AlertCircle, RefreshCw, Layers, Upload, Filter, X } from 'lucide-react'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 
 
@@ -44,8 +43,6 @@ export function Questoes() {
     setAlternativaSelecionada,
     revelado,
     setRevelado,
-    explicacoes,
-    loadingExplicacao,
     copiedId,
     editingResolucao,
     setEditingResolucao,
@@ -57,7 +54,6 @@ export function Questoes() {
     isImportModalOpen,
     setIsImportModalOpen,
     handleCopy,
-    handleExplicacaoIA,
     handleSaveResolucao,
     tempoSegundos,
     salvandoResposta,
@@ -384,8 +380,6 @@ export function Questoes() {
               revelado={revelado}
               onReset={() => { setAlternativaSelecionada(null); setRevelado(false) }}
               onConfirmarResposta={handleConfirmarResposta}
-              onExplicacaoIA={handleExplicacaoIA}
-              loadingExplicacao={loadingExplicacao}
               copiedId={copiedId}
               onCopyId={handleCopy}
               tempoSegundos={tempoSegundos}
@@ -421,20 +415,6 @@ export function Questoes() {
             />
           </ErrorBoundary>
 
-          {/* 7. Caixa de Análise do Mentor IA */}
-          {explicacoes[questoesExibidas[currentQuestaoIndex].id!] && 
-           explicacoes[questoesExibidas[currentQuestaoIndex].id!] !== resolucaoText && (
-            <div className="bg-blue-50/30 border border-border/80 rounded-xl p-6 space-y-3 shadow-sm">
-              <div className="flex items-center gap-2 text-primary font-black text-xs uppercase tracking-wider">
-                <BrainCircuit className="w-5 h-5 text-primary" />
-                <span>Explicação do Professor IA</span>
-              </div>
-              <div className="text-foreground leading-relaxed text-sm max-w-none">
-                <MarkdownAI text={explicacoes[questoesExibidas[currentQuestaoIndex].id!]} />
-              </div>
-            </div>
-          )}
-
           <ErrorBoundary>
             <QuestaoNavegacao
               onAnterior={() => { setCurrentQuestaoIndex(prev => prev - 1); setAlternativaSelecionada(null); setRevelado(false) }}
@@ -469,7 +449,6 @@ export function Questoes() {
             <ErrorBoundary>
               <QuestaoGabarito
                 questao={q}
-                explicacaoIA={q ? explicacoes[q.id] : undefined}
                 totalQuestoes={cadernoQuestoes.length}
                 onVoltar={() => setTopTab('questoes')}
               />
@@ -503,7 +482,6 @@ export function Questoes() {
         <QuestaoPrintView
           questao={questoesExibidas[currentQuestaoIndex]}
           alternativaSelecionada={alternativaSelecionada}
-          explicacoes={explicacoes}
         />
       )}
 

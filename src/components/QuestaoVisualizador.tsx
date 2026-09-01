@@ -3,7 +3,7 @@ import { cleanHtmlText } from '../lib/cleanHtml'
 import { MarkdownAI } from './ui/MarkdownAI'
 import {
   ChevronRight, ChevronLeft, RotateCcw, Copy, Check, ExternalLink,
-  BrainCircuit, Loader2, GraduationCap, Pencil, X, CheckCircle2, XCircle
+  Loader2, GraduationCap, Pencil, X, CheckCircle2, XCircle
 } from 'lucide-react'
 
 interface QuestaoVisualizadorProps {
@@ -15,8 +15,6 @@ interface QuestaoVisualizadorProps {
   revelado: boolean
   onReset: () => void
   onConfirmarResposta: () => void
-  onExplicacaoIA: (questao: ResolucaoView) => void
-  loadingExplicacao: number | null
   copiedId: number | null
   onCopyId: (id: number) => void
   tempoSegundos: number
@@ -32,8 +30,7 @@ export function QuestaoVisualizador({
   questao, index, total,
   alternativaSelecionada, onSelectAlternativa,
   revelado, onReset,
-  onConfirmarResposta, onExplicacaoIA,
-  loadingExplicacao,
+  onConfirmarResposta,
   copiedId, onCopyId,
   tempoSegundos, salvandoResposta,
   onEditar, onAnterior, onProxima,
@@ -195,18 +192,6 @@ export function QuestaoVisualizador({
                 {salvandoResposta && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 RESOLVER QUESTÃO
               </button>
-              <button
-                onClick={() => onExplicacaoIA(questao)}
-                disabled={loadingExplicacao === questao.id}
-                className="flex items-center gap-1.5 border border-primary/30 hover:bg-primary/5 text-primary font-black px-4 py-2.5 rounded-lg text-xxs transition-all active:scale-98 cursor-pointer"
-              >
-                {loadingExplicacao === questao.id ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                ) : (
-                  <BrainCircuit className="w-3.5 h-3.5 text-primary" />
-                )}
-                <span>Minha Explicação (IA)</span>
-              </button>
             </>
           ) : (
             <>
@@ -230,18 +215,6 @@ export function QuestaoVisualizador({
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Tentar Mais uma vez</span>
-              </button>
-              <button
-                onClick={() => onExplicacaoIA(questao)}
-                disabled={loadingExplicacao === questao.id}
-                className="flex items-center gap-1.5 border border-primary/30 hover:bg-primary/5 text-primary font-black px-4 py-2.5 rounded-lg text-xxs transition-all active:scale-98 cursor-pointer"
-              >
-                {loadingExplicacao === questao.id ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                ) : (
-                  <BrainCircuit className="w-3.5 h-3.5 text-primary" />
-                )}
-                <span>Minha Explicação (IA)</span>
               </button>
             </>
           )}

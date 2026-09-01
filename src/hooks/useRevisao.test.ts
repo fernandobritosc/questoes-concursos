@@ -5,17 +5,10 @@ import type { ResolucaoView } from '../types/database'
 
 const mockFetchAllResolucoes = vi.fn()
 const mockInsertHistoricoResolucao = vi.fn()
-const mockUpdateResolucaoProfessor = vi.fn()
-const mockGerarExplicacaoErro = vi.fn()
 
 vi.mock('../services/supabase.service', () => ({
   fetchAllResolucoes: () => mockFetchAllResolucoes(),
   insertHistoricoResolucao: (...args: unknown[]) => mockInsertHistoricoResolucao(...args),
-  updateResolucaoProfessor: (...args: unknown[]) => mockUpdateResolucaoProfessor(...args),
-}))
-
-vi.mock('../services/gemini.service', () => ({
-  gerarExplicacaoErro: (...args: unknown[]) => mockGerarExplicacaoErro(...args),
 }))
 
 function makeResolucao(overrides: Partial<ResolucaoView> & { questao_tec_id: number }): ResolucaoView {
@@ -138,34 +131,6 @@ describe('useRevisao', () => {
       )
     })
     })
-
-  it('handleExplicacaoIA generates explanation', async () => {
-    const questoes = [
-      makeResolucao({ questao_tec_id: 101, gabarito: 'A', acertou: false }),
-    ]
-    mockFetchAllResolucoes.mockResolvedValue(questoes)
-    mockGerarExplicacaoErro.mockResolvedValue('Explicação detalhada')
-
-    const { result } = renderHook(() => useRevisao())
-
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false)
-    })
-
-    act(() => { result.current.setAlternativaSelecionada('B') })
-    await waitFor(() => {
-      expect(result.current.alternativaSelecionada).toBe('B')
-    })
-    await result.current.handleExplicacaoIA()
-
-    await waitFor(() => {
-      expect(mockGerarExplicacaoErro).toHaveBeenCalled()
-    })
-    expect(mockUpdateResolucaoProfessor).toHaveBeenCalled()
-    await waitFor(() => {
-      expect(result.current.explicacaoAtual).toBe('Explicação detalhada')
-    })
-  })
 
   it('handleClassificar applies SM-2 and removes question', async () => {
     const questoes = [

@@ -25,10 +25,7 @@ export function Revisao() {
     setAlternativaSelecionada,
     revelado,
     salvandoResposta,
-    explicacaoAtual,
-    loadingExplicacao,
     handleConfirmarResposta,
-    handleExplicacaoIA,
     handleClassificar,
     obterPrazosEstimados,
   } = useRevisao()
@@ -179,9 +176,6 @@ export function Revisao() {
         onResolucaoTextChange={setResolucaoText}
         onSaveResolucao={handleSaveResolucao}
         savingResolucao={savingResolucao}
-        explicacaoAtual={explicacaoAtual}
-        onExplicacaoIA={handleExplicacaoIA}
-        loadingExplicacao={loadingExplicacao}
         onVoltar={() => setSearchParams({})}
         onAnterior={() => {
           const prev = errosFiltrados[activeInFilterIndex - 1]

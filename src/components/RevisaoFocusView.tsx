@@ -1,4 +1,4 @@
-import { ArrowLeft, ChevronLeft, ChevronRight, BrainCircuit, ExternalLink, Book, Pencil, Check, Loader2, CheckCircle2, XCircle, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight, ExternalLink, Book, Pencil, Check, Loader2, CheckCircle2, XCircle, ArrowRight } from 'lucide-react'
 import { MarkdownAI } from './ui/MarkdownAI'
 import { Button } from './ui/Button'
 import { cleanHtmlText } from '../lib/cleanHtml'
@@ -29,9 +29,6 @@ interface RevisaoFocusViewProps {
   savingResolucao: boolean
 
   // Explicação IA
-  explicacaoAtual: string | null
-  onExplicacaoIA: () => void
-  loadingExplicacao: boolean
 
   // Ações
   onVoltar: () => void
@@ -65,9 +62,6 @@ export function RevisaoFocusView({
   onResolucaoTextChange,
   onSaveResolucao,
   savingResolucao,
-  explicacaoAtual,
-  onExplicacaoIA,
-  loadingExplicacao,
   onVoltar,
   onAnterior,
   onProxima,
@@ -283,19 +277,6 @@ export function RevisaoFocusView({
                   )}
                 </div>
 
-                {/* Caixa de Explicação IA se carregada */}
-                {explicacaoAtual && explicacaoAtual !== resolucaoText && (
-                  <div className="bg-violet-600/[0.05] border border-violet-500/10 rounded-xl p-5 mt-6 animate-in slide-in-from-bottom-4 flex flex-col gap-3">
-                    <div className="flex items-center gap-2 text-violet-400 font-black text-xs uppercase shrink-0">
-                      <BrainCircuit className="w-5 h-5 text-violet-400 shrink-0" />
-                      <span>Explicação do Mentor IA</span>
-                    </div>
-                    <div className="text-[13px] text-foreground/90 select-text font-medium">
-                      <MarkdownAI text={explicacaoAtual} />
-                    </div>
-                  </div>
-                )}
-
               </div>
 
               {/* Rodapé do Card e Ações */}
@@ -338,17 +319,6 @@ export function RevisaoFocusView({
                       <ChevronRight className="w-4.5 h-4.5" />
                     </button>
                   </div>
-
-                  {!explicacaoAtual && (
-                    <Button
-                      variant="secondary"
-                      onClick={onExplicacaoIA}
-                      loading={loadingExplicacao}
-                      icon={<BrainCircuit className="w-4.5 h-4.5 text-violet-400" />}
-                    >
-                      Me Explique (IA)
-                    </Button>
-                  )}
 
                   {!revelado ? (
                     <Button

@@ -6,7 +6,6 @@ import { queryRows, queryOne } from './db.js'
 import { registerUser, loginUser, getAuthUser, ensureProfile, changePassword } from './auth.js'
 import { registerCrud } from './routes/crud.js'
 import { registerStorage } from './routes/storage.js'
-import { registerGemini } from './routes/gemini.js'
 
 const app = Fastify({ logger: { level: 'info' } })
 
@@ -43,7 +42,6 @@ const TABLES = [
 registerCrud(app, TABLES)
 registerCrud(app, TABLES, '/rest/v1')
 registerStorage(app)
-registerGemini(app)
 
 // ─── Auth ─────────────────────────────────────────────────────
 

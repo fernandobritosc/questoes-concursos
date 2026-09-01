@@ -189,6 +189,7 @@ export function useQuestoes() {
     } else if (caderno.currentQuestaoIndex >= questoesExibidas.length) {
       caderno.setCurrentQuestaoIndex(Math.max(0, questoesExibidas.length - 1))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questoesExibidas.length, caderno.currentQuestaoIndex, caderno.setCurrentQuestaoIndex])
 
   // ─── Effects de Coordenação ──────────────────────────────────────────────────
@@ -420,8 +421,6 @@ export function useQuestoes() {
     setAlternativaSelecionada: caderno.setAlternativaSelecionada,
     revelado: caderno.revelado,
     setRevelado: caderno.setRevelado,
-    explicacoes: resolucao.explicacoes,
-    loadingExplicacao: resolucao.loadingExplicacao,
     copiedId: caderno.copiedId,
     editingResolucao: resolucao.editingResolucao,
     setEditingResolucao: resolucao.setEditingResolucao,
@@ -509,7 +508,6 @@ export function useQuestoes() {
     getFilteredQuestions: filter.getFilteredQuestions,
     handleGerarCaderno,
     handleCopy: caderno.handleCopy,
-    handleExplicacaoIA: resolucao.handleExplicacaoIA,
     handleSaveResolucao,
     handleConfirmarResposta,
     loadHistoricoDaQuestao: caderno.loadHistoricoDaQuestao,
