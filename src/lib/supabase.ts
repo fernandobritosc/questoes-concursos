@@ -28,8 +28,6 @@ export interface AuthSession {
 }
 
 const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || '/api'
-export const SUPABASE_URL = API_BASE_URL
-export const SUPABASE_ANON_KEY = ''
 
 const SESSION_KEY = 'monitorpro_session'
 
@@ -171,30 +169,6 @@ class PostgrestBuilder {
   }
   in(col: string, values: unknown[]): this {
     this.filters.push({ column: col, encoded: `in.(${values.map(v => this.encode(v)).join(',')})` })
-    return this
-  }
-  gt(col: string, value: unknown): this {
-    this.filters.push({ column: col, encoded: `gt.${this.encode(value)}` })
-    return this
-  }
-  gte(col: string, value: unknown): this {
-    this.filters.push({ column: col, encoded: `gte.${this.encode(value)}` })
-    return this
-  }
-  lt(col: string, value: unknown): this {
-    this.filters.push({ column: col, encoded: `lt.${this.encode(value)}` })
-    return this
-  }
-  lte(col: string, value: unknown): this {
-    this.filters.push({ column: col, encoded: `lte.${this.encode(value)}` })
-    return this
-  }
-  like(col: string, value: unknown): this {
-    this.filters.push({ column: col, encoded: `like.${this.encode(value)}` })
-    return this
-  }
-  ilike(col: string, value: unknown): this {
-    this.filters.push({ column: col, encoded: `ilike.${this.encode(value)}` })
     return this
   }
   is(col: string, value: unknown): this {
