@@ -9,6 +9,53 @@
 // INTERINO: IP:porta do backend. Em produção será o domínio HTTPS (ex: https://fernandoestudos.com/api).
 const BACKEND_URL = "http://204.216.111.13:3000";
 
+// Faz o fetch via background service worker para evitar o bloqueio de mixed
+// content (página https do LS -> backend http). Devolve um objeto "Response-like".
+function backendFetch(url, options) {
+  return new Promise((resolve, reject) => {
+    if (isContextInvalidated()) {
+      reject(new Error("Contexto da extensão invalidado"));
+      return;
+    }
+    const fullUrl = url.startsWith("http") ? url : `${BACKEND_URL}${url}`;
+    chrome.runtime.sendMessage(
+      {
+        type: "monitorpro_fetch",
+        url: fullUrl,
+        method: (options && options.method) || "GET",
+        headers: (options && options.headers) || {},
+        ...(options && options.body !== undefined ? { body: options.body } : {})
+      },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        if (!response) {
+          reject(new Error("Sem resposta do background"));
+          return;
+        }
+        if (response.status === 0 && !response.ok) {
+          reject(new Error(response.statusText || "Falha de rede"));
+          return;
+        }
+        resolve({
+          ok: response.ok,
+          status: response.status,
+          statusText: response.statusText,
+          async json() {
+            if (!response.bodyText) return null;
+            return JSON.parse(response.bodyText);
+          },
+          async text() {
+            return response.bodyText || "";
+          }
+        });
+      }
+    );
+  });
+}
+
 let sentMetas = new Set();
 
 function isContextInvalidated() {
@@ -28,18 +75,17 @@ if (isReactApp) {
     try {
       let sessionStr = localStorage.getItem("monitorpro_session");
       let session = sessionStr ? JSON.parse(sessionStr) : null;
-      if (!session || !session.token) {
+      const token = session?.access_token || session?.token || null;
+      const userId = session?.user?.id || session?.userId || null;
+      if (!token && !userId) {
         const legacyStr = localStorage.getItem("sb-dyxtalcvjcprmhuktyfd-auth-token");
         if (legacyStr) {
           const legacy = JSON.parse(legacyStr);
           session = { token: legacy.access_token, userId: legacy.user?.id };
         }
       }
-      if (session && session.token) {
-        const token = session.token;
-        const userId = session.userId;
-        if (token && userId) {
-          chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], (stored) => {
+      if (token && userId) {
+        chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], (stored) => {
             if (isContextInvalidated()) return;
             if (stored.monitorpro_token !== token || stored.monitorpro_user_id !== userId) {
               chrome.storage.local.set({ monitorpro_token: token, monitorpro_user_id: userId }, () => {
@@ -48,7 +94,6 @@ if (isReactApp) {
               });
             }
           });
-        }
       } else {
         chrome.storage.local.get(["monitorpro_token"], (stored) => {
           if (isContextInvalidated()) return;
@@ -210,7 +255,7 @@ if (window.location.hostname.includes("lsensino.com.br")) {
   }
 
   async function reqJson(url, opts) {
-    const res = await fetch(url, opts);
+    const res = await backendFetch(url, opts);
     if (res.ok) return res;
     const body = await res.text();
     if (ehJwtExpirou(body)) {

@@ -10,6 +10,53 @@
 // INTERINO: IP:porta do backend. Em produção será o domínio HTTPS (ex: https://fernandoestudos.com/api).
 const BACKEND_URL = "http://204.216.111.13:3000";
 
+// Faz o fetch via background service worker para evitar o bloqueio de mixed
+// content (página https do TEC -> backend http). Devolve um objeto "Response-like".
+function backendFetch(url, options) {
+  return new Promise((resolve, reject) => {
+    if (isContextInvalidated()) {
+      reject(new Error("Contexto da extensão invalidado"));
+      return;
+    }
+    const fullUrl = url.startsWith("http") ? url : `${BACKEND_URL}${url}`;
+    chrome.runtime.sendMessage(
+      {
+        type: "monitorpro_fetch",
+        url: fullUrl,
+        method: (options && options.method) || "GET",
+        headers: (options && options.headers) || {},
+        ...(options && options.body !== undefined ? { body: options.body } : {})
+      },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        if (!response) {
+          reject(new Error("Sem resposta do background"));
+          return;
+        }
+        if (response.status === 0 && !response.ok) {
+          reject(new Error(response.statusText || "Falha de rede"));
+          return;
+        }
+        resolve({
+          ok: response.ok,
+          status: response.status,
+          statusText: response.statusText,
+          async json() {
+            if (!response.bodyText) return null;
+            return JSON.parse(response.bodyText);
+          },
+          async text() {
+            return response.bodyText || "";
+          }
+        });
+      }
+    );
+  });
+}
+
 // Helper para detectar se o contexto da extensão foi invalidado (ex: após reload ou reinício)
 function isContextInvalidated() {
   if (typeof chrome === 'undefined' || !chrome.runtime || !chrome.runtime.id) {
@@ -31,17 +78,23 @@ const hostname = window.location.hostname;
 const isReactApp = hostname.includes("localhost") || hostname.includes("127.0.0.1") || hostname.includes("vercel.app") || hostname.includes("204.216.111.13");
 
 if (isReactApp) {
-  console.log("content.js:3 MonitorPro v3.0: Olho invisível ativado!");
+  console.log("content.js:3 MonitorPro v3.1: Olho invisível ativado!", "extId=" + (chrome.runtime?.id ?? "?"));
   console.log("content.js:10 ⚡ MonitorPro: Receptor DOM de sessão iniciado...");
+
+  let jaSincronizouNestaPagina = false;
 
   function sincronizarSessao() {
     if (isContextInvalidated()) return;
     try {
       // Novo formato: sessão do backend próprio
+      // O app grava { access_token, user: { id, ... } } (ver setSessionAndSession em src/lib/supabase.ts)
       let sessionStr = localStorage.getItem("monitorpro_session");
       let session = sessionStr ? JSON.parse(sessionStr) : null;
+      const token = session?.access_token || session?.token || null;
+      const userId = session?.user?.id || session?.userId || null;
+      console.log("[MonitorPro v3.1] sessão do page:", sessionStr ? "presente" : "ausente", "| token:", token ? "SIM" : "nao", "| userId:", userId);
       // Fallback legado (Supabase)
-      if (!session || !session.token) {
+      if (!token && !userId) {
         const legacyStr = localStorage.getItem("sb-dyxtalcvjcprmhuktyfd-auth-token");
         if (legacyStr) {
           const legacy = JSON.parse(legacyStr);
@@ -49,12 +102,9 @@ if (isReactApp) {
         }
       }
 
-      if (session && session.token) {
-        const token = session.token;
-        const userId = session.userId;
-
-        if (token && userId) {
-          chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], (stored) => {
+      if (token && userId) {
+        jaSincronizouNestaPagina = true;
+        chrome.storage.local.get(["monitorpro_token", "monitorpro_user_id"], (stored) => {
             if (isContextInvalidated()) return;
             if (stored.monitorpro_token !== token || stored.monitorpro_user_id !== userId) {
               chrome.storage.local.set({
@@ -66,15 +116,16 @@ if (isReactApp) {
               });
             }
           });
-        }
-      } else {
-        // Sem token no localStorage -> Usuário deslogou do App
+      } else if (jaSincronizouNestaPagina) {
+        // ÚNICAMENTE se esta aba JÁ sincronizou uma sessão antes (ou seja, o usuário
+        // realmente deslogou AQUI). Evita que qualquer aba sem sessão (ex: outra página
+        // vercel.app, localhost, app deslogado) apague o token que outra aba gravou.
         chrome.storage.local.get(["monitorpro_token"], (stored) => {
           if (isContextInvalidated()) return;
           if (stored.monitorpro_token) {
             chrome.storage.local.remove(["monitorpro_token", "monitorpro_user_id"], () => {
               if (isContextInvalidated()) return;
-              console.log("content.js:48 ⚡ MonitorPro: Sessão limpa (usuário deslogado do aplicativo).");
+              console.log("content.js:118: ⚡ MonitorPro: Sessão limpa (usuário deslogado do aplicativo).");
             });
           }
         });
@@ -101,7 +152,7 @@ if (isReactApp) {
 // ============================================================================
 
 if (window.location.hostname.includes("tecconcursos.com.br")) {
-  console.log("⚡ MonitorPro: Extrator iniciado na página do TEC Concursos.");
+  console.log("⚡ MonitorPro: Extrator iniciado na página do TEC Concursos.", "extId=" + (chrome.runtime?.id ?? "?"));
 
   // Controle de envios de tentativas e comentários de forma independente
   const sentAttempts = new Set();
@@ -574,6 +625,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
       if (isContextInvalidated()) return;
       const token = stored.monitorpro_token;
       const userId = stored.monitorpro_user_id;
+      console.log("[MonitorPro] storage.local lido ao salvar:", { token: token ? "SIM" : "nao", userId: userId ?? null, extId: chrome.runtime?.id });
 
       // Define os headers de rede
       const headers = {
@@ -592,7 +644,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
 
         // Passo A: Verifica se a questão já está cadastrada na tabela 'questoes' e busca tentativas existentes
         const searchUrl = `${BACKEND_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,enunciado,alternativas,gabarito,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`;
-        const searchRes = await fetch(searchUrl, {
+        const searchRes = await backendFetch(searchUrl, {
           method: "GET",
           headers
         });
@@ -625,7 +677,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
         // Passo B: Se a questão não existir no banco, faz o cadastro dela
         if (!dbQuestaoId) {
           console.log(`[MonitorPro] Questão #${questaoPayload.questao_tec_id} inédita. Cadastrando na tabela 'questoes'...`);
-          const insertRes = await fetch(`${BACKEND_URL}/rest/v1/questoes`, {
+          const insertRes = await backendFetch(`${BACKEND_URL}/rest/v1/questoes`, {
             method: "POST",
             headers: {
               ...headers,
@@ -652,7 +704,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
             if (errText.includes("23505") || errText.includes("duplicate key")) {
               console.warn(`[MonitorPro] Conflito de chave duplicada detectado para a Questão #${questaoPayload.questao_tec_id}. Recuperando registro existente...`);
               if (isContextInvalidated()) return;
-              const recoveryRes = await fetch(`${BACKEND_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`, {
+              const recoveryRes = await backendFetch(`${BACKEND_URL}/rest/v1/questoes?questao_tec_id=eq.${questaoPayload.questao_tec_id}&select=id,resolucao_professor,historico_resolucoes!historico_resolucoes_questao_id_fkey(id,user_id)`, {
                 method: "GET",
                 headers
               });
@@ -690,7 +742,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
                   if (Object.keys(updatePayload).length > 0) {
                     console.log(`[MonitorPro] Atualizando metadados pós-recuperação da Questão #${questaoPayload.questao_tec_id}...`, updatePayload, `ano=${questaoPayload.ano}`);
                     if (isContextInvalidated()) return;
-                    const updateRes = await fetch(`${BACKEND_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
+                    const updateRes = await backendFetch(`${BACKEND_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
                       method: "PATCH",
                       headers,
                       body: JSON.stringify(updatePayload)
@@ -734,7 +786,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
           }
           if (Object.keys(updatePayload).length > 0) {
             console.log(`[MonitorPro] Atualizando metadados da Questão #${questaoPayload.questao_tec_id}...`, updatePayload, `ano=${questaoPayload.ano}`);
-            const updateRes = await fetch(`${BACKEND_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
+            const updateRes = await backendFetch(`${BACKEND_URL}/rest/v1/questoes?id=eq.${dbQuestaoId}`, {
               method: "PATCH",
               headers,
               body: JSON.stringify(updatePayload)
@@ -766,7 +818,7 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
           };
 
           console.log(`[MonitorPro] Gravando tentativa na tabela 'historico_resolucoes'...`, finalTentativa);
-          const historyRes = await fetch(`${BACKEND_URL}/rest/v1/historico_resolucoes`, {
+          const historyRes = await backendFetch(`${BACKEND_URL}/rest/v1/historico_resolucoes`, {
             method: "POST",
             headers: {
               ...headers,

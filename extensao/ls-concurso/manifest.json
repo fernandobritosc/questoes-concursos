@@ -6,6 +6,9 @@
   "permissions": [
     "storage"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "host_permissions": [
     "https://aluno.lsensino.com.br/*",
     "http://204.216.111.13/*",
