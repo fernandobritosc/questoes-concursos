@@ -107,9 +107,10 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        // Backend próprio (Fastify) — em dev roda em http://127.0.0.1:3000
+        // Backend próprio (Fastify) — default local; sobrescrever com VITE_PROXY_TARGET
+        // ex.: VITE_PROXY_TARGET=http://204.216.111.13:3000 para usar a VM em dev
         '/api': {
-          target: 'http://127.0.0.1:3000',
+          target: env.VITE_PROXY_TARGET || 'http://127.0.0.1:3000',
           changeOrigin: true,
           rewrite: (p: string) => p.replace(/^\/api/, ''),
         },

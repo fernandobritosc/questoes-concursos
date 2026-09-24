@@ -54,6 +54,7 @@ function makeDefaultHook(overrides: Record<string, unknown> = {}) {
     historicoQuestaoAtiva: [],
     loadingHistoricoAtivo: false,
     handleConfirmarResposta: vi.fn(),
+    filtros: null,
     setFiltros: vi.fn(),
     questoesExibidas: [],
     handleEditQuestao: vi.fn(),
@@ -63,14 +64,24 @@ function makeDefaultHook(overrides: Record<string, unknown> = {}) {
     page: 1,
     totalPages: 1,
     handleNavigatePage: vi.fn(),
+    questaoTecId: '',
+    objetivo: 'todos',
+    selectedAssuntos: [],
+    totalFiltrosAtivos: 0,
+    handleResetFilters: vi.fn(),
     ...overrides,
   }
 }
 
 const mockRef = vi.hoisted(() => ({ current: makeDefaultHook() }))
 
+const searchParamsMock = vi.hoisted(() => ({
+  params: new URLSearchParams(),
+  setParams: vi.fn(),
+}))
+
 vi.mock('react-router-dom', () => ({
-  useSearchParams: vi.fn(() => [new URLSearchParams(), vi.fn()]),
+  useSearchParams: vi.fn(() => [searchParamsMock.params, searchParamsMock.setParams]),
 }))
 
 vi.mock('../hooks/useQuestoes', () => ({
@@ -81,6 +92,8 @@ import { Questoes } from './Questoes'
 
 beforeEach(() => {
   mockRef.current = makeDefaultHook()
+  searchParamsMock.params = new URLSearchParams()
+  searchParamsMock.setParams = vi.fn()
 })
 
 describe('Questoes page', () => {
@@ -131,5 +144,40 @@ describe('Questoes page', () => {
     })
     render(<Questoes />)
     expect(document.querySelector('.animate-pulse')).toBeInTheDocument()
+  })
+
+  it('opens the clicked question from ?id= deep link', () => {
+    const outra: ResolucaoView = {
+      ...mockQuestao,
+      id: 2,
+      questao_id: 101,
+      questao_tec_id: 99999,
+      enunciado: 'Outra questão',
+    }
+    searchParamsMock.params = new URLSearchParams({ id: '99999' })
+    const setCurrentQuestaoIndex = vi.fn()
+    mockRef.current = makeDefaultHook({
+      cadernoQuestoes: [mockQuestao, outra],
+      questoesExibidas: [mockQuestao, outra],
+      setCurrentQuestaoIndex,
+    })
+    render(<Questoes />)
+    expect(setCurrentQuestaoIndex).toHaveBeenCalledWith(1)
+    expect(searchParamsMock.setParams).toHaveBeenCalledWith({}, { replace: true })
+  })
+
+  it('resets filters when deep-linked question is hidden by filters', () => {
+    searchParamsMock.params = new URLSearchParams({ id: '12345' })
+    const handleResetFilters = vi.fn()
+    mockRef.current = makeDefaultHook({
+      cadernoQuestoes: [mockQuestao],
+      questoesExibidas: [],
+      totalFiltrosAtivos: 2,
+      handleResetFilters,
+      setCurrentQuestaoIndex: vi.fn(),
+    })
+    render(<Questoes />)
+    expect(handleResetFilters).toHaveBeenCalled()
+    expect(searchParamsMock.setParams).not.toHaveBeenCalled()
   })
 })

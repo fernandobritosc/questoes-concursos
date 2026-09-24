@@ -51,6 +51,8 @@ interface QuestaoCacheState {
   setProgressivePage: (hash: string, page: string, data: ResolucaoView[], totalCount: number, totalPages: number) => void
   getProgressivePage: (hash: string, page: string) => { data: ResolucaoView[]; totalCount: number; totalPages: number } | null
   resetProgressiveCache: (hash: string) => void
+  /** Aplica updates em uma questão em todos os caches de listagem (evita gabarito velho após PATCH). */
+  patchQuestaoInCaches: (questaoId: number, updates: Partial<ResolucaoView>) => void
 
   setHistoricoCache: (data: HistoricoResolucao[]) => void
   getHistoricoCache: () => HistoricoResolucao[] | null
@@ -185,6 +187,20 @@ export const useQuestaoStore = create<QuestaoCacheState>((set, get) => ({
     progressiveFilterHash: hash,
     progressiveTotalCount: 0,
     progressiveTotalPages: 0,
+  }),
+
+  patchQuestaoInCaches: (questaoId, updates) => set(state => {
+    const match = (q: ResolucaoView) => q.questao_id === questaoId || q.id === questaoId
+    const apply = (list: ResolucaoView[] | null): ResolucaoView[] | null =>
+      list ? list.map(q => (match(q) ? { ...q, ...updates } : q)) : null
+
+    return {
+      questoesCache: apply(state.questoesCache),
+      questoesLevesCache: apply(state.questoesLevesCache),
+      resolucoesCache: apply(state.resolucoesCache),
+      resolucoesLevesCache: apply(state.resolucoesLevesCache),
+      progressiveCache: apply(state.progressiveCache) ?? [],
+    }
   }),
 
   // Actions - historico

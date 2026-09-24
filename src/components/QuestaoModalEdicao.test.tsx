@@ -116,4 +116,48 @@ describe('QuestaoModalEdicao', () => {
     await userEvent.click(xButton)
     expect(onClose).toHaveBeenCalledOnce()
   })
+
+  it('re-syncs form when a different questao is opened', async () => {
+    const outra: ResolucaoView = {
+      ...mockQuestao,
+      id: 2,
+      questao_id: 200,
+      enunciado: 'Outro enunciado?',
+      gabarito: 'C',
+    }
+    const { rerender } = render(
+      <QuestaoModalEdicao isOpen={true} questao={mockQuestao} onClose={vi.fn()} onSave={vi.fn()} />
+    )
+    await userEvent.click(screen.getByLabelText('Gabarito'))
+    await userEvent.selectOptions(screen.getByLabelText('Gabarito'), 'D')
+    expect(screen.getByLabelText('Gabarito')).toHaveValue('D')
+
+    rerender(
+      <QuestaoModalEdicao isOpen={true} questao={outra} onClose={vi.fn()} onSave={vi.fn()} />
+    )
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Outro enunciado?')).toBeInTheDocument()
+      expect(screen.getByLabelText('Gabarito')).toHaveValue('C')
+    })
+  })
+
+  it('keeps user edits when same questao prop re-renders', async () => {
+    const onSave = vi.fn().mockResolvedValue(true)
+    const { rerender } = render(
+      <QuestaoModalEdicao isOpen={true} questao={mockQuestao} onClose={vi.fn()} onSave={onSave} />
+    )
+    await userEvent.click(screen.getByLabelText('Gabarito'))
+    await userEvent.selectOptions(screen.getByLabelText('Gabarito'), 'B')
+
+    rerender(
+      <QuestaoModalEdicao isOpen={true} questao={{ ...mockQuestao }} onClose={vi.fn()} onSave={onSave} />
+    )
+    expect(screen.getByLabelText('Gabarito')).toHaveValue('B')
+
+    await userEvent.click(screen.getByText('Confirmar e Salvar'))
+    await waitFor(() => {
+      expect(onSave).toHaveBeenCalledOnce()
+    })
+    expect(onSave.mock.calls[0][0].gabarito).toBe('B')
+  })
 })

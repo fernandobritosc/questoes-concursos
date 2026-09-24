@@ -90,6 +90,7 @@ export async function updateResolucaoProfessor(
     .eq('id', questaoId)
 
   if (error) throw error
+  useQuestaoStore.getState().patchQuestaoInCaches(questaoId, { resolucao_professor: texto })
 }
 
 /** Atualiza todos os dados editáveis de uma questão. */
@@ -103,6 +104,7 @@ export async function updateQuestao(
     .eq('id', questaoId)
 
   if (error) throw error
+  useQuestaoStore.getState().patchQuestaoInCaches(questaoId, payload as Partial<ResolucaoView>)
 }
 
 // ─── Historico Resolucoes ─────────────────────────────────────────────────────

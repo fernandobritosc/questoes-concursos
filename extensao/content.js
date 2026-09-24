@@ -284,6 +284,26 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
   }
 
   /**
+   * Normaliza um candidato a gabarito para uma letra única A-E (ou null).
+   * Aceita "a", " A ", "Gabarito: B", "Certo"→C, "Errado"→E, etc.
+   */
+  function normalizarLetraGabarito(raw) {
+    if (raw == null) return null;
+    const s = String(raw).trim().toUpperCase();
+    if (!s) return null;
+    if (/^[A-E]$/.test(s)) return s;
+    const explicito = s.match(/(?:GABARITO|RESPOSTA|CORRETA|ALTERNATIVA)\s*:?\s*([A-E])\b/);
+    if (explicito) return explicito[1];
+    if (s === "CERTO") return "C";
+    if (s === "ERRADO") return "E";
+    const isolada = s.match(/\b([A-E])\b/);
+    if (isolada) return isolada[1];
+    const unica = s.match(/^[^A-E]*([A-E])[^A-E]*$/);
+    if (unica) return unica[1];
+    return null;
+  }
+
+  /**
    * Helper para verificar se a questão no container foi resolvida.
    * Utiliza múltiplos critérios (classes dos LIs, mensagens de gabarito e visibilidade)
    * para máxima resiliência e velocidade.
@@ -519,6 +539,15 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
         gabarito = gabaritoStrong.textContent.trim().toUpperCase();
       }
     }
+    // Fallback: texto tipo "Gabarito: A" / "Resposta correta: C"
+    if (!gabarito) {
+      const msgEl = container.querySelector(".questao-enunciado-mensagem-resolucao");
+      if (msgEl) {
+        const m = msgEl.textContent.match(/(?:gabarito|resposta|correta)\s*:?\s*([A-E])\b/i);
+        if (m) gabarito = m[1].toUpperCase();
+      }
+    }
+    gabarito = normalizarLetraGabarito(gabarito);
 
     // Resposta do usuário (li que tem aria-checked="true" ou classe erro)
     let selectedLi = container.querySelector('li[aria-checked="true"]') || container.querySelector('li.erro');
@@ -551,6 +580,16 @@ if (window.location.hostname.includes("tecconcursos.com.br")) {
     } else {
       // Fallback visual pela presença da caixa de erro
       acertou = container.querySelector(".questao-enunciado-resolucao-errou") === null;
+    }
+
+    // 8.1 Deriva o gabarito quando o usuário acertou e a extração visual falhou
+    // (sem li.correcao / mensagem): a alternativa escolhida é a correta.
+    if (!gabarito && acertou) {
+      const letra = normalizarLetraGabarito(alternativaUsuario);
+      if (letra) {
+        gabarito = letra;
+        console.log(`[MonitorPro] Gabarito derivado da alternativa correta da Questão #${questaoTecId}: ${gabarito}`);
+      }
     }
 
     // 9. Tempo em segundos

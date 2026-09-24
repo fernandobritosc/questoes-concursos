@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Pencil, Loader2, Check } from 'lucide-react'
 import type { ResolucaoView } from '../types/database'
 import { Modal } from './ui/Modal'
@@ -50,13 +50,19 @@ export function QuestaoModalEdicao({ isOpen, questao, onClose, onSave }: Questao
     alternativas: {} as Record<string, string>,
   })
   const [saving, setSaving] = useState(false)
+  const lastSyncedQuestaoId = useRef<number | null>(null)
 
-  if (isOpen && questao) {
-    const fresh = getFormFromQuestao(questao)
-    if (form.enunciado !== fresh.enunciado) {
-      setForm(fresh)
+  useEffect(() => {
+    if (!isOpen || !questao) {
+      lastSyncedQuestaoId.current = null
+      return
     }
-  }
+    const currentId = questao.questao_id || questao.id
+    if (lastSyncedQuestaoId.current !== currentId) {
+      setForm(getFormFromQuestao(questao))
+      lastSyncedQuestaoId.current = currentId
+    }
+  }, [isOpen, questao])
 
   const set = (field: string, value: string | number | null | Record<string, string>) => {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -173,8 +179,9 @@ export function QuestaoModalEdicao({ isOpen, questao, onClose, onSave }: Questao
               />
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Gabarito</label>
+              <label htmlFor="edit-gabarito" className="text-[10px] font-black text-muted-foreground uppercase tracking-wide">Gabarito</label>
               <select 
+                id="edit-gabarito"
                 value={form.gabarito}
                 onChange={(e) => set('gabarito', e.target.value)}
                 className="w-full bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-bold focus:ring-2 focus:ring-[#1976d2] focus:border-[#1976d2] text-foreground focus:outline-none"

@@ -16,6 +16,15 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 
 ### ✅ Concluído
 
+#### Backfill de gabaritos + fix de cache pós-edição + extensão v3.1
+- **Diagnóstico**: 1623/3145 questões (52%) sem `gabarito` no Postgres da VM — todas vindas da extensão TEC com histórico `acertou=true` (a alternativa escolhida **é** o gabarito); extração visual falhava (`li.correcao`/mensagem) e o PATCH filtrava `null`, nunca preenchendo
+- **Backfill na VM** (`sudo -u postgres psql -d concursos`): `UPDATE questoes SET gabarito = upper(alternativa)` via `DISTINCT ON` do histórico mais recente com `acertou=true` e letra `A–E` → **1625 atualizadas, 0 sem gabarito** (total 3147, todos `A–E`)
+- **Cache pós-PATCH** (`src/stores/questaoStore.ts`): nova action `patchQuestaoInCaches(questaoId, updates)` aplicada em `updateQuestao`/`updateResolucaoProfessor` — o cache progressivo deixava de devolver gabarito antigo após salvar (sintoma "não está salvando")
+- **Modal de edição** (`QuestaoModalEdicao.tsx`): re-sync do form por `questao_id` (não mais só por `enunciado`); label `htmlFor`/`id` no select de gabarito
+- **Extensão TEC v3.1** (`extensao/content.js` + `manifest.json`): `normalizarLetraGabarito()` (A–E, "Certo"→C, "Errado"→E, "Gabarito: X"); fallback de texto na mensagem de resolução; **deriva gabarito da alternativa quando `acertou=true`** e a extração visual falhar
+- **Testes**: `src/stores/questaoStore.test.ts` (4) + 2 no modal → **249/249**; tsc 0, ESLint 0, `node --check` na extensão OK
+- **Uso**: recarregar a extensão em `chrome://extensions` (versão 3.1); F5 no app para descartar cache em memória
+
 #### Troca de senha do usuário (endpoint no backend + UI no Monitor Pro)
 - **Backend** (`backend/src/auth.js + index.js`): nova função `changePassword(userId, {currentPassword, newPassword})` — exige usuário autenticado, valida senha atual via bcrypt, exige nova senha ≥ 6 chars, atualiza o hash; rota `POST /auth/change-password` (usa `request.authUser`). Deploy na VM (`scp` de `auth.js`/`index.js` + `sudo systemctl restart concursos-backend`)
 - **Frontend (Monitor Pro, repo `C:\Users\uniao\OneDrive\Desktop\Projetos`)**:

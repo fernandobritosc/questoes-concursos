@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuestoes } from '../hooks/useQuestoes'
 import { ImportPdfModal } from '../components/ImportPdfModal'
@@ -60,6 +60,7 @@ export function Questoes() {
     historicoQuestaoAtiva,
     loadingHistoricoAtivo,
     handleConfirmarResposta,
+    filtros,
     setFiltros,
     questoesExibidas,
     handleEditQuestao,
@@ -126,22 +127,59 @@ export function Questoes() {
   const handleOpenEditModal = () => setIsEditModalOpen(true)
 
   const [searchParams, setSearchParams] = useSearchParams()
+  const deepLinkResetRef = useRef(false)
 
   useEffect(() => {
     const idParam = searchParams.get('id')
     const matParam = searchParams.get('materia')
     const assParam = searchParams.get('assunto')
 
-    if (idParam && cadernoQuestoes.length > 0) {
-      const index = cadernoQuestoes.findIndex(q => q.questao_tec_id === parseInt(idParam, 10))
-      if (index !== -1) {
+    if (idParam) {
+      const tecId = parseInt(idParam, 10)
+      if (Number.isNaN(tecId)) {
+        deepLinkResetRef.current = false
+        setSearchParams({}, { replace: true })
+        return
+      }
+
+      if (cadernoQuestoes.length === 0) return
+
+      const indexExibidas = questoesExibidas.findIndex(q => q.questao_tec_id === tecId)
+      if (indexExibidas !== -1) {
+        deepLinkResetRef.current = false
         setFiltros(null)
-        setCurrentQuestaoIndex(index)
+        setCurrentQuestaoIndex(indexExibidas)
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setTopTab('questoes')
         setSearchParams({}, { replace: true })
+        return
       }
-    } else if ((matParam || assParam) && cadernoQuestoes.length > 0) {
+
+      const existeNoCaderno = cadernoQuestoes.some(q => q.questao_tec_id === tecId)
+      const temFiltros =
+        totalFiltrosAtivos > 0 ||
+        selectedAssuntos.length > 0 ||
+        Boolean(questaoTecId) ||
+        objetivo !== 'todos' ||
+        Boolean(filtros)
+
+      if (!deepLinkResetRef.current && (existeNoCaderno || temFiltros)) {
+        deepLinkResetRef.current = true
+        handleResetFilters()
+        setFiltros(null)
+        return
+      }
+
+      if (!loading && !pageLoading) {
+        deepLinkResetRef.current = false
+        setSearchParams({}, { replace: true })
+      }
+      return
+    }
+
+    deepLinkResetRef.current = false
+
+    if ((matParam || assParam) && cadernoQuestoes.length > 0) {
       const newFiltros: Record<string, string> = {}
       if (matParam) newFiltros.materia = matParam
       if (assParam) newFiltros.assunto = assParam
@@ -151,7 +189,22 @@ export function Questoes() {
       setTopTab('questoes')
       setSearchParams({}, { replace: true })
     }
-  }, [searchParams, cadernoQuestoes, setCurrentQuestaoIndex, setSearchParams, setFiltros])
+  }, [
+    searchParams,
+    cadernoQuestoes,
+    questoesExibidas,
+    loading,
+    pageLoading,
+    totalFiltrosAtivos,
+    selectedAssuntos,
+    questaoTecId,
+    objetivo,
+    filtros,
+    handleResetFilters,
+    setCurrentQuestaoIndex,
+    setSearchParams,
+    setFiltros,
+  ])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
