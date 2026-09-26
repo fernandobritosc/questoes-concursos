@@ -19,6 +19,7 @@ import { queryRows, queryOne } from '../db.js'
 const PUBLIC_TABLES = new Set(['questoes', 'news_feed', 'ranking_geral', 'flashcards'])
 const HIDDEN_COLUMNS = new Set(['password_hash'])
 const USER_COLUMN = {
+  users: 'id',
   historico_resolucoes: 'user_id',
   metas_concurso: 'user_id',
   profiles: 'id',
@@ -32,13 +33,77 @@ const USER_COLUMN = {
 }
 const ADMIN_WRITE_TABLES = new Set(['news_feed'])
 
-function isPublicWrite(table) {
-  return table === 'questoes'
+/**
+ * Tabelas cujo dono está na tabela pai (não têm user_id próprio).
+ * Usado para validar propriedade e escopar escritas em massa.
+ */
+const OWNER_VIA_PARENT = {
+  tarefas_meta: { table: 'metas_concurso', fk: 'meta_id', owner: 'user_id' },
 }
 
 /** Tabelas que aceitam INSERT anônimo (registro público, sem sessão). */
 function isPublicInsert(table) {
   return table === 'questoes' || table === 'historico_resolucoes'
+}
+
+/** Coluna que identifica o dono da linha (null = tabela sem dono). */
+function ownerColumn(table) {
+  return USER_COLUMN[table] || null
+}
+
+/** true quando a tabela tem dono — próprio (USER_COLUMN) ou herdado do pai. */
+function hasOwner(table) {
+  return !!(USER_COLUMN[table] || OWNER_VIA_PARENT[table])
+}
+
+/**
+ * Valida a propriedade da linha antes de escrever (evita IDOR).
+ * Admins escrevem em qualquer linha; tabelas sem dono não são restringidas.
+ * Retorna a resposta de erro quando o acesso deve ser negado, ou null quando liberado.
+ */
+async function checkOwnership(col, id, user) {
+  if (user?.is_admin) return null
+  const via = OWNER_VIA_PARENT[col]
+  if (via) {
+    const row = await queryOne(
+      `SELECT p.${via.owner} AS __owner FROM ${col} c JOIN ${via.table} p ON p.id = c.${via.fk} WHERE c.id = $1`,
+      [id]
+    )
+    if (!row) return { status: 404, message: 'Registro não encontrado' }
+    if (String(row.__owner) !== String(user?.id)) return { status: 403, message: 'Sem permissão' }
+    return null
+  }
+  const owner = ownerColumn(col)
+  if (!owner) return null
+  const row = await queryOne(`SELECT ${owner} AS __owner FROM ${col} WHERE id = $1`, [id])
+  if (!row) return { status: 404, message: 'Registro não encontrado' }
+  if (String(row.__owner) !== String(user.id)) return { status: 403, message: 'Sem permissão' }
+  return null
+}
+
+/** Opções de escopo por dono para as escritas em massa (PATCH/DELETE por filtro). */
+function scopeOptions(table, user) {
+  if (!user || user.is_admin) return {}
+  const via = OWNER_VIA_PARENT[table]
+  if (via) {
+    return {
+      scopeByUser: true,
+      userId: user.id,
+      scopeExpr: `${via.fk} IN (SELECT id FROM ${via.table} WHERE ${via.owner} = $u)`,
+    }
+  }
+  const owner = ownerColumn(table)
+  if (!owner) return {}
+  return { scopeByUser: true, userId: user.id, scopeColumn: owner }
+}
+
+/** Autorização comum a PATCH/DELETE: exige sessão e, em tabelas de admin, is_admin. */
+function denyWrite(table, user) {
+  if (!user) return { status: 401, message: 'Autenticação necessária' }
+  if (ADMIN_WRITE_TABLES.has(table) && !user.is_admin) {
+    return { status: 403, message: 'Somente admin pode escrever' }
+  }
+  return null
 }
 
 function safeIdent(name) {
@@ -65,15 +130,21 @@ function safeDecode(str) {
 }
 
 /** Constrói WHERE a partir de query params estilo PostgREST. */
-export function buildFilters(queryParams, { scopeByUser = false, userId = null } = {}) {
+export function buildFilters(queryParams, { scopeByUser = false, userId = null, scopeColumn = 'user_id', scopeExpr = null } = {}) {
   const wheres = []
   const params = []
   let idx = 1
   if (scopeByUser && userId) {
-    wheres.push(`user_id = $${idx++}`)
+    if (scopeExpr) {
+      wheres.push(scopeExpr.replace('$u', `$${idx}`))
+    } else {
+      const sc = safeIdent(scopeColumn) || 'user_id'
+      wheres.push(`${sc} = $${idx}`)
+    }
     params.push(userId)
+    idx++
   }
-  const skipKeys = new Set(['select', 'order', 'offset', 'limit', 'count', 'on_conflict'])
+  const skipKeys = new Set(['select', 'order', 'offset', 'limit', 'count', 'on_conflict', 'head'])
   for (const [key, value] of Object.entries(queryParams)) {
     if (!key || skipKeys.has(key)) continue
     const col = safeIdent(key)
@@ -151,7 +222,7 @@ function coerceValue(value) {
   return value
 }
 
-function buildInsert(table, rows) {
+function buildInsert(table, rows, { returning = true } = {}) {
   const cols = Object.keys(rows[0]).filter(c => c !== 'id' || rows[0][c] !== undefined)
   const safeCols = cols.map(c => safeIdent(c)).filter(Boolean)
   if (!safeCols.length) throw new Error('Nenhuma coluna válida para inserção')
@@ -163,7 +234,8 @@ function buildInsert(table, rows) {
       return `$${rIdx * safeCols.length + cIdx + 1}`
     }).join(', ')})`
   })
-  return { sql: `INSERT INTO ${table} (${safeCols.join(', ')}) VALUES ${placeholders.join(', ')} RETURNING *`, values }
+  const suffix = returning ? ' RETURNING *' : ''
+  return { sql: `INSERT INTO ${table} (${safeCols.join(', ')}) VALUES ${placeholders.join(', ')}${suffix}`, values }
 }
 
 export function buildUpdate(table, id, payload) {
@@ -244,7 +316,7 @@ function makeCrudRouter(app, table, prefix = '') {
   app.get(base, async (request, reply) => {
     const user = request.authUser
     const isPublic = PUBLIC_TABLES.has(col)
-    const needsScope = USER_COLUMN[col] && !isPublic
+    const needsScope = hasOwner(col) && !isPublic
     if (needsScope && !user) return reply.code(401).send({ message: 'Autenticação necessária' })
 
     const { cols, embeds } = parseSelect(request.query.select)
@@ -257,10 +329,7 @@ function makeCrudRouter(app, table, prefix = '') {
     }
     const selectSql = cols.length ? cols.join(', ') : '*'
 
-    const { whereSql, params } = buildFilters(request.query, {
-      scopeByUser: needsScope && USER_COLUMN[col] !== 'id',
-      userId: user?.id,
-    })
+    const { whereSql, params } = buildFilters(request.query, needsScope ? scopeOptions(col, user) : {})
     const orderSql = buildOrder(request.query)
     const offset = Number(request.query.offset) || 0
     const limit = Math.min(Number(request.query.limit) || 1000, 5000)
@@ -322,14 +391,13 @@ function makeCrudRouter(app, table, prefix = '') {
   app.get(`${base}/:id`, async (request, reply) => {
     const user = request.authUser
     const isPublic = PUBLIC_TABLES.has(col)
-    const needsScope = USER_COLUMN[col] && !isPublic
+    const needsScope = hasOwner(col) && !isPublic
     if (needsScope && !user) return reply.code(401).send({ message: 'Autenticação necessária' })
     const row = await queryOne(`SELECT * FROM ${col} WHERE id = $1`, [request.params.id])
     if (!row) return reply.code(404).send({ message: 'Registro não encontrado' })
-    if (needsScope && user) {
-      const ownerCol = USER_COLUMN[col]
-      const ownerValue = ownerCol === 'id' ? row.id : row.user_id
-      if (String(ownerValue) !== String(user.id)) return reply.code(403).send({ message: 'Sem permissão' })
+    if (needsScope) {
+      const notOwned = await checkOwnership(col, request.params.id, user)
+      if (notOwned) return reply.code(notOwned.status).send({ message: notOwned.message })
     }
     return reply.send(stripHidden(row))
   })
@@ -372,7 +440,7 @@ function makeCrudRouter(app, table, prefix = '') {
     if (user && USER_COLUMN[col] && USER_COLUMN[col] !== 'id') {
       for (const r of rows) r[USER_COLUMN[col]] = user.id
     }
-    const { sql: insertSql, values } = buildInsert(col, rows)
+    const { sql: insertSql, values } = buildInsert(col, rows, { returning: false })
     const conflictTarget = conflictCols.join(', ')
     const updates = conflictCols
       .map(c => `${c} = EXCLUDED.${c}`)
@@ -390,8 +458,11 @@ function makeCrudRouter(app, table, prefix = '') {
 
   app.patch(`${base}/:id`, async (request, reply) => {
     const user = request.authUser
-    if (!user && !isPublicWrite(col)) return reply.code(401).send({ message: 'Autenticação necessária' })
+    const denied = denyWrite(col, user)
+    if (denied) return reply.code(denied.status).send({ message: denied.message })
     try {
+      const notOwned = await checkOwnership(col, request.params.id, user)
+      if (notOwned) return reply.code(notOwned.status).send({ message: notOwned.message })
       const { sql, values } = buildUpdate(col, request.params.id, request.body || {})
       const result = await queryRows(sql, values)
       if (!result.length) return reply.code(404).send({ message: 'Registro não encontrado' })
@@ -404,11 +475,10 @@ function makeCrudRouter(app, table, prefix = '') {
   // PATCH por filtro (PostgREST): PATCH /:tabela?col=eq.x
   app.patch(base, async (request, reply) => {
     const user = request.authUser
-    if (!user && !isPublicWrite(col)) return reply.code(401).send({ message: 'Autenticação necessária' })
-    const { whereSql, params } = buildFilters(request.query, {
-      scopeByUser: USER_COLUMN[col] && USER_COLUMN[col] !== 'id',
-      userId: user?.id,
-    })
+    const denied = denyWrite(col, user)
+    if (denied) return reply.code(denied.status).send({ message: denied.message })
+    const { whereSql, params } = buildFilters(request.query, scopeOptions(col, user))
+    if (!whereSql) return reply.code(400).send({ message: 'Filtro obrigatório para atualização em massa' })
     const payload = request.body || {}
     const entries = Object.entries(payload).filter(([c]) => c !== 'id' && safeIdent(c))
     if (!entries.length) return reply.code(400).send({ message: 'Nenhum campo para atualizar' })
@@ -424,7 +494,10 @@ function makeCrudRouter(app, table, prefix = '') {
 
   app.delete(`${base}/:id`, async (request, reply) => {
     const user = request.authUser
-    if (!user && !isPublicWrite(col)) return reply.code(401).send({ message: 'Autenticação necessária' })
+    const denied = denyWrite(col, user)
+    if (denied) return reply.code(denied.status).send({ message: denied.message })
+    const notOwned = await checkOwnership(col, request.params.id, user)
+    if (notOwned) return reply.code(notOwned.status).send({ message: notOwned.message })
     await queryRows(`DELETE FROM ${col} WHERE id = $1`, [request.params.id])
     return reply.send({ success: true })
   })
@@ -432,11 +505,10 @@ function makeCrudRouter(app, table, prefix = '') {
   // DELETE por filtro (PostgREST)
   app.delete(base, async (request, reply) => {
     const user = request.authUser
-    if (!user && !isPublicWrite(col)) return reply.code(401).send({ message: 'Autenticação necessária' })
-    const { whereSql, params } = buildFilters(request.query, {
-      scopeByUser: USER_COLUMN[col] && USER_COLUMN[col] !== 'id',
-      userId: user?.id,
-    })
+    const denied = denyWrite(col, user)
+    if (denied) return reply.code(denied.status).send({ message: denied.message })
+    const { whereSql, params } = buildFilters(request.query, scopeOptions(col, user))
+    if (!whereSql) return reply.code(400).send({ message: 'Filtro obrigatório para remoção em massa' })
     await queryRows(`DELETE FROM ${col} ${whereSql}`, params)
     return reply.send({ success: true })
   })

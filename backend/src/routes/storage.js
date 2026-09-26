@@ -7,6 +7,7 @@
  * Endpoints:
  *   POST   /storage/:bucket/upload?path=...  (multipart, campo "file")  -> { path, publicUrl, url }
  *   GET    /storage/:bucket/:path            (download / exibição)
+ *   GET    /storage/:bucket/list?prefix=...  (lista arquivos do bucket)  -> [{ name, path, size }]
  *   DELETE /storage/:bucket?path=...         (remove arquivo)           -> { success }
  *   GET    /storage/:bucket/public-url?path= -> { publicUrl }
  */
@@ -59,6 +60,8 @@ export function registerStorage(app, prefix = '') {
   })
 
   app.get(`${prefix}/storage/:bucket/list`, async (request, reply) => {
+    const user = request.authUser
+    if (!user) return reply.code(401).send({ message: 'Autenticação necessária' })
     const safeBucket = /^[a-z0-9_-]+$/i.test(request.params.bucket) ? request.params.bucket : null
     if (!safeBucket) return reply.code(400).send({ message: 'Bucket inválido' })
     const prefixPath = String(request.query.prefix || '')

@@ -20,6 +20,20 @@ export/
 export_monitorpro/
 tarefas_meta.json
 
+# Artefatos de depuração e mídia local (permanecem no disco, fora do versionamento)
+events_*.json
+estado_atual.json
+cache_resumo_*.json
+notificacoes.json
+test_body.json
+watcher_log.txt
+__pycache__/
+*.pyc
+*.pdf
+Pdf/
+metas_LS/
+mpes-edital-*.html
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

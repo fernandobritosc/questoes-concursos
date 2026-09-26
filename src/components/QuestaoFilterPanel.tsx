@@ -325,8 +325,16 @@ export function QuestaoFilterPanel({
 
   return (
     <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
-      <button
+      <div
+        role="button"
+        tabIndex={0}
         onClick={onToggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            onToggle()
+          }
+        }}
         className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-foreground hover:bg-muted/30 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-2">
@@ -350,7 +358,7 @@ export function QuestaoFilterPanel({
           )}
           {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
         </div>
-      </button>
+      </div>
 
       {isExpanded && (
         <div className="border-t border-border">
