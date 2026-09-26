@@ -196,7 +196,7 @@ Combined with a `MutationObserver` (lines 321-347) that triggers the same proces
 `extensao/content.js` line 9:
 
 ```javascript
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+const SUPABASE_ANON_KEY = "SUPABASE_ANON_KEY_REMOVIDA";
 const SUPABASE_URL = "https://dyxtalcvjcprmhuktyfd.supabase.co";
 ```
 
