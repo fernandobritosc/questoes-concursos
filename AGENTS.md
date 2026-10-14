@@ -16,6 +16,14 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 
 ### ✅ Concluído
 
+#### Fix: "(sem grupo)" reaparecia no índice do banco de questões
+- **Causa**: extensão TEC insere questões com `grupo = null` (não calcula grupo); o índice usava `q.grupo` direto e o backfill só roda manualmente — toda questão nova caía em "(sem grupo)"
+- **`QuestaoIndice.tsx`**: quando `q.grupo` é null, resolve em tempo de render via `getGrupo(materia, assunto)` — cobre qualquer questão futura
+- **`grupoUtils.ts`**: `GRUPOS_NORMALIZED` agora guarda TODAS as entradas por chave normalizada e prefere a da mesma matéria (antes ficava só a primeira — "Das Disposições Gerais..." repete em várias leis); novo fallback p/ 'Legislação Específica dos Tribunais Federais'
+- **`grupos.json`**: nova matéria "Legislação Específica dos Tribunais Federais" (grupo "Regimento Interno do TST")
+- **Backfill na VM**: 8 questões órfãs preenchidas → 0 sem grupo; script gerador de SQL em `Temp/opencode/backfill_grupo.cjs`
+- **Testes**: 251/251; tsc 0; ESLint 0. Commit `a13bf18`
+
 #### Heatmap — assunto exibido abaixo da matéria no detalhe do dia
 - **`DashboardStudyHeatmap.tsx`**: `detalheDia` agora agrupa matéria → assuntos (nested); cada assunto renderizado como sub-linha indentada (borda esquerda) com `acertos/total · taxa%`; fallback `'Sem assunto'` quando `assunto` é null
 - **Testes**: novo `src/components/DashboardStudyHeatmap.test.tsx` (2) → **251/251**; tsc 0, ESLint 0
