@@ -3,6 +3,21 @@ import { Activity, ChevronDown, ChevronUp } from 'lucide-react'
 
 /* ──────────────── Componente StudyHeatmap (GitHub-style) ──────────────── */
 
+interface DiaDetalheAssunto {
+  assunto: string
+  total: number
+  acertos: number
+  taxa: number
+}
+
+interface DiaDetalheMateria {
+  materia: string
+  total: number
+  acertos: number
+  taxa: number
+  assuntos: DiaDetalheAssunto[]
+}
+
 interface DashboardStudyHeatmapProps {
   resolucoes: Array<{
     alternativa: string | null
@@ -10,6 +25,7 @@ interface DashboardStudyHeatmapProps {
     acertou?: boolean
     tempo_segundos?: number
     materia?: string | null
+    assunto?: string | null
   }>
 }
 
@@ -51,24 +67,40 @@ export function DashboardStudyHeatmap({ resolucoes }: DashboardStudyHeatmapProps
       return getLocalDateKey(new Date(r.data_resolucao)) === diaSelecionado
     })
     if (doDia.length === 0) {
-      return { total: 0, acertos: 0, taxa: 0, tempoMedio: 0, porMateria: [] as Array<{ materia: string; total: number; acertos: number; taxa: number }> }
+      return { total: 0, acertos: 0, taxa: 0, tempoMedio: 0, porMateria: [] as DiaDetalheMateria[] }
     }
     const acertos = doDia.filter(r => r.acertou).length
     const tempoMedio = Math.round(doDia.reduce((acc, r) => acc + (r.tempo_segundos || 0), 0) / doDia.length)
-    const mapMateria = new Map<string, { total: number; acertos: number }>()
+    const mapMateria = new Map<string, { total: number; acertos: number; assuntos: Map<string, { total: number; acertos: number }> }>()
     doDia.forEach(r => {
       const mat = r.materia || 'Sem Matéria'
-      const entry = mapMateria.get(mat) || { total: 0, acertos: 0 }
+      let entry = mapMateria.get(mat)
+      if (!entry) {
+        entry = { total: 0, acertos: 0, assuntos: new Map() }
+        mapMateria.set(mat, entry)
+      }
       entry.total += 1
       if (r.acertou) entry.acertos += 1
-      mapMateria.set(mat, entry)
+      const ass = r.assunto || 'Sem assunto'
+      const assEntry = entry.assuntos.get(ass) || { total: 0, acertos: 0 }
+      assEntry.total += 1
+      if (r.acertou) assEntry.acertos += 1
+      entry.assuntos.set(ass, assEntry)
     })
-    const porMateria = Array.from(mapMateria.entries())
+    const porMateria: DiaDetalheMateria[] = Array.from(mapMateria.entries())
       .map(([materia, v]) => ({
         materia,
         total: v.total,
         acertos: v.acertos,
         taxa: v.total > 0 ? Math.round((v.acertos / v.total) * 100) : 0,
+        assuntos: Array.from(v.assuntos.entries())
+          .map(([assunto, a]) => ({
+            assunto,
+            total: a.total,
+            acertos: a.acertos,
+            taxa: a.total > 0 ? Math.round((a.acertos / a.total) * 100) : 0,
+          }))
+          .sort((a, b) => b.total - a.total),
       }))
       .sort((a, b) => b.total - a.total)
       .slice(0, 5)
@@ -334,11 +366,28 @@ export function DashboardStudyHeatmap({ resolucoes }: DashboardStudyHeatmapProps
                   <div className="mt-3 space-y-1.5">
                     <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Por matéria</p>
                     {detalheDia.porMateria.map(m => (
-                      <div key={m.materia} className="flex items-center justify-between gap-3 text-xs py-1.5 px-2.5 rounded-lg bg-card border border-border/50">
-                        <span className="font-bold text-foreground truncate">{m.materia}</span>
-                        <span className="text-muted-foreground font-semibold whitespace-nowrap">
-                          {m.acertos}/{m.total} · {m.taxa}%
-                        </span>
+                      <div key={m.materia} className="rounded-lg bg-card border border-border/50 px-2.5 py-1.5">
+                        <div className="flex items-center justify-between gap-3 text-xs">
+                          <span className="font-bold text-foreground truncate">{m.materia}</span>
+                          <span className="text-muted-foreground font-semibold whitespace-nowrap">
+                            {m.acertos}/{m.total} · {m.taxa}%
+                          </span>
+                        </div>
+                        {m.assuntos.length > 0 && (
+                          <div className="mt-1.5 space-y-1">
+                            {m.assuntos.map(a => (
+                              <div
+                                key={a.assunto}
+                                className="flex items-center justify-between gap-3 text-[11px] pl-2 border-l-2 border-border/60 dark:border-white/[0.06]"
+                              >
+                                <span className="text-muted-foreground truncate">{a.assunto}</span>
+                                <span className="text-muted-foreground/80 font-semibold whitespace-nowrap">
+                                  {a.acertos}/{a.total} · {a.taxa}%
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

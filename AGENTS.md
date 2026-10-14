@@ -16,6 +16,10 @@ Sistema de importação e registro de metas semanais do LS Concurso, com página
 
 ### ✅ Concluído
 
+#### Heatmap — assunto exibido abaixo da matéria no detalhe do dia
+- **`DashboardStudyHeatmap.tsx`**: `detalheDia` agora agrupa matéria → assuntos (nested); cada assunto renderizado como sub-linha indentada (borda esquerda) com `acertos/total · taxa%`; fallback `'Sem assunto'` quando `assunto` é null
+- **Testes**: novo `src/components/DashboardStudyHeatmap.test.tsx` (2) → **251/251**; tsc 0, ESLint 0
+
 #### Backfill de gabaritos + fix de cache pós-edição + extensão v3.1
 - **Diagnóstico**: 1623/3145 questões (52%) sem `gabarito` no Postgres da VM — todas vindas da extensão TEC com histórico `acertou=true` (a alternativa escolhida **é** o gabarito); extração visual falhava (`li.correcao`/mensagem) e o PATCH filtrava `null`, nunca preenchendo
 - **Backfill na VM** (`sudo -u postgres psql -d concursos`): `UPDATE questoes SET gabarito = upper(alternativa)` via `DISTINCT ON` do histórico mais recente com `acertou=true` e letra `A–E` → **1625 atualizadas, 0 sem gabarito** (total 3147, todos `A–E`)
