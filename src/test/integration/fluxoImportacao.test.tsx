@@ -190,7 +190,7 @@ describe('Fluxo de Importacao de PDF (integracao)', () => {
     expect(screen.getByText('Redes de Computadores')).toBeInTheDocument()
   })
 
-  it('6. questoes sem grupo aparecem como (sem grupo) no indice', async () => {
+  it('6. questoes sem grupo no banco caem no grupo fallback da matéria no indice', async () => {
     const questoes = [
       makeQuestao({
         questao_tec_id: 3001,
@@ -204,7 +204,8 @@ describe('Fluxo de Importacao de PDF (integracao)', () => {
 
     expect(screen.getByText('Direito Constitucional')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Direito Constitucional'))
-    expect(screen.getByText('(sem grupo)')).toBeInTheDocument()
+    // fallback: getGrupo resolve pelo grupo padrão da matéria mesmo com grupo null no banco
+    expect(screen.getByText('Teoria do Direito Constitucional')).toBeInTheDocument()
   })
 
   it('7. import define grupo automaticamente via getGrupo', async () => {

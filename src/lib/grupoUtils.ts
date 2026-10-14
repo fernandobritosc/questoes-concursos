@@ -35,12 +35,13 @@ function materiaKey(m: string): string {
 }
 
 // Índice normalizado para matching flexível (ignora acentos, maiúsculas, parênteses)
-const GRUPOS_NORMALIZED: Map<string, { materia: string; grupo: string | null }> = new Map()
+// Guarda TODOS os assuntos por chave normalizada (nomes como "Das Disposições Gerais (...)" se repetem em várias matérias)
+const GRUPOS_NORMALIZED: Map<string, Array<{ assunto: string; materia: string; grupo: string | null }>> = new Map()
 for (const [assunto, entry] of Object.entries(GRUPOS)) {
   const key = normalizeText(assunto)
-  if (!GRUPOS_NORMALIZED.has(key)) {
-    GRUPOS_NORMALIZED.set(key, entry)
-  }
+  const list = GRUPOS_NORMALIZED.get(key)
+  if (list) list.push({ assunto, ...entry })
+  else GRUPOS_NORMALIZED.set(key, [{ assunto, ...entry }])
 }
 
 // Fallback: quando o assunto não é encontrado, usa um grupo padrão da matéria
@@ -63,6 +64,7 @@ const MATERIA_FALLBACK: Record<string, string> = {
   'Engenharia Elétrica e Eletrônica': 'Redes de Dados e Comunicação',
   'Gestão de Projetos': 'Gestão de Projetos',
   'Biblioteconomia': 'Biblioteconomia',
+  'Legislação Específica dos Tribunais Federais': 'Regimento Interno do TST',
 }
 
 export function getGrupo(materia: string | null, assunto: string | null): string | null {
@@ -75,10 +77,12 @@ export function getGrupo(materia: string | null, assunto: string | null): string
   }
 
   // 2. Match normalizado (ignora acentos, maiúsculas, parênteses)
+  //    Preferência: mesma matéria; senão qualquer entrada com a chave
   const normKey = normalizeText(assunto)
-  const normEntry = GRUPOS_NORMALIZED.get(normKey)
-  if (normEntry && materiaKey(normEntry.materia) === materiaKey(materia)) {
-    return normEntry.grupo
+  const normList = GRUPOS_NORMALIZED.get(normKey)
+  if (normList) {
+    const same = normList.find(e => materiaKey(e.materia) === materiaKey(materia))
+    if (same) return same.grupo
   }
 
   // 3. Fallback por matéria — busca o grupo padrão da matéria

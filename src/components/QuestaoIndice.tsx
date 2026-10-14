@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { ChevronDown, ChevronRight, ChevronUp, Trash2 } from 'lucide-react'
 import type { ResolucaoView } from '../types/database'
 import gruposData from '../data/grupos.json'
+import { getGrupo } from '../lib/grupoUtils'
 
 type GrupoEntry = { materia: string; grupo: string | null }
 const GRUPOS_RAW = gruposData as Record<string, GrupoEntry>
@@ -72,7 +73,8 @@ function buildTree3(questoes: ResolucaoView[]): Record<string, Node> {
     const qr = q as unknown as Record<string, unknown>
     const materia = String(qr.materia || 'Sem materia')
     const assunto = String(qr.assunto || 'Sem assunto')
-    const grupo = String(qr.grupo || '(sem grupo)')
+    const rawGrupo = qr.grupo ? String(qr.grupo) : getGrupo(String(qr.materia || ''), String(qr.assunto || ''))
+    const grupo = rawGrupo || '(sem grupo)'
 
     if (!root[materia]) root[materia] = { name: materia, count: 0, children: {} }
     root[materia].count++
